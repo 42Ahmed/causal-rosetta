@@ -14,7 +14,27 @@
     "href": "intro.html",
     "title": "1  Introduction",
     "section": "",
-    "text": "Enjoy the ride :)\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "text": "1.1 How Did We Get Here? (Who is Grandpa?)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#how-did-we-get-here-who-is-grandpa",
+    "href": "intro.html#how-did-we-get-here-who-is-grandpa",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "The Origins (The Lab): Back in the 19th century, researchers in medicine and agriculture invented statistics to solve problems in their domains.\n\nKey Context: These domains existed inside laboratories and controlled fields. If they wanted to know if a fertilizer worked, they simply controlled the environment.\n\nThe Standardization: Statistics was not set in stone. In the 20th century, a fierce debate occurred between the giants Neyman, Pearson, and Fisher. This solidified the rules of the game (hypothesis testing), resulting in the creation of the first official Statistics Departments.\nThe Ivory Tower: The graduates of these new departments were experts in math and probability.\n\nThey began working on abstract theorems and “perfect” distributions.\nThey rarely saw the messy, broken data coming from the real world. This became known as Mathematical Statistics.\n\nThe Wild: Later on, economists realized they needed statistics too.\n\nThe Problem: They worked in the wild, not the lab. They could not “control” the economy or people’s choices.\n\nThe Birth of Econometrics: Economists used these tools to estimate the magnitude of relationships (e.g., supply and demand) and test economic theories.\n\nThe Flaw: Estimation wasn’t enough. In the real world, thousands of variables move together. You couldn’t isolate the true effect of a policy because you couldn’t hold everything else constant.\n\nThe Distinction:\n\nMathematical Statistics: They invent the math first. They assume a perfect world, derive a theorem, and then check if it fits a lab setting.\nEconometrics: They look at the messy data first. They realize standard testing is impossible, so they invent new techniques to handle the mess.\n\nThe Destination (Causal Inference): Causal Inference is the modern extension of econometrics. It is the specific pursuit of identifying the exact effect of a treatment, getting results from the wild as if we are in a lab.\n\n\n1.1.1 The Analogy: The Disease\nTo understand the difference, imagine a new virus appears:\n\nMathematical Statistics: Invents a theoretical disease that follows a perfect bell curve. Invents a cure for that theoretical disease. Waits for a patient to actually catch it.\nEconometrics: Inspects the sick patients we have right now. Tries to cure them using available data. realizes the data is biased, so they improve the cure.\nCausal Inference: Doing everything the econometrician does, but with a laser focus on proving that it was the cure that saved the patient, not just luck.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#what-will-we-learn",
+    "href": "intro.html#what-will-we-learn",
+    "title": "1  Introduction",
+    "section": "1.2 What Will We Learn?",
+    "text": "1.2 What Will We Learn?\n\nThe Anti-Textbook Approach:\n\nFormal books often gatekeep this knowledge behind rigorous Calculus, Linear Algebra, Numerical Analysis, and Probability Theory.\nBy the time you finish the prerequisites, you’ve forgotten why you wanted to learn this in the first place.\n\nThe Toolkit:\n\nHere, we will learn the useful stuff as we go.\nThink of this as a backpack containing only what you need for the journey—no heavy, unnecessary theory.\n\nThe Blend:\n\nWe will blend classical Econometrics (the foundation) with modern Causal Inference (the design) and Machine Learning (the power).",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
@@ -24,19 +44,9 @@
     "href": "summary.html",
     "title": "2  Summary",
     "section": "",
-    "text": "In summary, this book has no content whatsoever.",
+    "text": "The real treasure was the models we learnt along the pages.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
-    "crumbs": [
-      "References"
     ]
   }
 ]
