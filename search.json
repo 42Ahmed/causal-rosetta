@@ -1,0 +1,42 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Causal Rosetta",
+    "section": "",
+    "text": "Preface\nThe original Rosetta Stone was a breakthrough not because it contained new information, but because it presented the same decree in three different scripts: Hieroglyphs, Demotic, and Ancient Greek. It allowed scholars to finally decipher a language that had been locked away for centuries.\nThe Causal Rosetta aims to do the same for modern econometrics.\nToday, the landscape of causal inference is rich with incredible resources. We have the rigorous theory of Mostly Harmless Econometrics, the intuitive storytelling of The Effect, and the practical programming of Causal Inference for the Brave and True—all standing in the shadow of the thousand-page encyclopedias by Greene and Wooldridge. Yet, for a student or practitioner, this abundance can feel overwhelming. Trying to piece together a coherent workflow by jumping between five different textbooks, three coding languages, and endless StackOverflow threads is a recipe for friction, not learning.\nAs a Teaching Assistant, my job is not to invent new theorems. My job is to translate the “what” into the “how.” I see where students get stuck: not on the derivation of the estimator, but on the syntax of the implementation.\nThis book is a pragmatic synthesis. It is an attempt to blend the wisdom of the giants into a single, accessible manual.\n\nThe Philosophy of This Book\n\nSynthesis, Not Invention: I have read the chapters from the competing books so you don’t have to. This book aggregates the best explanation for each technique.\nThe “Cheat Sheet” Approach: We keep the theory light. The heavy mathematical lifting is already done better elsewhere (and I will cite those sources extensively if you wish to dive deeper).\nBilingual by Design: Every concept is implemented side-by-side in R and Python. Whether you are an econometrics traditionalist or a data science modernist, you belong here.\nCode-First: The focus is on the “Do.” We start with data and end with a results table.\n\nIf the other books are the lectures, think of this book as the lab session.\nEnjoy the ride.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "Enjoy the ride :)\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  }
+]
