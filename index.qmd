@@ -1,0 +1,22 @@
+# Preface {.unnumbered}
+
+The original Rosetta Stone was a breakthrough not because it contained new information, but because it presented the same decree in three different scripts: Hieroglyphs, Demotic, and Ancient Greek. It allowed scholars to finally decipher a language that had been locked away for centuries.
+
+**The Causal Rosetta** aims to do the same for modern econometrics.
+
+Today, the landscape of causal inference is rich with incredible resources. We have the rigorous theory of *Mostly Harmless Econometrics*, the intuitive storytelling of *The Effect*, and the practical programming of *Causal Inference for the Brave and True*—**all standing in the shadow of the thousand-page encyclopedias by Greene and Wooldridge.** Yet, for a student or practitioner, this abundance can feel overwhelming. Trying to piece together a coherent workflow by jumping between five different textbooks, three coding languages, and endless StackOverflow threads is a recipe for friction, not learning.
+
+As a Teaching Assistant, my job is not to invent new theorems. My job is to translate the "what" into the "how." I see where students get stuck: not on the derivation of the estimator, but on the syntax of the implementation.
+
+This book is a pragmatic synthesis. It is an attempt to blend the wisdom of the giants into a single, accessible manual.
+
+### The Philosophy of This Book
+
+* **Synthesis, Not Invention:** I have read the chapters from the competing books so you don't have to. This book aggregates the best explanation for each technique.
+* **The "Cheat Sheet" Approach:** We keep the theory light. The heavy mathematical lifting is already done better elsewhere (and I will cite those sources extensively if you wish to dive deeper).
+* **Bilingual by Design:** Every concept is implemented side-by-side in **R** and **Python**. Whether you are an econometrics traditionalist or a data science modernist, you belong here.
+* **Code-First:** The focus is on the "Do." We start with data and end with a results table.
+
+If the other books are the lectures, think of this book as the lab session.
+
+Enjoy the ride.

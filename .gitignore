@@ -1,0 +1,13 @@
+# Quarto output and temporary files
+/.quarto/
+/_book/
+/_site/
+
+# RStudio user-specific settings
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Windows junk
+Thumbs.db

@@ -1,0 +1,5 @@
+# Introduction
+
+Enjoy the ride :)
+
+See @knuth84 for additional discussion of literate programming.
