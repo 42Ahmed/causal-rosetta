@@ -1,0 +1,114 @@
+---
+title: "Introductory Econometrics Math"
+format: html
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+So you want to be a math wizard who can prove any estimator?
+This chapter serves as a mathematical summary for the book **Introductory Ecconometrics**.
+After finishing this chapter, you will be able to solve all math problems. 
+
+## Math Refresher A
+
+### The Summation Operator and Descriptive Statistics
+
+The summation operator ($\sum$) is essential for manipulating formulas involving datasets.
+Given a sequence of $n$ numbers $\{x_1, x_2, \dots, x_n\}$, the sum is written as $\sum_{i=1}^n x_i = x_1 + x_2 + \dots + x_n$.
+
+**Key Summation Properties:**
+
+1\.
+**Sum of a constant:** For any constant $c$, $\sum_{i=1}^n c = nc$. 
+
+2\.
+**Factoring out a constant:** $\sum_{i=1}^n cx_i = c\sum_{i=1}^n x_i$. 
+
+3\.
+**Sum of a linear combination:** $\sum_{i=1}^n (ax_i + by_i) = a\sum_{i=1}^n x_i + b\sum_{i=1}^n y_i$. 
+
+*Note of caution:* The summation operator does **not** distribute over ratios or squares.
+The sum of ratios $\sum (x_i / y_i)$ is not equal to the ratio of the sums $\sum x_i / \sum y_i$, and $\sum x_i^2 \neq (\sum x_i)^2$.
+
+**Descriptive Statistics and Averages:**
+
+**Sample Average (Mean):** $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$.
+
+**Sum of Deviations:** If you subtract the mean from each observation to get a deviation $d_i = x_i - \bar{x}$, the sum of these deviations is exactly zero: $\sum_{i=1}^n (x_i - \bar{x}) = 0$.
+
+**Sum of Squared Deviations:** A critical algebraic fact for upcoming OLS proofs is that the sum of squared deviations can be rewritten: $\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n(\bar{x})^2$.
+
+**Cross-Products:** For two variables $x$ and $y$, the sum of their cross-deviations behaves similarly: $\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_i(y_i - \bar{y}) = \sum_{i=1}^n (x_i - \bar{x})y_i$.
+
+### Properties of Linear Functions
+
+A linear function takes the form $y = \beta_0 + \beta_1 x$, where $\beta_0$ is the intercept and $\beta_1$ is the slope.
+
+**Marginal Effect:** The defining feature of a linear function is that the marginal effect of $x$ on $y$ is constant.
+The change in $y$ is given by $\Delta y = \beta_1 \Delta x$.
+
+**Multiple Variables:** For $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2$, the change in $y$ is $\Delta y = \beta_1 \Delta x_1 + \beta_2 \Delta x_2$.
+If $x_2$ is held fixed ($\Delta x_2 = 0$), then $\Delta y = \beta_1 \Delta x_1$.
+This is the foundation of the *ceteris paribus* (holding other things equal) concept in multiple regression.
+
+### Proportions and Percentages
+
+You must strictly distinguish between a *percentage change* and a *percentage point change*.
+
+**Percentage change:** Evaluates the change relative to the initial value: $\%\Delta x = 100 \cdot \frac{x_1 - x_0}{x_0}$.
+
+**Percentage point change:** If a variable is already measured as a percentage (e.g., an unemployment rate drops from 8% to 6%), the difference is a change of $-2$ percentage points, *not* $-2$ percent (it is actually a $25\%$ decrease).
+
+### Some Special Functions and Their Properties
+
+To model relationships where marginal effects are not constant, econometricians rely on specific non-linear functions.
+
+#### Quadratic Functions
+
+Used to capture increasing or diminishing marginal returns.
+
+**Equation:** $y = \beta_0 + \beta_1 x + \beta_2 x^2$.
+\* **Turning Point:** The function reaches a maximum (if $\beta_2 < 0$) or a minimum (if $\beta_2 > 0$) at $x^* = \frac{\beta_1}{-2\beta_2}$.
+
+**Marginal Effect:** The effect of $x$ on $y$ changes based on the starting value of $x$.
+Approximated by $\Delta y \approx (\beta_1 + 2\beta_2 x)\Delta x$.
+
+#### The Natural Logarithm
+
+The natural log (denoted as $\log(x)$ or $\ln(x)$) restricts inputs to $x > 0$ and is widely used because it allows us to approximate percentage changes directly.
+
+**Algebraic Properties:** $\log(x_1 x_2) = \log(x_1) + \log(x_2)$ $\log(x_1 / x_2) = \log(x_1) - \log(x_2)$ $\log(x^c) = c \log(x)$.
+
+**Percentage Approximation:** For small changes, the change in the log of a variable represents its proportional change: $\Delta \log(x) \approx \frac{\Delta x}{x}$.
+Multiplying by 100 gives the percentage change: $100 \cdot \Delta \log(x) \approx \%\Delta x$.
+
+**Constant Elasticity Model:** If $\log(y) = \beta_0 + \beta_1 \log(x)$, then $\beta_1$ represents the elasticity of $y$ with respect to $x$ (the $\% \Delta y$ for a 1% increase in $x$).
+
+**Log-Level (Semi-Elasticity) Model:** If $\log(y) = \beta_0 + \beta_1 x$, then a 1-unit increase in $x$ leads to a $(100 \cdot \beta_1)\%$ change in $y$.
+
+#### The Exponential Function
+
+The exponential function, $y = \exp(x)$ or $e^x$, is the inverse of the natural logarithm, meaning $\log(\exp(x)) = x$ and $\exp(\log(x)) = x$.
+
+**Properties:** $\exp(x_1 + x_2) = \exp(x_1)\exp(x_2)$.
+
+**Use in Econometrics:** It is used to transform a log-linear equation back to its original levels.
+If $\log(y) = \beta_0 + \beta_1 x$, then $y = \exp(\beta_0 + \beta_1 x)$.
+
+### Differential Calculus
+
+Calculus formalizes the "marginal effect" approximations using derivatives.
+
+**Ordinary Derivatives:** The derivative $\frac{dy}{dx}$ evaluates the slope of a curve at a specific point.
+For small changes, $\Delta y \approx \frac{dy}{dx} \Delta x$.
+\* If $y = x^c$, then $\frac{dy}{dx} = cx^{c-1}$.
+\* If $y = \log(x)$, then $\frac{dy}{dx} = \frac{1}{x}$.
+\* If $y = \exp(\beta_0 + \beta_1 x)$, then $\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)$.
+
+**Partial Derivatives:** For multivariate functions like $y = f(x_1, x_2)$, the partial derivative $\frac{\partial y}{\partial x_1}$ measures the slope in the direction of $x_1$, treating $x_2$ as a constant.
+The *ceteris paribus* effect is calculated as $\Delta y \approx \frac{\partial y}{\partial x_1} \Delta x_1$.
+\*
+
+**First Order Conditions (Optimization):** To find the minimum or maximum of a function $f(x_1, x_2, \dots, x_k)$, you take the partial derivatives with respect to every variable $x_j$ and set them all to zero: $\frac{\partial f}{\partial x_j} = 0$ for all $j=1, 2, \dots, k$.
+This is exactly how the Ordinary Least Squares (OLS) estimators are derived.
