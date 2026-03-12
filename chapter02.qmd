@@ -1,0 +1,1299 @@
+---
+title: "Introductory Econometrics: OLS Math"
+format: html
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+## Basic Math Tools
+
+### The Summation Operator and Descriptive Statistics
+
+The summation operator ($\sum$) is essential for manipulating formulas involving datasets.
+Given a sequence of $n$ numbers $\{x_1, x_2, \dots, x_n\}$, the sum is written as $\sum_{i=1}^n x_i = x_1 + x_2 + \dots + x_n$.
+
+**Key Summation Properties:**
+
+1\.
+**Sum of a constant:** For any constant $c$, $\sum_{i=1}^n c = nc$. 
+
+2\.
+**Factoring out a constant:** $\sum_{i=1}^n cx_i = c\sum_{i=1}^n x_i$. 
+
+3\.
+**Sum of a linear combination:** $\sum_{i=1}^n (ax_i + by_i) = a\sum_{i=1}^n x_i + b\sum_{i=1}^n y_i$. 
+
+*Note of caution:* The summation operator does **not** distribute over ratios or squares.
+The sum of ratios $\sum (x_i / y_i)$ is not equal to the ratio of the sums $\sum x_i / \sum y_i$, and $\sum x_i^2 \neq (\sum x_i)^2$.
+
+**Descriptive Statistics and Averages:**
+
+**Sample Average (Mean):** $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$.
+
+**Sum of Deviations:** If you subtract the mean from each observation to get a deviation $d_i = x_i - \bar{x}$, the sum of these deviations is exactly zero: $\sum_{i=1}^n (x_i - \bar{x}) = 0$.
+
+**Sum of Squared Deviations:** A critical algebraic fact for upcoming OLS proofs is that the sum of squared deviations can be rewritten: $\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n(\bar{x})^2$.
+
+**Cross-Products:** For two variables $x$ and $y$, the sum of their cross-deviations behaves similarly: $\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_i(y_i - \bar{y}) = \sum_{i=1}^n (x_i - \bar{x})y_i$.
+
+### Properties of Linear Functions
+
+A linear function takes the form $y = \beta_0 + \beta_1 x$, where $\beta_0$ is the intercept and $\beta_1$ is the slope.
+
+**Marginal Effect:** The defining feature of a linear function is that the marginal effect of $x$ on $y$ is constant.
+The change in $y$ is given by $\Delta y = \beta_1 \Delta x$.
+
+**Multiple Variables:** For $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2$, the change in $y$ is $\Delta y = \beta_1 \Delta x_1 + \beta_2 \Delta x_2$.
+If $x_2$ is held fixed ($\Delta x_2 = 0$), then $\Delta y = \beta_1 \Delta x_1$.
+This is the foundation of the *ceteris paribus* (holding other things equal) concept in multiple regression.
+
+### Proportions and Percentages
+
+You must strictly distinguish between a *percentage change* and a *percentage point change*.
+
+**Percentage change:** Evaluates the change relative to the initial value: $\%\Delta x = 100 \cdot \frac{x_1 - x_0}{x_0}$.
+
+**Percentage point change:** If a variable is already measured as a percentage (e.g., an unemployment rate drops from 8% to 6%), the difference is a change of $-2$ percentage points, *not* $-2$ percent (it is actually a $25\%$ decrease).
+
+### Some Special Functions and Their Properties
+
+To model relationships where marginal effects are not constant, econometricians rely on specific non-linear functions.
+
+#### Quadratic Functions
+
+Used to capture increasing or diminishing marginal returns.
+
+**Equation:** $y = \beta_0 + \beta_1 x + \beta_2 x^2$.
+
+**Turning Point:** The function reaches a maximum (if $\beta_2 < 0$) or a minimum (if $\beta_2 > 0$) at $x^* = \frac{\beta_1}{-2\beta_2}$.
+
+**Marginal Effect:** The effect of $x$ on $y$ changes based on the starting value of $x$.
+Approximated by $\Delta y \approx (\beta_1 + 2\beta_2 x)\Delta x$.
+
+#### The Natural Logarithm
+
+The natural log (denoted as $\log(x)$ or $\ln(x)$) restricts inputs to $x > 0$ and is widely used because it allows us to approximate percentage changes directly.
+
+**Algebraic Properties:** $\log(x_1 x_2) = \log(x_1) + \log(x_2)$ $\log(x_1 / x_2) = \log(x_1) - \log(x_2)$ $\log(x^c) = c \log(x)$.
+
+**Percentage Approximation:** For small changes, the change in the log of a variable represents its proportional change: $\Delta \log(x) \approx \frac{\Delta x}{x}$.
+Multiplying by 100 gives the percentage change: $100 \cdot \Delta \log(x) \approx \%\Delta x$.
+
+**Constant Elasticity Model:** If $\log(y) = \beta_0 + \beta_1 \log(x)$, then $\beta_1$ represents the elasticity of $y$ with respect to $x$ (the $\% \Delta y$ for a 1% increase in $x$).
+
+**Log-Level (Semi-Elasticity) Model:** If $\log(y) = \beta_0 + \beta_1 x$, then a 1-unit increase in $x$ leads to a $(100 \cdot \beta_1)\%$ change in $y$.
+
+#### The Exponential Function
+
+The exponential function, $y = \exp(x)$ or $e^x$, is the inverse of the natural logarithm, meaning $\log(\exp(x)) = x$ and $\exp(\log(x)) = x$.
+
+**Properties:** $\exp(x_1 + x_2) = \exp(x_1)\exp(x_2)$.
+
+**Use in Econometrics:** It is used to transform a log-linear equation back to its original levels.
+If $\log(y) = \beta_0 + \beta_1 x$, then $y = \exp(\beta_0 + \beta_1 x)$.
+
+### Differential Calculus
+
+Calculus formalizes the "marginal effect" approximations using derivatives.
+
+**Ordinary Derivatives:** The derivative $\frac{dy}{dx}$ evaluates the slope of a curve at a specific point.
+For small changes, $\Delta y \approx \frac{dy}{dx} \Delta x$.
+
+If $y = x^c$, then $\frac{dy}{dx} = cx^{c-1}$.
+
+If $y = \log(x)$, then $\frac{dy}{dx} = \frac{1}{x}$.
+
+If $y = \exp(\beta_0 + \beta_1 x)$, then $\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)$.
+
+**Partial Derivatives:** For multivariate functions like $y = f(x_1, x_2)$, the partial derivative $\frac{\partial y}{\partial x_1}$ measures the slope in the direction of $x_1$, treating $x_2$ as a constant.
+The *ceteris paribus* effect is calculated as $\Delta y \approx \frac{\partial y}{\partial x_1} \Delta x_1$.
+
+**First Order Conditions (Optimization):** To find the minimum or maximum of a function $f(x_1, x_2, \dots, x_k)$, you take the partial derivatives with respect to every variable $x_j$ and set them all to zero: $\frac{\partial f}{\partial x_j} = 0$ for all $j=1, 2, \dots, k$.
+This is exactly how the Ordinary Least Squares (OLS) estimators are derived.
+
+## Probability
+
+### Random Variables and Their Probability Distributions
+
+A **random variable** takes on numerical values determined by an experiment (a procedure that can be infinitely repeated with well-defined outcomes).
+We denote random variables with uppercase letters (e.g., $X$) and their particular outcomes with lowercase letters (e.g., $x$).
+
+#### Discrete Random Variables
+
+A discrete random variable takes on a finite or countably infinite number of values.
+
+**Bernoulli (Binary) Random Variable:** The simplest type, taking only values of 1 (success) or 0 (failure).
+If $X \sim \text{Bernoulli}(\theta)$, then $P(X=1) = \theta$ and $P(X=0) = 1-\theta$.
+
+**Probability Density Function (PDF):** Summarizes the possible outcomes and their probabilities.
+For a discrete variable, $f(x_j) = P(X=x_j) = p_j$, where $\sum p_j = 1$.
+
+#### Continuous Random Variables
+
+A continuous random variable takes on any real value with a probability of exactly zero.
+Because probabilities of specific values are zero, we focus on ranges of values.
+
+**Cumulative Distribution Function (CDF):** Defined as $F(x) = P(X \le x)$, it evaluates the probability that $X$ is less than or equal to a number $x$.
+It is always between 0 and 1, and is a nondecreasing function.
+
+**Calculating Probabilities:** The probability that $X$ falls between $a$ and $b$ is computed via the CDF: $P(a \le X \le b) = F(b) - F(a)$.
+
+### Joint Distributions, Conditional Distributions, and Independence
+
+#### Joint Distributions and Independence
+
+When dealing with multiple random variables, their relationship is described by a **joint PDF**, $f_{X,Y}(x,y) = P(X=x, Y=y)$.
+
+**Independence:** Random variables $X$ and $Y$ are independent if their joint PDF is the product of their marginal PDFs: $f_{X,Y}(x,y) = f_X(x)f_Y(y)$.
+Knowing the outcome of $X$ tells us nothing about the outcome of $Y$.
+
+**Binomial Distribution:** The sum of $n$ independent Bernoulli trials (each with success probability $\theta$) follows a Binomial distribution: $X \sim \text{Binomial}(n, \theta)$.
+The probability of exactly $x$ successes is $\binom{n}{x} \theta^x (1-\theta)^{n-x}$.
+
+#### Conditional Distributions
+
+The **conditional PDF** of $Y$ given $X=x$ is $f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}$.
+It evaluates $P(Y=y | X=x)$.
+If $X$ and $Y$ are independent, then $f_{Y|X}(y|x) = f_Y(y)$.
+
+### Features of Probability Distributions
+
+#### The Expected Value and its Properties
+
+The **expected value** (or population mean), $E(X)$ or $\mu$, is the probability-weighted average of all possible values of $X$.
+For a discrete variable, $E(X) = \sum x_j f(x_j)$.
+E(X) does not necessarily correspond to a value that $X$ can actually take.
+Key Properties:
+
+1\.
+**Constants:** $E(c) = c$.
+
+2\.
+**Linearity:** $E(aX+b) = aE(X) + b$.
+
+3\.
+**Sums:** The expected value of a sum is the sum of expected values: $E(\sum a_i X_i) = \sum a_i E(X_i)$.
+
+*Note:* For nonlinear functions, $E[g(X)] \neq g(E[X])$ in general (e.g., $E(X^2) \neq [E(X)]^2$).
+
+#### The Median
+
+The median is the value $m$ where half the area of the PDF is to the left and half to the right.
+If a distribution is symmetric about its mean $\mu$, then the mean and the median are equal.
+
+#### Variance and Standard Deviation
+
+**Variance** measures the expected squared distance of $X$ from its mean: $Var(X) = E[(X - \mu)^2] = E(X^2) - \mu^2$.
+Variance is always non-negative, and denoted $\sigma^2$.
+Key Properties:
+
+1\.
+**Constants:** $Var(c) = 0$.
+
+2\.
+**Linear Combinations:** $Var(aX+b) = a^2 Var(X)$ (Adding a constant does not change variance; multiplying scales it by the constant squared).
+
+**Standard Deviation (**$sd(X)$ or $\sigma$) is the positive square root of the variance.
+It restores the measure of dispersion to the original units of the variable.
+Property: $sd(aX+b) = |a|sd(X)$.
+
+#### Standardizing, Skewness, and Kurtosis
+
+-   **Standardization:** To create a variable $Z$ with a mean of 0 and a variance of 1, subtract the mean and divide by the standard deviation: $Z = \frac{X - \mu}{\sigma}$.
+-   **Skewness:** Measured by the third moment, $E(Z^3)$. If a distribution is symmetric, skewness is zero.
+-   **Kurtosis:** Measured by the fourth moment, $E(Z^4)$. It captures the "thickness" of the tails. The standard normal distribution has a kurtosis of 3.
+
+### Features of Joint and Conditional Distributions
+
+#### Covariance and Correlation
+
+**Covariance** measures the linear dependence between two variables: $Cov(X,Y) = E[(X-\mu_X)(Y-\mu_Y)] = E(XY) - \mu_X\mu_Y$.
+
+If $X$ and $Y$ are independent, $Cov(X,Y) = 0$ (but zero covariance does *not* strictly imply independence).
+
+$Cov(a_1 X + b_1, a_2 Y + b_2) = a_1 a_2 Cov(X,Y)$.
+
+**Correlation Coefficient (**$\rho_{XY}$) standardizes covariance to remove the influence of measurement units: $Corr(X,Y) = \frac{Cov(X,Y)}{sd(X)sd(Y)}$.
+
+Bounded: $-1 \le Corr(X,Y) \le 1$.
+
+$Corr(X,Y) = 1$ implies a perfect positive linear relationship; $-1$ implies a perfect negative linear relationship.
+
+#### Variance of Sums of Random Variables
+
+The variance of a sum accounts for covariance: $Var(aX + bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y)$.
+If $X$ and $Y$ are uncorrelated ($Cov=0$), the variance of the sum (or difference) is the sum of the variances: $Var(X \pm Y) = Var(X) + Var(Y)$.
+For $n$ pairwise uncorrelated variables: $Var(\sum a_i X_i) = \sum a_i^2 Var(X_i)$.
+
+#### Conditional Expectation
+
+The **conditional expectation** $E(Y|X=x)$ tells us how the average value of $Y$ varies with specific outcomes of $X$.
+In econometrics, this is frequently modeled as a function, like $E(Y|X) = \beta_0 + \beta_1 X$.
+Key Properties:
+
+**CE.1:** $E[c(X)|X] = c(X)$ (Functions of $X$ act as constants when conditioning on $X$).
+
+**CE.2:** $E[a(X)Y + b(X)|X] = a(X)E(Y|X) + b(X)$.
+
+**CE.3:** If $X$ and $Y$ are independent, $E(Y|X) = E(Y)$.
+
+**CE.4 (Law of Iterated Expectations):** $E[E(Y|X)] = E(Y)$.
+The unconditional expectation of $Y$ is the expected value of the conditional expectation.
+
+**CE.5:** If $E(Y|X) = E(Y)$, then $Cov(X,Y) = 0$ (but zero covariance does not guarantee $E(Y|X)=E(Y)$).
+
+#### Conditional Variance
+
+The conditional variance is $Var(Y|X=x) = E(Y^2|x) - [E(Y|x)]^2$.
+If $X$ and $Y$ are independent, the conditional variance equals the unconditional variance: $Var(Y|X) = Var(Y)$.
+
+### The Normal and Related Distributions
+
+#### The Normal Distribution
+
+The normal distribution is characterized by its bell shape, defined purely by its mean ($\mu$) and variance ($\sigma^2$): $X \sim Normal(\mu, \sigma^2)$.
+
+**Standard Normal Distribution:** $Z \sim Normal(0,1)$.
+The CDF of $Z$ is denoted $\Phi(z)$.
+
+**Standardizing:** Any normal variable can be standardized to compute probabilities: $P(X \le x) = P\left(\frac{X-\mu}{\sigma} \le \frac{x-\mu}{\sigma}\right) = P(Z \le z) = \Phi(z)$.
+
+#### Additional Properties of the Normal Distribution
+
+-   A linear transformation of a normal variable remains normal: $aX+b \sim Normal(a\mu+b, a^2\sigma^2)$.
+-   If two jointly normal variables are uncorrelated, they are absolutely independent.
+-   Any linear combination of independent normal variables is normally distributed. For example, the sample average $\bar{Y} \sim Normal(\mu, \sigma^2/n)$.
+
+#### The Chi-Square Distribution
+
+If you square and sum $n$ independent standard normal variables, $Z_i \sim Normal(0,1)$, the resulting variable $X = \sum Z_i^2$ has a **chi-square distribution with** $n$ degrees of freedom ($X \sim \chi^2_n$).
+The mean is $n$ and the variance is $2n$.
+
+#### The t Distribution
+
+The **t distribution** is formed by dividing a standard normal variable $Z$ by the square root of an independent chi-square variable $X$ (divided by its degrees of freedom $n$): $T = \frac{Z}{\sqrt{X/n}} \sim t_n$.
+The t distribution has thicker tails than the normal, but approaches the standard normal distribution as the degrees of freedom ($n$) approach infinity.
+
+#### The F Distribution
+
+The **F distribution** is the ratio of two independent chi-square variables, each divided by their respective degrees of freedom: $F = \frac{X_1/k_1}{X_2/k_2} \sim F_{k_1, k_2}$.
+$k_1$ is the numerator degrees of freedom, and $k_2$ is the denominator degrees of freedom.
+
+## Mathematical Statistics
+
+### Populations, Parameters, and Random Sampling
+
+Statistical inference involves learning about a population from a sample, primarily through estimation and hypothesis testing.
+
+**Parameters:** These are the unknown constants that determine the strength and direction of relationships within the population probability distributions.
+
+**Random Sampling:** If $Y_1, Y_2, \dots, Y_n$ are independent random variables with a common probability density function $f(y; \theta)$, they form a random sample.
+We also refer to them as independent, identically distributed (i.i.d.) random variables.
+
+### Finite Sample Properties of Estimators
+
+These properties hold for a sample of any size, whether small or large.
+
+#### Estimators and Estimates
+
+An **estimator** $W$ is a predefined rule or mathematical formula, $W = h(Y_1, \dots, Y_n)$, used to assign a value to a parameter $\theta$.
+Because it depends on the random sample, the estimator itself is a random variable with a sampling distribution.
+An **estimate** $w$ is the specific numerical value obtained once actual data are plugged into the rule.
+
+#### Unbiasedness
+
+An estimator is **unbiased** if its expected value over all possible random samples equals the true parameter: $E(W) = \theta$.
+
+**Bias:** Defined as $Bias(W) = E(W) - \theta$.
+\* The sample average $\bar{Y} = \frac{1}{n}\sum Y_i$ is an unbiased estimator of the population mean $\mu$.
+
+The sample variance $S^2 = \frac{1}{n-1}\sum (Y_i - \bar{Y})^2$ is an unbiased estimator of the population variance $\sigma^2$.
+
+#### The Sampling Variance and Efficiency
+
+Unbiasedness is not enough; we also want the estimator's distribution to be tightly centered around the true parameter.
+
+**Sampling Variance:** Measures the dispersion of the estimator.
+For the sample average, $Var(\bar{Y}) = \sigma^2 / n$.
+A larger sample size $n$ directly shrinks the variance.
+
+**Relative Efficiency:** If $W_1$ and $W_2$ are both unbiased estimators, $W_1$ is more efficient if $Var(W_1) \le Var(W_2)$ for all $\theta$.
+
+**Mean Squared Error (MSE):** For biased estimators, we compare MSE: $MSE(W) = Var(W) + [Bias(W)]^2$.
+
+### Asymptotic or Large Sample Properties of Estimators
+
+These properties describe the behavior of an estimator as the sample size $n$ grows indefinitely.
+
+#### Consistency
+
+An estimator $W_n$ is **consistent** for $\theta$ if the probability that it is far from $\theta$ shrinks to zero as $n \to \infty$: $P(|W_n - \theta| > \epsilon) \to 0$.
+\* We write this as the probability limit: $plim(W_n) = \theta$.
+
+**Law of Large Numbers (LLN):** States that $plim(\bar{Y}_n) = \mu$, meaning the sample average converges to the population average.
+
+**Properties of Plims:** Unlike expected values, plims pass through continuous functions (e.g., $plim(g(W_n)) = g(plim(W_n))$) and preserve multiplication and division.
+
+#### Asymptotic Normality
+
+Even if the underlying population is not normal, the **Central Limit Theorem (CLT)** states that the standardized sample average has an **asymptotic standard normal distribution**.
+\* $Z_n = \frac{\bar{Y}_n - \mu}{\sigma/\sqrt{n}} \sim \text{Normal}(0,1)$ as $n \to \infty$.
+
+### General Approaches to Parameter Estimation
+
+1.  **Method of Moments:** Replaces population moments (like $E(Y)$) with their sample counterparts (like $\bar{Y}$). For instance, sample covariance and sample correlation are method of moments estimators.
+2.  **Maximum Likelihood Estimation (MLE):** Chooses the parameter value $\theta$ that maximizes the likelihood function (or log-likelihood function), representing the probability of observing the actual data sample. MLE is typically the most asymptotically efficient estimator.
+3.  **Least Squares:** Estimates the parameter by minimizing the sum of squared deviations: $\sum(Y_i - m)^2$.
+
+### Interval Estimation and Confidence Intervals
+
+A point estimate lacks information regarding its precision.
+An interval estimate provides a random interval that contains the true parameter with a specified probability.
+
+**Confidence Interval (CI):** A 95% CI for a population mean $\mu$ (when $\sigma$ is unknown) is $\bar{y} \pm c \cdot se(\bar{y})$, where $se(\bar{y}) = s/\sqrt{n}$.
+\* The critical value $c$ is the 97.5th percentile from the $t_{n-1}$ distribution.
+
+**Rule of Thumb:** For large $n$, the $t$ distribution approaches the standard normal, making $c \approx 1.96$ (often rounded to 2).
+The approximate 95% CI is simply $\bar{y} \pm 2 \cdot se(\bar{y})$.
+
+**Interpretation:** It is incorrect to say "there is a 95% probability the parameter is in this specific interval." Rather, across 95% of all possible random samples, the constructed interval will contain the true parameter.
+
+### Hypothesis Testing
+
+Tests a specific hypothesis about the population using sample data.
+
+#### Fundamentals and the t-Statistic
+
+**Null Hypothesis (**$H_0$): The presumed truth, typically $H_0: \mu = \mu_0$.
+
+**Alternative Hypothesis (**$H_1$): Can be one-sided ($m > m_0$ or $m < m_0$) or two-sided ($m \neq m_0$).
+
+**Errors:** A Type I error occurs when a true $H_0$ is rejected.
+The **significance level (**$\alpha$) specifies the probability of a Type I error (e.g., 0.05).
+
+**t-statistic:** $t = \frac{\bar{y} - \mu_0}{se(\bar{y})}$.
+We compare $t$ to a critical value $c$.
+For a two-tailed test, we reject $H_0$ if $|t| > c$.
+
+#### Computing and Using p-Values
+
+The **p-value** is the largest significance level at which we would still fail to reject $H_0$.
+
+It represents the probability of observing a test statistic as extreme as the one computed, assuming $H_0$ is true.
+\* Small p-values are strong evidence against $H_0$.
+If $p\text{-value} < \alpha$, we reject $H_0$.
+
+#### Connections and Significance
+
+-   **Link to CIs:** If the hypothesized value $\mu_0$ is not contained in the 95% confidence interval, then $H_0: \mu = \mu_0$ is rejected against the two-sided alternative at the 5% significance level.
+-   **Practical vs. Statistical Significance:** A $t$ statistic ($t = \frac{\bar{y}}{se(\bar{y})}$) can be large either because the estimate $\bar{y}$ is practically large, or simply because a massive sample size caused $se(\bar{y})$ to shrink near zero. Always evaluate the economic magnitude (practical significance) alongside the statistical significance.
+
+### Remarks on Notation
+
+In econometrics, the "hat" notation (e.g., $\hat{\theta}$) is used universally to represent *both* the random estimator and the numerical estimate.
+Whether it represents a random variable (when discussing sampling distributions) or a fixed number (when discussing a particular sample outcome) is determined by the context.
+
+## Simple Linear Regression
+
+### Definition of the Simple Regression Model
+
+The simple linear regression model assumes that a population relationship between a dependent variable $y$ and an independent variable $x$ can be written as: $y = \beta_0 + \beta_1 x + u$.
+\* $\beta_0$ is the intercept parameter, and $\beta_1$ is the slope parameter.
+
+$u$ is the error term (or disturbance), representing all unobserved factors that affect $y$.
+Holding the unobserved factors fixed ($\Delta u = 0$), the marginal effect of $x$ on $y$ is linear and constant: $\Delta y = \beta_1 \Delta x$.
+To establish a causal relationship, we assume that the average value of $u$ does not depend on the value of $x$, known as the mean independence assumption: $E(u|x) = E(u)$.
+Without loss of generality, the unconditional expectation of the error can be normalized to zero: $E(u) = 0$.
+Combining these yields the zero conditional mean assumption: $E(u|x) = 0$.
+Under this assumption, the population regression function (PRF) defines the expected value of $y$ conditional on $x$ as a linear function: $E(y|x) = \beta_0 + \beta_1 x$.
+
+### Deriving the Ordinary Least Squares Estimates
+
+For a random sample of size $n$, $\{(x_i, y_i) : i = 1, \dots, n\}$, the population model for each observation $i$ is: $y_i = \beta_0 + \beta_1 x_i + u_i$.
+Using the method of moments based on the population restrictions $E(u) = 0$ and $Cov(x,u) = E(xu) = 0$, we obtain the following sample counterparts (first order conditions) to solve for the estimates $\hat{\beta}_0$ and $\hat{\beta}_1$: 1.
+$n^{-1} \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0$.
+2.
+$n^{-1} \sum_{i=1}^n x_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0$.
+
+Solving the first equation yields the ordinary least squares (OLS) intercept estimate: $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$.
+Substituting $\hat{\beta}_0$ into the second equation and applying the properties of the summation operator yields the OLS slope estimate: $\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}$.
+This can also be expressed using sample standard deviations and correlation as $\hat{\beta}_1 = \hat{\rho}_{xy} \left(\frac{\hat{\sigma}_y}{\hat{\sigma}_x}\right)$.
+The OLS estimates minimize the sum of squared residuals, $\sum_{i=1}^n \hat{u}_i^2 = \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$.
+Once computed, the sample regression function (SRF) or OLS regression line is: $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$, where the predicted change is $\Delta\hat{y} = \hat{\beta}_1 \Delta x$.
+
+#### A Note on Terminology
+
+Estimating $y = \beta_0 + \beta_1 x + u$ by obtaining $\hat{\beta}_0$ and $\hat{\beta}_1$ via OLS is commonly referred to as regressing $y$ on $x$.
+
+### Properties of OLS on Any Sample of Data
+
+#### Fitted Values and Residuals
+
+For each observation, the fitted value is $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$ and the OLS residual is $\hat{u}_i = y_i - \hat{y}_i$.
+
+#### Algebraic Properties of OLS Statistics
+
+1.  The sample average of the OLS residuals is zero: $\sum_{i=1}^n \hat{u}_i = 0$.
+2.  The sample covariance between the regressors and the residuals is zero: $\sum_{i=1}^n x_i \hat{u}_i = 0$.
+3.  The point $(\bar{x}, \bar{y})$ is always on the OLS regression line: $\bar{y} = \hat{\beta}_0 + \hat{\beta}_1 \bar{x}$.
+
+Each observation can be decomposed as $y_i = \hat{y}_i + \hat{u}_i$.
+This allows the total sample variation in $y$ to be decomposed into explained and unexplained parts:
+
+Total Sum of Squares: $SST \equiv \sum_{i=1}^n (y_i - \bar{y})^2$.
+
+Explained Sum of Squares: $SSE \equiv \sum_{i=1}^n (\hat{y}_i - \bar{y})^2$.
+
+Residual Sum of Squares: $SSR \equiv \sum_{i=1}^n \hat{u}_i^2$.
+Algebraically, $SST = SSE + SSR$.
+
+#### Goodness-of-Fit
+
+The $R$-squared (coefficient of determination) is the fraction of the sample variation in $y$ that is explained by $x$: $R^2 \equiv \frac{SSE}{SST} = 1 - \frac{SSR}{SST}$.
+$R^2$ is bounded between 0 and 1, and equals the squared sample correlation coefficient between $y_i$ and $\hat{y}_i$.
+
+### Units of Measurement and Functional Form
+
+#### The Effects of Changing Units of Measurement on OLS Statistics
+
+-   If the dependent variable $y$ is multiplied by a constant $c$, both the OLS intercept ($\hat{\beta}_0$) and slope ($\hat{\beta}_1$) estimates are multiplied by $c$.
+-   If the independent variable $x$ is multiplied by a constant $c$, the OLS slope estimate is divided by $c$, while the intercept remains unchanged.
+-   The goodness-of-fit measure, $R^2$, is strictly invariant to linear changes in the units of measurement of either variable.
+
+#### Incorporating Nonlinearities in Simple Regression
+
+-   **Log-Level Model (Constant Percentage Effect):** $\log(y) = \beta_0 + \beta_1 x + u$. A one-unit change in $x$ leads to a $(100 \cdot \beta_1)\%$ change in $y$.
+-   **Log-Log Model (Constant Elasticity):** $\log(y) = \beta_0 + \beta_1 \log(x) + u$. The coefficient $\beta_1$ represents the elasticity of $y$ with respect to $x$ (a 1% change in $x$ leads to a $\beta_1\%$ change in $y$).
+-   **Level-Log Model:** $y = \beta_0 + \beta_1 \log(x) + u$. A 1% change in $x$ implies a $\Delta y \approx (\beta_1 / 100)$.
+
+#### The Meaning of “Linear” Regression
+
+"Linear" signifies that the model is strictly linear in its parameters ($\beta_0, \beta_1$), not necessarily in the underlying variables $y$ and $x$, allowing for functions like natural logs or squares.
+
+### Expected Values and Variances of the OLS Estimators
+
+#### Unbiasedness of OLS
+
+OLS unbiasedness relies on four assumptions:
+
+1\.
+**SLR.1 (Linear in parameters):** $y = \beta_0 + \beta_1 x + u$.
+
+2\.
+**SLR.2 (Random sampling):** A sample of size $n$, $\{(x_i, y_i) : i = 1, \dots, n\}$, is drawn randomly from the population.
+
+3\.
+**SLR.3 (Sample variation in explanatory variable):** The sample values $x_i$ are not all identical.
+
+4\.
+**SLR.4 (Zero conditional mean):** $E(u|x) = 0$.
+
+Under these assumptions, the OLS estimator can be written in terms of the population parameter and the errors: $\hat{\beta}_1 = \beta_1 + \frac{\sum_{i=1}^n (x_i - \bar{x})u_i}{SST_x}$.
+Taking the expectation conditional on the sample values of $x$ establishes unbiasedness (Theorem 2.1): $E(\hat{\beta}_0) = \beta_0$ and $E(\hat{\beta}_1) = \beta_1$.
+
+#### Variances of the OLS Estimators
+
+To simplify the calculation of the variance of the OLS estimators, a fifth assumption is added:
+
+5.  **SLR.5 (Homoskedasticity):** $Var(u|x) = \sigma^2$, meaning the error variance is constant across all values of $x$.
+
+Under SLR.1 through SLR.5 (Theorem 2.2), the sampling variances conditional on $x$ are: \* $Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sigma^2}{SST_x}$.
+\* $Var(\hat{\beta}_0) = \frac{\sigma^2 n^{-1} \sum_{i=1}^n x_i^2}{\sum_{i=1}^n (x_i - \bar{x})^2}$.
+
+#### Estimating the Error Variance
+
+The error variance $\sigma^2$ is the expected value of $u^2$.
+Because true errors $u_i$ are unobserved, we rely on the OLS residuals $\hat{u}_i$.
+The residuals are related to the unobserved errors by: $\hat{u}_i = u_i - (\hat{\beta}_0 - \beta_0) - (\hat{\beta}_1 - \beta_1)x_i$.
+Because 2 degrees of freedom are lost estimating $\hat{\beta}_0$ and $\hat{\beta}_1$, the unbiased estimator of the error variance adjusts by $n-2$ (Theorem 2.3): $\hat{\sigma}^2 = \frac{\sum_{i=1}^n \hat{u}_i^2}{n - 2} = \frac{SSR}{n - 2}$.
+The standard error of the regression (SER) is $\hat{\sigma} = \sqrt{\hat{\sigma}^2}$, which allows the standard error of the slope estimator to be computed as: $se(\hat{\beta}_1) = \frac{\hat{\sigma}}{\sqrt{SST_x}}$.
+
+### Regression through the Origin and Regression on a Constant
+
+If the intercept $\beta_0$ is constrained to zero, the equation is $\tilde{y} = \tilde{\beta}_1 x$.
+The slope estimator minimizing the sum of squared residuals without an intercept is: $\tilde{\beta}_1 = \frac{\sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2}$.
+Conversely, if the model restricts the slope to zero (regression on a constant), the intercept that minimizes the sum of squared residuals is strictly the sample average: $\tilde{\beta}_0 = \bar{y}$.
+
+### Regression on a Binary Explanatory Variable
+
+When the independent variable $x$ is binary ($x \in \{0, 1\}$), the population regression function yields: $E(y|x) = \beta_0 + \beta_1 x$.
+Here, $\beta_1 = E(y|x=1) - E(y|x=0)$, representing the difference in expected values between the two groups.
+The mechanics of OLS dictate that:
+
+$\hat{\beta}_0 = \bar{y}_0$ (the sample average of $y$ for the group where $x=0$).
+
+$\hat{\beta}_1 = \bar{y}_1 - \bar{y}_0$ (the difference in sample means between the $x=1$ group and the $x=0$ group).
+
+#### Counterfactual Outcomes, Causality, and Policy Analysis
+
+In the context of treatment effects, let $y(1)$ be the potential outcome with treatment and $y(0)$ without.
+If the treatment assignment $x$ is completely independent of the baseline potential outcome $u(0)$, the zero conditional mean assumption $E[u(0)|x] = 0$ holds.
+In such a purely randomized experiment, the simple regression slope estimate $\hat{\beta}_1$ serves as an unbiased estimator of the average treatment effect $\tau$.
+
+## Multiple Regression: Estimation
+
+### Motivation for Multiple Regression
+
+**The Model with Two Independent Variables** The simple regression model can be expanded to include multiple observable factors, such as $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$, where $\beta_0$ is the intercept, and $\beta_1$ and $\beta_2$ measure the change in $y$ with respect to $x_1$ and $x_2$, respectively, holding other factors fixed.
+The key mathematical assumption for estimating these ceteris paribus effects is the zero conditional mean assumption, which dictates that the unobserved error $u$ is, on average, unrelated to the included variables: $E(u|x_1, x_2) = 0$.
+
+**The Model with k Independent Variables** The general multiple linear regression (MLR) model is written in the population as $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k + u$, where $\beta_0$ is the intercept and the remaining $\beta_j$ are the $k$ slope parameters.
+The zero conditional mean assumption extends to all $k$ variables: $E(u|x_1, x_2, \dots, x_k) = 0$.
+
+### Mechanics and Interpretation of Ordinary Least Squares
+
+**Obtaining the OLS Estimates** Given a sample of $n$ observations, the method of ordinary least squares (OLS) chooses the estimates $\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k$ to minimize the sum of squared residuals: $\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \dots - \hat{\beta}_k x_{ik})^2$.
+Using multivariable calculus, this minimization yields $k+1$ linear equations (the FOCs) in $k+1$ unknowns: $\sum_{i=1}^n \hat{u}_i = 0$, and $\sum_{i=1}^n x_{ij} \hat{u}_i = 0$ for all $j = 1, \dots, k$.
+
+**Interpreting the OLS Regression Equation** The sample regression function (SRF) is $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \dots + \hat{\beta}_k x_k$.
+The intercept $\hat{\beta}_0$ is the predicted value of $y$ when all $x_j = 0$.
+The slope estimates yield partial effect interpretations, computed as the predicted change: $\Delta \hat{y} = \hat{\beta}_1 \Delta x_1 + \dots + \hat{\beta}_k \Delta x_k$.
+
+**On the Meaning of “Holding Other Factors Fixed” in Multiple Regression** The power of multiple regression is its mathematical isolation of ceteris paribus effects: by setting the change in all other independent variables to zero (e.g., $\Delta x_2 = \dots = \Delta x_k = 0$), the formula strictly reduces to $\Delta \hat{y} = \hat{\beta}_1 \Delta x_1$.
+
+**Changing More Than One Independent Variable Simultaneously** If multiple variables change at once, the predicted change in $y$ is simply the sum of their individual partial effects algebraically added together.
+
+**OLS Fitted Values and Residuals** For any observation $i$, the fitted value is $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_{i1} + \dots + \hat{\beta}_k x_{ik}$ and the OLS residual is $\hat{u}_i = y_i - \hat{y}_i$.
+The algebraic properties dictated by the FOCs guarantee that the sample average of the residuals is zero ($\sum_{i=1}^n \hat{u}_i = 0$), the sample covariance between each independent variable and the residuals is zero, and the point containing the sample averages $(\bar{x}_1, \dots, \bar{x}_k, \bar{y})$ always lies directly on the OLS regression line.
+
+**A “Partialling Out” Interpretation of Multiple Regression** In a model with two independent variables, $\hat{\beta}_1$ can be expressed analytically as $\hat{\beta}_1 = \frac{\sum_{i=1}^n \hat{r}_{i1} y_i}{\sum_{i=1}^n \hat{r}_{i1}^2}$, where the $\hat{r}_{i1}$ are the OLS residuals from a simple regression of $x_1$ on $x_2$.
+This proves that $\hat{\beta}_1$ mathematically isolates the relationship between $y$ and $x_1$ after the linear effect of $x_2$ has been completely partialled (or netted) out.
+
+**Comparison of Simple and Multiple Regression Estimates** The slope $\tilde{\beta}_1$ from a simple regression of $y$ on $x_1$ is related to the multiple regression slope $\hat{\beta}_1$ by the exact equation $\tilde{\beta}_1 = \hat{\beta}_1 + \hat{\beta}_2 \tilde{\delta}_1$, where $\tilde{\delta}_1$ is the slope coefficient from the simple regression of $x_2$ on $x_1$.
+The two estimators are identical only if either the partial effect of $x_2$ is zero ($\hat{\beta}_2 = 0$) or the variables $x_1$ and $x_2$ are completely uncorrelated in the sample ($\tilde{\delta}_1 = 0$).
+
+**Goodness-of-Fit** The total variation in the sample can be decomposed as $SST = SSE + SSR$, where $SST = \sum_{i=1}^n (y_i - \bar{y})^2$, $SSE = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2$, and $SSR = \sum_{i=1}^n \hat{u}_i^2$.
+The $R^2$ goodness-of-fit measure is the fraction of total sample variation explained by the model: $R^2 = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}$.
+
+**Regression through the Origin** If the population intercept $\beta_0$ is constrained to zero, the OLS estimates are derived by minimizing the sum of squared residuals without $\beta_0$.
+However, the residuals from a regression through the origin do not necessarily average out to zero.
+
+### The Expected Value of the OLS Estimators
+
+The unbiasedness of OLS rests on four population assumptions (Theorem 3.1, $E(\hat{\beta}_j) = \beta_j$):
+
+1\.
+**MLR.1 (Linear in parameters):** The population model is $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u$.
+
+2.  **MLR.2 (Random sampling):** The data consist of a random sample of size $n$ from the population.
+
+3\.
+**MLR.3 (No perfect collinearity):** In the sample, no independent variable is constant or an exact linear combination of the other variables.
+
+4\.
+**MLR.4 (Zero conditional mean):** $E(u|x_1, x_2, \dots, x_k) = 0$.
+
+**Including Irrelevant Variables in a Regression Model** If you include an irrelevant variable ($x_3$) where its true population parameter is $\beta_3 = 0$, the OLS estimators for all parameters remain unbiased, meaning their expected values across all random samples are unaffected.
+
+**Omitted Variable Bias: The Simple Case** If the true model is $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$, but you omit $x_2$ and estimate $\tilde{y} = \tilde{\beta}_0 + \tilde{\beta}_1 x_1$, the expected value of the slope becomes $E(\tilde{\beta}_1) = \beta_1 + \beta_2 \tilde{\delta}_1$.
+The term $\beta_2 \tilde{\delta}_1$ is the omitted variable bias.
+If $\beta_2 > 0$ and $x_1$ and $x_2$ are positively correlated ($\tilde{\delta}_1 > 0$), the bias is mathematically positive (upward bias).
+
+**Omitted Variable Bias: More General Cases** If multiple regressors exist and $x_3$ is omitted, all other OLS estimators are generally biased unless the retained variables are uncorrelated with the omitted variable.
+Assuming $x_1$ and $x_2$ are uncorrelated, the bias on $\tilde{\beta}_1$ can be isolated by analyzing the simple correlation between $x_1$ and the omitted $x_3$.
+
+### The Variance of the OLS Estimators
+
+To calculate the variances of the estimators, a fifth assumption is added:
+
+**5. MLR.5 (Homoskedasticity):** The conditional variance of the error is constant: $Var(u|x_1, \dots, x_k) = \sigma^2$.
+Theorem 3.2 gives the variance formula: $Var(\hat{\beta}_j) = \frac{\sigma^2}{SST_j (1 - R_j^2)}$.
+
+**The Components of the OLS Variances: Multicollinearity** Three mathematical factors dictate the variance:
+
+1\.
+**Error Variance (**$\sigma^2$): A higher unobserved noise increases the variance.
+
+2\.
+**Total Sample Variation (**$SST_j$): A larger spread in $x_j$ (often driven by a larger sample size $n$) decreases the variance.
+
+3\.
+**Multicollinearity (**$R_j^2$): $R_j^2$ is the $R$-squared from regressing $x_j$ on all other independent variables.
+As this correlation approaches 1, the variance inflates unbounded.
+The multiplier $1/(1-R_j^2)$ is formalized as the Variance Inflation Factor (VIF).
+
+**Variances in Misspecified Models** If $x_2$ is irrelevant ($\beta_2 = 0$), omitting it produces an estimator $\tilde{\beta}_1$ with a strictly smaller variance than the multiple regression estimator $\hat{\beta}_1$.
+The cost of including an irrelevant variable is entirely a loss of mathematical precision (higher variance) due to induced multicollinearity.
+
+**Estimating** $\sigma^2$: Standard Errors of the OLS Estimators Because $k+1$ restrictions are imposed on the residuals by the FOCs, the unbiased estimator for $\sigma^2$ requires a degrees of freedom ($df$) correction: $\hat{\sigma}^2 = \frac{SSR}{n - k - 1}$.
+The standard error of the regression (SER) is $\hat{\sigma}$, yielding the standard error of the coefficient: $se(\hat{\beta}_j) = \frac{\hat{\sigma}}{\sqrt{SST_j(1 - R_j^2)}}$.
+
+### Efficiency of OLS: The Gauss-Markov Theorem
+
+Theorem 3.4 (The Gauss-Markov Theorem) states that under Assumptions MLR.1 through MLR.5, the OLS estimators are the Best Linear Unbiased Estimators (BLUE).
+Mathematically, if $\tilde{\beta}_j = \sum_{i=1}^n w_{ij} y_i$ is any other linear and unbiased estimator, its variance must be at least as large as the OLS variance: $Var(\hat{\beta}_j) \le Var(\tilde{\beta}_j)$.
+
+### Some Comments on the Language of Multiple Regression Analysis
+
+The linear model is a population concept defined mathematically as $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u$, which exists independently of the estimation method applied to it.
+OLS is simply the computational tool to estimate those theoretical parameters $\beta_j$.
+
+### Several Scenarios for Applying Multiple Regression
+
+**Prediction** If the MLR.4 assumption $E(u|x_1, \dots, x_k) = 0$ holds, the regression perfectly models the conditional expectation $E(y|x_1, \dots, x_k) = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$, which generates unbiased fitted predictions for $y$.
+
+**Efficient Markets** If theory suggests a single variable $w$ is a "sufficient statistic" for predicting $y$, this implies the exact mathematical condition $E(y|w, x) = E(y|w)$.
+In a linear model, this requires the parameters $\gamma_j$ on all other $x_j$ factors to be strictly zero.
+
+**Measuring the Tradeoff between Two Variables** Multiple regression estimates tradeoffs algebraically; setting $\Delta \hat{y} = 0$ calculates how much one variable must be adjusted to offset a change in another while holding the outcome constant.
+
+**Testing for Ceteris Paribus Group Differences** By incorporating binary indicator variables for distinct groups, the resulting slope coefficient $b$ mathematically isolates the difference in the expected value of $y$ between those groups after statistically controlling for all $x_j$ covariates.
+
+**Potential Outcomes, Treatment Effects, and Policy Analysis** Defining potential outcomes $y(0)$ and $y(1)$, the causal treatment effect is $\tau = y(1) - y(0)$.
+Under the "unconfoundedness" (or conditional independence) assumption, the unobserved potential outcomes are independent of the treatment $w$ given covariates $x$.
+Assuming a linear form $E[y(0)|x] = \alpha + x\gamma$, the causal effect maps flawlessly into the standard regression equation $E(y|w, x) = \alpha + \tau w + x\gamma$, where $\tau$ is consistently estimated by OLS.
+
+## Multiple Regression: Inference
+
+### Sampling Distributions of the OLS Estimators
+
+To perform exact statistical inference, we must know the full sampling distribution of the OLS estimators $\hat{\beta}_j$.
+This requires adding a sixth assumption to the Gauss-Markov setup.
+
+**Assumption MLR.6 (Normality):** The population error $u$ is independent of the explanatory variables $x_1, \dots, x_k$ and is normally distributed with zero mean and variance $\sigma^2$: $u \sim \text{Normal}(0, \sigma^2)$.
+
+Assumptions MLR.1 through MLR.6 are collectively known as the Classical Linear Model (CLM) assumptions.
+Under the CLM, the population distribution of $y$ given $x$ is: $y|x \sim \text{Normal}(\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k, \sigma^2)$.
+
+**Theorem 4.1 (Normal Sampling Distributions):** Under MLR.1 through MLR.6, conditional on the sample values of the independent variables, each OLS estimator is normally distributed: $\hat{\beta}_j \sim \text{Normal}(\beta_j, Var(\hat{\beta}_j))$.
+Consequently, the standardized estimator is standard normal: $(\hat{\beta}_j - \beta_j)/sd(\hat{\beta}_j) \sim \text{Normal}(0,1)$.
+
+### Testing Hypotheses about a Single Population Parameter: The t Test
+
+To test hypotheses about the unknown population parameter $\beta_j$, we must replace the unknown standard deviation $sd(\hat{\beta}_j)$ with the estimated standard error $se(\hat{\beta}_j)$.
+
+**Theorem 4.2:** Under the CLM assumptions, the standardized estimator using the standard error follows a $t$ distribution: $(\hat{\beta}_j - \beta_j)/se(\hat{\beta}_j) \sim t_{n-k-1}$.
+Here, $n-k-1$ represents the degrees of freedom ($df$), where $n$ is the sample size and $k+1$ is the total number of estimated parameters (including the intercept).
+
+For the common null hypothesis $H_0: \beta_j = 0$, the test statistic (the $t$ statistic) is strictly defined as: $t_{\hat{\beta}_j} \equiv \frac{\hat{\beta}_j}{se(\hat{\beta}_j)}$.
+
+#### Testing against One-Sided Alternatives
+
+-   $H_1: \beta_j > 0$: The rejection rule at a chosen significance level $\alpha$ (e.g., 5%) is $t > c$, where the critical value $c$ is the $(1-\alpha)$ percentile in a $t_{n-k-1}$ distribution.
+-   $H_1: \beta_j < 0$: The rejection rule is $t < -c$, where $c$ is the positive critical value obtained exactly as above.
+
+#### Two-Sided Alternatives
+
+-   $H_1: \beta_j \neq 0$: The appropriate rejection rule utilizes the absolute value of the $t$ statistic: $|t| > c$. Here, $c$ is the $(1-\alpha/2)$ percentile in a $t_{n-k-1}$ distribution (e.g., the 97.5th percentile for a 5% significance level).
+
+#### Testing Other Hypotheses about $\beta_j$
+
+To test whether $\beta_j$ equals a specific non-zero constant, $H_0: \beta_j = a_j$, the $t$ statistic is calculated as: $t = \frac{\hat{\beta}_j - a_j}{se(\hat{\beta}_j)}$.
+This statistic is still distributed as $t_{n-k-1}$ under $H_0$, and testing against one- or two-sided alternatives proceeds using the same critical values as before.
+
+#### Computing p-Values for t Tests
+
+The $p$-value represents the smallest significance level at which the null hypothesis would be rejected given the observed $t$ statistic.
+\* For a two-sided alternative, $\text{p-value} = P(|T| > |t|) = 2P(T > |t|)$, where $T \sim t_{n-k-1}$ and $t$ is the calculated test statistic.
+\* If $\text{p-value} < \alpha$, $H_0$ is rejected at the $\alpha$ significance level.
+
+#### A Reminder on the Language of Classical Hypothesis Testing
+
+Mathematically, if $H_0$ is not rejected, it is incorrect to state that $H_0$ is "accepted." We simply "fail to reject $H_0$" because the test statistic could simultaneously fail to reject a continuum of other mathematical values for $\beta_j$.
+
+#### Economic, or Practical, versus Statistical Significance
+
+A $t$ statistic ($t = \hat{\beta}_j / se(\hat{\beta}_j)$) can be large either because the estimated magnitude $\hat{\beta}_j$ is practically large, or because $se(\hat{\beta}_j)$ is mathematically small (often driven by a large sample size $n$).
+
+### Confidence Intervals
+
+A $(1-\alpha)$ confidence interval (CI) provides a random interval that contains the true population parameter $(1-\alpha)$ proportion of the time across repeated samples.
+Under the CLM assumptions, a 95% confidence interval for $\beta_j$ is given by: $\hat{\beta}_j \pm c \cdot se(\hat{\beta}_j)$.
+where $c$ is the 97.5th percentile in a $t_{n-k-1}$ distribution.
+
+### Testing Hypotheses about a Single Linear Combination of the Parameters
+
+To test a relationship between two parameters, such as $H_0: \beta_1 = \beta_2$ against $H_1: \beta_1 < \beta_2$, the null is rewritten as $H_0: \beta_1 - \beta_2 = 0$.
+The $t$ statistic is: $t = \frac{\hat{\beta}_1 - \hat{\beta}_2}{se(\hat{\beta}_1 - \hat{\beta}_2)}$.
+The standard error in the denominator requires the sample covariance between the estimators: $se(\hat{\beta}_1 - \hat{\beta}_2) = \left( [se(\hat{\beta}_1)]^2 + [se(\hat{\beta}_2)]^2 - 2s_{12} \right)^{1/2}$, where $s_{12} = \widehat{Cov}(\hat{\beta}_1, \hat{\beta}_2)$.
+
+Because standard software does not always report $s_{12}$, an algebraically equivalent method is to reparameterize the model.
+Define $\theta_1 = \beta_1 - \beta_2$, meaning $\beta_1 = \theta_1 + \beta_2$.
+Substituting this back into the population model forces the regression software to directly estimate $\hat{\theta}_1$ and report its exact standard error $se(\hat{\theta}_1)$.
+
+### Testing Multiple Linear Restrictions: The F Test
+
+#### Testing Exclusion Restrictions
+
+To test the joint significance of $q$ independent variables, the null hypothesis imposes $q$ exclusion restrictions: $H_0: \beta_{k-q+1} = 0, \dots, \beta_k = 0$.
+The $F$ statistic is mathematically defined using the Sum of Squared Residuals (SSR) from both the unrestricted model ($SSR_{ur}$) and the restricted model ($SSR_r$): $F \equiv \frac{(SSR_r - SSR_{ur})/q}{SSR_{ur}/(n-k-1)}$.
+\* $q = df_r - df_{ur}$ (the numerator degrees of freedom).
+
+$n - k - 1 = df_{ur}$ (the denominator degrees of freedom).
+Under $H_0$ and the CLM assumptions, $F \sim F_{q, n-k-1}$.
+The rejection rule is strictly one-sided: reject $H_0$ if $F > c$, where $c$ is the right-tail critical value from the $F$ distribution.
+
+#### Relationship between F and t Statistics
+
+Testing the exclusion of a single variable ($q=1$) yields an $F$ statistic that is mathematically identical to the square of the $t$ statistic: $F = t^2$.
+Because $t_{n-k-1}^2$ follows an $F_{1, n-k-1}$ distribution, the two approaches yield the exact same $p$-value and outcome for two-sided alternatives.
+
+#### The R-Squared Form of the F Statistic
+
+Because the total sum of squares ($SST$) is identical for both the restricted and unrestricted models (as long as the dependent variable remains exactly the same), the $F$ statistic can be written algebraically using $R^2$: $F = \frac{(R^2_{ur} - R^2_r)/q}{(1 - R^2_{ur})/(n-k-1)}$.
+
+#### Computing p-Values for F Tests
+
+The $p$-value is evaluated as the probability of observing a value as large as the calculated $F$ statistic: $P(F_{q, n-k-1} > F)$.
+
+#### The F Statistic for Overall Significance of a Regression
+
+To test the null hypothesis that *none* of the explanatory variables have an effect on $y$ ($H_0: \beta_1 = \dots = \beta_k = 0$), the restricted model contains only an intercept, meaning $R^2_r = 0$.
+The $F$ statistic simplifies to: $F = \frac{R^2/k}{(1-R^2)/(n-k-1)}$.
+
+#### Testing General Linear Restrictions
+
+To test joint hypotheses that do not simply exclude variables (e.g., $H_0: \beta_1=1, \beta_2=0, \beta_3=0$), you mathematically impose the restrictions on the unrestricted equation to derive the restricted equation.
+If this forces the dependent variable to change (e.g., $y - x_1 = \beta_0 + u$), you **must** compute the $F$ statistic using the strictly valid $SSR$ formula, because $SST$ differs between the two regressions, invalidating the $R$-squared form.
+
+### Reporting Regression Results
+
+OLS results should standardly include the estimated coefficients, standard errors (typically placed in parentheses directly below the coefficient estimates), sample size $n$, and the $R$-squared.
+
+### Revisiting Causal Effects and Policy Analysis
+
+When testing policy interventions under the unconfoundedness assumption, the null hypothesis of no treatment effect is strictly written as $H_0: \tau = 0$, where $\tau$ is the treatment parameter in $E(y|w, x) = \alpha + \tau w + x\gamma$.
+The standard $t$ statistic is used to evaluate statistical significance, and a 95% confidence interval isolates the range of plausible values for the population treatment effect.
+
+## Multiple Regression: Asymptotic
+
+### Consistency
+
+The foundational large-sample property of estimators is consistency.
+An estimator $\hat{\beta}_j$ is consistent if its probability distribution collapses to the true parameter value $\beta_j$ as the sample size $n \to \infty$.
+Mathematically, this is expressed as $plim(\hat{\beta}_j) = \beta_j$.
+
+**Theorem 5.1 (Consistency of OLS):** Under Assumptions MLR.1 through MLR.4, the OLS estimator $\hat{\beta}_j$ is consistent for $\beta_j$ for all $j = 0, 1, \dots, k$.
+In the simple regression case, the estimator is algebraically rewritten using the true population parameter and errors: $\hat{\beta}_1 = \beta_1 + \frac{n^{-1}\sum_{i=1}^n (x_{i1} - \bar{x}_1)u_i}{n^{-1}\sum_{i=1}^n (x_{i1} - \bar{x}_1)^2}$.
+Applying the Law of Large Numbers (LLN) to the numerator and denominator yields the probability limits: $plim(\hat{\beta}_1) = \beta_1 + \frac{Cov(x_1, u)}{Var(x_1)}$.
+Under MLR.4, $Cov(x_1, u) = 0$, meaning $plim(\hat{\beta}_1) = \beta_1$.
+
+**Assumption MLR.4' (Zero Mean and Zero Correlation):** Consistency requires a weaker condition than the zero conditional mean assumption ($E(u|x_1, \dots, x_k) = 0$).
+OLS consistency only strictly requires that the error has a zero unconditional mean and is strictly uncorrelated with each independent variable: $E(u) = 0$ and $Cov(x_j, u) = 0$, for $j = 1, 2, \dots, k$.
+
+#### Deriving the Inconsistency in OLS
+
+If $x_1$ and $u$ are correlated, OLS is biased and inconsistent.
+In the simple regression model, the inconsistency (or asymptotic bias) is directly computed as: $plim(\hat{\beta}_1) - \beta_1 = \frac{Cov(x_1, u)}{Var(x_1)}$.
+
+For the multiple regression case, suppose the true model is $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + v$, which satisfies MLR.1–MLR.4.
+If $x_2$ is omitted and we estimate the simple regression of $y$ on $x_1$, the probability limit of the restricted slope $\tilde{\beta}_1$ is mathematically defined as: $plim(\tilde{\beta}_1) = \beta_1 + \beta_2 \delta_1$, where $\delta_1 = \frac{Cov(x_1, x_2)}{Var(x_1)}$.
+If multiple regressors are present and $x_1$ is correlated with $u$ while the other independent variables are not, all OLS estimators (including the intercept) are generally inconsistent.
+However, if $x_1$ is completely uncorrelated with the other $x_j$, then only $\hat{\beta}_1$ is inconsistent, and its inconsistency is identical to the simple regression formula.
+
+### Asymptotic Normality and Large Sample Inference
+
+To perform statistical inference without requiring the strict normality of the error term (MLR.6), we rely on the Central Limit Theorem (CLT).
+
+**Theorem 5.2 (Asymptotic Normality of OLS):** Under the Gauss-Markov Assumptions MLR.1 through MLR.5: 1.
+$\sqrt{n}(\hat{\beta}_j - \beta_j) \sim^a \text{Normal}(0, \sigma^2/a_j^2)$, where $\sigma^2/a_j^2$ is the asymptotic variance, and $a_j^2 = plim(n^{-1}\sum_{i=1}^n \hat{r}_{ij}^2)$ (the probability limit of the sample variance of the residuals from regressing $x_j$ on all other independent variables).
+2.
+$\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$.
+3.
+The standardized estimator is asymptotically standard normal: $(\hat{\beta}_j - \beta_j)/sd(\hat{\beta}_j) \sim^a \text{Normal}(0,1)$ and $(\hat{\beta}_j - \beta_j)/se(\hat{\beta}_j) \sim^a \text{Normal}(0,1)$.
+
+Because $t_{n-k-1}$ approaches the standard normal distribution as the degrees of freedom get large, the practical implication of Theorem 5.2 is that we evaluate the standard OLS test statistic $t = (\hat{\beta}_j - \beta_j)/se(\hat{\beta}_j) \sim^a t_{n-k-1}$ exactly as we would under the classical linear model assumptions.
+
+**Asymptotic Standard Errors:** The estimated variance of $\hat{\beta}_j$ shrinks at the rate of the inverse of the sample size.
+The standard error approximates to: $se(\hat{\beta}_j) \approx c_j / \sqrt{n}$, where $c_j = \frac{\sigma}{\sigma_j \sqrt{1 - \rho_j^2}}$.
+Here, $\sigma_j = sd(x_j)$ and $\rho_j^2$ is the population $R$-squared from regressing $x_j$ on the other covariates.
+
+#### Other Large Sample Tests: The Lagrange Multiplier Statistic
+
+In large samples, the Lagrange multiplier (LM) statistic (or score statistic) provides an alternative to the $F$ statistic for testing multiple exclusion restrictions.
+To test $q$ exclusion restrictions ($H_0: \beta_{k-q+1} = 0, \dots, \beta_k = 0$): 1.
+Estimate the restricted model (omitting the $q$ variables) to obtain the restricted residuals, $\tilde{u}$.
+2.
+Run an auxiliary regression of $\tilde{u}$ on *all* independent variables (both included and excluded): $\tilde{u}$ on $x_1, x_2, \dots, x_k$.
+3.
+Obtain the $R$-squared from this auxiliary regression, denoted $R_{\tilde{u}}^2$.
+4.
+Compute the LM statistic: $LM = n R_{\tilde{u}}^2$.
+
+Under $H_0$, $LM \sim^a \chi^2_q$.
+The null hypothesis is rejected if $LM > c$, where $c$ is the critical value from the $\chi^2_q$ distribution.
+
+### Asymptotic Efficiency of OLS
+
+Under the Gauss-Markov assumptions, OLS is asymptotically efficient within a specific class of estimators.
+Consider the simple regression model $y = \beta_0 + \beta_1 x + u$.
+Let $z_i = g(x_i)$ be any function of $x$.
+Since $E(u|x) = 0$, $u$ is uncorrelated with $g(x)$.
+We can define an instrumental variable estimator: $\tilde{\beta}_1 = \frac{\sum_{i=1}^n (z_i - \bar{z})y_i}{\sum_{i=1}^n (z_i - \bar{z})x_i}$.
+By the LLN, $plim(\tilde{\beta}_1) = \beta_1 + \frac{Cov(z,u)}{Cov(z,x)} = \beta_1$.
+
+The asymptotic variance of $\sqrt{n}(\tilde{\beta}_1 - \beta_1)$ is $\frac{\sigma^2 Var(z)}{[Cov(z,x)]^2}$.
+The asymptotic variance of the OLS estimator is derived when $z = x$, yielding $\frac{\sigma^2}{Var(x)}$.
+By the Cauchy-Schwartz inequality, $[Cov(z,x)]^2 \le Var(z)Var(x)$, which mathematically guarantees that: $\frac{\sigma^2}{Var(x)} \le \frac{\sigma^2 Var(z)}{[Cov(z,x)]^2}$.
+Therefore, the OLS estimator has the smallest asymptotic variance in this class.
+
+**Theorem 5.3 (Asymptotic Efficiency of OLS):** For the general $k$ regressor case, estimators can be derived from the generalized first order conditions: $\sum_{i=1}^n g_j(x_i) (y_i - \tilde{\beta}_0 - \tilde{\beta}_1 x_{i1} \dots - \tilde{\beta}_k x_{ik}) = 0$.
+Under the Gauss-Markov assumptions, the OLS estimators (where $g_j(x_i) = x_{ij}$) possess the minimum asymptotic variances: $Avar \sqrt{n}(\hat{\beta}_j - \beta_j) \le Avar \sqrt{n}(\tilde{\beta}_j - \beta_j)$.
+
+### Asymptotic Normality of OLS
+
+The mathematical proof of Theorem 5.2(i) for simple regression requires standardizing the slope estimator: $\sqrt{n}(\hat{\beta}_1 - \beta_1) = (1/\hat{\sigma}_x^2) [n^{-1/2} \sum_{i=1}^n (x_i - \bar{x})u_i]$.
+The probability limit of the sample variance is $plim(\hat{\sigma}_x^2) = \sigma_x^2 = Var(x)$.
+The numerator sum is decomposed: $n^{-1/2} \sum_{i=1}^n (x_i - \bar{x})u_i = n^{-1/2} \sum_{i=1}^n (x_i - \mu_x)u_i + (\mu_x - \bar{x}) [n^{-1/2} \sum_{i=1}^n u_i]$.
+
+By the CLT, $n^{-1/2} \sum u_i \sim^a \text{Normal}(0, \sigma^2)$.
+\* By the LLN, $plim(\mu_x - \bar{x}) = 0$.
+
+Therefore, the product $(\mu_x - \bar{x})[n^{-1/2} \sum u_i]$ has a probability limit of zero.
+
+The sequence $(x_i - \mu_x)u_i$ is i.i.d. with mean zero (because $Cov(x,u)=0$) and variance $\sigma^2 \sigma_x^2$ (by homoskedasticity).
+By the CLT, $n^{-1/2} \sum (x_i - \mu_x)u_i \sim^a \text{Normal}(0, \sigma^2\sigma_x^2)$.
+
+Because the limits pass through the sum, the asymptotic distribution of $\sqrt{n}(\hat{\beta}_1 - \beta_1)$ is strictly defined as Normal$(0, \frac{\sigma^2\sigma_x^2}{(\sigma_x^2)^2})$, which simplifies exactly to **Normal**$(0, \sigma^2/\sigma_x^2)$.
+
+## Multiple Regression Analysis: Further Issues
+
+### Effects of Data Scaling on OLS Statistics
+
+Changing the units of measurement for variables in a regression does not change the underlying statistical significance or the goodness-of-fit, but it does mechanically scale the coefficients and standard errors.
+
+**Scaling the Dependent Variable:** If $y$ is multiplied by a constant $c$, then the OLS intercept and all slope estimates ($\hat{\beta}_j$) are multiplied by $c$.
+The standard errors are also multiplied by $c$, leaving the $t$ statistics entirely unchanged.
+The standard error of the regression ($SER$ or $\hat{\sigma}$) is multiplied by $c$, and the Sum of Squared Residuals ($SSR$) is multiplied by $c^2$.
+
+**Scaling an Independent Variable:** If $x_j$ is multiplied by a constant $c$, its coefficient estimate $\hat{\beta}_j$ is strictly divided by $c$.
+Its standard error is also divided by $c$, again leaving the $t$ statistic perfectly unchanged.
+
+**Logarithmic Variables:** Changing the unit of measurement of any variable appearing in logarithmic form (either dependent or independent) only changes the intercept, $\hat{\beta}_0$.
+The slope coefficients remain completely unaffected because $\log(cy) = \log(c) + \log(y)$.
+
+#### Beta Coefficients
+
+To measure effects in terms of standard deviation units (making variables with different scales directly comparable), we compute **standardized coefficients** or **beta coefficients**.
+
+First, convert all variables into $z$-scores by subtracting the sample mean and dividing by the sample standard deviation: $z_y = \frac{y_i - \bar{y}}{\hat{\sigma}_y}$ and $z_j = \frac{x_{ij} - \bar{x}_j}{\hat{\sigma}_j}$.
+
+The regression of $z_y$ on the standardized independent variables yields the beta coefficients: $z_y = \hat{b}_1 z_1 + \hat{b}_2 z_2 + \dots + \hat{b}_k z_k + \text{error}$.
+\* The intercept drops out because the $z$-scores have means of zero.
+
+Mathematically, the relationship between the standardized coefficient $\hat{b}_j$ and the usual OLS coefficient $\hat{\beta}_j$ is $\hat{b}_j = \left(\frac{\hat{\sigma}_j}{\hat{\sigma}_y}\right) \hat{\beta}_j$.
+
+### More on Functional Form
+
+#### More on Using Logarithmic Functional Forms
+
+While the coefficient on a dummy variable or a small change in $x$ in a log-level model, $\log(y) = \beta_0 + \beta_1 x$, is approximately the percentage change in $y$, this approximation degrades for larger changes.
+
+**Exact Percentage Change:** For any change $\Delta x$, the exact percentage change in the predicted $y$ is computed algebraically using the exponential function: $\%\Delta \hat{y} = 100 \cdot [\exp(\hat{\beta}_1 \Delta x) - 1]$.
+
+#### Models with Quadratics
+
+Quadratic functions capture diminishing or increasing marginal effects.
+
+**Equation:** $y = \beta_0 + \beta_1 x + \beta_2 x^2 + u$.
+
+**Marginal Effect:** The approximate slope changes with $x$, defined via the derivative: $\frac{\Delta \hat{y}}{\Delta x} \approx \hat{\beta}_1 + 2\hat{\beta}_2 x$.
+
+**Turning Point:** The function reaches its maximum (if $\beta_2 < 0$) or minimum (if $\beta_2 > 0$) precisely at the turning point: $x^* = \left| \frac{\hat{\beta}_1}{2\hat{\beta}_2} \right|$.
+
+#### Models with Interaction Terms
+
+Interaction terms allow the partial effect of one variable to vary depending on the level of another.
+\* **Equation:** $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2 + u$.
+
+**Partial Effect:** The effect of $x_1$ holding $x_2$ fixed is isolated using calculus: $\frac{\Delta y}{\Delta x_1} = \beta_1 + \beta_3 x_2$.
+The parameter $\beta_1$ strictly measures the effect of $x_1$ only when $x_2 = 0$.
+
+**Reparameterization:** To make the base coefficients more meaningful and directly compute standard errors for the average effects, you can mathematically center the variables about their sample means ($\mu_1, \mu_2$) before interacting them: $y = \alpha_0 + \delta_1 x_1 + \delta_2 x_2 + \beta_3 (x_1 - \mu_1)(x_2 - \mu_2) + u$.
+Here, $\delta_1$ evaluates the partial effect of $x_1$ at the exact mean of $x_2$.
+
+#### Computing Average Partial Effects
+
+The Average Partial Effect (APE) provides a single summary number for a nonlinear partial effect.
+
+Instead of plugging the average of $x$ into the nonlinear function, you compute the partial effect for *each unit* in the sample and average the results.
+\* For an interaction model $y = \beta_0 + \beta_1 x_1 + \dots + \beta_6 x_1 x_2 + u$, the APE of $x_1$ is computed as $\hat{\beta}_1 + \hat{\beta}_6 \bar{x}_2$, where $\bar{x}_2$ is the sample average.
+
+### More on Goodness-of-Fit and Selection of Regressors
+
+#### Adjusted R-Squared
+
+The standard $R^2$ mathematically never decreases when an independent variable is added.
+The adjusted $R$-squared ($\bar{R}^2$) penalizes the inclusion of unnecessary regressors by utilizing degrees of freedom ($df$) corrections.
+
+**Population** $R$-squared: $\rho^2 = 1 - \frac{\sigma_u^2}{\sigma_y^2}$.
+
+**Adjusted R-squared formula:** $\bar{R}^2 = 1 - \frac{SSR / (n - k - 1)}{SST / (n - 1)} = 1 - \frac{\hat{\sigma}^2}{SST / (n - 1)}$.
+
+**Algebraic Relationship:** $\bar{R}^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}$.
+
+If a new variable is added, $\bar{R}^2$ increases if and only if the absolute value of the $t$ statistic on the new variable is strictly greater than 1.
+
+#### Using Adjusted R-Squared to Choose between Nonnested Models
+
+$\bar{R}^2$ can be used to compare models with different independent variables, as long as the dependent variable remains mathematically identical.
+You absolutely cannot use $R^2$ or $\bar{R}^2$ to compare a model where $y$ is the dependent variable with a model where $\log(y)$ is the dependent variable, because their Total Sum of Squares ($SST$) measure fundamentally different variations.
+
+#### Controlling for Too Many Factors and Adding Regressors
+
+Adding independent variables that are genuinely uncorrelated with the variable of interest does not cause multicollinearity but can mechanically reduce the error variance ($\sigma^2$), which shrinks the standard error of the OLS estimator, yielding mathematically higher precision.
+
+### Prediction and Residual Analysis
+
+#### Confidence Intervals for Predictions
+
+If we want to estimate the expected value of $y$ given specific values for the regressors, $c_1, c_2, \dots, c_k$, the parameter of interest is $\theta_0 = \beta_0 + \beta_1 c_1 + \dots + \beta_k c_k$.
+
+**Prediction:** $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 c_1 + \dots + \hat{\beta}_k c_k$.
+
+**Standard Error trick:** To force regression software to compute the standard error of this specific prediction, $se(\hat{y}_0)$, run a transformed regression: $y_i$ on $(x_{i1} - c_1), (x_{i2} - c_2), \dots, (x_{ik} - c_k)$.
+The estimated intercept from this regression is exactly $\hat{y}_0$, and its reported standard error is precisely $se(\hat{y}_0)$.
+
+**Prediction Interval for a Future Value:** If you want to predict an unknown *future* outcome $y_0 = \theta_0 + u_0$, the prediction error is $\hat{e}_0 = y_0 - \hat{y}_0$.
+Because the unobserved error $u_0$ is independent of the sample, the variance is the sum of the estimation variance and the population error variance: $Var(\hat{e}_0) = Var(\hat{y}_0) + \sigma^2$.
+
+**Standard Error of the Prediction Error:** $se(\hat{e}_0) = \sqrt{[se(\hat{y}_0)]^2 + \hat{\sigma}^2}$.
+\* **95% Prediction Interval:** $\hat{y}_0 \pm t_{.025} \cdot se(\hat{e}_0)$.
+
+#### Residual Analysis
+
+Examining the residual $\hat{u}_i = y_i - \hat{y}_i$ isolates whether an observation is an outlier relative to the specific subset of factors controlled for in the regression model.
+
+#### Predicting y When log(y) Is the Dependent Variable
+
+Because $E(y|x)$ is not equal to $\exp[E(\log y | x)]$, simply exponentiating the predicted value $\widehat{\log y}$ systematically underestimates $y$.
+\* **Assuming Normality:** If the error $u$ is normally distributed, the exact expected value adjustment is: $\hat{y} = \exp(\hat{\sigma}^2 / 2) \cdot \exp(\widehat{\log y})$.
+\* **Without Normality (Smearing Estimate):** If $u$ is merely independent of $x$, calculate the expected value of $\exp(u)$ directly from the sample: $\hat{\alpha}_0 = n^{-1} \sum_{i=1}^n \exp(\hat{u}_i)$, where $\hat{u}_i$ are the OLS residuals.
+Then the prediction is: $\hat{y} = \hat{\alpha}_0 \exp(\widehat{\log y})$.
+
+#### Predicting y When the Dependent Variable Is log(y) (Goodness-of-Fit)
+
+To compare the fit of a $\log(y)$ model directly against a linear $y$ model, we must compute an equivalent $R^2$.
+
+1\.
+Generate predictions $\hat{m}_i = \hat{\alpha}_0 \exp(\widehat{\log y_i})$ for every observation in the sample.
+
+2\.
+Compute the square of the sample correlation coefficient between the actual $y_i$ values and the predicted $\hat{m}_i$ values.
+\* This squared correlation mathematically serves as an $R^2$ that evaluates how well the log model predicts the *level* of $y$, which can be directly compared to the standard $R^2$ from the level-level model.
+
+## Multiple Regression Analysis with Qualitative Information
+
+### Describing Qualitative Information
+
+Qualitative information is incorporated into regression models using a binary variable (or dummy variable), which strictly takes on the values of zero and one.
+The mathematical benefit of using a zero-one variable is that it dictates a simple interpretation of the parameters as intercept shifts between the two groups.
+
+### A Single Dummy Independent Variable
+
+A model with a single dummy variable, $x_1$ (e.g., $female$), is written as: $y = \beta_0 + \delta_0 x_1 + \beta_1 x_2 + u$.
+Taking the expected value conditional on the explanatory variables isolates the mathematical meaning of $\delta_0$: $\delta_0 = E(y | x_1=1, x_2) - E(y | x_1=0, x_2)$.
+The parameter $\delta_0$ represents the exact difference in the conditional expected value of $y$ between the two groups, holding $x_2$ fixed.
+The group assigned the value zero ($x_1=0$) is the **base group** (or benchmark group), defined by the intercept $\beta_0$.
+The intercept for the $x_1=1$ group is mathematically evaluated as $\beta_0 + \delta_0$.
+
+Including a dummy variable for *both* groups (e.g., $male$ and $female$) alongside an overall intercept $\beta_0$ introduces perfect collinearity because $female + male = 1$ for all observations.
+This strict linear dependence is known as the **dummy variable trap**.
+
+#### Interpreting Coefficients on Dummy Explanatory Variables When the Dependent Variable Is log(y)
+
+When the dependent variable is logarithmic, $\log(y) = \beta_0 + \delta_0 x_1 + \dots + u$, the coefficient $\delta_0$ approximates the percentage difference in $y$.
+However, because $\Delta x_1 = 1$ is not infinitesimally small, the *exact* proportional difference must be calculated using the exponential function: **Exact Percentage Difference =** $100 \cdot [\exp(\hat{\delta}_0) - 1]$.
+
+### Using Dummy Variables for Multiple Categories
+
+To incorporate a qualitative variable with $g$ categories, you must strictly include $g - 1$ dummy variables in the model along with the overall intercept.
+The omitted category mathematically serves as the base group, and the estimated coefficient on any included dummy variable measures the difference in intercepts between that specific group and the base group.
+
+#### Incorporating Ordinal Information by Using Dummy Variables
+
+If a variable takes on ordered discrete values (e.g., ratings $0, 1, 2, 3, 4$), including it directly implies a strictly constant marginal effect.
+A mathematically flexible approach turns the ordinal variable into $g$ categories and defines $g-1$ dummies: $y = \beta_0 + \delta_1 D_1 + \delta_2 D_2 + \delta_3 D_3 + \delta_4 D_4 + u$.
+This parameterization allows the marginal step between each rating to vary algebraically, capturing nonlinear structural effects.
+The constant partial effect model is nested as a testable restriction: $H_0: \delta_2 = 2\delta_1, \delta_3 = 3\delta_1, \delta_4 = 4\delta_1$.
+
+### Interactions Involving Dummy Variables
+
+#### Interactions among Dummy Variables
+
+Interacting two dummy variables allows the partial effect of one qualitative factor to depend on the level of another.
+For instance, if groups are defined by gender ($x_1$) and marital status ($x_2$), the model: $y = \beta_0 + \delta_1 x_1 + \delta_2 x_2 + \delta_3 (x_1 \cdot x_2) + u$ allows the effect of $x_2$ to differ based on $x_1$.
+The expected value for the group where $x_1=1$ and $x_2=1$ evaluates to $\beta_0 + \delta_1 + \delta_2 + \delta_3$.
+
+#### Allowing for Different Slopes
+
+To test whether the partial effect of a quantitative variable ($x_2$) differs across groups defined by a dummy variable ($x_1$), we specify an interaction term: $y = \beta_0 + \delta_0 x_1 + \beta_1 x_2 + \delta_1 (x_1 \cdot x_2) + u$.
+
+When $x_1=0$, the regression function is $E(y|x) = \beta_0 + \beta_1 x_2$.
+
+When $x_1=1$, the regression function is $E(y|x) = (\beta_0 + \delta_0) + (\beta_1 + \delta_1) x_2$.
+The parameter $\delta_1$ algebraically isolates the difference in the slope (return) of $x_2$ between the two groups.
+
+#### Testing for Differences in Regression Functions across Groups
+
+To test the null hypothesis that two populations share the exact same regression function ($H_0: \delta_0=0, \delta_1=0, \dots, \delta_k=0$), we use the **Chow Statistic**.
+Let $n_1$ and $n_2$ be the sizes of the two groups, with total $n = n_1 + n_2$.
+
+1\.
+Estimate the pooled restricted model to obtain $SSR_P$.
+
+2\.
+Estimate the model separately for group 1 to obtain $SSR_1$, and group 2 to obtain $SSR_2$.
+
+3\.
+The unrestricted sum of squared residuals is $SSR_{ur} = SSR_1 + SSR_2$.
+The F-statistic is computed as: $F = \frac{[SSR_P - (SSR_1 + SSR_2)] / (k + 1)}{(SSR_1 + SSR_2) / [n - 2(k + 1)]}$.
+*Note:* If you only want to test for slope differences while allowing an unrestricted intercept shift ($\delta_0 \neq 0$), the numerator degrees of freedom becomes $k$ instead of $k+1$, and $SSR_P$ is obtained from a regression that explicitly includes the group dummy variable without interactions.
+
+### A Binary Dependent Variable: The Linear Probability Model
+
+When the dependent variable $y$ is binary ($y \in \{0, 1\}$), its conditional expectation is strictly equivalent to the conditional probability of success: $E(y|x) = P(y=1|x)$.
+The **Linear Probability Model (LPM)** assumes this probability is linear in parameters: $P(y=1|x) = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$.
+The slope $\beta_j$ measures the strictly constant marginal effect on the probability of success: $\Delta P(y=1|x) = \beta_j \Delta x_j$.
+
+**Mathematical limitations of the LPM:**
+
+1\.
+Fitted probabilities ($\hat{y}_i$) can algebraically fall below 0 or exceed 1.
+
+2\.
+The constant marginal effect assumption implies impossible probabilities for extreme shifts in explanatory variables.
+
+3\.
+The error term $u$ is intrinsically heteroskedastic because the variance relies entirely on the parameters: $Var(y|x) = p(x)[1 - p(x)]$.
+Because of this, OLS standard errors and tests are invalid unless specifically corrected using heteroskedasticity-robust standard errors.
+
+### More on Policy Analysis and Program Evaluation
+
+#### Program Evaluation and Unrestricted Regression Adjustment
+
+When evaluating a binary treatment $w$ ($w=1$ for treated, $0$ for control), we define potential outcomes $y(0)$ and $y(1)$.
+Assuming conditional independence (unconfoundedness), $w$ is independent of $[y(0), y(1)]$ given covariates $x$.
+Allowing the treatment effect $\tau$ to vary based on $x$ requires Unrestricted Regression Adjustment (URA).
+We center the covariates about their sample means $\bar{x}$ and interact them with the treatment indicator: $y_i = \alpha_0 + \tau w_i + (x_i - \bar{x})\gamma_0 + w_i(x_i - \bar{x})\delta + u_i$.
+The parameter $\tau$ directly yields the Average Treatment Effect (ATE).
+
+Equivalently, you can run separate regressions for the control group to get slopes $\hat{\gamma}_{0,j}$ and the treatment group to get slopes $\hat{\gamma}_{1,j}$.
+For every single unit $i$ in the entire sample, compute the counterfactual predictions $\hat{y}_{i}(0)$ and $\hat{y}_{i}(1)$.
+The ATE is the algebraic average of these differences: $\hat{\tau}_{ATE} = \frac{1}{n} \sum_{i=1}^n [\hat{y}_i(1) - \hat{y}_i(0)]$.
+
+### Interpreting Regression Results with Discrete Dependent Variables
+
+Even when $y$ is a discrete variable that takes on a narrow set of integer outcomes (such as a count of children or number of arrests), the parameters $\beta_j$ should be interpreted mechanically via the conditional mean: $E(y | x_1, \dots, x_k) = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k$.
+Therefore, $\beta_j$ is the ceteris paribus change in the expected or average value of $y$.
+For example, $\beta_{educ} = -0.090$ does not mean an individual's count drops by a fraction; it implies that for a group of 100 people, increasing education by one year reduces the expected total aggregate outcome by 9 units.
+
+### Heteroskedasticity
+
+### Consequences of Heteroskedasticity for OLS
+
+The presence of heteroskedasticity—where $Var(u|x_1, \dots, x_k)$ is not constant—does not cause bias or inconsistency in the OLS estimators $\hat{\beta}_j$.
+However, the assumption of homoskedasticity is required for OLS to be the Best Linear Unbiased Estimator (BLUE).
+Under heteroskedasticity, OLS is no longer efficient, and the conventional variance formulas for the OLS estimators are mathematically invalid, meaning the standard $t$, $F$, and $LM$ statistics no longer follow their respective distributions and cannot be used for exact inference.
+The interpretation of goodness-of-fit measures, such as $R^2$ and adjusted $R^2$, remains completely unaffected because they evaluate the expected value of $y$, not its variance.
+
+### Heteroskedasticity-Robust Inference after OLS Estimation
+
+To conduct valid inference without knowing the exact form of heteroskedasticity, we compute heteroskedasticity-robust standard errors.
+In the simple regression case, the mathematically valid estimator of the variance of $\hat{\beta}_1$ under heteroskedasticity is derived as: $Var(\hat{\beta}_1) = \frac{\sum_{i=1}^n (x_i - \bar{x})^2 \hat{u}_i^2}{SST_x^2}$.
+For the general multiple regression model, the valid estimator for the variance of $\hat{\beta}_j$ is defined algebraically as: $Var(\hat{\beta}_j) = \frac{\sum_{i=1}^n \hat{r}_{ij}^2 \hat{u}_i^2}{SSR_j^2}$.
+Here, $\hat{r}_{ij}$ denotes the $i^{th}$ residual from regressing $x_j$ on all other independent variables, $SSR_j$ is the sum of squared residuals from this auxiliary regression, and $\hat{u}_i$ is the OLS residual from the original model.
+Regression packages often multiply this variance by the degrees of freedom correction $n / (n - k - 1)$.
+
+**Computing Heteroskedasticity-Robust LM Tests:** To test $q$ exclusion restrictions robustly:
+
+1\.
+Obtain the residuals $\tilde{u}$ from the restricted OLS model.
+
+2\.
+Regress each of the $q$ excluded variables on all included variables and save the corresponding residuals, $\tilde{r}_1, \dots, \tilde{r}_q$.
+
+3\.
+Compute the products $\tilde{r}_1\tilde{u}, \dots, \tilde{r}_q\tilde{u}$.
+
+4\.
+Run a regression of $1$ (a constant dependent variable of ones) on these products without an intercept.
+The robust statistic is strictly $LM = n - SSR_1$, where $SSR_1$ is the sum of squared residuals from this final regression.
+Under the null, $LM \sim^a \chi^2_q$.
+
+### Testing for Heteroskedasticity
+
+The formal null hypothesis of homoskedasticity is $H_0: Var(u|x_1, \dots, x_k) = \sigma^2$.
+Since the true errors $u$ are unobservable, tests rely on the squared OLS residuals, $\hat{u}^2$.
+
+**The Breusch-Pagan (BP) Test:** The BP test assumes the variance is a linear function of the independent variables: $\hat{u}^2 = \delta_0 + \delta_1 x_1 + \dots + \delta_k x_k + error$.
+The null hypothesis strictly evaluates $H_0: \delta_1 = \dots = \delta_k = 0$.
+The tests utilize the $R$-squared from this regression ($R^2_{\hat{u}^2}$):
+
+**F-statistic:** $F = \frac{R^2_{\hat{u}^2} / k}{(1 - R^2_{\hat{u}^2}) / (n - k - 1)}$.
+
+**LM-statistic:** $LM = n \cdot R^2_{\hat{u}^2} \sim^a \chi^2_k$.
+
+**The White Test:** The White test relaxes the linearity assumption by also evaluating the squares and cross-products of all independent variables: $\hat{u}^2 = \delta_0 + \delta_1 x_1 + \dots + \delta_k x_k + \delta_{k+1} x_1^2 + \dots + \delta_m x_1 x_2 + error$.
+This tests whether $\hat{u}^2$ is correlated with any of the terms up to a quadratic order.
+
+**A Special Case of the White Test:** To conserve degrees of freedom, the White test is often operationalized by using only the OLS fitted values ($\hat{y}$) and their squares: $\hat{u}^2 = \delta_0 + \delta_1 \hat{y} + \delta_2 \hat{y}^2 + error$.
+The test evaluates $H_0: \delta_1 = 0, \delta_2 = 0$ using an $F_{2, n-3}$ or $\chi^2_2$ distribution.
+
+### Weighted Least Squares Estimation
+
+When the exact form of heteroskedasticity is known, the parameters can be estimated more efficiently using Generalized Least Squares (GLS).
+
+**The Heteroskedasticity Is Known up to a Multiplicative Constant** Assume $Var(u|x) = \sigma^2 h(x)$, where $h(x) > 0$ is a known function.
+We transform the original equation by dividing every term by $\sqrt{h_i}$: $y_i / \sqrt{h_i} = \beta_0(1/\sqrt{h_i}) + \beta_1(x_{i1}/\sqrt{h_i}) + \dots + \beta_k(x_{ik}/\sqrt{h_i}) + u_i/\sqrt{h_i}$.
+The new error term, $u_i / \sqrt{h_i}$, strictly has a constant conditional variance of $\sigma^2$.
+The OLS estimators of this transformed equation are the Weighted Least Squares (WLS) estimators, which mathematically minimize the weighted sum of squared residuals: $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{i1} - \dots - \beta_k x_{ik})^2 / h_i$.
+
+**The Heteroskedasticity Function Must Be Estimated: Feasible GLS** When $h(x)$ is unknown, it must be modeled and estimated to perform Feasible GLS (FGLS).
+We typically assume an exponential variance function to ensure positive variance predictions: $Var(u|x) = \sigma^2 \exp(\delta_0 + \delta_1 x_1 + \dots + \delta_k x_k)$.
+The procedure relies on the following steps:
+
+1\.
+Regress $y$ on $x_1, \dots, x_k$ to obtain OLS residuals $\hat{u}$.
+
+2\.
+Create $\log(\hat{u}^2)$.
+
+3\.
+Run the regression $\log(\hat{u}^2) = \alpha_0 + \delta_1 x_1 + \dots + \delta_k x_k + e$ to obtain fitted values $\hat{g}_i$.
+4.
+Compute the estimated variance weights: $\hat{h}_i = \exp(\hat{g}_i)$.
+5.
+Estimate the main equation via WLS using weights $1/\hat{h}_i$.
+Alternatively, the $\hat{g}_i$ can be obtained by regressing $\log(\hat{u}^2)$ purely on $\hat{y}$ and $\hat{y}^2$.
+
+**Prediction and Prediction Intervals with Heteroskedasticity** Under the assumption $Var(y|x) = \sigma^2 h(x)$, the point prediction $\hat{y}_0 = \hat{\beta}_0 + x_0 \hat{\beta}$ is obtained via the WLS coefficients.
+However, the variance of the unobserved error $u_0$ dictates the prediction interval width: $se(u_0) = \hat{\sigma}\sqrt{h(x_0)}$.
+The exact 95% prediction interval is generated via: $\hat{y}_0 \pm t_{.025} \cdot se(\hat{e}_0)$, where $se(\hat{e}_0) = [se(\hat{y}_0)^2 + \hat{\sigma}^2 h(x_0)]^{1/2}$.
+
+### The Linear Probability Model Revisited
+
+Because a binary dependent variable is strictly bounded by zero and one, the Linear Probability Model (LPM) contains structural heteroskedasticity unless all slopes are exactly zero.
+The variance is mechanically tied to the probability of success: $Var(y|x) = p(x)[1 - p(x)]$.
+To account for this:
+
+1\.
+Estimate the LPM by OLS and obtain the fitted values, $\hat{y}_i$.
+
+2\.
+Assuming all fitted values fall perfectly inside the unit interval ($0 < \hat{y}_i < 1$), construct the estimated variances $\hat{h}_i = \hat{y}_i(1 - \hat{y}_i)$.
+3.
+Estimate the model by WLS using weights $1/\hat{h}_i$.
+If any $\hat{y}_i$ algebraically fall outside $(0, 1)$, the variance estimate $\hat{h}_i$ becomes negative or zero, meaning WLS will fail.
+In those situations, arbitrary adjustments are necessary to bring the values inside the unit interval before applying WLS.
+
+## More on Specification and Data Issues
+
+### Functional Form Misspecification
+
+A model suffers from functional form misspecification if it does not properly account for the relationship between the dependent and the observed explanatory variables (e.g., omitting a squared term like $exper^2$ from the true model).
+
+#### RESET as a General Test for Functional Form Misspecification
+
+Ramsey's regression specification error test (RESET) detects general functional form misspecification by adding polynomials of the OLS fitted values into the regression.
+
+1\.
+Estimate the original model: $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u$, and obtain the fitted values $\hat{y}$.
+
+2\.
+Estimate the expanded equation: $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + \delta_1 \hat{y}^2 + \delta_2 \hat{y}^3 + error$.
+(Higher-order polynomials can be added, but squares and cubes are standard).
+
+3\.
+Compute the $F$ statistic to test the null hypothesis of correct specification: $H_0: \delta_1 = 0, \delta_2 = 0$.
+
+4\.
+Under $H_0$, the statistic has an approximate $F_{2, n-k-3}$ distribution.
+An LM version distributed as $\chi^2_2$ is also valid.
+
+#### Tests against Nonnested Alternatives
+
+To test nonnested models (e.g., a level-level model vs. a level-log model), the Davidson-MacKinnon test uses fitted values from the competing model.
+
+1\.
+Assume Model 1 is $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$ and Model 2 is $y = \beta_0 + \beta_1 \log(x_1) + \beta_2 \log(x_2) + u$.
+
+2\.
+Estimate Model 2 by OLS and obtain the fitted values, $\check{y}$.
+
+3\.
+Add $\check{y}$ to Model 1 to form the auxiliary equation: $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \theta_1 \check{y} + error$.
+
+4\.
+If Model 1 is the true conditional mean, $\theta_1$ should be zero.
+A significant $t$ statistic on $\check{y}$ rejects Model 1.
+The process can be reversed by adding the fitted values from Model 1, $\hat{y}$, into Model 2.
+
+### Using Proxy Variables for Unobserved Explanatory Variables
+
+Suppose the true population model is $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3^* + u$, where $x_1$ and $x_2$ are observed, but $x_3^*$ is unobserved.
+We can substitute a proxy variable $x_3$ if it satisfies certain mathematical requirements.
+
+1\.
+The proxy relationship is $x_3^* = \delta_0 + \delta_3 x_3 + v_3$.
+
+2\.
+The error $u$ must be uncorrelated with $x_1$, $x_2$, $x_3^*$, and $x_3$.
+
+3\.
+The expected value of $x_3^*$ must depend only on $x_3$ and not on $x_1$ or $x_2$: $E(x_3^* | x_1, x_2, x_3) = E(x_3^* | x_3) = \delta_0 + \delta_3 x_3$.
+
+By plugging the proxy relationship into the true model, we derive the plug-in solution: $y = (\beta_0 + \beta_3\delta_0) + \beta_1 x_1 + \beta_2 x_2 + \beta_3\delta_3 x_3 + (u + \beta_3 v_3)$.
+Letting $\alpha_0 = \beta_0 + \beta_3\delta_0$, $\alpha_3 = \beta_3\delta_3$, and $e = u + \beta_3 v_3$, the model becomes $y = \alpha_0 + \beta_1 x_1 + \beta_2 x_2 + \alpha_3 x_3 + e$.
+Because $e$ has zero mean and is uncorrelated with $x_1, x_2$, and $x_3$, regressing $y$ on $x_1, x_2, x_3$ produces consistent and unbiased estimators for $\beta_1$ and $\beta_2$.
+
+If the proxy is imperfect and $x_3^*$ depends on $x_1$ and $x_2$ such that $x_3^* = \delta_0 + \delta_1 x_1 + \delta_2 x_2 + \delta_3 x_3 + v_3$, the probability limit of the OLS estimator shows remaining bias: $plim(\hat{\beta}_1) = \beta_1 + \beta_3\delta_1$.
+
+#### Using Lagged Dependent Variables and Potential Outcomes
+
+When no explicit proxy exists, the lagged dependent variable $y_{t-1}$ can mathematically proxy for unobserved historical factors.
+In a potential outcomes framework $y(0) = \mu_0 + v(0)$ and $y(1) = \mu_1 + v(1)$, the unconfoundedness assumption ($w$ is independent of $[v(0), v(1)]$ conditional on $x$) implies $x$ acts as a proxy.
+Assuming linear functional forms, $E[v(0)|x] = (x - \mu)\gamma_0$, leading to the regression $y_i$ on $w_i, x_i, w_i \cdot (x_i - \bar{x})$, where the coefficient on $w_i$ is the average treatment effect $\tau_{ATE}$.
+
+### Models with Random Slopes
+
+A random coefficient (or random slope) model allows the partial effect of a variable to vary by individual: $y_i = a_i + b_i x_i$.
+Defining the population averages $\alpha = E(a_i)$ and $\beta = E(b_i)$, we can rewrite the parameters as $a_i = \alpha + c_i$ and $b_i = \beta + d_i$ (where $c_i$ and $d_i$ are zero-mean deviations).
+Substituting these yields: $y_i = \alpha + \beta x_i + c_i + d_i x_i = \alpha + \beta x_i + u_i$, where $u_i = c_i + d_i x_i$.
+OLS provides consistent estimates of the average slope $\beta$ if $a_i$ and $b_i$ are mean independent of $x_i$: $E(a_i | x_i) = E(a_i)$ and $E(b_i | x_i) = E(b_i)$.
+However, the error $u_i$ is strictly heteroskedastic.
+Assuming $Cov(c_i, d_i | x_i) = 0$, the variance is $Var(u_i | x_i) = \sigma_c^2 + \sigma_d^2 x_i^2$.
+This requires heteroskedasticity-robust standard errors.
+In the multiple regression case, $y_i = \alpha + \beta_1 x_{i1} + \dots + \beta_k x_{ik} + u_i$, where $u_i = c_i + d_{i1} x_{i1} + \dots + d_{ik} x_{ik}$.
+
+### Properties of OLS under Measurement Error
+
+#### Measurement Error in the Dependent Variable
+
+Let $y^*$ be the true unobserved dependent variable and $y$ be the observed measure, such that $e_0 = y - y^*$ is the measurement error.
+Substituting $y^* = y - e_0$ into the population model $y^* = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u$ yields: $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u + e_0$.
+If $e_0$ has a zero mean and is statistically independent of each $x_j$, OLS estimators remain unbiased and consistent.
+The only consequence is an inflated error variance, $Var(u + e_0) = \sigma_u^2 + \sigma_{e_0}^2$, resulting in larger standard errors.
+For logarithmic models, multiplicative measurement error $y = y^* a_0$ yields additive error in the log regression: $\log(y) = \log(y^*) + e_0$ where $e_0 = \log(a_0)$.
+
+#### Measurement Error in an Explanatory Variable
+
+Let $x_1^*$ be the true unobserved independent variable and $x_1$ be the observed measure, with error $e_1 = x_1 - x_1^*$.
+If we assume $e_1$ is uncorrelated with the *observed* $x_1$ ($Cov(x_1, e_1) = 0$), OLS remains consistent, just with a larger error variance.
+
+However, the **Classical Errors-in-Variables (CEV)** assumption states that $e_1$ is uncorrelated with the *unobserved* truth $x_1^*$: $Cov(x_1^*, e_1) = 0$.
+Under CEV, $x_1$ and $e_1$ *must* be correlated: $Cov(x_1, e_1) = E[(x_1^* + e_1)e_1] = \sigma_{e_1}^2$.
+Substituting $x_1^* = x_1 - e_1$ into the model yields an error term of $u - \beta_1 e_1$.
+Because $Cov(x_1, u - \beta_1 e_1) = -\beta_1 \sigma_{e_1}^2$, OLS is asymptotically biased (attenuation bias): $plim(\hat{\beta}_1) = \beta_1 \left( \frac{\sigma_{x_1^*}^2}{\sigma_{x_1^*}^2 + \sigma_{e_1}^2} \right)$.
+Because the term in parentheses is strictly less than 1, $\hat{\beta}_1$ is mathematically attenuated (biased toward zero).
+
+With multiple explanatory variables, if $x_1$ is the only variable measured with CEV, the limit becomes: $plim(\hat{\beta}_1) = \beta_1 \left( \frac{\sigma_{r_1^*}^2}{\sigma_{r_1^*}^2 + \sigma_{e_1}^2} \right)$.
+Here, $r_1^*$ is the population error from the regression of $x_1^*$ on all other explanatory variables ($x_2, \dots, x_k$).
+This also causes inconsistency in the estimators for the exactly measured variables $\beta_2, \dots, \beta_k$.
+
+### Missing Data, Nonrandom Samples, and Outlying Observations
+
+-   **Missing Data & Nonrandom Samples:** Exogenously missing data or sample selection based purely on independent variables (e.g., restricting the sample to only people over age 35) does not bias OLS because the population regression function $E(y|x)$ remains exactly the same for any subset of $x$. However, endogenous selection—sampling based on the value of the dependent variable $y$ (e.g., selecting only individuals with wealth below $250,000$)—makes $E(y_{selected}|x) \neq E(y|x)$, fundamentally causing OLS to be biased and inconsistent.
+-   **Outliers:** OLS estimates can be heavily shifted by influential observations because the objective function minimizes *squared* residuals. Leverage statistics and studentized residuals (calculated by dropping an observation and determining how far it falls from the resulting regression line) are used to formally detect these points mathematically.
+
+### Least Absolute Deviations Estimation
+
+Least Absolute Deviations (LAD) offers mathematical resilience against outliers by minimizing the sum of the absolute values of the residuals: $\min_{b_0, b_1, \dots, b_k} \sum_{i=1}^n |y_i - b_0 - b_1 x_{i1} - \dots - b_k x_{ik}|$.
+Unlike OLS, the LAD objective function grows linearly rather than quadratically for large errors.
+
+**Median vs. Mean:** LAD strictly estimates the parameters of the conditional median, $Med(y | x_1, \dots, x_k)$, rather than the conditional mean $E(y|x_1, \dots, x_k)$.
+If the error distribution is symmetric, the mean and median are identical, and LAD and OLS estimate the same parameters.
+
+**Monotonic Transformations:** Because the median passes through strictly increasing functions, if we model $\log(y) = \beta_0 + x\beta + u$ with $Med(u|x)=0$, then the exact conditional median of the level is $Med(y|x) = \exp(\beta_0 + x\beta)$.
+This is a mathematical advantage over OLS, where $E(y|x)$ cannot be perfectly recovered from $E[\log(y)|x]$ without knowing the exact distribution of $u$.
