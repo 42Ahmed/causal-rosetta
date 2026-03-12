@@ -1,13 +1,18 @@
-# Quarto output and temporary files
-/.quarto/
-/_book/
-/_site/
-
-# RStudio user-specific settings
+# Quarto and RStudio internals
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+/.quarto/
+/_book/
 
-# Windows junk
-Thumbs.db
+# Python internals
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+env/
+
+# Data and OS clutter
+.DS_Store
+*.Rproj
+**/*.quarto_ipynb
