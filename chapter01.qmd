@@ -69,7 +69,8 @@ To model relationships where marginal effects are not constant, econometricians 
 Used to capture increasing or diminishing marginal returns.
 
 **Equation:** $y = \beta_0 + \beta_1 x + \beta_2 x^2$.
-\* **Turning Point:** The function reaches a maximum (if $\beta_2 < 0$) or a minimum (if $\beta_2 > 0$) at $x^* = \frac{\beta_1}{-2\beta_2}$.
+
+**Turning Point:** The function reaches a maximum (if $\beta_2 < 0$) or a minimum (if $\beta_2 > 0$) at $x^* = \frac{\beta_1}{-2\beta_2}$.
 
 **Marginal Effect:** The effect of $x$ on $y$ changes based on the starting value of $x$.
 Approximated by $\Delta y \approx (\beta_1 + 2\beta_2 x)\Delta x$.
@@ -102,13 +103,15 @@ Calculus formalizes the "marginal effect" approximations using derivatives.
 
 **Ordinary Derivatives:** The derivative $\frac{dy}{dx}$ evaluates the slope of a curve at a specific point.
 For small changes, $\Delta y \approx \frac{dy}{dx} \Delta x$.
-\* If $y = x^c$, then $\frac{dy}{dx} = cx^{c-1}$.
-\* If $y = \log(x)$, then $\frac{dy}{dx} = \frac{1}{x}$.
-\* If $y = \exp(\beta_0 + \beta_1 x)$, then $\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)$.
+
+If $y = x^c$, then $\frac{dy}{dx} = cx^{c-1}$.
+
+If $y = \log(x)$, then $\frac{dy}{dx} = \frac{1}{x}$.
+
+If $y = \exp(\beta_0 + \beta_1 x)$, then $\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)$.
 
 **Partial Derivatives:** For multivariate functions like $y = f(x_1, x_2)$, the partial derivative $\frac{\partial y}{\partial x_1}$ measures the slope in the direction of $x_1$, treating $x_2$ as a constant.
 The *ceteris paribus* effect is calculated as $\Delta y \approx \frac{\partial y}{\partial x_1} \Delta x_1$.
-\*
 
 **First Order Conditions (Optimization):** To find the minimum or maximum of a function $f(x_1, x_2, \dots, x_k)$, you take the partial derivatives with respect to every variable $x_j$ and set them all to zero: $\frac{\partial f}{\partial x_j} = 0$ for all $j=1, 2, \dots, k$.
 This is exactly how the Ordinary Least Squares (OLS) estimators are derived.
