@@ -10,7 +10,7 @@ So you want to be a math wizard who can prove any estimator?
 This chapter serves as a mathematical summary for the book **Introductory Ecconometrics**.
 After finishing this chapter, you will be able to solve all math problems. 
 
-## Math Refresher A
+## Basic Math Tools
 
 ### The Summation Operator and Descriptive Statistics
 
@@ -115,3 +115,171 @@ The *ceteris paribus* effect is calculated as $\Delta y \approx \frac{\partial y
 
 **First Order Conditions (Optimization):** To find the minimum or maximum of a function $f(x_1, x_2, \dots, x_k)$, you take the partial derivatives with respect to every variable $x_j$ and set them all to zero: $\frac{\partial f}{\partial x_j} = 0$ for all $j=1, 2, \dots, k$.
 This is exactly how the Ordinary Least Squares (OLS) estimators are derived.
+
+## Probability
+
+### Random Variables and Their Probability Distributions
+
+A **random variable** takes on numerical values determined by an experiment (a procedure that can be infinitely repeated with well-defined outcomes).
+We denote random variables with uppercase letters (e.g., $X$) and their particular outcomes with lowercase letters (e.g., $x$).
+
+#### Discrete Random Variables
+
+A discrete random variable takes on a finite or countably infinite number of values.
+
+**Bernoulli (Binary) Random Variable:** The simplest type, taking only values of 1 (success) or 0 (failure).
+If $X \sim \text{Bernoulli}(\theta)$, then $P(X=1) = \theta$ and $P(X=0) = 1-\theta$.
+
+**Probability Density Function (PDF):** Summarizes the possible outcomes and their probabilities.
+For a discrete variable, $f(x_j) = P(X=x_j) = p_j$, where $\sum p_j = 1$.
+
+#### Continuous Random Variables
+
+A continuous random variable takes on any real value with a probability of exactly zero.
+Because probabilities of specific values are zero, we focus on ranges of values.
+
+**Cumulative Distribution Function (CDF):** Defined as $F(x) = P(X \le x)$, it evaluates the probability that $X$ is less than or equal to a number $x$.
+It is always between 0 and 1, and is a nondecreasing function.
+
+**Calculating Probabilities:** The probability that $X$ falls between $a$ and $b$ is computed via the CDF: $P(a \le X \le b) = F(b) - F(a)$.
+
+### Joint Distributions, Conditional Distributions, and Independence
+
+#### Joint Distributions and Independence
+
+When dealing with multiple random variables, their relationship is described by a **joint PDF**, $f_{X,Y}(x,y) = P(X=x, Y=y)$.
+
+**Independence:** Random variables $X$ and $Y$ are independent if their joint PDF is the product of their marginal PDFs: $f_{X,Y}(x,y) = f_X(x)f_Y(y)$.
+Knowing the outcome of $X$ tells us nothing about the outcome of $Y$.
+
+**Binomial Distribution:** The sum of $n$ independent Bernoulli trials (each with success probability $\theta$) follows a Binomial distribution: $X \sim \text{Binomial}(n, \theta)$.
+The probability of exactly $x$ successes is $\binom{n}{x} \theta^x (1-\theta)^{n-x}$.
+
+#### Conditional Distributions
+
+The **conditional PDF** of $Y$ given $X=x$ is $f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}$.
+It evaluates $P(Y=y | X=x)$.
+If $X$ and $Y$ are independent, then $f_{Y|X}(y|x) = f_Y(y)$.
+
+### Features of Probability Distributions
+
+#### The Expected Value and its Properties
+
+The **expected value** (or population mean), $E(X)$ or $\mu$, is the probability-weighted average of all possible values of $X$.
+For a discrete variable, $E(X) = \sum x_j f(x_j)$.
+E(X) does not necessarily correspond to a value that $X$ can actually take.
+Key Properties:
+
+1\.
+**Constants:** $E(c) = c$.
+
+2\.
+**Linearity:** $E(aX+b) = aE(X) + b$.
+
+3\.
+**Sums:** The expected value of a sum is the sum of expected values: $E(\sum a_i X_i) = \sum a_i E(X_i)$.
+
+*Note:* For nonlinear functions, $E[g(X)] \neq g(E[X])$ in general (e.g., $E(X^2) \neq [E(X)]^2$).
+
+#### The Median
+
+The median is the value $m$ where half the area of the PDF is to the left and half to the right.
+If a distribution is symmetric about its mean $\mu$, then the mean and the median are equal.
+
+#### Variance and Standard Deviation
+
+**Variance** measures the expected squared distance of $X$ from its mean: $Var(X) = E[(X - \mu)^2] = E(X^2) - \mu^2$.
+Variance is always non-negative, and denoted $\sigma^2$.
+Key Properties:
+
+1\.
+**Constants:** $Var(c) = 0$.
+
+2\.
+**Linear Combinations:** $Var(aX+b) = a^2 Var(X)$ (Adding a constant does not change variance; multiplying scales it by the constant squared).
+
+**Standard Deviation (**$sd(X)$ or $\sigma$) is the positive square root of the variance.
+It restores the measure of dispersion to the original units of the variable.
+Property: $sd(aX+b) = |a|sd(X)$.
+
+#### Standardizing, Skewness, and Kurtosis
+
+-   **Standardization:** To create a variable $Z$ with a mean of 0 and a variance of 1, subtract the mean and divide by the standard deviation: $Z = \frac{X - \mu}{\sigma}$.
+-   **Skewness:** Measured by the third moment, $E(Z^3)$. If a distribution is symmetric, skewness is zero.
+-   **Kurtosis:** Measured by the fourth moment, $E(Z^4)$. It captures the "thickness" of the tails. The standard normal distribution has a kurtosis of 3.
+
+### Features of Joint and Conditional Distributions
+
+#### Covariance and Correlation
+
+**Covariance** measures the linear dependence between two variables: $Cov(X,Y) = E[(X-\mu_X)(Y-\mu_Y)] = E(XY) - \mu_X\mu_Y$.
+
+If $X$ and $Y$ are independent, $Cov(X,Y) = 0$ (but zero covariance does *not* strictly imply independence).
+
+$Cov(a_1 X + b_1, a_2 Y + b_2) = a_1 a_2 Cov(X,Y)$.
+
+**Correlation Coefficient (**$\rho_{XY}$) standardizes covariance to remove the influence of measurement units: $Corr(X,Y) = \frac{Cov(X,Y)}{sd(X)sd(Y)}$.
+
+Bounded: $-1 \le Corr(X,Y) \le 1$.
+
+$Corr(X,Y) = 1$ implies a perfect positive linear relationship; $-1$ implies a perfect negative linear relationship.
+
+#### Variance of Sums of Random Variables
+
+The variance of a sum accounts for covariance: $Var(aX + bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y)$.
+If $X$ and $Y$ are uncorrelated ($Cov=0$), the variance of the sum (or difference) is the sum of the variances: $Var(X \pm Y) = Var(X) + Var(Y)$.
+For $n$ pairwise uncorrelated variables: $Var(\sum a_i X_i) = \sum a_i^2 Var(X_i)$.
+
+#### Conditional Expectation
+
+The **conditional expectation** $E(Y|X=x)$ tells us how the average value of $Y$ varies with specific outcomes of $X$.
+In econometrics, this is frequently modeled as a function, like $E(Y|X) = \beta_0 + \beta_1 X$.
+Key Properties:
+
+**CE.1:** $E[c(X)|X] = c(X)$ (Functions of $X$ act as constants when conditioning on $X$).
+
+**CE.2:** $E[a(X)Y + b(X)|X] = a(X)E(Y|X) + b(X)$.
+
+**CE.3:** If $X$ and $Y$ are independent, $E(Y|X) = E(Y)$.
+
+**CE.4 (Law of Iterated Expectations):** $E[E(Y|X)] = E(Y)$.
+The unconditional expectation of $Y$ is the expected value of the conditional expectation.
+
+**CE.5:** If $E(Y|X) = E(Y)$, then $Cov(X,Y) = 0$ (but zero covariance does not guarantee $E(Y|X)=E(Y)$).
+
+#### Conditional Variance
+
+The conditional variance is $Var(Y|X=x) = E(Y^2|x) - [E(Y|x)]^2$.
+If $X$ and $Y$ are independent, the conditional variance equals the unconditional variance: $Var(Y|X) = Var(Y)$.
+
+### The Normal and Related Distributions
+
+#### The Normal Distribution
+
+The normal distribution is characterized by its bell shape, defined purely by its mean ($\mu$) and variance ($\sigma^2$): $X \sim Normal(\mu, \sigma^2)$.
+
+**Standard Normal Distribution:** $Z \sim Normal(0,1)$.
+The CDF of $Z$ is denoted $\Phi(z)$.
+
+**Standardizing:** Any normal variable can be standardized to compute probabilities: $P(X \le x) = P\left(\frac{X-\mu}{\sigma} \le \frac{x-\mu}{\sigma}\right) = P(Z \le z) = \Phi(z)$.
+
+#### Additional Properties of the Normal Distribution
+
+-   A linear transformation of a normal variable remains normal: $aX+b \sim Normal(a\mu+b, a^2\sigma^2)$.
+-   If two jointly normal variables are uncorrelated, they are absolutely independent.
+-   Any linear combination of independent normal variables is normally distributed. For example, the sample average $\bar{Y} \sim Normal(\mu, \sigma^2/n)$.
+
+#### The Chi-Square Distribution
+
+If you square and sum $n$ independent standard normal variables, $Z_i \sim Normal(0,1)$, the resulting variable $X = \sum Z_i^2$ has a **chi-square distribution with** $n$ degrees of freedom ($X \sim \chi^2_n$).
+The mean is $n$ and the variance is $2n$.
+
+#### The t Distribution
+
+The **t distribution** is formed by dividing a standard normal variable $Z$ by the square root of an independent chi-square variable $X$ (divided by its degrees of freedom $n$): $T = \frac{Z}{\sqrt{X/n}} \sim t_n$.
+The t distribution has thicker tails than the normal, but approaches the standard normal distribution as the degrees of freedom ($n$) approach infinity.
+
+#### The F Distribution
+
+The **F distribution** is the ratio of two independent chi-square variables, each divided by their respective degrees of freedom: $F = \frac{X_1/k_1}{X_2/k_2} \sim F_{k_1, k_2}$.
+$k_1$ is the numerator degrees of freedom, and $k_2$ is the denominator degrees of freedom.
