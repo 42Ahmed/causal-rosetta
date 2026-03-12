@@ -388,7 +388,8 @@ window.Quarto = {
 <section id="quadratic-functions" class="level4" data-number="1.1.4.1">
 <h4 data-number="1.1.4.1" class="anchored" data-anchor-id="quadratic-functions"><span class="header-section-number">1.1.4.1</span> Quadratic Functions</h4>
 <p>Used to capture increasing or diminishing marginal returns.</p>
-<p><strong>Equation:</strong> <span class="math inline">\(y = \beta_0 + \beta_1 x + \beta_2 x^2\)</span>. * <strong>Turning Point:</strong> The function reaches a maximum (if <span class="math inline">\(\beta_2 &lt; 0\)</span>) or a minimum (if <span class="math inline">\(\beta_2 &gt; 0\)</span>) at <span class="math inline">\(x^* = \frac{\beta_1}{-2\beta_2}\)</span>.</p>
+<p><strong>Equation:</strong> <span class="math inline">\(y = \beta_0 + \beta_1 x + \beta_2 x^2\)</span>.</p>
+<p><strong>Turning Point:</strong> The function reaches a maximum (if <span class="math inline">\(\beta_2 &lt; 0\)</span>) or a minimum (if <span class="math inline">\(\beta_2 &gt; 0\)</span>) at <span class="math inline">\(x^* = \frac{\beta_1}{-2\beta_2}\)</span>.</p>
 <p><strong>Marginal Effect:</strong> The effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span> changes based on the starting value of <span class="math inline">\(x\)</span>. Approximated by <span class="math inline">\(\Delta y \approx (\beta_1 + 2\beta_2 x)\Delta x\)</span>.</p>
 </section>
 <section id="the-natural-logarithm" class="level4" data-number="1.1.4.2">
@@ -409,8 +410,11 @@ window.Quarto = {
 <section id="differential-calculus" class="level3" data-number="1.1.5">
 <h3 data-number="1.1.5" class="anchored" data-anchor-id="differential-calculus"><span class="header-section-number">1.1.5</span> Differential Calculus</h3>
 <p>Calculus formalizes the “marginal effect” approximations using derivatives.</p>
-<p><strong>Ordinary Derivatives:</strong> The derivative <span class="math inline">\(\frac{dy}{dx}\)</span> evaluates the slope of a curve at a specific point. For small changes, <span class="math inline">\(\Delta y \approx \frac{dy}{dx} \Delta x\)</span>. * If <span class="math inline">\(y = x^c\)</span>, then <span class="math inline">\(\frac{dy}{dx} = cx^{c-1}\)</span>. * If <span class="math inline">\(y = \log(x)\)</span>, then <span class="math inline">\(\frac{dy}{dx} = \frac{1}{x}\)</span>. * If <span class="math inline">\(y = \exp(\beta_0 + \beta_1 x)\)</span>, then <span class="math inline">\(\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)\)</span>.</p>
-<p><strong>Partial Derivatives:</strong> For multivariate functions like <span class="math inline">\(y = f(x_1, x_2)\)</span>, the partial derivative <span class="math inline">\(\frac{\partial y}{\partial x_1}\)</span> measures the slope in the direction of <span class="math inline">\(x_1\)</span>, treating <span class="math inline">\(x_2\)</span> as a constant. The <em>ceteris paribus</em> effect is calculated as <span class="math inline">\(\Delta y \approx \frac{\partial y}{\partial x_1} \Delta x_1\)</span>. *</p>
+<p><strong>Ordinary Derivatives:</strong> The derivative <span class="math inline">\(\frac{dy}{dx}\)</span> evaluates the slope of a curve at a specific point. For small changes, <span class="math inline">\(\Delta y \approx \frac{dy}{dx} \Delta x\)</span>.</p>
+<p>If <span class="math inline">\(y = x^c\)</span>, then <span class="math inline">\(\frac{dy}{dx} = cx^{c-1}\)</span>.</p>
+<p>If <span class="math inline">\(y = \log(x)\)</span>, then <span class="math inline">\(\frac{dy}{dx} = \frac{1}{x}\)</span>.</p>
+<p>If <span class="math inline">\(y = \exp(\beta_0 + \beta_1 x)\)</span>, then <span class="math inline">\(\frac{dy}{dx} = \beta_1 \exp(\beta_0 + \beta_1 x)\)</span>.</p>
+<p><strong>Partial Derivatives:</strong> For multivariate functions like <span class="math inline">\(y = f(x_1, x_2)\)</span>, the partial derivative <span class="math inline">\(\frac{\partial y}{\partial x_1}\)</span> measures the slope in the direction of <span class="math inline">\(x_1\)</span>, treating <span class="math inline">\(x_2\)</span> as a constant. The <em>ceteris paribus</em> effect is calculated as <span class="math inline">\(\Delta y \approx \frac{\partial y}{\partial x_1} \Delta x_1\)</span>.</p>
 <p><strong>First Order Conditions (Optimization):</strong> To find the minimum or maximum of a function <span class="math inline">\(f(x_1, x_2, \dots, x_k)\)</span>, you take the partial derivatives with respect to every variable <span class="math inline">\(x_j\)</span> and set them all to zero: <span class="math inline">\(\frac{\partial f}{\partial x_j} = 0\)</span> for all <span class="math inline">\(j=1, 2, \dots, k\)</span>. This is exactly how the Ordinary Least Squares (OLS) estimators are derived.</p>
 
 
