@@ -1,13 +1,38 @@
 # Preface {.unnumbered}
 
-The original Rosetta Stone was a breakthrough not because it contained new information, but because it presented the same decree in three different scripts: Hieroglyphs, Demotic, and Ancient Greek. It allowed scholars to finally decipher a language that had been locked away for centuries.
 
-**The Causal Rosetta** aims to do the same for modern econometrics.
 
-Today, the landscape of causal inference is rich with incredible resources. We have the rigorous theory of *Mostly Harmless Econometrics*, the intuitive storytelling of *The Effect*, and the practical programming of *Causal Inference for the Brave and True*—**all standing in the shadow of the thousand-page encyclopedias by Greene and Wooldridge.** Yet, for a student or practitioner, this abundance can feel overwhelming. Trying to piece together a coherent workflow by jumping between five different textbooks, three coding languages, and endless StackOverflow threads is a recipe for friction, not learning.
 
-As a Teaching Assistant, my job is not to invent new theorems. My job is to translate the "what" into the "how." I see where students get stuck: not on the derivation of the estimator, but on the syntax of the implementation.
+# Preface: The Map of a Struggle
 
-This book is a pragmatic synthesis. It is an attempt to blend the wisdom of the giants into a single, accessible manual.
+If you are looking for a traditional, top-down econometrics textbook that pretends learning this subject is a clean, linear process, you are in the wrong place. 
 
-Enough with the formalities, even as a TA I find it hellish to master econometrics. This book records my learning journey. Each chapter is my notes from a specific source. I ordered the chapters in a way that will get you in business ASAP. Starting from absolutely nothing till the moment you or I reach noble prize level like Angrist or Dufflo.
+There are already brilliant textbooks written by brilliant econometricians. But when you are actually trying to learn modern causal inference from scratch, reading those textbooks feels like walking into a movie halfway through. 
+
+This book, the *Causal Rosetta*, is not a standard syllabus. It is a highly opinionated, chronological map of how I actually studied the subject. It is a documented survival guide designed to save you from the struggles I went through trying to piece together traditional econometrics, modern causal inference, and the underlying mathematics.
+
+### Why is the book ordered this way?
+
+If you look at the Table of Contents, you might be confused. Why are we deriving Ordinary Least Squares in Chapter 1, but not talking about Causal Directed Acyclic Graphs (DAGs) until Chapter 12? Why is there a random Calculus cheatsheet in Chapter 13?
+
+The answer is simple: **This is the exact order in which the roadblocks appear when you try to learn this field.** Here is the reasoning behind the journey we are about to take:
+
+* **Phase 1: The Traditional Foundation (Chapters 1–10)**
+    Before you can critique standard methods, you have to understand them. I started my journey with Ben Lambert’s lectures and Wooldridge’s *Introductory Econometrics*. These chapters cover the absolute mechanics—deriving OLS, the Gauss-Markov assumptions, and traditional regression analysis. You have to know the rules before modern causal inference tells you how to break them.
+* **Phase 2: The Tooling (Chapter 11)**
+    Theory without code is useless. After grasping the basics, I had to stop and take CS50’s R course just to build the companion applications. This chapter exists because you cannot do modern econometrics without knowing the Tidyverse.
+* **Phase 3: The Causal Epiphany (Chapter 12)**
+    This is where the paradigm shifts. Reading Nick Huntington-Klein’s *The Effect* changed how I saw data. Traditional econometrics lacks the visual language of causality. Here, we step back from the regression tables and learn to draw the actual problem using DAGs and causal intuition.
+* **Phase 4: The Mathematical Reality Check (Chapter 13 & Upcoming)**
+    Intuition only gets you so far. When I tried to move from intuitive texts to rigorous graduate-level theory (like Bruce Hansen’s *Econometrics*), I hit a massive mathematical wall. I realized my calculus and matrix algebra weren't strong enough. Chapter 13 (and the upcoming Matrix Algebra sections) are exactly where I had to pause, retreat, and relearn the math required to survive the advanced texts. 
+* **Phase 5: The Synthesis (Future Chapters)**
+    The final goal of this project is to take the rigorous math of Hansen, the design-focused intuition of *Causal Inference: The Mixtape*, and the practical application of *Mostly Harmless Econometrics*, and translate them into a single, cohesive framework—finishing with Causal Machine Learning. 
+
+### How to use this book
+
+If you are a beginner, read it chronologically. When you hit the math chapters, know that they are placed there exactly when you need them to understand the next step.
+
+If your math is already strong, or you already know Wooldridge inside and out, skip straight to Chapter 12 to begin the causal transition. 
+
+I built this so no one has to struggle the way I did to connect these fragmented pieces. Let's begin.
+
