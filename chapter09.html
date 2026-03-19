@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Factor Analysis &amp; SEM – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter10.html" rel="next">
+<link href="./chapter08.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter09.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#part-5-factor-analysis-and-sem" id="toc-part-5-factor-analysis-and-sem" class="nav-link active" data-scroll-target="#part-5-factor-analysis-and-sem">378. Part 5: Factor analysis and SEM</a></li>
+  <li><a href="#almost-there" id="toc-almost-there" class="nav-link" data-scroll-target="#almost-there">379. Almost there</a></li>
+  <li><a href="#factor-analysis-and-sem" id="toc-factor-analysis-and-sem" class="nav-link" data-scroll-target="#factor-analysis-and-sem">380. Factor analysis and SEM</a></li>
+  <li><a href="#factor-analysis---an-introduction" id="toc-factor-analysis---an-introduction" class="nav-link" data-scroll-target="#factor-analysis---an-introduction">381. Factor analysis - an introduction</a></li>
+  <li><a href="#factor-analysis---model-representation" id="toc-factor-analysis---model-representation" class="nav-link" data-scroll-target="#factor-analysis---model-representation">382. Factor analysis - model representation</a></li>
+  <li><a href="#factor-analysis---model-representation-2" id="toc-factor-analysis---model-representation-2" class="nav-link" data-scroll-target="#factor-analysis---model-representation-2">383. Factor analysis - model representation 2</a></li>
+  <li><a href="#factor-analysis---model-representation-3" id="toc-factor-analysis---model-representation-3" class="nav-link" data-scroll-target="#factor-analysis---model-representation-3">384. Factor analysis - model representation 3</a></li>
+  <li><a href="#factor-analysis---model-representation-4" id="toc-factor-analysis---model-representation-4" class="nav-link" data-scroll-target="#factor-analysis---model-representation-4">385. Factor analysis - model representation 4</a></li>
+  <li><a href="#factor-analysis-assumptions" id="toc-factor-analysis-assumptions" class="nav-link" data-scroll-target="#factor-analysis-assumptions">386. Factor analysis assumptions</a></li>
+  <li><a href="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-1" id="toc-derivation-of-variance-covariance-matrix-in-factor-analysis-part-1" class="nav-link" data-scroll-target="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-1">387. Derivation of variance covariance matrix in factor analysis part 1</a></li>
+  <li><a href="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-2" id="toc-derivation-of-variance-covariance-matrix-in-factor-analysis-part-2" class="nav-link" data-scroll-target="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-2">388. Derivation of variance covariance matrix in factor analysis part 2</a></li>
+  <li><a href="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-3" id="toc-derivation-of-variance-covariance-matrix-in-factor-analysis-part-3" class="nav-link" data-scroll-target="#derivation-of-variance-covariance-matrix-in-factor-analysis-part-3">389. Derivation of variance covariance matrix in factor analysis part 3</a></li>
+  <li><a href="#factor-analysis-predicted-variance-and-covariance-indicators-part-1" id="toc-factor-analysis-predicted-variance-and-covariance-indicators-part-1" class="nav-link" data-scroll-target="#factor-analysis-predicted-variance-and-covariance-indicators-part-1">390. Factor analysis: predicted variance and covariance indicators part 1</a></li>
+  <li><a href="#factor-analysis-predicted-variance-and-covariance-indicators-part-2" id="toc-factor-analysis-predicted-variance-and-covariance-indicators-part-2" class="nav-link" data-scroll-target="#factor-analysis-predicted-variance-and-covariance-indicators-part-2">391. Factor analysis: predicted variance and covariance indicators part 2</a></li>
+  <li><a href="#variance-covariance-matrix-using-matrix-notation-of-factor-analysis" id="toc-variance-covariance-matrix-using-matrix-notation-of-factor-analysis" class="nav-link" data-scroll-target="#variance-covariance-matrix-using-matrix-notation-of-factor-analysis">392. Variance covariance matrix using matrix notation of factor analysis</a></li>
+  <li><a href="#covariance-between-indicators-and-factors" id="toc-covariance-between-indicators-and-factors" class="nav-link" data-scroll-target="#covariance-between-indicators-and-factors">393. Covariance between indicators and factors</a></li>
+  <li><a href="#model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-1" id="toc-model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-1" class="nav-link" data-scroll-target="#model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-1">394. Model implied variance covariance matrix of indicators (matrix form) part 1</a></li>
+  <li><a href="#model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-2" id="toc-model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-2" class="nav-link" data-scroll-target="#model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-2">395. Model implied variance covariance matrix of indicators (matrix form) part 2</a></li>
+  <li><a href="#model-implied-variance-covariance-matrix-an-example" id="toc-model-implied-variance-covariance-matrix-an-example" class="nav-link" data-scroll-target="#model-implied-variance-covariance-matrix-an-example">396. Model implied variance covariance matrix an example</a></li>
+  <li><a href="#maximum-likelihood-estimation-of-factor-analysis-models-part-1" id="toc-maximum-likelihood-estimation-of-factor-analysis-models-part-1" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-of-factor-analysis-models-part-1">397. Maximum likelihood estimation of factor analysis models part 1</a></li>
+  <li><a href="#maximum-likelihood-estimation-of-factor-analysis-models-part-2" id="toc-maximum-likelihood-estimation-of-factor-analysis-models-part-2" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-of-factor-analysis-models-part-2">398. Maximum likelihood estimation of factor analysis models part 2</a></li>
+  <li><a href="#maximum-likelihood-estimation-of-factor-analysis-models-fitting-function" id="toc-maximum-likelihood-estimation-of-factor-analysis-models-fitting-function" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-of-factor-analysis-models-fitting-function">399. Maximum likelihood estimation of factor analysis models fitting function</a></li>
+  <li><a href="#mission-accomplished" id="toc-mission-accomplished" class="nav-link" data-scroll-target="#mission-accomplished">400. MISSION ACCOMPLISHED</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Factor Analysis &amp; SEM</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-5-factor-analysis-and-sem" class="level3">
+<h3 class="anchored" data-anchor-id="part-5-factor-analysis-and-sem">378. Part 5: Factor analysis and SEM</h3>
+<p>Final part</p>
+</section>
+<section id="almost-there" class="level3">
+<h3 class="anchored" data-anchor-id="almost-there">379. Almost there</h3>
+<p>Rome wasn’t built in a day, but it collapsed in one</p>
+</section>
+<section id="factor-analysis-and-sem" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis-and-sem">380. Factor analysis and SEM</h3>
+<p>I see a light, and I hope its not a train</p>
+</section>
+<section id="factor-analysis---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis---an-introduction">381. Factor analysis - an introduction</h3>
+<p><strong>1. What is Factor Analysis?</strong></p>
+<ul>
+<li><strong>Purpose</strong>: Factor analysis aims to <strong>explain the variance and covariance</strong> between a set of <strong>observed variables</strong>.</li>
+<li><strong>Observed Variables</strong>: These are variables for which we have actual data.</li>
+<li><strong>Model Goal</strong>: To develop a model for the <strong>population</strong>, typically by using data from a <strong>sample</strong>.</li>
+<li><strong>Core Mechanism</strong>: The model explains the variance and covariance of observed variables using a <strong>set of typically fewer unobserved factors and weightings</strong>.
+<ul>
+<li>This implies that the variance and covariance structure observed is, at least in part, due to these unobserved factors.</li>
+</ul></li>
+</ul>
+<hr>
+<p><strong>Example: Psychiatric Care Data</strong></p>
+<ul>
+<li>Imagine having data on observed characteristics of individuals admitted to psychiatric care:
+<ul>
+<li><strong>Insomnia</strong></li>
+<li><strong>Suicidal thoughts</strong></li>
+<li><strong>Hyperventilation</strong></li>
+<li><strong>Nausea</strong></li>
+</ul></li>
+<li>This data represents a <strong>sample</strong>, not the entire population.</li>
+<li><strong>Observation</strong>: Within this sample, there’s variance and covariance between these variables.
+<ul>
+<li><strong>Example</strong>: There might be a covariance of <span class="math inline">\(0.3\)</span> between insomnia and suicidal thoughts.</li>
+</ul></li>
+<li><strong>Factor Analysis Goal</strong>: To create a model that explains this covariance (and variance) in the <strong>population</strong>.</li>
+<li><strong>Hypothesis</strong>: This variance and covariance structure is due to <strong>unobserved factors</strong>.
+<ul>
+<li><strong>Proposed Unobserved Factors</strong>:
+<ul>
+<li><strong>Depression</strong></li>
+<li><strong>Extreme Anxiety</strong></li>
+</ul></li>
+</ul></li>
+<li><strong>Intuition</strong>: These two underlying factors (depression and anxiety) are hypothesized to <strong>causally affect</strong> and thus be <strong>responsible for the variance and covariance</strong> between all the observed characteristics.</li>
+</ul>
+<hr>
+<p><strong>The Role of Weightings (Loadings)</strong></p>
+<ul>
+<li>In factor analysis, the unobserved factors (e.g., depression, anxiety) are assumed to have a <strong>causal effect</strong> on each of the observed characteristics.</li>
+<li>This causal influence is quantified by <strong>weightings</strong>.</li>
+<li><strong>Weighting Notation</strong>:
+<ul>
+<li>The weighting of the first unobserved factor on the first observed factor might be called <span class="math inline">\(w_{11}\)</span>.
+<ul>
+<li><em>Example</em>: The amount to which depression causes insomnia.</li>
+</ul></li>
+<li>The weighting of the second unobserved factor on the first observed factor might be called <span class="math inline">\(w_{21}\)</span>.
+<ul>
+<li><em>Example</em>: The amount to which anxiety causes insomnia.</li>
+</ul></li>
+</ul></li>
+<li><strong>Key Insight</strong>: These weightings are typically different for each factor-observed variable pair.</li>
+<li><strong>Estimation</strong>: A primary goal of factor analysis is to <strong>estimate these weightings and the unobserved factors</strong> themselves.</li>
+<li><strong>Factor Relationships</strong>: It’s important to note that these <strong>unobserved factors can themselves be correlated</strong>.</li>
+<li><strong>Higher-Order Models</strong>: Factor analysis can extend to higher-order models where unobserved factors are themselves caused by even “further down the chain” unobserved factors.</li>
+</ul>
+<hr>
+<p><strong>Understanding Variance Components</strong></p>
+<ul>
+<li>When analyzing the variance of a given observed variable (e.g., insomnia) across a sample, factor analysis aims to explain its variance in the population.</li>
+<li>The variance of an observed variable is thought to comprise two main parts: <imagine a="" box="">
+<ul>
+<li><strong>Commonality</strong>: This is the <strong>proportion of variance explained by the shared unobserved factors</strong>.
+<ul>
+<li>It’s called “commonality” because these factors are common to (affect) other observed variables as well.</li>
+</ul></li>
+<li><strong>Unique Variance</strong>: This is the <strong>proportion of variance that is NOT explained by these shared unobserved factors</strong>.
+<ul>
+<li>It is considered <strong>unique to that specific observed variable</strong> and is not caused by the common set of factors.</li>
+</ul></li>
+</ul></imagine></li>
+<li><strong>Unique Factors</strong>: Typically, this unique variance is attributed to a set of specific unobserved variables (e.g., <span class="math inline">\(\varepsilon_1, \varepsilon_2, \varepsilon_3, \varepsilon_4\)</span>) that explain the unique variance of that particular observed variable.</li>
+<li><strong>Covariance Extension</strong>: If these unique factors (e.g., <span class="math inline">\(\varepsilon_1\)</span> and <span class="math inline">\(\varepsilon_2\)</span>) are correlated, then the covariance between observed variables can also be attributed partly to the shared factors and partly to these unique factors.</li>
+</ul>
+<hr>
+<p><strong>5. Practical Applications</strong></p>
+<ul>
+<li><strong>Primary Use: Explaining Variance and Covariance</strong>
+<ul>
+<li>Factor analysis’s core utility is to explain the complex variance and covariance relationships among observed characteristics by using a <strong>typically simpler underlying structure</strong>.</li>
+<li><strong>Example</strong>: Reducing a system from four observed characteristics (insomnia, suicidal thoughts, hyperventilation, nausea) to two unobserved factors (depression, anxiety) simplifies the dimensionality from four to two.</li>
+</ul></li>
+<li><strong>Testing a Particular Theory</strong>
+<ul>
+<li>Especially prominent in <strong>psychology</strong>, factor analysis is used to test theoretical frameworks.</li>
+<li><strong>Method</strong>: If a theory proposes a link between certain unobserved constructs (e.g., depression, anxiety) and a set of observed characteristics, factor analysis can test whether this theoretical structure is supported by the empirical data.</li>
+</ul></li>
+<li><strong>Dimensionality Reduction</strong>
+<ul>
+<li>This is a significant application, particularly relevant in fields like <strong>machine learning</strong>.</li>
+<li><strong>Concept</strong>: It involves starting with a system of many (highly dimensional) variables and replacing it with a system of <strong>fewer unobserved factors</strong>.</li>
+<li><strong>Benefits in Machine Learning</strong>:
+<ul>
+<li><strong>Improving Predictive Power</strong>: By reducing noise and focusing on core underlying constructs.</li>
+<li><strong>Easier Computation</strong>: Working with fewer variables reduces computational complexity.</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="factor-analysis---model-representation" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis---model-representation">382. Factor analysis - model representation</h3>
+<hr>
+<p>Factor Analysis - Model Representation</p>
+<ul>
+<li><strong>Factor analysis</strong> helps us understand how observed variables relate to underlying, unobserved factors.</li>
+<li>We will explore how to represent models and data in factor analysis.</li>
+<li>Our example involves <strong>four observed factors</strong> collected from a sample of individuals:
+<ul>
+<li>Insomnia (<span class="math inline">\(y_1\)</span>)</li>
+<li>Suicidal Thoughts (<span class="math inline">\(y_2\)</span>)</li>
+<li>Hyperventilation (<span class="math inline">\(y_3\)</span>)</li>
+<li>Nausea (<span class="math inline">\(y_4\)</span>)</li>
+</ul></li>
+</ul>
+<hr>
+<p>Representing Observed Data Slide 2</p>
+<ul>
+<li><p>Each observed variable can be thought of as a <strong>vector of observations</strong> across a sample of ‘n’ individuals.</p></li>
+<li><p>For example, <strong>insomnia (<span class="math inline">\(y_1\)</span>)</strong> is a vector where each component represents the insomnia measure for a different person:</p>
+<p><span class="math display">\[
+  y_1 = \begin{pmatrix} y_1^1 \\ y_1^2 \\ \vdots \\ y_1^n \end{pmatrix}
+  \]</span></p>
+<ul>
+<li>Where <span class="math inline">\(y_1^1\)</span> is the insomnia value for the first person, <span class="math inline">\(y_1^2\)</span> for the second person, and so on, up to <span class="math inline">\(y_1^n\)</span> for the nth person.</li>
+</ul></li>
+<li><p>Similarly, <strong>nausea (<span class="math inline">\(y_4\)</span>)</strong> is also a vector of observations for each person in the sample:</p>
+<p><span class="math display">\[
+  y_4 = \begin{pmatrix} y_4^1 \\ y_4^2 \\ \vdots \\ y_4^n \end{pmatrix}
+  \]</span></p></li>
+<li><p>This vector representation applies analogously to all other observed variables (<span class="math inline">\(y_2, y_3\)</span>).</p></li>
+</ul>
+<hr>
+<p>Two Ways to Represent Factor Analysis Models</p>
+<ul>
+<li>There are essentially <strong>two primary ways</strong> to think about representing models in factor analysis:
+<ol type="1">
+<li><strong>Vector of Equations</strong> formalism</li>
+<li><strong>Matrix Interpretation</strong></li>
+</ol></li>
+<li>In this discussion, we will focus extensively on the <strong>Vector of Equations</strong> approach.</li>
+<li>The Matrix Interpretation will be introduced and discussed in subsequent material.</li>
+</ul>
+<hr>
+<p>The Vector of Equations Formalism - Intuition and Unobserved Factors</p>
+<ul>
+<li><strong>Intuition</strong>: With the vector of equations formalism, we <strong>“forget about the fact that <span class="math inline">\(y_1\)</span> through <span class="math inline">\(y_4\)</span> represents actually a vector of observations for individuals”</strong> and instead focus purely on the structure of the equations themselves.</li>
+<li>We identify <strong>unobserved (latent) factors</strong> that influence the observed variables.</li>
+<li>For our example, we consider two unobserved factors:
+<ul>
+<li><strong>Depression (<span class="math inline">\(\eta_1\)</span>)</strong></li>
+<li><strong>Anxiety (<span class="math inline">\(\eta_2\)</span>)</strong></li>
+</ul></li>
+</ul>
+<hr>
+<p>The Vector of Equations - General Form and Example (Insomnia)</p>
+<ul>
+<li><p>Each observed variable (<span class="math inline">\(y_i\)</span>) is determined in a <strong>linear regression-like form</strong> by the unobserved factors.</p></li>
+<li><p>Consider <strong>Insomnia (<span class="math inline">\(y_1\)</span>)</strong>:</p>
+<p><span class="math display">\[
+  y_1 = \lambda_{11} \eta_1 + \lambda_{12} \eta_2 + \varepsilon_1
+  \]</span></p></li>
+<li><p>Let’s break down this equation:</p>
+<ul>
+<li><span class="math inline">\(\eta_1\)</span>: The unobserved factor <strong>Depression</strong>.</li>
+<li><span class="math inline">\(\eta_2\)</span>: The unobserved factor <strong>Anxiety</strong>.</li>
+<li><span class="math inline">\(\lambda_{11}\)</span>: This is a <strong>loading (weight)</strong> that corresponds to the influence of the first unobserved variable (Depression, <span class="math inline">\(\eta_1\)</span>) on the first observed variable (Insomnia, <span class="math inline">\(y_1\)</span>).</li>
+<li><span class="math inline">\(\lambda_{12}\)</span>: This is a <strong>loading (weight)</strong> that corresponds to the influence of the second unobserved variable (Anxiety, <span class="math inline">\(\eta_2\)</span>) on the first observed variable (Insomnia, <span class="math inline">\(y_1\)</span>).</li>
+<li><span class="math inline">\(\varepsilon_1\)</span>: This term represents the <strong>unique variance of <span class="math inline">\(y_1\)</span></strong>.</li>
+</ul></li>
+</ul>
+<hr>
+<p>The Vector of Equations - Another Example (Nausea) and Components Explained</p>
+<ul>
+<li><p>We can write this type of regression formula for <strong>each of the observed characteristics</strong>.</p></li>
+<li><p>Consider <strong>Nausea (<span class="math inline">\(y_4\)</span>)</strong>:</p>
+<p><span class="math display">\[
+  y_4 = \lambda_{41} \eta_1 + \lambda_{42} \eta_2 + \varepsilon_4
+  \]</span></p></li>
+</ul>
+<hr>
+<p>Key Concepts: Commonality and Unique Variance</p>
+<ul>
+<li><strong>Commonality</strong>:
+<ul>
+<li><p>This refers to <strong>the part of each equation that is common to all the observed characteristics</strong>.</p></li>
+<li><p>It represents the proportion of an observed variable’s variance that is explained by the <strong>shared unobserved factors</strong>.</p></li>
+<li><p>In our equations, the commonality for <span class="math inline">\(y_i\)</span> is represented by the terms involving the latent variables:</p>
+<p><span class="math display">\[
+  \lambda_{i1} \eta_1 + \lambda_{i2} \eta_2
+  \]</span></p></li>
+</ul></li>
+<li><strong>Unique Variance (<span class="math inline">\(\varepsilon_i\)</span>)</strong>:
+<ul>
+<li>This is the term (<span class="math inline">\(\varepsilon\)</span>) in each equation that is <strong>unique to that specific observed factor (<span class="math inline">\(y_i\)</span>)</strong>.</li>
+<li>It represents the <strong>proportion of the variance of the observed characteristic which is NOT due to the shared unobserved factors</strong>.</li>
+<li>Essentially, it captures the variance in an observed variable that is specific to that variable and not shared with others via the common latent factors.</li>
+</ul></li>
+</ul>
+<hr>
+<p>Conclusion and Next Steps</p>
+<ul>
+<li>We have discussed the <strong>Vector of Equations</strong> approach to representing models in factor analysis.</li>
+<li>This method allows us to express observed variables as linear combinations of unobserved factors and unique variance terms.</li>
+<li>The concepts of <strong>commonality</strong> and <strong>unique variance</strong> are crucial for understanding the contributions of shared and unique influences on observed variables.</li>
+<li>In the next video, the <strong>Matrix Interpretation</strong> of factor analysis models will be introduced.</li>
+</ul>
+<hr>
+</section>
+<section id="factor-analysis---model-representation-2" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis---model-representation-2">383. Factor analysis - model representation 2</h3>
+<p>we continue our discussion on <strong>model representation in factor analysis</strong>. In the previous part, we introduced the vector of equations interpretation of models in factor analysis.</p>
+<hr>
+<p>The Vector of Equations Interpretation</p>
+<ul>
+<li><strong>Intuition</strong>: In factor analysis, the vector of equations interpretation means that we have <strong>one regression equation for each of the observed characteristics</strong>.</li>
+<li>For example, if we are analyzing symptoms, we would have a regression equation for:
+<ul>
+<li>Insomnia</li>
+<li>Nausea</li>
+<li>Suicidal thoughts</li>
+<li>Hyperventilation</li>
+</ul></li>
+</ul>
+<hr>
+<p>Fixed and Varying Components It is important to understand that each of these equations contains elements that are <strong>fixed across individuals in our sample</strong> and elements that <strong>vary between individuals</strong>.</p>
+<ul>
+<li><strong>Fixed Components (across individuals)</strong>:
+<ul>
+<li>The <strong>weightings of the unobserved factors on the observed characteristics</strong>. These are often denoted by Lambda (<span class="math inline">\(\lambda\)</span>) parameters, such as <span class="math inline">\(\lambda_{11}\)</span>, <span class="math inline">\(\lambda_{12}\)</span>, <span class="math inline">\(\lambda_{41}\)</span>, and <span class="math inline">\(\lambda_{42}\)</span>, as well as all weightings in between. These are essentially the <strong>factor loadings</strong>.</li>
+</ul></li>
+<li><strong>Varying Components (between individuals)</strong>:
+<ul>
+<li>The <strong>actual values or scores of these hidden (unobserved) factors</strong> for different individuals. For instance, <span class="math inline">\(\eta_{21}\)</span> and <span class="math inline">\(\eta_{22}\)</span> represent these factor scores.</li>
+<li><strong>Crucially, <span class="math inline">\(\eta_{21}\)</span> (and similarly <span class="math inline">\(\eta_{22}\)</span>) actually represents a vector</strong> with different values for each individual in our sample (e.g., <span class="math inline">\(\eta_{211}\)</span> through <span class="math inline">\(\eta_{21N}\)</span>).</li>
+<li>The <strong>unique disturbance terms</strong> (e.g., <span class="math inline">\(\epsilon_1\)</span> through <span class="math inline">\(\epsilon_4\)</span>) also represent vectors of unique disturbance terms which are <strong>different for each individual</strong>.</li>
+</ul></li>
+</ul>
+<hr>
+<p>A Key Difference from Multiple Regression On the surface, each individual equation in factor analysis might look like a simple multiple regression equation. However, there is a fundamental difference:</p>
+<ul>
+<li><strong>Core Difference</strong>: In factor analysis, the <strong>only thing which we actually observe is the left-hand side</strong> of the equations (i.e., the observed characteristics like insomnia, nausea, etc.).</li>
+<li><strong>What is Unobserved?</strong>: All other components of the model are <strong>unobserved</strong>:
+<ul>
+<li>The <strong>actual values or scores of the hidden factors</strong> (e.g., <span class="math inline">\(\eta_{21}\)</span>, <span class="math inline">\(\eta_{22}\)</span>).</li>
+<li>The <strong>weightings of the unobserved characteristics</strong> (factor loadings).</li>
+<li>The <strong>unique factors or disturbance terms</strong> (e.g., <span class="math inline">\(\epsilon_1\)</span> through <span class="math inline">\(\epsilon_4\)</span>).</li>
+</ul></li>
+<li><strong>Intuition</strong>: Factor analysis aims to infer these unobserved underlying factors and their relationships with observed variables, unlike multiple regression where all predictors are typically observed.</li>
+</ul>
+<hr>
+<p>Stacking Equations: A More Compact Representation To simplify the representation of the system of equations, we can <strong>stack each of these individual equations on top of each other</strong>.</p>
+<ul>
+<li><strong>Process</strong>:
+<ul>
+<li>The observed characteristics (<span class="math inline">\(y_1\)</span> through <span class="math inline">\(y_4\)</span>) are combined into a <strong>vector on the left-hand side</strong>.</li>
+<li>The fixed weightings (<span class="math inline">\(\lambda_{11}, \lambda_{12}\)</span>, etc.) form a <strong>matrix</strong>. This matrix would have values like <span class="math inline">\(\lambda_{11}\)</span> and <span class="math inline">\(\lambda_{12}\)</span> as its first row, and <span class="math inline">\(\lambda_{41}\)</span> and <span class="math inline">\(\lambda_{42}\)</span> as its final row. This is often referred to as the <strong>factor loading matrix</strong>, <span class="math inline">\(\Lambda\)</span>.</li>
+<li>The unobserved specific factor scores (<span class="math inline">\(\eta_{21}\)</span> and <span class="math inline">\(\eta_{22}\)</span>) are combined into a <strong>vector</strong>.</li>
+<li>The unique disturbance terms (<span class="math inline">\(\epsilon_1\)</span> through <span class="math inline">\(\epsilon_4\)</span>) are also combined into a <strong>vector</strong>.</li>
+</ul></li>
+<li><strong>Key Idea</strong>: We are stacking equations rather than observations in this formalism.</li>
+</ul>
+$$
+<span class="math display">\[\begin{bmatrix}y_1 \\ \vdots \\ y_4\end{bmatrix}\]</span>
+=
+<span class="math display">\[\begin{bmatrix}\lambda_{11} &amp; \lambda_{12} \\ \vdots &amp; \vdots\\ \eta_{41} &amp;\eta_{42}\end{bmatrix}\]</span>
+<span class="math display">\[\begin{bmatrix}\eta_1 \\ \eta_2\end{bmatrix}\]</span>
+<ul>
+<li><span class="math display">\[\begin{bmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_4\end{bmatrix}\]</span>
+$$</li>
+</ul>
+<hr>
+<p>SThe Compact Vector Equation for Factor Analysis This process allows us to replace a system of four (or more) individual equations by a <strong>single vector equation</strong>.</p>
+<ul>
+<li><p><strong>The General Form</strong>:</p>
+<p><span class="math display">\[
+  \mathbf{y} = \mathbf{\Lambda \eta} + \mathbf{\epsilon}
+  \]</span></p></li>
+<li><p><strong>Intuition and Caveat</strong>: This is a <strong>very compact way of writing what is in principle actually quite a complicated system of equations</strong>. However, it’s important to stress that this compact form implicitly “forgets” a crucial detail:</p>
+<ul>
+<li><strong><span class="math inline">\(\mathbf{y}\)</span> (e.g., <span class="math inline">\(y_1\)</span> through <span class="math inline">\(y_4\)</span>) actually represents vectors of observations</strong> for each observed characteristic across different individuals.</li>
+<li><strong><span class="math inline">\(\mathbf{\eta}\)</span> (e.g., <span class="math inline">\(\eta_{21}\)</span> and <span class="math inline">\(\eta_{22}\)</span>) also represents vectors of different values or scores of the factors</strong> for different individuals.</li>
+<li><strong><span class="math inline">\(\mathbf{\epsilon}\)</span> (e.g., <span class="math inline">\(\epsilon_1\)</span> through <span class="math inline">\(\epsilon_4\)</span>) also represents vectors of unique disturbance terms</strong> which are different for each individual.</li>
+</ul></li>
+<li><p><strong>Next Steps</strong>: This compact vector representation naturally leads into the <strong>matrix representation of factor analysis</strong>, which will be discussed further in the next segment.</p></li>
+</ul>
+</section>
+<section id="factor-analysis---model-representation-3" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis---model-representation-3">384. Factor analysis - model representation 3</h3>
+<p>Recap: Problems with the Vector Equation Form</p>
+<ul>
+<li><p>In previous discussions, factor analysis models were written as a system of equations, where each equation represented a particular observed characteristic.</p></li>
+<li><p>This was initially stacked as:</p>
+<p><span class="math display">\[
+  \mathbf{y} = \mathbf{\Lambda \eta} + \mathbf{\epsilon}
+  \]</span></p></li>
+<li><p><strong>The main problem with this vector equation form</strong> is that implicitly, each component of the dependent variable <span class="math inline">\(\mathbf{Y}\)</span> (e.g., <span class="math inline">\(Y_1\)</span>, <span class="math inline">\(Y_2\)</span>, etc.) and the unobserved factors <span class="math inline">\(\mathbf{\eta}\)</span> are treated as vectors of <span class="math inline">\(\mathbf{n \times 1}\)</span> dimensions.</p></li>
+<li><p><strong>Intuition</strong>: For example, <span class="math inline">\(Y_1\)</span> actually represents a vector of observations for the first characteristic across all ‘n’ individuals (i.e., <span class="math inline">\(Y_{1,1}\)</span>, <span class="math inline">\(Y_{2,1}\)</span>, …, <span class="math inline">\(Y_{n,1}\)</span>), but this form implicitly “forgets” that crucial individual-level information.</p></li>
+<li><p>We need a way to write down the model that <strong>retains this individual-level information</strong>.</p></li>
+</ul>
+<hr>
+<p>Introducing the Individual Index ‘i’</p>
+<ul>
+<li><p>To address the limitations, we can add an index ‘i’ to each variable, representing the individual.</p>
+<ul>
+<li><p>So, for the first observed characteristic, we have:</p>
+<p><span class="math display">\[
+  Y_{i1} = \lambda_{11} \eta_{i1} + \lambda_{12} \eta_{i2} + \epsilon_{i1}
+  \]</span></p></li>
+<li><p>This applies for all ‘i’ from 1 to ‘N’ (total observations).</p></li>
+</ul></li>
+<li><p>This can be extended for all observed characteristics, for example, the fourth: <span class="math inline">\(Y_{i4} = \lambda_{41} \eta_{i1} + \lambda_{42} \eta_{i2} + \epsilon_{i4}\)</span>.</p></li>
+<li><p><strong>Condensing the system</strong>: We can write down the entire system of equations using solely indices:</p>
+<p><span class="math display">\[
+  \boxed{\mathbf{Y_{ij} = \lambda_{j1} \eta_{i1} + \lambda_{j2} \eta_{i2} + \epsilon_{ij}}}
+  \]</span></p>
+<ul>
+<li>Here, <strong>‘i’ represents the individual</strong> (takes values 1 through N).</li>
+<li>And <strong>‘j’ represents which observable characteristic</strong> we are talking about (takes values 1 through 4 in this example).</li>
+</ul></li>
+<li><p><strong>Intuition</strong>: This single equation effectively condenses <strong>4N equations</strong> (if there are 4 observed characteristics and N individuals) into a more compact form, but it can still appear messy.</p></li>
+</ul>
+<hr>
+<p>Transition to Matrix Form: Why Matrices?</p>
+<ul>
+<li>Because the observed variable <span class="math inline">\(\mathbf{Y}\)</span> now has <strong>two indices</strong> (i for individual, j for characteristic, as in <span class="math inline">\(Y_{ij}\)</span>), it naturally lends itself to being represented by a <strong>matrix</strong>.</li>
+<li>This allows us to incorporate the information that we are dealing with ‘n’ individuals directly into the model’s structure.</li>
+</ul>
+<hr>
+<p>The Observed Data Matrix: <span class="math inline">\(\tilde{\mathbf{Y}}\)</span></p>
+<ul>
+<li><p>We can represent the dependent variable <span class="math inline">\(\mathbf{Y}\)</span> as a matrix.</p></li>
+<li><p>Each <strong>row</strong> in this matrix represents an <strong>individual’s observed variables</strong>.</p></li>
+<li><p><strong>Dimensions</strong>: This matrix has <strong>N rows</strong> (for N individuals) by <strong>V columns</strong> (for V observed characteristics). So, it’s an <strong>N x V</strong> matrix.</p></li>
+<li><p>Example (with 4 observed characteristics):</p>
+<p><span class="math display">\[
+  \mathbf{\tilde{Y}_{{N \times V}} = \begin{pmatrix} Y_{11} &amp; Y_{12} &amp; Y_{13} &amp; Y_{14} \\ Y_{21} &amp; Y_{22} &amp; Y_{23} &amp; Y_{24} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ Y_{N1} &amp; Y_{N2} &amp; Y_{N3} &amp; Y_{N4} \end{pmatrix}}
+  \]</span></p>
+<ul>
+<li><span class="math inline">\(Y_{11}\)</span> is the value of observed characteristic 1 for the first individual.</li>
+<li><span class="math inline">\(Y_{N4}\)</span> is the value of observed characteristic 4 for the Nth individual.</li>
+</ul></li>
+</ul>
+<hr>
+<p>The Factor Score Matrix: <span class="math inline">\(\tilde{\mathbf{\eta}}\)</span></p>
+<ul>
+<li><p>This matrix contains the <strong>factor scores for different individuals</strong>.</p></li>
+<li><p>Each <strong>row</strong> corresponds to an <strong>individual</strong>, and the entries in that row are their scores for each of the unobserved factors.</p></li>
+<li><p><strong>Dimensions</strong>: This matrix has <strong>N rows</strong> (for N individuals) by <strong>F columns</strong> (for F unobserved factors). So, it’s an <strong>N x F</strong> matrix.</p></li>
+<li><p>Example (with 2 unobserved factors):</p>
+<p><span class="math display">\[
+  \mathbf{\tilde{\eta}_{N \times F} = \begin{pmatrix} \eta_{11} &amp; \eta_{12} \\ \eta_{21} &amp; \eta_{22} \\ \vdots &amp; \vdots \\ \eta_{N1} &amp; \eta_{N2} \end{pmatrix}}
+  \]</span></p>
+<ul>
+<li><span class="math inline">\(\eta_{11}\)</span> is the score of the first individual on the first unobserved factor.</li>
+<li><span class="math inline">\(\eta_{N2}\)</span> is the score of the Nth individual on the second unobserved factor.</li>
+</ul></li>
+</ul>
+<hr>
+<p>The Factor Weight Matrix: <span class="math inline">\(\mathbf{\Lambda^T}\)</span></p>
+<ul>
+<li><p>This matrix represents the <strong>factor weights</strong> (or loadings).</p></li>
+<li><p><strong>Important</strong>: In the matrix representation, this is often the <strong>transpose of the loading matrix</strong> commonly denoted as <span class="math inline">\(\mathbf{\Lambda}\)</span>.</p></li>
+<li><p>Each <strong>column</strong> of <span class="math inline">\(\mathbf{\Lambda^T}\)</span> represents the weights for a particular observed characteristic across the factors, while each <strong>row</strong> corresponds to the weights of a factor on all observed characteristics.</p></li>
+<li><p><strong>Dimensions</strong>: Because we have F unobserved factors and V observed characteristics, this matrix will have <strong>F rows</strong> by <strong>V columns</strong>. So, it’s an <strong>F x V</strong> matrix.</p></li>
+<li><p>Example (with 2 unobserved factors and 4 observed characteristics):</p>
+<p><span class="math display">\[
+  \mathbf{\Lambda^T_{F \times V} = \begin{pmatrix} \lambda_{11} &amp; \lambda_{21} &amp; \lambda_{31} &amp; \lambda_{41} \\ \lambda_{12} &amp; \lambda_{22} &amp; \lambda_{32} &amp; \lambda_{42} \end{pmatrix}}
+  \]</span></p>
+<ul>
+<li>The first row (<span class="math inline">\(\lambda_{11}\)</span> to <span class="math inline">\(\lambda_{41}\)</span>) represents the weights on the first unobserved factor (<span class="math inline">\(\eta_1\)</span>) for each of the four observed characteristics.</li>
+<li>The second row (<span class="math inline">\(\lambda_{12}\)</span> to <span class="math inline">\(\lambda_{42}\)</span>) represents the similar weights but for the second factor (<span class="math inline">\(\eta_2\)</span>).</li>
+</ul></li>
+<li><p><strong>Crucial intuition for matrix multiplication</strong>: When we multiply <span class="math inline">\(\mathbf{\tilde{\eta}_{N \times F}}\)</span> <em>by <span class="math inline">\(\mathbf{\Lambda^T_{F \times V}}\)</span></em>, the inner dimensions (F) cancel out, resulting in an <strong>N x V matrix</strong>, which matches the dimensions of our observed data matrix <span class="math inline">\(\mathbf{\tilde{Y}_{N \times V}}\)</span>. This dimensional consistency confirms the correctness of the setup.</p></li>
+</ul>
+<hr>
+<p>The Disturbance Term Matrix: <span class="math inline">\(\tilde{\mathbf{\epsilon}}\)</span></p>
+<ul>
+<li><p>Finally, we have a matrix of our <strong>disturbance (error) terms</strong>.</p></li>
+<li><p>For the system to make sense, this matrix must have the <strong>same dimensions as our dependent variable matrix</strong> <span class="math inline">\(\mathbf{\tilde{Y}}\)</span>.</p></li>
+<li><p><strong>Dimensions</strong>: This matrix has <strong>N rows</strong> (for N individuals) by <strong>V columns</strong> (for V observed characteristics). So, it’s an <strong>N x V</strong> matrix.</p></li>
+<li><p>Example (with 4 observed characteristics):</p>
+<p><span class="math display">\[
+  \mathbf{\tilde{\epsilon}_{N \times V} = \begin{pmatrix} \epsilon{11} &amp; \epsilon_{12} &amp; \epsilon_{13} &amp; \epsilon_{14} \\ \epsilon_{21} &amp; \epsilon_{22} &amp; \epsilon_{23} &amp; \epsilon_{24} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ \epsilon_{N1} &amp; \epsilon_{N2} &amp; \epsilon_{N3} &amp; \epsilon_{N4} \end{pmatrix}}
+  \]</span></p>
+<ul>
+<li>Each individual row corresponds to the disturbances for one individual.</li>
+</ul></li>
+</ul>
+<hr>
+<p>The Full Matrix Equation</p>
+<ul>
+<li><p>The complete system of equations, explicitly including information about ‘N’ individuals, can be written as a single matrix equation.</p></li>
+<li><p>It’s common practice to use a <strong>tilde (<span class="math inline">\(\sim\)</span>)</strong> to indicate that we are referring to a matrix representation and to explicitly state the dimensions.</p></li>
+<li><p>The matrix representation of the factor analysis model is:</p>
+<p><span class="math display">\[
+  \boxed{\mathbf{\tilde{Y}_{N \times V} = \tilde{\eta}_{N \times F} \Lambda^T_{F \times V} + \tilde{\epsilon}_{N \times V}}}
+  \]</span></p></li>
+</ul>
+<hr>
+<p>Matrix vs.&nbsp;Vector Representation</p>
+<ul>
+<li>In this course on factor analysis, we will <strong>alternate between the matrix representation and the vector representation</strong> of factor analysis models.</li>
+<li>Sometimes one form will be more “prudent” or suitable than the other depending on the context.</li>
+<li>However, it’s important to note that the <strong>matrix representation of factor analysis models is in some ways slightly more powerful</strong> than the vector equation form.</li>
+</ul>
+<hr>
+</section>
+<section id="factor-analysis---model-representation-4" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis---model-representation-4">385. Factor analysis - model representation 4</h3>
+<p>We reached that</p>
+<p><span class="math display">\[
+\boxed{\mathbf{\tilde{Y}_{N \times V} = \tilde{\eta}_{N \times F} \Lambda^T_{F \times V} + \tilde{\epsilon}_{N \times V}}}
+\]</span></p>
+<p>where <span class="math inline">\(N\)</span> is number of individuals, <span class="math inline">\(F\)</span> number of factors and <span class="math inline">\(V\)</span> number of observed variables</p>
+<hr>
+<p>Refining the Model: Incorporating Unique Factors</p>
+<p>Now, let’s delve into a crucial refinement of the factor analysis model concerning the error term.</p>
+<p><strong>Intuition</strong>: The initial error term (<span class="math inline">\(\epsilon_{NV}\)</span>) lumps together all unexplained variance. However, in factor analysis, we want to distinguish between variance due to common factors and variance that is unique to each observed variable, plus random error. This distinction is vital for accurate model interpretation.</p>
+<ul>
+<li><p>Typically, in factor analysis models, we prefer to write the <strong>disturbance term</strong> (the error term <span class="math inline">\(\epsilon_{NV}\)</span>) in a way that is <strong>similar to that of the variance due to the common share factors</strong>.</p></li>
+<li><p>This means we don’t just treat it as residual error, but rather as variance stemming from <strong>unique factors</strong> specific to each observed variable.</p></li>
+<li><p>Therefore, we <strong>rewrite our error term <span class="math inline">\(\epsilon_{NV}\)</span></strong>:</p>
+<p><span class="math display">\[
+  &nbsp;\epsilon_{NV} = U_{NV} D'_{VV}
+  \]</span></p></li>
+</ul>
+<p>Let’s define these new matrices:</p>
+<ul>
+<li><strong><span class="math inline">\(U_{NV}\)</span></strong>: This is a matrix which <strong>contains the unique factor scores for each individual</strong>.
+<ul>
+<li>Like the dependent variable and error term, it has <strong>N rows</strong> (individuals) and <strong>V columns</strong> (observed variables). Each individual has a score on a unique factor for each observed variable.</li>
+</ul></li>
+<li><strong><span class="math inline">\(D'_{VV}\)</span></strong>: This is a <strong>matrix of the weightings on each of those individual variables</strong>.
+<ul>
+<li><p>It has dimensions <strong>V rows</strong> and <strong>V columns</strong>.</p></li>
+<li><p>This matrix contains the <strong>weightings of these unique factors on each of the observed variables</strong>.</p>
+<p><span class="math display">\[
+  D_{VV} = \begin{bmatrix}
+  \lambda_{u1} &amp;\dots &amp;0\\
+  \vdots \\
+  0 &amp; \dots &amp; \lambda_{uV}
+  \end{bmatrix}
+  \]</span></p></li>
+</ul></li>
+</ul>
+<hr>
+<p>The Unique Factor Weightings Matrix: <span class="math inline">\(D_{VV}\)</span></p>
+<p>The matrix <span class="math inline">\(D_{VV}\)</span> (or its transpose <span class="math inline">\(D'_{VV}\)</span>) has a very specific and important structure in factor analysis.</p>
+<p><strong>Intuition</strong>: The unique factors represent variance in an observed variable that is not shared with any other observed variable. This includes both specific variance (variance truly unique to that measure) and measurement error. By making <span class="math inline">\(D_{VV}\)</span> diagonal, we mathematically enforce that each unique factor only influences its corresponding observed variable.</p>
+<ul>
+<li>The matrix <strong><span class="math inline">\(D_{VV}\)</span> is typically assumed to be a diagonal matrix</strong>.</li>
+<li>This means that <strong>all off-diagonal elements are assumed to be zero</strong>.</li>
+<li>The <strong>diagonal elements</strong> of <span class="math inline">\(D_{VV}\)</span> <strong>represent the weights of these unique factor scores on each of the specific variables</strong>.
+<ul>
+<li>For example, these diagonal elements are denoted as <strong><span class="math inline">\(\lambda_{U1}\)</span> through to <span class="math inline">\(\lambda_{UV}\)</span></strong>.</li>
+<li>The subscript ‘U’ (e.g., in <span class="math inline">\(\lambda_U\)</span>) is used to <strong>indicate that we are talking about the unique factors</strong>. This helps to distinguish these weightings from those on the latent factors, which are assumed to be common between different variables.</li>
+</ul></li>
+</ul>
+<p><strong>In summary, because <span class="math inline">\(D_{VV}\)</span> is diagonal, it implies that</strong>:</p>
+<ul>
+<li>Each observed variable (<span class="math inline">\(y_1, y_2, \ldots, y_V\)</span>) has a unique variance component associated only with itself.</li>
+<li>The unique factor influencing <span class="math inline">\(y_1\)</span> does not influence <span class="math inline">\(y_2\)</span>, and so on. This is a fundamental assumption that separates the common variance from the unique variance in factor analysis.</li>
+</ul>
+<hr>
+<p>The Complete Factor Analysis Model in Matrix Form</p>
+<p>By incorporating the refined error term, we can now write the factor analysis model in its complete and commonly used matrix form.</p>
+<p><strong>Intuition</strong>: The complete form of the equation clearly separates the variance of the observed variables into two main components: variance explained by <strong>common factors</strong> (shared across multiple variables) and variance explained by <strong>unique factors</strong> (specific to each variable and measurement error). This distinction is the core of factor analysis.</p>
+<ul>
+<li><p>Combining our initial equation with the rewritten error term, we arrive at the <strong>complete equation for factor analysis models</strong>:</p>
+<p><span class="math display">\[
+  \begin{align*} y_{NV} = F_{Nf} P'_{fV} + U_{NV} D'_{VV} \end{align*}
+  \]</span></p></li>
+</ul>
+<p>Let’s reiterate what each part signifies in this <strong>complete form</strong>:</p>
+<ul>
+<li><strong><span class="math inline">\(y_{NV}\)</span></strong>: The <strong>Observed Variable Matrix</strong>. This is our data, containing the measured characteristics for each individual.</li>
+<li><strong><span class="math inline">\(F_{Nf} P'_{fV}\)</span></strong>: The <strong>Common Factor Component</strong>.
+<ul>
+<li>This represents the portion of variance in the observed variables that is <strong>explained by the underlying latent factors</strong>. These factors are assumed to be shared across multiple observed variables.</li>
+</ul></li>
+<li><strong><span class="math inline">\(U_{NV} D'_{VV}\)</span></strong>: The <strong>Unique Factor Component</strong>.
+<ul>
+<li>This represents the portion of variance in the observed variables that is <strong>unique to each specific variable</strong> and includes random error.</li>
+<li>The diagonal nature of <span class="math inline">\(D_{VV}\)</span> ensures that these unique factors influence only their corresponding observed variables, not other variables.</li>
+</ul></li>
+</ul>
+</section>
+<section id="factor-analysis-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis-assumptions">386. Factor analysis assumptions</h3>
+<p><strong>Confirmatory Factor Analysis (CFA)</strong> is a statistical technique used to explain the variance and covariance of observed variables. This presentation will cover the key assumptions underlying CFA.</p>
+<p><strong>Confirmatory factor analysis</strong> (CFA) models attempt to explain the relationships among observed variables by means of a set of shared, unobserved factors.</p>
+<hr>
+<p>The CFA model can be represented using vector notation as:</p>
+<p><span class="math display">\[
+\mathbf{Y} = \mathbf{\Lambda} \mathbf{\eta} + \mathbf{\epsilon}
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{Y}\)</span>: Represents the <strong>vector of observed variables</strong> (<span class="math inline">\(y_1, y_2, ..., y_V\)</span>).</li>
+<li><span class="math inline">\(\mathbf{\eta}\)</span>: Represents the <strong>vector of unobserved factors</strong> or shared factors (<span class="math inline">\(f_1, f_2, ..., f_F\)</span>).</li>
+<li><span class="math inline">\(\mathbf{\Lambda}\)</span>: Represents the <strong>weights of the different factors</strong> on each of the different observed variables.</li>
+<li><span class="math inline">\(\mathbf{\epsilon}\)</span>: Represents the <strong>specific unique variances</strong> or disturbance terms, which are components of the variance unique to specific variables and not due to the shared factors.</li>
+</ul>
+<hr>
+<p>Assumption 1: Zero Expected Value of Variables The first core assumption of confirmatory factor analysis is that the <strong>expected value of the observed variables is equal to zero</strong>.</p>
+<p><span class="math display">\[
+E[y]=0
+\]</span></p>
+<p><strong>What this means in practice: Standardization</strong> This assumption implies that <strong>each of the observed variables has been standardized</strong>.</p>
+<ul>
+<li><strong>Standardization</strong> involves transforming a raw variable by subtracting its mean and dividing by its standard deviation.
+<ul>
+<li><p>If <span class="math inline">\(X_1\)</span> is a raw variable with mean <span class="math inline">\(\mu_1\)</span> and standard deviation <span class="math inline">\(\sigma_1\)</span>, the standardized variable <span class="math inline">\(y_1\)</span> is:</p>
+<p><span class="math display">\[
+  y_1 = \frac{X_1 - \mu_1}{\sigma_1}
+  \]</span></p></li>
+</ul></li>
+<li><strong>Result of Standardization</strong>:
+<ul>
+<li>The <strong>mean of the transformed variable is zero</strong>: <span class="math inline">\(E[y_1] = 0\)</span>.</li>
+<li>The <strong>variance of the transformed variable is one</strong>: <span class="math inline">\(Var(y_1) = 1\)</span>.</li>
+</ul></li>
+</ul>
+<hr>
+<p><strong>Intuition behind Standardization</strong>:</p>
+<ul>
+<li>Standardization makes <strong>variances equal to one</strong>.</li>
+<li>It also ensures that <strong>covariances between individual variables are always less than one</strong>, thereby making covariances and variances comparable to some degree.</li>
+</ul>
+<p><strong>Broader Implications for the Model Variables</strong>:</p>
+<ul>
+<li>The assumption that <span class="math inline">\(E[\mathbf{Y}] = \mathbf{0}\)</span> also implies that the <strong>expected value of the unobserved factors is zero</strong>: <span class="math inline">\(E[\mathbf{\eta}] = \mathbf{0}\)</span>.</li>
+<li>Similarly, the <strong>expected value of the error terms is zero</strong>: <span class="math inline">\(E[\mathbf{\epsilon}] = \mathbf{0}\)</span>.</li>
+<li>Therefore, all variables within the model (observed variables, unobserved factors, and error terms) are effectively expressed as <strong>deviations from their respective means</strong>.</li>
+</ul>
+<hr>
+<p>Assumption 2: No Covariance between Factors &amp; Error Terms The final assumption is that there is <strong>no covariance between our underlying factors and our disturbance term Epsilon</strong>.</p>
+<ul>
+<li>This means that the factors (<span class="math inline">\(\mathbf{\eta}\)</span>) and the errors (<span class="math inline">\(\mathbf{\epsilon}\)</span>) are uncorrelated.</li>
+</ul>
+<p><span class="math display">\[
+E[\mathbf{\epsilon} \mathbf{\eta}^T] = \mathbf{0}
+\]</span></p>
+<ul>
+<li>This matrix multiplication indicates that the covariance between each component of <span class="math inline">\(\mathbf{\epsilon}\)</span> and each component of <span class="math inline">\(\mathbf{\eta}\)</span> is zero.</li>
+</ul>
+<hr>
+<p>The core intuition behind the assumption <span class="math inline">\(E[\mathbf{\epsilon} \mathbf{\eta}^T] = \mathbf{0}\)</span> is as follows:</p>
+<ul>
+<li>After the model has <strong>controlled for (or accounted for) the underlying shared factors</strong> which are contained in the vector <span class="math inline">\(\mathbf{\eta}\)</span>, any remaining <strong>residual component of the variance of the observed variable Y</strong> (which is represented by <span class="math inline">\(\mathbf{\epsilon}\)</span>) is <strong>in no way related to those underlying factors</strong>.</li>
+<li>This residual component, <span class="math inline">\(\mathbf{\epsilon}\)</span>, is therefore considered to be <strong>idiosyncratic error</strong>. It represents the unique variation in each observed variable that is not explained by the common factors and is specific to that variable alone.</li>
+</ul>
+</section>
+<section id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-1">387. Derivation of variance covariance matrix in factor analysis part 1</h3>
+</section>
+<section id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-2">388. Derivation of variance covariance matrix in factor analysis part 2</h3>
+</section>
+<section id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="derivation-of-variance-covariance-matrix-in-factor-analysis-part-3">389. Derivation of variance covariance matrix in factor analysis part 3</h3>
+</section>
+<section id="factor-analysis-predicted-variance-and-covariance-indicators-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis-predicted-variance-and-covariance-indicators-part-1">390. Factor analysis: predicted variance and covariance indicators part 1</h3>
+</section>
+<section id="factor-analysis-predicted-variance-and-covariance-indicators-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="factor-analysis-predicted-variance-and-covariance-indicators-part-2">391. Factor analysis: predicted variance and covariance indicators part 2</h3>
+</section>
+<section id="variance-covariance-matrix-using-matrix-notation-of-factor-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="variance-covariance-matrix-using-matrix-notation-of-factor-analysis">392. Variance covariance matrix using matrix notation of factor analysis</h3>
+</section>
+<section id="covariance-between-indicators-and-factors" class="level3">
+<h3 class="anchored" data-anchor-id="covariance-between-indicators-and-factors">393. Covariance between indicators and factors</h3>
+</section>
+<section id="model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-1">394. Model implied variance covariance matrix of indicators (matrix form) part 1</h3>
+</section>
+<section id="model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="model-implied-variance-covariance-matrix-of-indicators-matrix-form-part-2">395. Model implied variance covariance matrix of indicators (matrix form) part 2</h3>
+</section>
+<section id="model-implied-variance-covariance-matrix-an-example" class="level3">
+<h3 class="anchored" data-anchor-id="model-implied-variance-covariance-matrix-an-example">396. Model implied variance covariance matrix an example</h3>
+</section>
+<section id="maximum-likelihood-estimation-of-factor-analysis-models-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation-of-factor-analysis-models-part-1">397. Maximum likelihood estimation of factor analysis models part 1</h3>
+</section>
+<section id="maximum-likelihood-estimation-of-factor-analysis-models-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation-of-factor-analysis-models-part-2">398. Maximum likelihood estimation of factor analysis models part 2</h3>
+</section>
+<section id="maximum-likelihood-estimation-of-factor-analysis-models-fitting-function" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation-of-factor-analysis-models-fitting-function">399. Maximum likelihood estimation of factor analysis models fitting function</h3>
+</section>
+<section id="mission-accomplished" class="level3">
+<h3 class="anchored" data-anchor-id="mission-accomplished">400. MISSION ACCOMPLISHED</h3>
+<p>But you still have other courses to do</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter08.html" class="pagination-link" aria-label="Causal Inference &amp; Matrix Approach">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter10.html" class="pagination-link" aria-label="Econometrics: Emperically...">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

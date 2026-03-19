@@ -278,19 +278,79 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introductory Econometrics: OLS Emperically</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introductory Econometrics: OLS Math</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introductory Econometrics: Panel Math</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
   </div>
 </li>
     </ul>
@@ -303,10 +363,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
-  <ul class="collapse">
-  <li><a href="#the-philosophy-of-this-book" id="toc-the-philosophy-of-this-book" class="nav-link" data-scroll-target="#the-philosophy-of-this-book">The Philosophy of This Book</a></li>
-  </ul></li>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
   </ul>
 </nav>
     </div>
@@ -346,19 +403,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Today, the landscape of causal inference is rich with incredible resources. We have the rigorous theory of <em>Mostly Harmless Econometrics</em>, the intuitive storytelling of <em>The Effect</em>, and the practical programming of <em>Causal Inference for the Brave and True</em>—<strong>all standing in the shadow of the thousand-page encyclopedias by Greene and Wooldridge.</strong> Yet, for a student or practitioner, this abundance can feel overwhelming. Trying to piece together a coherent workflow by jumping between five different textbooks, three coding languages, and endless StackOverflow threads is a recipe for friction, not learning.</p>
 <p>As a Teaching Assistant, my job is not to invent new theorems. My job is to translate the “what” into the “how.” I see where students get stuck: not on the derivation of the estimator, but on the syntax of the implementation.</p>
 <p>This book is a pragmatic synthesis. It is an attempt to blend the wisdom of the giants into a single, accessible manual.</p>
-<section id="the-philosophy-of-this-book" class="level3">
-<h3 class="anchored" data-anchor-id="the-philosophy-of-this-book">The Philosophy of This Book</h3>
-<ul>
-<li><strong>Synthesis, Not Invention:</strong> I have read the chapters from the competing books so you don’t have to. This book aggregates the best explanation for each technique.</li>
-<li><strong>The “Cheat Sheet” Approach:</strong> We keep the theory light. The heavy mathematical lifting is already done better elsewhere (and I will cite those sources extensively if you wish to dive deeper).</li>
-<li><strong>Bilingual by Design:</strong> Every concept is implemented side-by-side in <strong>R</strong> and <strong>Python</strong>. Whether you are an econometrics traditionalist or a data science modernist, you belong here.</li>
-<li><strong>Code-First:</strong> The focus is on the “Do.” We start with data and end with a results table.</li>
-</ul>
-<p>If the other books are the lectures, think of this book as the lab session.</p>
-<p>Enjoy the ride.</p>
+<p>Enough with the formalities, even as a TA I find it hellish to master econometrics. This book records my learning journey. Each chapter is my notes from a specific source. I ordered the chapters in a way that will get you in business ASAP. Starting from absolutely nothing till the moment you or I reach noble prize level like Angrist or Dufflo.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -779,8 +826,8 @@ ul.task-list li input[type="checkbox"] {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./chapter01.html" class="pagination-link" aria-label="Introductory Econometrics: OLS Emperically">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introductory Econometrics: OLS Emperically</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./chapter01.html" class="pagination-link" aria-label="Deriving OLS">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

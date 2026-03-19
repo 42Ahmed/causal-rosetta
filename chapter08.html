@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Causal Inference &amp; Matrix Approach – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter09.html" rel="next">
+<link href="./chapter07.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter08.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#part-4-graduate-course" id="toc-part-4-graduate-course" class="nav-link active" data-scroll-target="#part-4-graduate-course">298. Part 4: Graduate course</a></li>
+  <li><a href="#a-graduate-course-in-econometrics" id="toc-a-graduate-course-in-econometrics" class="nav-link" data-scroll-target="#a-graduate-course-in-econometrics">299. A graduate course in econometrics</a></li>
+  <li><a href="#you-are-finally-learning-graduate-level" id="toc-you-are-finally-learning-graduate-level" class="nav-link" data-scroll-target="#you-are-finally-learning-graduate-level">300. You are finally learning graduate level</a></li>
+  <li><a href="#introduction-to-the-matrix-formulation-of-econometrics" id="toc-introduction-to-the-matrix-formulation-of-econometrics" class="nav-link" data-scroll-target="#introduction-to-the-matrix-formulation-of-econometrics">301. Introduction to the matrix formulation of econometrics</a></li>
+  <li><a href="#the-matrix-formulation-of-econometrics---example" id="toc-the-matrix-formulation-of-econometrics---example" class="nav-link" data-scroll-target="#the-matrix-formulation-of-econometrics---example">302. The matrix formulation of econometrics - example</a></li>
+  <li><a href="#how-to-differentiate-with-respect-to-a-vector-part-1" id="toc-how-to-differentiate-with-respect-to-a-vector-part-1" class="nav-link" data-scroll-target="#how-to-differentiate-with-respect-to-a-vector-part-1">303. How to differentiate with respect to a vector part 1</a></li>
+  <li><a href="#how-to-differentiate-with-respect-to-a-vector-part-2" id="toc-how-to-differentiate-with-respect-to-a-vector-part-2" class="nav-link" data-scroll-target="#how-to-differentiate-with-respect-to-a-vector-part-2">304. How to differentiate with respect to a vector part 2</a></li>
+  <li><a href="#how-to-differentiate-with-respect-to-a-vector-part-3" id="toc-how-to-differentiate-with-respect-to-a-vector-part-3" class="nav-link" data-scroll-target="#how-to-differentiate-with-respect-to-a-vector-part-3">305. How to differentiate with respect to a vector part 3</a></li>
+  <li><a href="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-1" id="toc-ordinary-least-squares-estimation---derivation-in-matrix-form-part-1" class="nav-link" data-scroll-target="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-1">306. Ordinary least squares estimation - derivation in matrix form part 1</a></li>
+  <li><a href="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-2" id="toc-ordinary-least-squares-estimation---derivation-in-matrix-form-part-2" class="nav-link" data-scroll-target="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-2">307. Ordinary least squares estimation - derivation in matrix form part 2</a></li>
+  <li><a href="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-3" id="toc-ordinary-least-squares-estimation---derivation-in-matrix-form-part-3" class="nav-link" data-scroll-target="#ordinary-least-squares-estimation---derivation-in-matrix-form-part-3">308. Ordinary least squares estimation - derivation in matrix form part 3</a></li>
+  <li><a href="#expectation-and-variance-of-a-random-vector-part-1" id="toc-expectation-and-variance-of-a-random-vector-part-1" class="nav-link" data-scroll-target="#expectation-and-variance-of-a-random-vector-part-1">309. Expectation and variance of a random vector part 1</a></li>
+  <li><a href="#expectation-and-variance-of-a-random-vector-part-2" id="toc-expectation-and-variance-of-a-random-vector-part-2" class="nav-link" data-scroll-target="#expectation-and-variance-of-a-random-vector-part-2">310. Expectation and variance of a random vector part 2</a></li>
+  <li><a href="#expectation-and-variance-of-a-random-vector-part-3" id="toc-expectation-and-variance-of-a-random-vector-part-3" class="nav-link" data-scroll-target="#expectation-and-variance-of-a-random-vector-part-3">311. Expectation and variance of a random vector part 3</a></li>
+  <li><a href="#expectation-and-variance-of-a-random-vector-part-4" id="toc-expectation-and-variance-of-a-random-vector-part-4" class="nav-link" data-scroll-target="#expectation-and-variance-of-a-random-vector-part-4">312. Expectation and variance of a random vector part 4</a></li>
+  <li><a href="#least-squares-as-an-unbiased-estimator-matrix-formulation" id="toc-least-squares-as-an-unbiased-estimator-matrix-formulation" class="nav-link" data-scroll-target="#least-squares-as-an-unbiased-estimator-matrix-formulation">313. Least squares as an unbiased estimator matrix formulation</a></li>
+  <li><a href="#variance-of-least-squares-estimators-matrix-form" id="toc-variance-of-least-squares-estimators-matrix-form" class="nav-link" data-scroll-target="#variance-of-least-squares-estimators-matrix-form">314. Variance of least squares estimators matrix form</a></li>
+  <li><a href="#gauss-markov-theorem-proof---matrix-form-part-1" id="toc-gauss-markov-theorem-proof---matrix-form-part-1" class="nav-link" data-scroll-target="#gauss-markov-theorem-proof---matrix-form-part-1">315. Gauss-Markov theorem proof - matrix form part 1</a></li>
+  <li><a href="#gauss-markov-theorem-proof---matrix-form-part-2" id="toc-gauss-markov-theorem-proof---matrix-form-part-2" class="nav-link" data-scroll-target="#gauss-markov-theorem-proof---matrix-form-part-2">316. Gauss-Markov theorem proof - matrix form part 2</a></li>
+  <li><a href="#gauss-markov-theorem-proof---matrix-form-part-3" id="toc-gauss-markov-theorem-proof---matrix-form-part-3" class="nav-link" data-scroll-target="#gauss-markov-theorem-proof---matrix-form-part-3">317. Gauss-Markov theorem proof - matrix form part 3</a></li>
+  <li><a href="#geometric-interpretation-of-ordinary-least-squares-an-introduction" id="toc-geometric-interpretation-of-ordinary-least-squares-an-introduction" class="nav-link" data-scroll-target="#geometric-interpretation-of-ordinary-least-squares-an-introduction">318. Geometric interpretation of ordinary least squares: an introduction</a></li>
+  <li><a href="#geometric-interpretation-of-ordinary-least-squares-an-example" id="toc-geometric-interpretation-of-ordinary-least-squares-an-example" class="nav-link" data-scroll-target="#geometric-interpretation-of-ordinary-least-squares-an-example">319. Geometric interpretation of ordinary least squares: an example</a></li>
+  <li><a href="#geometric-least-squares-column-space-intuition" id="toc-geometric-least-squares-column-space-intuition" class="nav-link" data-scroll-target="#geometric-least-squares-column-space-intuition">320. Geometric least squares column space intuition</a></li>
+  <li><a href="#geometric-interpretation-of-least-squares---orthogonal-projection" id="toc-geometric-interpretation-of-least-squares---orthogonal-projection" class="nav-link" data-scroll-target="#geometric-interpretation-of-least-squares---orthogonal-projection">321. Geometric interpretation of least squares - orthogonal projection</a></li>
+  <li><a href="#geometric-interpretation-of-least-squares---geometrical-derivation-of-estimator" id="toc-geometric-interpretation-of-least-squares---geometrical-derivation-of-estimator" class="nav-link" data-scroll-target="#geometric-interpretation-of-least-squares---geometrical-derivation-of-estimator">322. Geometric interpretation of least squares - geometrical derivation of estimator</a></li>
+  <li><a href="#orthogonal-projection-operator-in-least-squares---part-1" id="toc-orthogonal-projection-operator-in-least-squares---part-1" class="nav-link" data-scroll-target="#orthogonal-projection-operator-in-least-squares---part-1">323. Orthogonal projection operator in least squares - part 1</a></li>
+  <li><a href="#orthogonal-projection-operator-in-least-squares---part-2" id="toc-orthogonal-projection-operator-in-least-squares---part-2" class="nav-link" data-scroll-target="#orthogonal-projection-operator-in-least-squares---part-2">324. Orthogonal projection operator in least squares - part 2</a></li>
+  <li><a href="#orthogonal-projection-operator-in-least-squares---part-3" id="toc-orthogonal-projection-operator-in-least-squares---part-3" class="nav-link" data-scroll-target="#orthogonal-projection-operator-in-least-squares---part-3">325. Orthogonal projection operator in least squares - part 3</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-1" id="toc-estimating-the-error-variance-in-matrix-form-part-1" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-1">326. Estimating the error variance in matrix form part 1</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-2" id="toc-estimating-the-error-variance-in-matrix-form-part-2" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-2">327. Estimating the error variance in matrix form part 2</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-3" id="toc-estimating-the-error-variance-in-matrix-form-part-3" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-3">328. Estimating the error variance in matrix form part 3</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-4" id="toc-estimating-the-error-variance-in-matrix-form-part-4" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-4">329. Estimating the error variance in matrix form part 4</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-5" id="toc-estimating-the-error-variance-in-matrix-form-part-5" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-5">330. Estimating the error variance in matrix form part 5</a></li>
+  <li><a href="#estimating-the-error-variance-in-matrix-form-part-6" id="toc-estimating-the-error-variance-in-matrix-form-part-6" class="nav-link" data-scroll-target="#estimating-the-error-variance-in-matrix-form-part-6">331. Estimating the error variance in matrix form part 6</a></li>
+  <li><a href="#proof-that-the-trace-of-mx-is-p" id="toc-proof-that-the-trace-of-mx-is-p" class="nav-link" data-scroll-target="#proof-that-the-trace-of-mx-is-p">332. Proof that the trace of MX is p</a></li>
+  <li><a href="#representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-1" id="toc-representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-1" class="nav-link" data-scroll-target="#representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-1">333. Representing homoscedasticity and no autocorrelation in matrix form part 1</a></li>
+  <li><a href="#representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-2" id="toc-representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-2" class="nav-link" data-scroll-target="#representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-2">334. Representing homoscedasticity and no autocorrelation in matrix form part 2</a></li>
+  <li><a href="#representing-homoscedasticity-in-matrix-form" id="toc-representing-homoscedasticity-in-matrix-form" class="nav-link" data-scroll-target="#representing-homoscedasticity-in-matrix-form">335. Representing homoscedasticity in matrix form</a></li>
+  <li><a href="#blue-estimators-in-presence-of-heteroscedasticity-gls-part-1" id="toc-blue-estimators-in-presence-of-heteroscedasticity-gls-part-1" class="nav-link" data-scroll-target="#blue-estimators-in-presence-of-heteroscedasticity-gls-part-1">336. BLUE estimators in presence of heteroscedasticity GLS part 1</a></li>
+  <li><a href="#blue-estimators-in-presence-of-heteroscedasticity-gls-part-2" id="toc-blue-estimators-in-presence-of-heteroscedasticity-gls-part-2" class="nav-link" data-scroll-target="#blue-estimators-in-presence-of-heteroscedasticity-gls-part-2">337. BLUE estimators in presence of heteroscedasticity GLS part 2</a></li>
+  <li><a href="#gls-estimators-in-matrix-form-part-1" id="toc-gls-estimators-in-matrix-form-part-1" class="nav-link" data-scroll-target="#gls-estimators-in-matrix-form-part-1">338. GLS estimators in matrix form part 1</a></li>
+  <li><a href="#gls-estimators-in-matrix-form-part-2" id="toc-gls-estimators-in-matrix-form-part-2" class="nav-link" data-scroll-target="#gls-estimators-in-matrix-form-part-2">339. GLS estimators in matrix form part 2</a></li>
+  <li><a href="#gls-estimators-in-matrix-form-part-3" id="toc-gls-estimators-in-matrix-form-part-3" class="nav-link" data-scroll-target="#gls-estimators-in-matrix-form-part-3">340. GLS estimators in matrix form part 3</a></li>
+  <li><a href="#variance-of-gls-estimators" id="toc-variance-of-gls-estimators" class="nav-link" data-scroll-target="#variance-of-gls-estimators">341. Variance of GLS estimators</a></li>
+  <li><a href="#gls-example-in-matrix-form" id="toc-gls-example-in-matrix-form" class="nav-link" data-scroll-target="#gls-example-in-matrix-form">342. GLS example in matrix form</a></li>
+  <li><a href="#gls-estimators-in-presence-of-autocorrelation-and-heteroscedasticity-in-matrix-form" id="toc-gls-estimators-in-presence-of-autocorrelation-and-heteroscedasticity-in-matrix-form" class="nav-link" data-scroll-target="#gls-estimators-in-presence-of-autocorrelation-and-heteroscedasticity-in-matrix-form">343. GLS estimators in presence of autocorrelation and heteroscedasticity in matrix form</a></li>
+  <li><a href="#the-kronecker-product-of-two-matrices---an-introduction" id="toc-the-kronecker-product-of-two-matrices---an-introduction" class="nav-link" data-scroll-target="#the-kronecker-product-of-two-matrices---an-introduction">344. The Kronecker product of two matrices - an introduction</a></li>
+  <li><a href="#sure-estimation-an-introduction-part-1" id="toc-sure-estimation-an-introduction-part-1" class="nav-link" data-scroll-target="#sure-estimation-an-introduction-part-1">345. SURE estimation an introduction part 1</a></li>
+  <li><a href="#sure-estimation-an-introduction-part-2" id="toc-sure-estimation-an-introduction-part-2" class="nav-link" data-scroll-target="#sure-estimation-an-introduction-part-2">346. SURE estimation an introduction part 2</a></li>
+  <li><a href="#sure-estimation---autocorrelation-and-heteroscedasticity" id="toc-sure-estimation---autocorrelation-and-heteroscedasticity" class="nav-link" data-scroll-target="#sure-estimation---autocorrelation-and-heteroscedasticity">357. SURE estimation - autocorrelation and heteroscedasticity</a></li>
+  <li><a href="#sure-estimator-derivation-part-1" id="toc-sure-estimator-derivation-part-1" class="nav-link" data-scroll-target="#sure-estimator-derivation-part-1">348. SURE estimator derivation part 1</a></li>
+  <li><a href="#sure-estimator-derivation-part-2" id="toc-sure-estimator-derivation-part-2" class="nav-link" data-scroll-target="#sure-estimator-derivation-part-2">349. SURE estimator derivation part 2</a></li>
+  <li><a href="#kronecker-matrix-product-properties" id="toc-kronecker-matrix-product-properties" class="nav-link" data-scroll-target="#kronecker-matrix-product-properties">350. Kronecker matrix product properties</a></li>
+  <li><a href="#sure-estimator-same-independent-variables-part-1" id="toc-sure-estimator-same-independent-variables-part-1" class="nav-link" data-scroll-target="#sure-estimator-same-independent-variables-part-1">351. SURE estimator same independent variables part 1</a></li>
+  <li><a href="#sure-estimator-same-independent-variables-part-2" id="toc-sure-estimator-same-independent-variables-part-2" class="nav-link" data-scroll-target="#sure-estimator-same-independent-variables-part-2">352. SURE estimator same independent variables part 2</a></li>
+  <li><a href="#sure-estimator-same-independent-variables-part-3" id="toc-sure-estimator-same-independent-variables-part-3" class="nav-link" data-scroll-target="#sure-estimator-same-independent-variables-part-3">353. SURE estimator same independent variables part 3</a></li>
+  <li><a href="#causality-an-introduction" id="toc-causality-an-introduction" class="nav-link" data-scroll-target="#causality-an-introduction">354. Causality an introduction</a></li>
+  <li><a href="#the-rubin-causal-model---an-introduction" id="toc-the-rubin-causal-model---an-introduction" class="nav-link" data-scroll-target="#the-rubin-causal-model---an-introduction">355. The Rubin causal model - an introduction</a></li>
+  <li><a href="#causation-in-econometrics---a-simple-comparison-of-group-means" id="toc-causation-in-econometrics---a-simple-comparison-of-group-means" class="nav-link" data-scroll-target="#causation-in-econometrics---a-simple-comparison-of-group-means">356. Causation in econometrics - a simple comparison of group means</a></li>
+  <li><a href="#causation-in-econometrics---selection-bias-and-average-causal-effect" id="toc-causation-in-econometrics---selection-bias-and-average-causal-effect" class="nav-link" data-scroll-target="#causation-in-econometrics---selection-bias-and-average-causal-effect">357. Causation in econometrics - selection bias and average causal effect</a></li>
+  <li><a href="#random-assignment-removes-selection-bias" id="toc-random-assignment-removes-selection-bias" class="nav-link" data-scroll-target="#random-assignment-removes-selection-bias">358. Random assignment removes selection bias</a></li>
+  <li><a href="#how-to-check-if-treatment-is-randomly-assigned" id="toc-how-to-check-if-treatment-is-randomly-assigned" class="nav-link" data-scroll-target="#how-to-check-if-treatment-is-randomly-assigned">359. How to check if treatment is randomly assigned</a></li>
+  <li><a href="#the-conditional-independence-assumption-introduction" id="toc-the-conditional-independence-assumption-introduction" class="nav-link" data-scroll-target="#the-conditional-independence-assumption-introduction">360. The conditional independence assumption: introduction</a></li>
+  <li><a href="#the-conditional-independence-assumption-intuition" id="toc-the-conditional-independence-assumption-intuition" class="nav-link" data-scroll-target="#the-conditional-independence-assumption-intuition">361. The conditional independence assumption: intuition</a></li>
+  <li><a href="#the-average-causal-effect---an-example" id="toc-the-average-causal-effect---an-example" class="nav-link" data-scroll-target="#the-average-causal-effect---an-example">362. The average causal effect - an example</a></li>
+  <li><a href="#the-average-causal-effect-with-continuous-treatment-variables" id="toc-the-average-causal-effect-with-continuous-treatment-variables" class="nav-link" data-scroll-target="#the-average-causal-effect-with-continuous-treatment-variables">363. The average causal effect with continuous treatment variables</a></li>
+  <li><a href="#conditional-independence-assumption-for-continuous-variables" id="toc-conditional-independence-assumption-for-continuous-variables" class="nav-link" data-scroll-target="#conditional-independence-assumption-for-continuous-variables">364. Conditional independence assumption for continuous variables</a></li>
+  <li><a href="#linear-regression-and-causality" id="toc-linear-regression-and-causality" class="nav-link" data-scroll-target="#linear-regression-and-causality">365. Linear regression and causality</a></li>
+  <li><a href="#selection-bias-as-viewed-as-a-problem-with-samples" id="toc-selection-bias-as-viewed-as-a-problem-with-samples" class="nav-link" data-scroll-target="#selection-bias-as-viewed-as-a-problem-with-samples">366. Selection bias as viewed as a problem with samples</a></li>
+  <li><a href="#sample-balancing-via-stratification-and-matching" id="toc-sample-balancing-via-stratification-and-matching" class="nav-link" data-scroll-target="#sample-balancing-via-stratification-and-matching">367. Sample balancing via stratification and matching</a></li>
+  <li><a href="#propensity-score---introduction-and-theorem" id="toc-propensity-score---introduction-and-theorem" class="nav-link" data-scroll-target="#propensity-score---introduction-and-theorem">368. Propensity score - introduction and theorem</a></li>
+  <li><a href="#the-law-of-iterated-expectations-an-introduction" id="toc-the-law-of-iterated-expectations-an-introduction" class="nav-link" data-scroll-target="#the-law-of-iterated-expectations-an-introduction">369. The law of iterated expectations: an introduction</a></li>
+  <li><a href="#the-law-of-iterated-expectations-introduction-to-nested-form" id="toc-the-law-of-iterated-expectations-introduction-to-nested-form" class="nav-link" data-scroll-target="#the-law-of-iterated-expectations-introduction-to-nested-form">370. The law of iterated expectations: introduction to nested form</a></li>
+  <li><a href="#propensity-score-theorem-proof-part-1" id="toc-propensity-score-theorem-proof-part-1" class="nav-link" data-scroll-target="#propensity-score-theorem-proof-part-1">371. Propensity score theorem proof part 1</a></li>
+  <li><a href="#propensity-score-theorem-proof-part-2" id="toc-propensity-score-theorem-proof-part-2" class="nav-link" data-scroll-target="#propensity-score-theorem-proof-part-2">372. Propensity score theorem proof part 2</a></li>
+  <li><a href="#propensity-score-matching-an-introduction" id="toc-propensity-score-matching-an-introduction" class="nav-link" data-scroll-target="#propensity-score-matching-an-introduction">373. Propensity score matching: an introduction</a></li>
+  <li><a href="#propensity-score-matching---mathematics-behind-estimation" id="toc-propensity-score-matching---mathematics-behind-estimation" class="nav-link" data-scroll-target="#propensity-score-matching---mathematics-behind-estimation">374. Propensity score matching - mathematics behind estimation</a></li>
+  <li><a href="#method-of-moments-and-generalized-method-of-moments---basic-introduction" id="toc-method-of-moments-and-generalized-method-of-moments---basic-introduction" class="nav-link" data-scroll-target="#method-of-moments-and-generalized-method-of-moments---basic-introduction">375. Method of moments and generalized method of moments - basic introduction</a></li>
+  <li><a href="#method-of-moments-and-generalized-method-of-moments-estimation-part-1" id="toc-method-of-moments-and-generalized-method-of-moments-estimation-part-1" class="nav-link" data-scroll-target="#method-of-moments-and-generalized-method-of-moments-estimation-part-1">376. Method of moments and generalized method of moments estimation part 1</a></li>
+  <li><a href="#method-of-moments-and-generalized-method-of-moments-estimation-part-2" id="toc-method-of-moments-and-generalized-method-of-moments-estimation-part-2" class="nav-link" data-scroll-target="#method-of-moments-and-generalized-method-of-moments-estimation-part-2">377. Method of moments and generalized method of moments estimation part 2</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Causal Inference &amp; Matrix Approach</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-4-graduate-course" class="level3">
+<h3 class="anchored" data-anchor-id="part-4-graduate-course">298. Part 4: Graduate course</h3>
+<p>Almost there</p>
+</section>
+<section id="a-graduate-course-in-econometrics" class="level3">
+<h3 class="anchored" data-anchor-id="a-graduate-course-in-econometrics">299. A graduate course in econometrics</h3>
+<p>into the graduate world</p>
+</section>
+<section id="you-are-finally-learning-graduate-level" class="level3">
+<h3 class="anchored" data-anchor-id="you-are-finally-learning-graduate-level">300. You are finally learning graduate level</h3>
+<p>Its ok to cry</p>
+</section>
+<section id="introduction-to-the-matrix-formulation-of-econometrics" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-to-the-matrix-formulation-of-econometrics">301. Introduction to the matrix formulation of econometrics</h3>
+<p>We have a model</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}+\dots + \beta_{p}x_{pi} + \varepsilon_i
+\]</span></p>
+<p>If I have <span class="math inline">\(p\)</span> independent variables, I need to write them all in a super long equation and <span class="math inline">\(i= 1,\dots,N\)</span></p>
+<p>To keep things compact, we write them in a matrix</p>
+$$
+<span class="math display">\[\begin{bmatrix}y_1\\y_2\\\vdots\\y_N\end{bmatrix}\]</span>
+<p>=</p>
+<span class="math display">\[\begin{bmatrix}
+1 &amp;x_{11} &amp;x_{21} &amp;\dots &amp;x_{p1}\\
+1 &amp;x_{12} &amp;x_{22} &amp;\dots &amp;x_{p2}\\
+\vdots\\
+1 &amp; x_{1N} &amp; x_{2n} &amp;\dots &amp;x_{pN}
+\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_{P}\end{bmatrix}\]</span>
+<ul>
+<li><span class="math display">\[\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_N\end{bmatrix}\]</span>
+$$</li>
+</ul>
+<p>which is produced as a dot product <result of="" the="" first="" row="" will="" get="" equation="" at="" top=""></result></p>
+<p>The dimensions are</p>
+<p><span class="math display">\[
+(N \times 1) = (N \times P)(P \times 1) + (N\times 1)
+\]</span></p>
+<p>The above model can be written as</p>
+<p><span class="math display">\[
+\boxed{Y = X \beta+ \varepsilon}
+\]</span></p>
+<p>This will allow us to deal with more complicated models</p>
+</section>
+<section id="the-matrix-formulation-of-econometrics---example" class="level3">
+<h3 class="anchored" data-anchor-id="the-matrix-formulation-of-econometrics---example">302. The matrix formulation of econometrics - example</h3>
+<p>We reached the formula</p>
+<p><span class="math display">\[
+Y = X\beta + u
+\]</span></p>
+<p>Here is an example</p>
+<p><span class="math display">\[
+wage_i = \alpha + \beta_1 \, educ_i + \beta_2 \, age_i + u_i
+\]</span></p>
+<p>This is the equation for individual <span class="math inline">\(i\)</span> where <span class="math inline">\(i \in [1,N]\)</span> so in matrix form it will be</p>
+$$
+<span class="math display">\[\begin{bmatrix}wage_1\\wage_2\\\vdots\\wage_N\end{bmatrix}\]</span>
+<p>=</p>
+<span class="math display">\[\begin{bmatrix}
+1 &amp;educ_1 &amp;age_1\\
+1 &amp;educ_1 &amp;age_2\\\vdots\\
+1 &amp; educ_{N} &amp; educ_{N} \end{bmatrix}
+\begin{bmatrix}\alpha\\\beta_1\\\beta_2\\\end{bmatrix}\]</span>
+<ul>
+<li><span class="math display">\[\begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}\]</span>
+$$</li>
+</ul>
+<p>where the dimensions are</p>
+<p><span class="math display">\[
+(N \times 1) = (N \times 3)(3 \times 1) + (N \times 1)
+\]</span></p>
+<p>Notice that the dimensions really depend on the dot product</p>
+</section>
+<section id="how-to-differentiate-with-respect-to-a-vector-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-differentiate-with-respect-to-a-vector-part-1">303. How to differentiate with respect to a vector part 1</h3>
+<p>We can differentiate a scalar, and a vector too</p>
+<p>If I have the vector <span class="math inline">\(X\)</span> and a and both have dimension <span class="math inline">\(P \times 1\)</span></p>
+<p><span class="math display">\[
+X=\begin{bmatrix}x_1\\\vdots\\x_p
+\end{bmatrix} \qquad a=\begin{bmatrix}a_1\\\vdots\\a_p
+\end{bmatrix}
+\]</span></p>
+<p>Then I take transpose of <span class="math inline">\(X\)</span> so dimension become <span class="math inline">\(1 \times P\)</span> and multiply by <span class="math inline">\(a\)</span> I get</p>
+<p><span class="math display">\[
+y = X'a
+\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is a scalar cuz <span class="math inline">\([1 \times P][P \times 1] = [1 \times 1]\)</span></p>
+<p>We can differentiate <span class="math inline">\(y\)</span> cuz its a scalar</p>
+<p><span class="math display">\[
+\dfrac{dy}{dx} = \begin{bmatrix}
+\dfrac{dy}{dx_1}\\\vdots \\ \dfrac{dy}{dx_p}
+\end{bmatrix}
+\]</span></p>
+<p>We can write <span class="math inline">\(y\)</span> implicitly as</p>
+<p><span class="math display">\[
+y = a_1x_1 + a_2x_2+\dots + a_px_p
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\dfrac{dy}{dx_1} = a_1 \qquad \dfrac{dy}{dx_p}= a_p
+\]</span></p>
+<p>SO</p>
+<p><span class="math display">\[
+\dfrac{dy}{dx} = \begin{bmatrix}
+\dfrac{dy}{dx_1}\\\vdots \\ \dfrac{dy}{dx_p}
+\end{bmatrix}
+= \begin{bmatrix}
+a_1\\
+\vdots\\
+a_p
+\end{bmatrix}
+\]</span></p>
+<p>Think of <span class="math inline">\(ax\)</span> as a scalar, if you differentiate, you will get <span class="math inline">\(a\)</span></p>
+<p>Notice that the differentiation must have sane dimensions as the variable being differentiated</p>
+<p>SO</p>
+<p><span class="math display">\[
+\dfrac{dy}{dx'} = \begin{bmatrix}
+\dfrac{dy}{dx_1}&amp;\dots &amp; \dfrac{dy}{dx_p}
+\end{bmatrix}
+= \begin{bmatrix}
+a_1 &amp;
+\dots &amp;
+a_p
+\end{bmatrix} = a'
+\]</span></p>
+<p>Always double check the dimensions</p>
+</section>
+<section id="how-to-differentiate-with-respect-to-a-vector-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-differentiate-with-respect-to-a-vector-part-2">304. How to differentiate with respect to a vector part 2</h3>
+<p>If <span class="math inline">\(X\)</span> is a <span class="math inline">\([2\times 1]\)</span> vector, and <span class="math inline">\(A\)</span> is a <span class="math inline">\([2 \times 2]\)</span> matrices</p>
+<p>If we multiply them, we get a quadratic form</p>
+<p><span class="math display">\[
+X = \begin{bmatrix}x_1\\
+x_2\end{bmatrix}
+\qquad
+A = \begin{bmatrix}a_{11} &amp;a_{12}\\
+a_{21} &amp;a_{22}\end{bmatrix}
+\]</span></p>
+<p>The quadratic form is</p>
+<p><span class="math display">\[
+Q = X'AX
+\]</span></p>
+<p>which is equal to</p>
+$$ Q =
+<span class="math display">\[\begin{bmatrix}x_1&amp;
+x_2\end{bmatrix}\]</span>
+<span class="math display">\[\begin{bmatrix}a_{11} &amp;a_{12}\\
+a_{21} &amp;a_{22}\end{bmatrix}\]</span>
+<span class="math display">\[\begin{bmatrix}x_1\\
+x_2\end{bmatrix}\]</span>
+<p>$$</p>
+<p>dimensions</p>
+<p><span class="math display">\[
+[1 \times 2][2 \times 2][2 \times 1]
+\]</span></p>
+<p>the two matrices at the right get <span class="math inline">\([2 \times 1]\)</span>, when multiplied by the left we get <span class="math inline">\([1 \times 2][2 \times 1] = [1\times 1]\)</span> = a <strong>scalar</strong></p>
+$$
+<span class="math display">\[\begin{bmatrix}
+x_1 &amp; x_2
+\end{bmatrix}
+\begin{bmatrix}
+a_{11}x_1+a_{12}x_2 \\ a_{21}x_1+a_{22}x_2
+\end{bmatrix}\]</span>
+<p>= a_{11}x_1<sup>2+2a_{12}x_1x_2+a_{22}x_2</sup>2 $$</p>
+<p>The creepy right side is just a scalar.</p>
+<p>If we differentiate with respect to <span class="math inline">\(X\)</span>, the derivative vector will have same dimensions of <span class="math inline">\(X\)</span></p>
+<p>$$ =</p>
+<span class="math display">\[\begin{bmatrix}
+\dfrac{dQ}{d{x_1}}\\\dfrac{dQ}{dx_2}
+\end{bmatrix}\]</span>
+=
+<span class="math display">\[\begin{bmatrix}
+2a_{11}x_1 + 2a_{12}x_2\\
+2a_{21}x_1 + 2a_{22}x_2
+\end{bmatrix}\]</span>
+<p>= 2 AX $$</p>
+<p>This is why its called the quadratic formula, its like differentiating</p>
+<p><span class="math display">\[
+y = x^2\to 2x
+\]</span></p>
+</section>
+<section id="how-to-differentiate-with-respect-to-a-vector-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-differentiate-with-respect-to-a-vector-part-3">305. How to differentiate with respect to a vector part 3</h3>
+<p>How to differentiate <span class="math inline">\(Q\)</span> with respect to a transpose <span class="math inline">\(X'\)</span>?</p>
+<p><span class="math display">\[
+\dfrac{d Q}{d X'} = \begin{bmatrix}\dfrac{dQ}{dx_1} &amp;\dfrac{dQ}{dx_2}\end{bmatrix} = 2 X'A' = 2X'A
+\]</span></p>
+<p>when we transpose, we reverse the order of the multiplication</p>
+<p><span class="math display">\[
+[AB]' = B'A'
+\]</span></p>
+</section>
+<section id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-1">306. Ordinary least squares estimation - derivation in matrix form part 1</h3>
+<p>Back to our <span class="math inline">\(OLS\)</span>, we have a scatter plot, <span class="math inline">\(x\)</span> on x axis, <span class="math inline">\(y\)</span> on y axis, and we want to fit a line to minimize <strong>sum of squared vertical distances</strong></p>
+<p>Not horizontal distance cuz we deal with prediction error</p>
+<p><span class="math display">\[
+S = \sum \hat u_i^2
+\]</span></p>
+<p>we put a hat cuz we estimate the error and don’t know the error term in the population</p>
+<p>If the model is</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta \,x_i + u_i
+\]</span></p>
+<p>then</p>
+<p><span class="math display">\[
+S = \sum \hat u_i^2 = \sum(y_i - \hat \alpha - \hat \beta \, x_i)^2
+\]</span></p>
+<p>To differentiate, we differentiate with respect to <span class="math inline">\(\alpha, \beta\)</span> and let the derivative <span class="math inline">\(=0\)</span></p>
+<p>This form does not generalize to the multivariate case though so we make a matrix</p>
+<p><span class="math display">\[
+y = X \hat \beta + \hat u
+\]</span></p>
+<p>hats cause we don’t know the parameters</p>
+<p>To replicate <span class="math inline">\(S = \sum \hat u^2\)</span> we write it as</p>
+<p><span class="math display">\[
+S = \hat u ' \hat u = \hat u_1^2 + \hat u_2^2 +\dots + \hat u_N^2
+\]</span></p>
+<p>Remember that the original is a column vector and that <span class="math inline">\([1 \times N][N \times 1] = [1 \times 1]\)</span> so <span class="math inline">\(S\)</span> is a scalar</p>
+<p>To get <span class="math inline">\(\hat u\)</span> <we did="" not="" fit="" the="" model="" yet=""> we use the fact that</we></p>
+<p><span class="math display">\[
+\hat u = y - X \hat \beta
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+S = (y - X \hat \beta)'(y - X \hat \beta)
+\]</span></p>
+</section>
+<section id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-2">307. Ordinary least squares estimation - derivation in matrix form part 2</h3>
+<p>We reached the equation</p>
+<p><span class="math display">\[
+S = (y - X \hat \beta)'(y - X \hat \beta)
+\]</span></p>
+<p>which can be written as</p>
+<p><span class="math display">\[
+S = (y' -\hat \beta' X ' )(y - X \hat \beta)
+\]</span></p>
+<p>expand to get</p>
+<p><span class="math display">\[
+S = y'y - y' X \hat \beta - \hat \beta'X'y - \hat \beta'X'X \hat \beta
+\]</span></p>
+<p>we are differentiating with respect to the vector <span class="math inline">\(\hat \beta\)</span> &lt;remember that the vector <span class="math inline">\(\hat \beta\)</span> has dimensions <span class="math inline">\([1\times P]\)</span>&gt;</p>
+<p>Lets differentiate, but we will start with third term in <span class="math inline">\(S\)</span> cuz its easier</p>
+<p><span class="math display">\[
+\hat \beta'X'y = [1 \times P][P \times N][N \times 1] = [1\times 1]
+\]</span></p>
+<p>a scalar, its like differentiating <span class="math inline">\(ax \to a\)</span> and will be <span class="math inline">\(X'y\)</span></p>
+<p>second term in <span class="math inline">\(S\)</span> is just the transpose of the third term and are equivalent cuz its a scalar, so it will be <span class="math inline">\(X'y\)</span></p>
+<p>The first term doesn’t have <span class="math inline">\(\beta\)</span> so it disappears, last term is just the quadratic matrix, so it will be <span class="math inline">\(2 X'X \hat \beta\)</span></p>
+<p>Summing up</p>
+<p><span class="math display">\[
+\dfrac{\partial S}{\partial \hat \beta} = - X'y - X'y + 2 X'X \hat \beta = 0
+\]</span></p>
+<p>where <span class="math inline">\(0\)</span> is a column vector</p>
+</section>
+<section id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="ordinary-least-squares-estimation---derivation-in-matrix-form-part-3">308. Ordinary least squares estimation - derivation in matrix form part 3</h3>
+<p>We reached this formula</p>
+<p><span class="math display">\[
+\dfrac{\partial S}{\partial \hat \beta} = - X'y - X'y + 2 X'X \hat \beta = 0
+\]</span></p>
+<p>Isolate for <span class="math inline">\(\hat \beta\)</span></p>
+<p><span class="math display">\[
+2 X'X \hat \beta = 2X'y
+\]</span></p>
+<p>We divide by 2, then multiply both sides by <span class="math inline">\((X'X)^{-1}\)</span> to get</p>
+<p><span class="math display">\[
+(X'X)^{-1}X'X \hat \beta = (X'X)^{-1}X'y
+\]</span></p>
+<p>Matrices have the property that <span class="math inline">\(A^{-1}A = I\)</span> then left term will be the identity matrix and <span class="math inline">\(\hat \beta\)</span></p>
+<p><span class="math display">\[
+\boxed{\hat \beta = (X'X)^{-1}X'y}
+\]</span></p>
+<p>If <span class="math inline">\(X'X\)</span> is singular, I can’t estimate <span class="math inline">\(\hat \beta\)</span>, like in <strong>perfect collinearity</strong></p>
+</section>
+<section id="expectation-and-variance-of-a-random-vector-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="expectation-and-variance-of-a-random-vector-part-1">309. Expectation and variance of a random vector part 1</h3>
+<p>How to get an expectation of a vector?</p>
+<p>If we have the vector <span class="math inline">\(X\)</span></p>
+<p><span class="math display">\[
+X= \begin{bmatrix}x_1\\x_2\\\vdots\\x_N\end{bmatrix}
+\]</span></p>
+<p>Then the expectation of the vector works on the elements</p>
+<p><span class="math display">\[
+E[X] = \begin{bmatrix}E[x_1]\\E[x_2]\\\vdots\\E[x_N]\end{bmatrix}
+\]</span></p>
+<p>Here are the properties of expectation on random vector</p>
+<p><span class="math display">\[
+E[X_1+X_2] = E\begin{bmatrix}x_{11}+x_{21}\\x_{12}+x_{22}\\\vdots\\x_{1N}+x_{2N}\end{bmatrix}
+\]</span></p>
+<p>We know that expectation is a linear operator so</p>
+<p><span class="math display">\[
+E[X_1+X_2] = \begin{bmatrix}E[x_{11}]\\E[x_{12}]\\\vdots\\E[x_{1N}]\end{bmatrix} + \begin{bmatrix}E[x_{21}]\\E[x_{22}]\\\vdots\\E[x_{2N}]\end{bmatrix} = E[X_1]+ E[X_2]
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\boxed{E[X_1+X_2] = E[X_1]+E[X_2]}
+\]</span></p>
+</section>
+<section id="expectation-and-variance-of-a-random-vector-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="expectation-and-variance-of-a-random-vector-part-2">310. Expectation and variance of a random vector part 2</h3>
+<p>The second property of expectation also holds</p>
+<p><span class="math display">\[
+\boxed{E[AX] = AE[X]}
+\]</span></p>
+<p>But the variance properties are different</p>
+<p>Given our vector</p>
+<p><span class="math display">\[
+X= \begin{bmatrix}x_1\\x_2\\\vdots\\x_N\end{bmatrix}
+\]</span></p>
+<p>we have a surprise</p>
+<p><span class="math display">\[
+Var[X] \neq\begin{bmatrix}Var[x_1]\\Var[x_2]\\\vdots\\Var[x_N]\end{bmatrix}
+\]</span></p>
+<p>cuz this form misses the covariance between the elements <each element="" has="" its="" own="" variance="" and="" varies="" with="" other="" elements=""></each></p>
+<p>SO we represent it as a <strong>variance covariance matrix</strong></p>
+<p><span class="math display">\[
+\mathrm{Var}(X) =\begin{bmatrix}\mathrm{Var}(x_1) &amp; \mathrm{Cov}(x_1, x_2) &amp; \cdots &amp; \mathrm{Cov}(x_1, x_N) \\\mathrm{Cov}(x_2, x_1) &amp; \mathrm{Var}(x_2) &amp; \cdots &amp; \mathrm{Cov}(x_2, x_N) \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\mathrm{Cov}(x_N, x_1) &amp; \mathrm{Cov}(x_N, x_2) &amp; \cdots &amp; \mathrm{Var}(x_N)\end{bmatrix}
+\]</span></p>
+<p>Notice that <span class="math inline">\(cov(x_1,x_2)\)</span> and <span class="math inline">\(cov(x_2,x_1)\)</span> are the same, order doesn’t matter, so this matrix is <strong>symmetric</strong></p>
+</section>
+<section id="expectation-and-variance-of-a-random-vector-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="expectation-and-variance-of-a-random-vector-part-3">311. Expectation and variance of a random vector part 3</h3>
+<p>The formula of variance in terms of expectation is</p>
+<p><span class="math display">\[
+\boxed{Var(X) = E[(X-\mu)(X-\mu)^T]}
+\]</span></p>
+<p>why transpose? cuz <span class="math inline">\(X-\mu\)</span> has dimensions <span class="math inline">\(N\times 1\)</span> so i need to multiply it by <span class="math inline">\(1 \times N\)</span> which will get me an <span class="math inline">\(N \times N\)</span> matrix</p>
+<p>Think of it element wise</p>
+<p>$$ Var(X)= E$$</p>
+<p>which results in the variance covariance matrix</p>
+<p><span class="math display">\[
+E \begin{bmatrix}(x_1 - \mu_1)^2&amp;(x_1 - \mu_1)(x_2-\mu_2)&amp; \dots
+\\\vdots \end{bmatrix}
+\]</span></p>
+</section>
+<section id="expectation-and-variance-of-a-random-vector-part-4" class="level3">
+<h3 class="anchored" data-anchor-id="expectation-and-variance-of-a-random-vector-part-4">312. Expectation and variance of a random vector part 4</h3>
+<p>in the scalar case we have</p>
+<p><span class="math display">\[
+Var(ax) = a^2var(x)
+\]</span></p>
+<p>In the matrix case, using the fact that <span class="math inline">\(E[AX]= AE[X]\)</span> we have</p>
+<p><span class="math display">\[
+Var(AX)= E\left[(AX-Au)(AX-Au)^T \right]
+\]</span></p>
+<p>Get <span class="math inline">\(A\)</span> out</p>
+<p><span class="math display">\[
+Var(AX)= E\left[A(X-u)(X-u)^T A^T\right]
+\]</span></p>
+<p>we put <span class="math inline">\(A^T\)</span> at the end cuz remember, transpose switches the order of multiplication</p>
+<p><span class="math inline">\(A\)</span> is a constant, so can be written outside the expectation</p>
+<p><span class="math display">\[
+Var(AX)= AE\left[(X-u)(X-u)^T \right]A^T
+\]</span></p>
+<p>And the creepy mess in the middle is just the equation for variance so we get</p>
+<p><span class="math display">\[
+\boxed{Var(AX) = A Var(X)A^T}
+\]</span></p>
+</section>
+<section id="least-squares-as-an-unbiased-estimator-matrix-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="least-squares-as-an-unbiased-estimator-matrix-formulation">313. Least squares as an unbiased estimator matrix formulation</h3>
+<p>We reached that</p>
+<p><span class="math display">\[
+\hat \beta = (X'X)^{-1}X'y
+\]</span></p>
+<p>where <span class="math inline">\(y = x\beta + u\)</span> so we subtitute to get</p>
+<p><span class="math display">\[
+\boxed{\hat \beta = (X'X)^{-1}X'X\beta+(X'X)^{-1}X'u}
+\]</span></p>
+<p>Notice that left side, inverted matrix times itself is just the identity matrix so we get</p>
+<p><span class="math display">\[
+\boxed{\hat \beta = \beta + (X'X)^{-1}X'u}
+\]</span></p>
+<p>This is the final form, now we can take our first assumption: <strong>zero conditional mean</strong></p>
+<p><span class="math display">\[
+E[\hat \beta] = \beta + (X'X)^{-1}E[u]
+\]</span></p>
+<p>zero conditional mean allows the expectation to pass through the <span class="math inline">\(X's\)</span> due to independence, second term vanishes cuz <span class="math inline">\(E[u] = 0\)</span></p>
+<p><span class="math display">\[
+E[\hat \beta] = \beta
+\]</span></p>
+<p>Unbiased</p>
+</section>
+<section id="variance-of-least-squares-estimators-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="variance-of-least-squares-estimators-matrix-form">314. Variance of least squares estimators matrix form</h3>
+<p>Knowing that</p>
+<p><span class="math display">\[
+\hat \beta = (X'X)^{-1}X'y
+\]</span></p>
+<p>and the property of variance with respect to random vectors</p>
+<p><span class="math display">\[
+Var(Ay) = AVar(y)A'
+\]</span></p>
+<p>Then we can write the variance of <span class="math inline">\(\hat \beta\)</span> as</p>
+<p><span class="math display">\[
+Var(\hat \beta) = (X'X)^{-1}X'var(y) \times Transpose
+\]</span></p>
+<p>To get the transpose of the matrix, remember that</p>
+<p><span class="math display">\[
+(AB)' = B'A' \qquad (A^{-1})' = (A')^{-1}
+\]</span></p>
+<p>SO in <span class="math inline">\((X'X)^{-1}X'\)</span>, the <span class="math inline">\(X'\)</span> at the end will be at the beginning, and transposed aka first term is <span class="math inline">\(X\)</span></p>
+<p>For the brackets, forget about the inverse for now, think of it as <span class="math inline">\((X'X)'\)</span> then switch the orders to get <span class="math inline">\(X'X\)</span> then add the inverse again</p>
+<p>final result is</p>
+<p><span class="math display">\[
+Var(\hat \beta) = (X'X)^{-1}X'var(y)X(X'X)^{-1}
+\]</span></p>
+<p>Using the assumption of <strong>homoscedasticity</strong> and no <strong>serial correlation</strong>. we get that</p>
+<p><span class="math display">\[
+Var(y) = \sigma^2 I
+\]</span></p>
+<p>Substituting, we get</p>
+<p><span class="math display">\[
+Var(\hat \beta) = \sigma^2(X'X)^{-1}X'X(X'X)^{-1}
+\]</span></p>
+<p>Notice that its a matrix times its inverse so they will be cancelled, so we get</p>
+<p><span class="math display">\[
+\boxed{Var(\hat \beta) = \sigma^2(X'X)^{-1}}
+\]</span></p>
+</section>
+<section id="gauss-markov-theorem-proof---matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="gauss-markov-theorem-proof---matrix-form-part-1">315. Gauss-Markov theorem proof - matrix form part 1</h3>
+<p>We have the equation</p>
+<p><span class="math display">\[
+y = XB + u \\ \hat \beta = (X'X)^{-1}X'y
+\]</span></p>
+<p>We will come up with another estimator <span class="math inline">\(\tilde \beta\)</span> and prove its unbiased then find its variance to prove <span class="math inline">\(\hat \beta\)</span> has lower variance</p>
+<p>To get <span class="math inline">\(\tilde \beta\)</span>, lets say its equal to <span class="math inline">\(\hat \beta\)</span> + an extra bit <span class="math inline">\(Dy\)</span> where <span class="math inline">\(D\)</span> is a matrix</p>
+<p><span class="math display">\[
+\tilde\beta = (X'X)^{-1}X'y + Dy
+\]</span></p>
+<p>to prove its unbiased, substitute with <span class="math inline">\(y\)</span></p>
+<p><span class="math display">\[
+\tilde \beta = (X'X)^{-1}X'X\beta+ (X'X)^{-1}X'u + DX\beta + Du
+\]</span></p>
+<p>first part is a matrix and its inverse so its cancelled, and using zero conditional mean of errors, second part disappears and <span class="math inline">\(Du\)</span> vanishes too</p>
+<p><span class="math display">\[
+\boxed{E[\tilde \beta] = \beta + DX \beta}
+\]</span></p>
+</section>
+<section id="gauss-markov-theorem-proof---matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="gauss-markov-theorem-proof---matrix-form-part-2">316. Gauss-Markov theorem proof - matrix form part 2</h3>
+<p>we created a new estimator</p>
+<p><span class="math display">\[
+\tilde\beta = (X'X)^{-1}X'y + Dy = Cy
+\]</span></p>
+<p>where <span class="math inline">\(C\)</span> is a big matrix multiplied by <span class="math inline">\(y\)</span></p>
+<p>and its expectation is</p>
+<p><span class="math display">\[
+E[\tilde \beta] = \beta + DX \beta
+\]</span></p>
+<p><span class="math inline">\(\tilde \beta\)</span> will be unbiased if</p>
+<p><span class="math display">\[
+\boxed{DX = 0}
+\]</span></p>
+<p>To get the variance remember the properties:</p>
+<ol type="1">
+<li><span class="math inline">\(Var(AX) = AVar(x)A'\)</span></li>
+<li><span class="math inline">\((AB)' = B'A'\)</span></li>
+<li><span class="math inline">\((A^{-1})' = (A')^{-1}\)</span></li>
+</ol>
+<p>Making use of the simplified matrix <span class="math inline">\(C\)</span></p>
+<p><span class="math display">\[
+Var(\tilde \beta) = C Var(y)C'
+\]</span></p>
+<p>assuming homoscedasticity and no serial correlation</p>
+<p><span class="math display">\[
+Var(\tilde \beta) = \sigma^2 CC'
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+C = \begin{bmatrix}(X'X)^{-1}X'+D \end{bmatrix} \\ C' = X(X'X)^{-1}+D'
+\]</span></p>
+</section>
+<section id="gauss-markov-theorem-proof---matrix-form-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="gauss-markov-theorem-proof---matrix-form-part-3">317. Gauss-Markov theorem proof - matrix form part 3</h3>
+<p>we reached</p>
+<p><span class="math display">\[
+Var(\tilde \beta) = \sigma^2[(X'X)^{-1}X'+D][X(X'X)^{-1}+D']
+\]</span></p>
+<p>if we multiply the two brackets, we get</p>
+<p><span class="math display">\[
+Var(\tilde \beta) = \sigma^2[(X'X)^{-1}X'X(X'X)^{-1} + (X'X)^{-1}X'D'+DX(X'X)^{-1}+DD']
+\]</span></p>
+<p>first bracket cancels cuz its a matrix times its inverse Then notice in the second term that <span class="math inline">\(X'D'=(DX)'=0\)</span> which we assumed for it to be unbiased, so it and third terms disappear</p>
+<p>So what remains is</p>
+<p><span class="math display">\[
+Var(\tilde \beta) = \sigma^2(X'X)^{-1}+ \sigma^2DD'
+\]</span></p>
+<p>In other words</p>
+<p><span class="math display">\[
+Var(\tilde \beta) = Var(\hat\beta) + \sigma^2DD'
+\]</span></p>
+<p>Any matrix times its transpose results in a <strong>positive semi definite matrix</strong></p>
+<p>so we get that</p>
+<p><span class="math display">\[
+Var(\tilde \beta) \ge Var(\hat\beta)
+\]</span></p>
+</section>
+<section id="geometric-interpretation-of-ordinary-least-squares-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation-of-ordinary-least-squares-an-introduction">318. Geometric interpretation of ordinary least squares: an introduction</h3>
+<p>If I have vector <span class="math inline">\(y\)</span> that has three individuals</p>
+<p><span class="math display">\[
+\begin{bmatrix} y_1 \\ y_2 \\ y_3\end{bmatrix}
+\]</span></p>
+<p>we can visualize it as an arrow in 3D space (like an arrow from the origin to the point <span class="math inline">\((y_1, y_2, y_3)\)</span>). So <span class="math inline">\(y\)</span> is a vector in <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
+<p>Even when <span class="math inline">\(y\)</span> is <span class="math inline">\(100 \times 1\)</span>, we keep this geometric idea: <span class="math inline">\(y\)</span> is still just an arrow, but in a 100-dimensional space (we can’t draw it, but the concept remains the same).</p>
+<p>Now consider <span class="math inline">\(X\)</span>, the matrix of independent variables. Each <strong>column</strong> of <span class="math inline">\(X\)</span> is a vector (arrow) in the same space as <span class="math inline">\(y\)</span>:</p>
+<p>Each column in <span class="math inline">\(X\)</span> (e.g., the first, second, and third) spans a direction in space. All <strong>linear combinations</strong> of these columns form a <strong>plane (or hyperplane)</strong> — called the <strong>column space of <span class="math inline">\(X\)</span></strong>.</p>
+$$
+<span class="math display">\[\begin{bmatrix}
+1 &amp;x_{11} &amp;x_{21}\\
+1 &amp;x_{12} &amp;x_{22}\\\vdots\\
+1 &amp; x_{14} &amp; x_{24} \end{bmatrix}\]</span>
+<p>$$</p>
+<p>OLS tries to find the vector <span class="math inline">\(\hat y = X\hat\beta\)</span> that:</p>
+<ul>
+<li><strong>lies on this plane</strong> (i.e., in the column space of <span class="math inline">\(X\)</span>),</li>
+<li>and is <strong>as close as possible to <span class="math inline">\(y\)</span></strong>.</li>
+</ul>
+<p>Think of it as casting a <strong>shadow</strong> from the tip of <span class="math inline">\(y\)</span> down to the plane: that shadow is <span class="math inline">\(\hat y\)</span>.</p>
+<p>The difference between the tip of <span class="math inline">\(y\)</span> and the tip of its shadow is the <strong>residual vector</strong>:</p>
+<p><span class="math display">\[
+\hat u = y - \hat y = y - X\hat\beta
+\]</span></p>
+<p>This vector is <strong>orthogonal</strong> (perpendicular) to the plane. OLS finds the <span class="math inline">\(\hat y\)</span> that <strong>minimizes the length of this vector</strong> — i.e., it minimizes <span class="math inline">\(|\hat u|^2\)</span>.</p>
+<p>Note: the picture is correct, but the vector naming is wrong, should be <span class="math inline">\(\hat y\)</span> not <span class="math inline">\(\hat u\)</span></p>
+</section>
+<section id="geometric-interpretation-of-ordinary-least-squares-an-example" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation-of-ordinary-least-squares-an-example">319. Geometric interpretation of ordinary least squares: an example</h3>
+<p>If we have the equation y = constant and error</p>
+<p><span class="math display">\[
+y_i = \beta_0 + u_i
+\]</span></p>
+<p><span class="math inline">\(y\)</span> is a vector of two individuals</p>
+<p><span class="math display">\[
+y = \begin{bmatrix}y_1 \\ y_2 \end{bmatrix}
+\]</span></p>
+<p>we can write it in matrix form as</p>
+<p><span class="math display">\[
+y = X \beta_0 + u
+\]</span></p>
+<p>Where <span class="math inline">\(X\)</span> is a vector</p>
+<p><span class="math display">\[
+X = \begin{bmatrix}1 \\ 1 \end{bmatrix}
+\]</span></p>
+<p>Cuz we have two individuals only, we are dealing with a 2D plane</p>
+<p>Lets say the individuals have values of</p>
+<p><span class="math display">\[
+y = \begin{bmatrix}y_1 \\ y_2 \end{bmatrix} = \begin{bmatrix}2 \\ -1 \end{bmatrix}
+\]</span></p>
+<p>We can draw a vector <span class="math inline">\(y\)</span> starting from <span class="math inline">\(0,0\)</span> and ends at <span class="math inline">\(2,-1\)</span></p>
+<p>The column space is just a line that passes through <span class="math inline">\(0,0\)</span> and <span class="math inline">\(1,1\)</span> &lt;cuz <span class="math inline">\(\beta\)</span> stretches it&gt;</p>
+<p><span class="math inline">\(OLS\)</span> tries to find the shortest distance between the line and the vector <span class="math inline">\(y\)</span></p>
+<p>The shadow of the vector <span class="math inline">\(y\)</span> will be the points <span class="math inline">\(\beta_0,\beta_0\)</span> so we minimize</p>
+<p><span class="math display">\[
+S = (y_1- \beta_0)^2 + (y_2 - \beta_0)^2
+\]</span></p>
+<p>How to minimize? by differentiating</p>
+<p><span class="math display">\[
+\dfrac{\delta S}{\delta \beta_0} = -2(y_1 - \beta-0) - 2(y_2 - \beta_0)=0
+\]</span></p>
+<p>By simplification, we get that</p>
+<p><span class="math display">\[
+\beta_0 = \dfrac{y_1+y_2}{2}
+\]</span></p>
+<p>which is intuitive, our best guess is the sample mean</p>
+<p><span class="math display">\[
+\hat \beta = \dfrac{2+(-1)}{2}= \dfrac {1}{ 2}
+\]</span></p>
+<p>as before, <span class="math inline">\(\hat y\)</span> lies on the plane, the orthogonal vector connecting the two is <span class="math inline">\(\hat u = y - \hat y\)</span></p>
+<p><span class="math display">\[
+\hat u = y - \hat y = \begin{bmatrix}2 \\-1 \end{bmatrix} - \begin{bmatrix}0.5 \\0.5 \end{bmatrix} = \begin{bmatrix}1.5 \\-1.5 \end{bmatrix}
+\]</span></p>
+<p>Proof that residual vector is orthogonal to column space</p>
+<p><span class="math display">\[
+\begin{bmatrix}1 \\1 \end{bmatrix}' \cdot \begin{bmatrix}1,5 \\-1.5 \end{bmatrix} = 1.5-1.5=0
+\]</span></p>
+<p>&lt;picture has <span class="math inline">\(\hat u\)</span> in the wrong place again&gt;</p>
+</section>
+<section id="geometric-least-squares-column-space-intuition" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-least-squares-column-space-intuition">320. Geometric least squares column space intuition</h3>
+<p>If we have the equation</p>
+$$
+<span class="math display">\[\begin{bmatrix}y_1\\y_2\\\vdots\\y_N\end{bmatrix}\]</span>
+<p>=</p>
+<span class="math display">\[\begin{bmatrix}
+1 &amp;x_{11} &amp;x_{12}\\
+1 &amp;x_{21} &amp;x_{22}\\\vdots\\
+1 &amp; x_{N1} &amp; x_{N2} \end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\\\beta_2\\\end{bmatrix}\]</span>
+<ul>
+<li><span class="math display">\[\begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}\]</span>
+$$</li>
+</ul>
+<p>to understand column space, think of the <span class="math inline">\(X\)</span> matrix as a matrix of vectors</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+v_0 &amp;v_1 &amp;v_2\\
+\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\\\beta_2\\\end{bmatrix}
++ \begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}
+\]</span></p>
+<p>If we multiply, we get</p>
+<p><span class="math display">\[
+y = \beta_0 v_0 + \beta_1 v_1 + \beta_2v_2 +u
+\]</span></p>
+<p>The parameters tell us how much of each vector we need to get as close as possible to <span class="math inline">\(y\)</span></p>
+<p>So imagine that if we have a vector <span class="math inline">\(y\)</span>, we reach it we say for example:</p>
+<ol type="1">
+<li>go right by <span class="math inline">\(\beta_0 v_0\)</span></li>
+<li>go up by <span class="math inline">\(\beta_1v_1\)</span></li>
+<li>go left by <span class="math inline">\(\beta_2v_2\)</span></li>
+</ol>
+<p>where all the above vectors lie on a plane <column vector=""></column></p>
+<p>then the remaining distance between <span class="math inline">\(y\)</span> and last element in our pirate map &lt;<span class="math inline">\(\beta_2v_2\)</span>&gt; should be orthogonal vector <span class="math inline">\(u\)</span> <img here="" is="" not="" exact=""></p>
+</section>
+<section id="geometric-interpretation-of-least-squares---orthogonal-projection" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation-of-least-squares---orthogonal-projection">321. Geometric interpretation of least squares - orthogonal projection</h3>
+<p>We reached that column vector is a plane, and we have an arrow <span class="math inline">\(y\)</span></p>
+<p>OLS first step is getting <span class="math inline">\(\hat y\)</span> which is the projection of the vector <span class="math inline">\(y\)</span> on the space <think of="" shadow="" the="" vector=""> <more on="" that="" later=""></more></think></p>
+<p>second step is writing <span class="math inline">\(\hat y\)</span> in terms of <span class="math inline">\(X\)</span> <will be="" explained="" now=""></will></p>
+<p>If <span class="math inline">\(X\)</span> has two independent variables, then <span class="math inline">\(x_1,x_2\)</span> are the two vectors in the matrix that can be visualized as arrows</p>
+<p>from first step, we already have <span class="math inline">\(\hat y\)</span> and we write in terms of <span class="math inline">\(X\)</span> using projections which results in</p>
+<p><span class="math display">\[
+\hat y = \hat \beta_1x_1 + \hat \beta_2x_2
+\]</span></p>
+<p>or in matrix way</p>
+<p><span class="math display">\[
+\hat y = X \hat \beta
+\]</span></p>
+<p>Notice that to get <span class="math inline">\(\hat y\)</span>, we assumed that we don’t have <strong>perfect collinearity</strong></p>
+</section>
+<section id="geometric-interpretation-of-least-squares---geometrical-derivation-of-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation-of-least-squares---geometrical-derivation-of-estimator">322. Geometric interpretation of least squares - geometrical derivation of estimator</h3>
+<p>Column space results in a plane that is at the base of the arrow <span class="math inline">\(y\)</span>, we get <span class="math inline">\(\hat y\)</span> that is the orthogonal projection of <span class="math inline">\(y\)</span> on the column space</p>
+<p><span class="math display">\[
+\hat y = \argmin ||y-\mu||^2 \qquad \mu \in Col(x)
+\]</span></p>
+<p>we know that <span class="math inline">\(\hat y= X \hat \beta\)</span> and that <span class="math inline">\((y - \hat y)\)</span> is orthogonal to the plane or mathematically</p>
+<p><span class="math display">\[
+X'(y - \hat y) = 0
+\]</span></p>
+<p>expand</p>
+<p><span class="math display">\[
+X'(y - X \hat \beta)= 0
+\]</span></p>
+<p>expand again to get</p>
+<p><span class="math display">\[
+X'y = X'X\hat \beta
+\]</span></p>
+<p>isolate <span class="math inline">\(\hat \beta\)</span> to get</p>
+<p><span class="math display">\[
+\boxed{\hat \beta = (X'X)^{-1}X'y}
+\]</span></p>
+<p>we got the formula without any derivatives lol</p>
+</section>
+<section id="orthogonal-projection-operator-in-least-squares---part-1" class="level3">
+<h3 class="anchored" data-anchor-id="orthogonal-projection-operator-in-least-squares---part-1">323. Orthogonal projection operator in least squares - part 1</h3>
+<p>back to our picture, column space of <span class="math inline">\(X\)</span> forms a plane, <span class="math inline">\(y\)</span> is the arrow</p>
+<p><span class="math inline">\(\hat y\)</span> is the projection of <span class="math inline">\(y\)</span> on the column space but what does that mean?</p>
+<p><span class="math display">\[
+\hat y = X \hat \beta
+\]</span></p>
+<p>expand the <span class="math inline">\(\hat \beta\)</span> to get</p>
+<p><span class="math display">\[
+\hat y = X(X'X)^{-1}X'y
+\]</span></p>
+<p>The weird stuff on the right is what projects <span class="math inline">\(y\)</span> on the column space, let it be <span class="math inline">\(P_x\)</span></p>
+<p><span class="math display">\[
+P_x = X(X'X)^{-1}X'
+\]</span></p>
+<p>What are the properties of this projection matrix?</p>
+<ol type="1">
+<li>if <span class="math inline">\(w\)</span> is in column space, then <span class="math inline">\(P_x w =w\)</span></li>
+<li>If <span class="math inline">\(w\)</span> is <span class="math inline">\(\perp\)</span> to column space, then <span class="math inline">\(P_x w = 0\)</span> <shadow is="" a="" point="" not="" vector=""></shadow></li>
+</ol>
+</section>
+<section id="orthogonal-projection-operator-in-least-squares---part-2" class="level3">
+<h3 class="anchored" data-anchor-id="orthogonal-projection-operator-in-least-squares---part-2">324. Orthogonal projection operator in least squares - part 2</h3>
+<p>We learnt about the projection matrix <span class="math inline">\(P_x\)</span></p>
+<p>Then cuz <span class="math inline">\(\hat y\)</span> already lies on the column space then</p>
+<p><span class="math display">\[
+P_x \hat y = \hat y
+\]</span></p>
+<p>Lets verify, first recall the formula for <span class="math inline">\(P_x\)</span></p>
+<p><span class="math display">\[
+P_x = X(X'X)^{-1}X'
+\]</span></p>
+<p>and <span class="math inline">\(\hat y = X \hat \beta\)</span>, then</p>
+<p><span class="math display">\[
+P_x \hat y = X(X'X)^{-1}X'X \hat \beta
+\]</span></p>
+<p>matrix and its inverse cancel, what remains is</p>
+<p><span class="math display">\[
+P_x \hat y = X \hat \beta = \hat y
+\]</span></p>
+<p>worked correctly, it will also work with <span class="math inline">\(X\)</span>, it will be <span class="math inline">\(P_x X =X\)</span></p>
+<p>Now remember our residual vector <span class="math inline">\(\hat u = y - \hat y\)</span>, its orthogonal to the column space so should result in <span class="math inline">\(P_x \hat u = 0\)</span></p>
+<p>To verify</p>
+<p><span class="math display">\[
+P_x(y-\hat y )= X(X'X)^{-1}X'y-X(X'X)^{-1}X'\hat y
+\]</span></p>
+<p>first term is just <span class="math inline">\(\hat y\)</span> and second term is <span class="math inline">\(\hat y\)</span> cuz its in column space then</p>
+<p><span class="math display">\[
+P_x(y- \hat y) = \hat y - \hat y = 0
+\]</span></p>
+</section>
+<section id="orthogonal-projection-operator-in-least-squares---part-3" class="level3">
+<h3 class="anchored" data-anchor-id="orthogonal-projection-operator-in-least-squares---part-3">325. Orthogonal projection operator in least squares - part 3</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-1">326. Estimating the error variance in matrix form part 1</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-2">327. Estimating the error variance in matrix form part 2</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-3">328. Estimating the error variance in matrix form part 3</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-4" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-4">329. Estimating the error variance in matrix form part 4</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-5" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-5">330. Estimating the error variance in matrix form part 5</h3>
+</section>
+<section id="estimating-the-error-variance-in-matrix-form-part-6" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-the-error-variance-in-matrix-form-part-6">331. Estimating the error variance in matrix form part 6</h3>
+</section>
+<section id="proof-that-the-trace-of-mx-is-p" class="level3">
+<h3 class="anchored" data-anchor-id="proof-that-the-trace-of-mx-is-p">332. Proof that the trace of MX is p</h3>
+</section>
+<section id="representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-1">333. Representing homoscedasticity and no autocorrelation in matrix form part 1</h3>
+</section>
+<section id="representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="representing-homoscedasticity-and-no-autocorrelation-in-matrix-form-part-2">334. Representing homoscedasticity and no autocorrelation in matrix form part 2</h3>
+</section>
+<section id="representing-homoscedasticity-in-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="representing-homoscedasticity-in-matrix-form">335. Representing homoscedasticity in matrix form</h3>
+</section>
+<section id="blue-estimators-in-presence-of-heteroscedasticity-gls-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="blue-estimators-in-presence-of-heteroscedasticity-gls-part-1">336. BLUE estimators in presence of heteroscedasticity GLS part 1</h3>
+</section>
+<section id="blue-estimators-in-presence-of-heteroscedasticity-gls-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="blue-estimators-in-presence-of-heteroscedasticity-gls-part-2">337. BLUE estimators in presence of heteroscedasticity GLS part 2</h3>
+</section>
+<section id="gls-estimators-in-matrix-form-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="gls-estimators-in-matrix-form-part-1">338. GLS estimators in matrix form part 1</h3>
+</section>
+<section id="gls-estimators-in-matrix-form-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="gls-estimators-in-matrix-form-part-2">339. GLS estimators in matrix form part 2</h3>
+</section>
+<section id="gls-estimators-in-matrix-form-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="gls-estimators-in-matrix-form-part-3">340. GLS estimators in matrix form part 3</h3>
+</section>
+<section id="variance-of-gls-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="variance-of-gls-estimators">341. Variance of GLS estimators</h3>
+</section>
+<section id="gls-example-in-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="gls-example-in-matrix-form">342. GLS example in matrix form</h3>
+</section>
+<section id="gls-estimators-in-presence-of-autocorrelation-and-heteroscedasticity-in-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="gls-estimators-in-presence-of-autocorrelation-and-heteroscedasticity-in-matrix-form">343. GLS estimators in presence of autocorrelation and heteroscedasticity in matrix form</h3>
+</section>
+<section id="the-kronecker-product-of-two-matrices---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="the-kronecker-product-of-two-matrices---an-introduction">344. The Kronecker product of two matrices - an introduction</h3>
+</section>
+<section id="sure-estimation-an-introduction-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimation-an-introduction-part-1">345. SURE estimation an introduction part 1</h3>
+</section>
+<section id="sure-estimation-an-introduction-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimation-an-introduction-part-2">346. SURE estimation an introduction part 2</h3>
+</section>
+<section id="sure-estimation---autocorrelation-and-heteroscedasticity" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimation---autocorrelation-and-heteroscedasticity">357. SURE estimation - autocorrelation and heteroscedasticity</h3>
+</section>
+<section id="sure-estimator-derivation-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimator-derivation-part-1">348. SURE estimator derivation part 1</h3>
+</section>
+<section id="sure-estimator-derivation-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimator-derivation-part-2">349. SURE estimator derivation part 2</h3>
+</section>
+<section id="kronecker-matrix-product-properties" class="level3">
+<h3 class="anchored" data-anchor-id="kronecker-matrix-product-properties">350. Kronecker matrix product properties</h3>
+</section>
+<section id="sure-estimator-same-independent-variables-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimator-same-independent-variables-part-1">351. SURE estimator same independent variables part 1</h3>
+</section>
+<section id="sure-estimator-same-independent-variables-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimator-same-independent-variables-part-2">352. SURE estimator same independent variables part 2</h3>
+</section>
+<section id="sure-estimator-same-independent-variables-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="sure-estimator-same-independent-variables-part-3">353. SURE estimator same independent variables part 3</h3>
+</section>
+<section id="causality-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="causality-an-introduction">354. Causality an introduction</h3>
+<p>In econometrics, some studies are <strong>descriptive</strong> like if inflation increases is <strong>associated</strong> GDP decreases</p>
+<p><span class="math display">\[
+\pi \uparrow \sim GDP \downarrow
+\]</span></p>
+<p>notice that we are not stating causality, inflation did not cause fall of GDP</p>
+<p>Another example is how well correlated is forecasted weather with respect to actual temperature</p>
+<p>This is a useful association, but not causal</p>
+<p>SO what questions are <strong>causal</strong>?</p>
+<p>do increases in number of years of education cause an increase in wage?</p>
+<p><span class="math display">\[
+educ \uparrow \to wage \uparrow
+\]</span></p>
+<p>Imagine alternative reality in which a person spends an extra year of education</p>
+<p>Causality is useful cuz it allows us to determine effects of many stuff like</p>
+<ol type="1">
+<li>effect of Democracy on GDP</li>
+<li>effect of decline in university costs on years of education</li>
+</ol>
+</section>
+<section id="the-rubin-causal-model---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="the-rubin-causal-model---an-introduction">355. The Rubin causal model - an introduction</h3>
+<p>By <strong>Professor Donald Rubin</strong> https://statistics.fas.harvard.edu/people/donald-b-rubin</p>
+<p>We want to know if <span class="math inline">\(x\)</span> <strong>causes <span class="math inline">\(y\)</span></strong></p>
+<p><span class="math display">\[
+x \to y
+\]</span></p>
+<p>Does investment in infrastructure decrease violence?</p>
+<p>we can’t just compare average violence in states that received and did not receive infrastructure. If we did we will get</p>
+<p><span class="math display">\[
+D_i=0: 100 \qquad D_i=1:150
+\]</span></p>
+<p>where <span class="math inline">\(D_i=0\)</span> means no infrastructure and <span class="math inline">\(D_i=1\)</span> means infrastructure</p>
+<p>How violence in states with more infrastructure is higher? We were expecting the opposite</p>
+<p>The culprit here is reverse causality, states with higher violence are more likely to be selected to have better infrastructure aka <strong>selection bias</strong></p>
+<p>We need to define potential violence for each state</p>
+<p>where <span class="math inline">\(v_{1i}\)</span> if it did receive infrastructure, <span class="math inline">\(v_{0i}\)</span> if it did not receive infrastructure</p>
+<p><span class="math display">\[
+potential = \begin{cases}v_{1i},&amp;if\, D_i=1\\
+v_{0i}, &amp;if \, D_i=0
+\end{cases}
+\]</span></p>
+<p>Sadly, for each state, we can observe only one potential violence, but if we did see both then <span class="math inline">\(\delta = v_{1i} - v_{0i}\)</span> is the causal effect we want</p>
+<p>This was for individual state, we care about average of all states</p>
+<p><span class="math display">\[
+\boxed{\text{ACE} = E[\delta] = E[v_{1i}] - E[v_{0i}]}
+\]</span></p>
+<p>But what do we mean by potential level of violence?</p>
+<p>If the government makes a decision to spend on states, it allocates its resources in non random fashion resulting in <span class="math inline">\(D_i=1, D_i=0\)</span></p>
+<p>in the <span class="math inline">\(D_i=1\)</span>, we observe violence for those who got the infrastructure <span class="math inline">\(v_{1i}\)</span>, but can’t observe what would have happened if they didn’t receive it <span class="math inline">\(v_{0i}\)</span> which is called <strong>counterfactual</strong></p>
+<p>For <span class="math inline">\(D_i=0\)</span>, we observe violence for those with no infrastructure <span class="math inline">\(v_{0i}\)</span> but can’t observe the counterfactual <span class="math inline">\(v_{1i}\)</span></p>
+<p>The average causal effect <span class="math inline">\(ACE\)</span> <span class="math inline">\(E[\delta]\)</span> is the average difference between <span class="math inline">\(v_{1i}\)</span> and <span class="math inline">\(v_{0i}\)</span> in both states of <span class="math inline">\(D_i\)</span> but we care more about the difference in the state where <span class="math inline">\(D_i=1\)</span> only <cuz we="" applied="" our="" treatment=""> so we use average causal effect of treated <span class="math inline">\(ACT\)</span></cuz></p>
+<p><span class="math display">\[
+\boxed{\text{ACT}= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=1]}
+\]</span></p>
+<p>Next: how in the world will we calculate something that we can’t observe</p>
+</section>
+<section id="causation-in-econometrics---a-simple-comparison-of-group-means" class="level3">
+<h3 class="anchored" data-anchor-id="causation-in-econometrics---a-simple-comparison-of-group-means">356. Causation in econometrics - a simple comparison of group means</h3>
+<p>Continuing with our example, we have the problem of selection bias. To solve it, we defined average causal effect and average causal effect of treated</p>
+<p>A good recap will help</p>
+<ol type="1">
+<li>Potential level of violence: each city is in one of the potentials based on infrastructure <causal effect="" we="" want=""></causal></li>
+</ol>
+<p><span class="math display">\[
+potential = \begin{cases}v_{1i}, &amp;D_i=1\\
+v_{0i}, &amp;D_i =0
+\end{cases}
+\]</span></p>
+<ol type="1">
+<li><p>Government decides to spend on infrastructure or not which results in counterfactuals: what happened vs what could have happened</p>
+<p><span class="math display">\[
+D_i=1, \quad \delta_i = v_{1i} - v_{0i}\\
+D_i=0, \quad \delta_i = v_{1i} - v_{0i}
+\]</span></p>
+<p>Here is the new</p>
+<ol type="1">
+<li>actual observed violence</li>
+</ol>
+<p><span class="math display">\[
+v_i= \begin{cases}v_{1i}, &amp;if\, D_i=1\\
+v_{0i}, &amp;if \, D_i =0
+\end{cases}
+\]</span></p>
+<p>when we write it like this, we can use <span class="math inline">\(D_i\)</span> as a dummy variable and write</p>
+<p><span class="math display">\[
+\boxed{v_i = v_{0i}+ (v_{1i} - v_{0i})D_i}
+\]</span></p>
+<p>Notice that what’s inside the bracket is the causal effect we want</p>
+<ol type="1">
+<li>comparing means of the two groups &lt;rewrite based on step 3&gt;</li>
+</ol>
+<p><span class="math display">\[
+E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+\]</span></p>
+<p>average violence in cities with infrastructure - average violence in cities without = observed violence in cities with infrastructure - observed violence in cities without</p>
+<p>Next: further interpret the last formula</p></li>
+</ol>
+</section>
+<section id="causation-in-econometrics---selection-bias-and-average-causal-effect" class="level3">
+<h3 class="anchored" data-anchor-id="causation-in-econometrics---selection-bias-and-average-causal-effect">357. Causation in econometrics - selection bias and average causal effect</h3>
+<p>we derived the formula for difference in means</p>
+<p><span class="math display">\[
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+\]</span></p>
+<p>we can add a term and subtract it again to be easier</p>
+<p><span class="math display">\[
+\Delta \mu = E[v_i|D_i=1] - E[v_{0i}|D_i=1]+\\ E[v_{0i}|D_i=1] - E[v_{oi}|D_i=0]
+\]</span></p>
+<p>Where the the first two expectations are the causal effect and the other two are <strong>selection bias</strong></p>
+<p>First two expressions are when <span class="math inline">\(D_i=1\)</span>, so we can combine them into one</p>
+<p><span class="math display">\[
+ACE = E[v_{1i}- v_{0i}|D_i=1] &lt;0
+\]</span></p>
+<p>where <span class="math inline">\(v_{1i}- v_{0i} = \delta_i\)</span> and <span class="math inline">\(v_{0i}\)</span> is the counterfactual, we expect it to be less than zero <violence decreased="" in="" presence="" of="" infrastructure=""></violence></p>
+<p>as for the selection bias</p>
+<p><span class="math display">\[
+SB = E[v_{0i}|D_i=1] - E[v_{0i}|D_i=0] &gt;0
+\]</span></p>
+<p>This is the selection effect, cities that did receive infrastructure would have had more violence <span class="math inline">\(v_{0i}\)</span> than those who did not receive the treatment <span class="math inline">\(v_{0i}|D_i=0\)</span></p>
+<p>so we expect the difference to be higher than zero</p>
+<p>Notice that <span class="math inline">\(ACE, SB\)</span> have opposite signs, and usually <span class="math inline">\(SB\)</span> is greater in magnitude, this is why change in mean had the opposite effect at the beginning</p>
+<p><span class="math display">\[
+\Delta \mu = ACE + SB
+\]</span></p>
+</section>
+<section id="random-assignment-removes-selection-bias" class="level3">
+<h3 class="anchored" data-anchor-id="random-assignment-removes-selection-bias">358. Random assignment removes selection bias</h3>
+<p>Continuing with the formula</p>
+<p><span class="math display">\[
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0]
+\]</span></p>
+<p>We had a problem of reverse causality, we are trying to see the difference in potential level of violence <span class="math inline">\(\delta = v_{1i}- v_{0i}\)</span>. This on city level, the average is</p>
+<p><span class="math display">\[
+ACE = E[\delta_i] = E[v_{1i}] - E[v_{0i}]
+\]</span></p>
+<p>If we have random assignment, we can evaluate the difference in means</p>
+<p><span class="math display">\[
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+\]</span></p>
+<p>If we have random assignment then <span class="math inline">\(D_i\)</span> is independent <statistically> of the violence outcomes</statistically></p>
+<p><span class="math display">\[
+D_i \perp\!\!\!\perp {v_{1i}, v_{0i}}
+\]</span></p>
+<p>so we can further simplify</p>
+<p><span class="math display">\[
+\begin{align*}
+\Delta \mu &amp;= E[v_i|D_i=1] - E[v_i|D_i=0] \\
+&amp;= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]\\
+&amp;= E[v_{1i} - v_{0i}|D_i=1] \\
+&amp;= E[v_{1i} - v_{0i}]\\
+&amp;= ACE
+\end{align*}
+\]</span></p>
+<p>The independence means that difference in violence level in the <span class="math inline">\(D_i=1\)</span> group, is equal to the difference in both groups</p>
+<p>which practically means:</p>
+<p>if we randomly assign infrastructure to some cities and some not, then whatever difference in violence we see, is the causal effect</p>
+<blockquote class="blockquote">
+<p><strong>“When you have eliminated the impossible, then whatever remains, however improbable, must be the truth.” - A Fallacy of Sherlock Holmes</strong></p>
+</blockquote>
+</section>
+<section id="how-to-check-if-treatment-is-randomly-assigned" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-check-if-treatment-is-randomly-assigned">359. How to check if treatment is randomly assigned</h3>
+<p>If we have random assignment, our problems are solved, but how to know if we have random assignment?</p>
+<p>One of the methods is to check mean levels of variables affecting violence between <span class="math inline">\(D_i=0, D_i=1\)</span>. Variables like</p>
+<ol type="1">
+<li>income</li>
+<li>unemployment</li>
+<li>Ethnic fractionalization</li>
+</ol>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(D_i=0\)</span></th>
+<th><span class="math inline">\(D_i=1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Income</td>
+<td>80</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>Do a simple <span class="math inline">\(t\)</span> test, if its significant, then we have difference in means between groups so don’t have random assignment</p>
+<p>If income is not randomly assigned, but unemployment is randomly assigned, we still can’t assume random assignment for infrastructure</p>
+<p>Another way is to regress violence on these variables and <span class="math inline">\(D_i\)</span></p>
+<p>If we don’t have random assignment then</p>
+<p><span class="math display">\[
+\Delta \mu \to bias
+\]</span></p>
+</section>
+<section id="the-conditional-independence-assumption-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="the-conditional-independence-assumption-introduction">360. The conditional independence assumption: introduction</h3>
+<p>What to do if we don’t have random assignment?</p>
+<p>Check the <strong>conditional independence assumption <span class="math inline">\(CIA\)</span></strong></p>
+<p><span class="math display">\[
+CIA: v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i
+\]</span></p>
+<p>meaning levels of violence in cities conditional on level of income in the cities is independent of infrastructure</p>
+<p>We can evaluate causal effect conditional on income</p>
+<p><span class="math display">\[
+ACE|income_i = E[v_i|income, D_i=1]- E[v_i|income_i, D_i=0]
+\]</span></p>
+<p>If the <span class="math inline">\(CIA\)</span> assumption is met, then if we condition on income, choice of infrastructure is irrelevant</p>
+<p><span class="math display">\[
+ACE|income_i = E[v_{1i} - v_{0i}|income_i]
+\]</span></p>
+</section>
+<section id="the-conditional-independence-assumption-intuition" class="level3">
+<h3 class="anchored" data-anchor-id="the-conditional-independence-assumption-intuition">361. The conditional independence assumption: intuition</h3>
+<p>We reached that</p>
+<p><span class="math display">\[
+E[\delta_i |income_i] = E[v_{1i}- v_{0i}|income_i]
+\]</span></p>
+<p>if we assumed that</p>
+<p><span class="math display">\[
+CIA: v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i
+\]</span></p>
+<p>But what does it mean?</p>
+<p>Think of <span class="math inline">\(D_i\)</span> - whether city gets infrastructure or not- as a box consisting of two components</p>
+<ol type="1">
+<li>choice based on level of income <not random="" selection=""> - poorer cities will be selected to take infrastructure</not></li>
+<li>random - variance of <span class="math inline">\(D_i\)</span> not related to income</li>
+</ol>
+<p>If we remove the part related to income, what remains is the random part meaning, if we remove the effect of income on infrastructure, then both groups are similar and comparable</p>
+<p>Another way to think about it is to consider the regression</p>
+<p><span class="math display">\[
+D_i = \delta \, income_i + \varepsilon_i
+\]</span></p>
+<p>here its clear, <span class="math inline">\(D_i\)</span> consists of two parts, income and random error, if we remove the income we get the random error</p>
+<p><span class="math display">\[
+D_i - \delta \, income_i = \varepsilon_i
+\]</span></p>
+<p>The CIA assumption tries to make levels of violence independent on error term only</p>
+<p><span class="math display">\[
+v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i \equiv v_{1i}, v_{0i} \perp\!\!\!\perp \varepsilon_i
+\]</span></p>
+<p>and when we remove the part of non random choice <income> we get</income></p>
+<p><span class="math display">\[
+SB = 0|income_i
+\]</span></p>
+</section>
+<section id="the-average-causal-effect---an-example" class="level3">
+<h3 class="anchored" data-anchor-id="the-average-causal-effect---an-example">362. The average causal effect - an example</h3>
+<p>If we own a firm and want to know causal effect of job training on sales</p>
+<p><span class="math display">\[
+J_i = \begin{cases}1\\0\end{cases}
+\]</span></p>
+<p>1 means took the job training</p>
+<p>we can see <span class="math inline">\(E[s_i]\)</span> in thr group <span class="math inline">\(J_i=1\)</span> and <span class="math inline">\(E[s_i]\)</span> for <span class="math inline">\(J_i=0\)</span>. the difference in mean is</p>
+<p><span class="math display">\[
+\Delta \mu = E[s_i|J_i=1] - E[s_i|J_i=0]
+\]</span></p>
+<p>as before, the potential outcomes for sales is</p>
+<p><span class="math display">\[
+potential = \begin{cases}s_{1i}, &amp;J_i=1
+\\s_{0i}, &amp;J_i=0
+\end{cases}
+\]</span></p>
+<p>the causal effect we want is</p>
+<p><span class="math display">\[
+\delta_i = s_{1i} - s_{0i}
+\]</span></p>
+<p>but for each case, we only observe one potential sales based on job training</p>
+<p>Solution: modify <span class="math inline">\(\Delta \mu\)</span> formula</p>
+<p><span class="math display">\[
+\begin{align*}\\
+\Delta \mu &amp;=  E[s_i|J_i=1] - E[s_i|J_i=0]\\
+&amp;=  E[s_{1i}|J_i=1] - E[s_{0i}|J_i=0]\\
+&amp;=  E[s_{1i}|J_i=1] -E[s_{0i}|J_i=1] +E[s_{0i}|J_i=1]- E[s_{0i}|J_i=0]\\
+&amp;= ACE + SB
+\end{align*}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+ACE =  E[s_{1i}|J_i=1] -E[s_{0i}|J_i=1]
+\]</span></p>
+<p>which can be rewritten as</p>
+<p><span class="math display">\[
+\begin{align*}
+ACE &amp;= E[s_{1i} - s_{0i}|J_i=1]\\
+&amp;= E[\delta_i|J_i=1]
+\end{align*}
+\]</span></p>
+<p>we expect that <span class="math inline">\(ACE&gt;0\)</span> in this example</p>
+<p>and</p>
+<p><span class="math display">\[
+SB = E[s_{0i}|J_i=1]- E[s_{0i}|J_i=0]
+\]</span></p>
+<p>which means levels of sales they would have without training given that they participated - level of sales they would have got without training given that they did not train</p>
+<p>We expect that better sellers will want the training so they get even more so effect is <span class="math inline">\(&gt;0\)</span></p>
+<p>Hence, <span class="math inline">\(\Delta \mu\)</span> is biased due to the selection bias and overestimated</p>
+<p>Solution: assume random assignment hence sales and job training are independent so SB becomes conditioned on either <span class="math inline">\(J_i=1\)</span> or <span class="math inline">\(J_{i}=0\)</span> does not matter, since we subtract either way, we get zero</p>
+<p><span class="math display">\[
+SB = E[s_{0i}|J_i=1]- E[s_{0i}|J_i=1] = 0
+\]</span></p>
+</section>
+<section id="the-average-causal-effect-with-continuous-treatment-variables" class="level3">
+<h3 class="anchored" data-anchor-id="the-average-causal-effect-with-continuous-treatment-variables">363. The average causal effect with continuous treatment variables</h3>
+<p>Something new: treatment effect is continuous</p>
+<p>If we want to study effect of study exercise on resting heart rate</p>
+<p><span class="math display">\[
+exercise \to HR
+\]</span></p>
+<p>But we have reverse causality, healthy people tend to exercise more</p>
+<p>Exercise is not really continuous but we can consider it though, so potential heart rate for each individual can be considered as function of Exercise</p>
+<p><span class="math display">\[
+Potential = f_i(E) = HR_{iE}
+\]</span></p>
+<p>The actual outcome we observe is</p>
+<p><span class="math display">\[
+Outcome = f_i(E_i) = HR_{iE_i}
+\]</span></p>
+<p>For each individual, we observe his exercise <span class="math inline">\(E_i\)</span> &lt;he has potential for any level of <span class="math inline">\(E\)</span> but we observe <span class="math inline">\(E_i\)</span> only&gt;</p>
+<p>The individual causal effect <span class="math inline">\(ICE\)</span> is</p>
+<p><span class="math display">\[
+ICE = f_i(E+1)-f_i(E)
+\]</span></p>
+<p>what would happen if he exercises one more time which can be written as</p>
+<p><span class="math display">\[
+ICE = \delta_i = HR_{i(E+1)} - HR_{iE}
+\]</span></p>
+<p>But we don’t care about an individual, want individuals instead, we take the average</p>
+<p><span class="math display">\[
+ACE = E[\delta_i]
+\]</span></p>
+<p>we can see difference in means</p>
+<p><span class="math display">\[
+\Delta \mu = E[HR_i | E_i = E+1]- E[HR_i|E_i = E]
+\]</span></p>
+<p>the difference if individuals added one year vs their current heart rate based on their current exercise</p>
+<p>since that <span class="math inline">\(HR_i\)</span> in the first bracket depends on <span class="math inline">\(E+1\)</span>, we can rewrite it as, same applies for second bracket</p>
+<p><span class="math display">\[
+\Delta \mu = E[HR_{i(E+1)} | E_i = E+1]- E[HR_{iE}|E_i = E]
+\]</span></p>
+<p>Like before, we write the formula by adding and subtracting a term</p>
+<p><span class="math display">\[
+\Delta \mu = E[HR_{i(E+1)} | E_i = E+1]- E[HR_{iE}|E_i = E+1] + E[HR_{iE}|E_i = E+1] - E[HR_{iE}|E_i = E]
+\]</span></p>
+<p>we added the counter factual <span class="math inline">\(E[HR_{iE}|E_i = E+1]\)</span>. And we got average causal effect and selection bias.</p>
+<p><span class="math display">\[
+\Delta \mu = ACE + SB
+\]</span></p>
+<p>we expect that <span class="math inline">\(SB &lt; 0, ACE &lt; 0\)</span> hence</p>
+<p><span class="math display">\[
+|\Delta \mu| &gt; |ACE|
+\]</span></p>
+<p>If we have random assignment, <span class="math inline">\(HR_i\)</span> and <span class="math inline">\(E_i\)</span> are independent, we can rewrite the conditional part in the selection bias from <span class="math inline">\(E_i = E+1\)</span> to <span class="math inline">\(E_i = E\)</span> for it to disappear</p>
+</section>
+<section id="conditional-independence-assumption-for-continuous-variables" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-independence-assumption-for-continuous-variables">364. Conditional independence assumption for continuous variables</h3>
+<p>Conditional independence will help us with continuous variables too</p>
+<p>If we had random assignment, then <span class="math inline">\(HR_i\)</span> and <span class="math inline">\(E_i\)</span> are independent, and selection bias becomes zero. But it is hard to assume.</p>
+<p>Instead, we do conditional independence assumption <span class="math inline">\(CIA\)</span></p>
+<p><span class="math display">\[
+HR_{iE} \perp\!\!\perp E_i|X_i
+\]</span></p>
+<p>where <span class="math inline">\(X_i\)</span> is a vector for past measures of health</p>
+<p>How to think about it?</p>
+<p><span class="math inline">\(E_i\)</span> is a block <square>, length of square is based on the variance. part of the variance is coming from past level of health <span class="math inline">\(X_i\)</span>, the other part is random</square></p>
+<p>If we condition on <span class="math inline">\(X_i\)</span>, we get a random sample</p>
+<p><span class="math display">\[
+SB = E[HR_{iE}|E_i = E+1, X_i] - E[HR_{iE}|E_i = E,X_1]
+\]</span></p>
+<p>which reads, what individuals health would be if they did not train an extra one and isolating effect of <span class="math inline">\(X_i\)</span> <counterfactual> minus what their health would be if they did not exercise the extra one and isolating effect of <span class="math inline">\(X_i\)</span></counterfactual></p>
+<p>Due to the <span class="math inline">\(CIA\)</span> assumption, we cance; the <span class="math inline">\(E_i\)</span> part from both terms to get</p>
+<p><span class="math display">\[
+SB = 0
+\]</span></p>
+<p>SO difference in means becomes</p>
+<p><span class="math display">\[
+\Delta \mu = E[HR_{i(E+1)}|E_i = E+1, X_i] - E[HR_{iE}|E_i = E+1, X_i]
+\]</span></p>
+<p>using <span class="math inline">\(CIA\)</span> assumption again, we cancel the <span class="math inline">\(E_i\)</span> part to get</p>
+<p><span class="math display">\[
+\Delta \mu = E[HR_{i(E+1)} - HR_{iE}|X_i]
+\]</span></p>
+</section>
+<section id="linear-regression-and-causality" class="level3">
+<h3 class="anchored" data-anchor-id="linear-regression-and-causality">365. Linear regression and causality</h3>
+<ol type="1">
+<li><strong>Potential Outcomes Framework</strong></li>
+</ol>
+<p>Assume the potential outcome (heart rate under level <span class="math inline">\(E\)</span> of exercise) is linear:</p>
+<p><span class="math display">\[
+HR_{iE} = \alpha + \beta E + \varepsilon_i
+\]</span></p>
+<ul>
+<li>Note: We write <span class="math inline">\(E\)</span>, not <span class="math inline">\(E_i\)</span>, because this <strong>function holds for any value of exercise</strong>, not just what person <em>i</em> actually did.</li>
+<li>Assumptions:
+<ol type="1">
+<li><strong>Linearity</strong>: Effect of exercise is linear.</li>
+<li><strong>Homogeneity</strong>: The same linear function applies to <strong>all individuals</strong> (i.e.&nbsp;same <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> for everyone).</li>
+</ol></li>
+</ul>
+<p>Then, the <strong>individual causal effect</strong> of increasing exercise by 1 unit is:</p>
+<p><span class="math display">\[
+\delta_i = HR_{i(E+1)} - HR_{iE} = \beta
+\]</span></p>
+<p>So <span class="math inline">\(\beta\)</span> itself is the individual-level effect — not just average.</p>
+<hr>
+<ol start="2" type="1">
+<li><strong>Observed Regression Model</strong></li>
+</ol>
+<p>In practice, we observe each person’s actual exercise level <span class="math inline">\(E_i\)</span> and heart rate <span class="math inline">\(HR_i\)</span>:</p>
+<p><span class="math display">\[
+HR_i = \alpha + \beta E_i + \varepsilon_i
+\]</span></p>
+<p>However, this <strong>model is not necessarily causal</strong>. Why?</p>
+<ul>
+<li>If <span class="math inline">\(E_i\)</span> is <strong>correlated with</strong> the error term <span class="math inline">\(\varepsilon_i\)</span>, then the OLS estimator of <span class="math inline">\(\beta\)</span> is <strong>biased</strong>.</li>
+<li>Example: If healthier people choose to exercise more <strong>and</strong> naturally have lower heart rates, then <span class="math inline">\(\varepsilon_i\)</span> is related to <span class="math inline">\(E_i\)</span>.</li>
+</ul>
+<hr>
+<ol start="3" type="1">
+<li><strong>Solution: Conditional Independence Assumption (CIA)</strong></li>
+</ol>
+<p>To address this, we assume:</p>
+<p><span class="math display">\[
+HR_{iE} \perp\!\!\!\perp E_i \mid X_i
+\]</span></p>
+<blockquote class="blockquote">
+<p>Given covariates <span class="math inline">\(X_i\)</span> (like age, gender, health), the level of exercise is as good as randomly assigned.</p>
+</blockquote>
+<p>This assumption implies:</p>
+<p><span class="math display">\[
+E[HR_{iE} \mid X_i, E_i] = E[HR_{iE} \mid X_i]
+\]</span></p>
+<p>Meaning: once we condition on <span class="math inline">\(X_i\)</span>, the observed exercise level gives us <strong>no extra info</strong> about potential outcomes.</p>
+<hr>
+<ol start="4" type="1">
+<li><strong>Estimation under CIA</strong></li>
+</ol>
+<p>So we now estimate a regression <strong>adjusting for <span class="math inline">\(X_i\)</span></strong>:</p>
+<p><span class="math display">\[
+HR_i = \alpha + \beta E_i + X_i'\delta + v_i
+\]</span></p>
+<p>By construction:</p>
+<p><span class="math display">\[
+E[v_i \mid X_i, E_i] = 0
+\]</span></p>
+<p>So the <strong>OLS estimator of <span class="math inline">\(\beta\)</span> is unbiased</strong>, and it now <strong>recovers the causal effect</strong> of exercise on heart rate, <strong>under the CIA</strong>.</p>
+<hr>
+<ol start="5" type="1">
+<li><strong>Expected Potential Outcome Function</strong></li>
+</ol>
+<p>From our potential outcomes model:</p>
+<p><span class="math display">\[
+HR_{iE} = \alpha + \beta E + \varepsilon_i
+\]</span></p>
+<p>We can take the conditional expectation given <span class="math inline">\(X_i\)</span>:</p>
+<p><span class="math display">\[
+E[HR_{iE} \mid X_i] = \alpha + \beta E + X_i'\delta
+\]</span></p>
+<p>This gives us the <strong>expected heart rate</strong> under level <span class="math inline">\(E\)</span> of exercise <strong>for someone with covariates <span class="math inline">\(X_i\)</span></strong>.</p>
+<p>Because this model does <strong>not include</strong> the error <span class="math inline">\(v_i\)</span>, it’s not biased by omitted variable bias</p>
+</section>
+<section id="selection-bias-as-viewed-as-a-problem-with-samples" class="level3">
+<h3 class="anchored" data-anchor-id="selection-bias-as-viewed-as-a-problem-with-samples">366. Selection bias as viewed as a problem with samples</h3>
+<p>As last section, we want to measure the effect of one extra unit</p>
+<p><span class="math display">\[
+E[\delta_i] = E[y_{i(w+1)} - y_{iw}]
+\]</span></p>
+<p>but we don’t see the potential levels of outcomes, what we have are people who chose <span class="math inline">\(w\)</span> and individuals who chose <span class="math inline">\(w+1\)</span></p>
+<p>They chose their level, hence <strong>selection bias</strong></p>
+<p><span class="math display">\[
+\Delta \mu \neq ACE
+\]</span></p>
+<p>Or in another way, there is an <span class="math inline">\(X_i\)</span> that determines the choice of level , so if we condition on <span class="math inline">\(X_i\)</span>, we can get the causal effect using regression</p>
+<p>But there are better ways than just a regression, the other ways view the problem of having different <span class="math inline">\(X_i\)</span> as a sampling problem</p>
+<p>Back to our training example</p>
+<p><span class="math display">\[
+J_i = \begin{cases}1\\0
+\end{cases}
+\]</span></p>
+<p>and we want the causal effect on level of sales <different in="" potential="" outcome=""></different></p>
+<p><span class="math display">\[
+E[\delta_i] = E[sales_{i1} - sales_{i0}]
+\]</span></p>
+<p>and we don’t have this data, instead we have</p>
+<p><span class="math display">\[
+\neq E[sales_i|J_i=1] - E[sales_i|J_i=0]
+\]</span></p>
+<p>sales for those who took the training vs those who did not.</p>
+<p>Why some took the training and some didn’t? Perhaps different levels</p>
+<p>We will consider <span class="math inline">\(X_i\)</span> as a <strong>covariate</strong> of past years’ sales, this is an indicator for motivation and other stuff</p>
+<p>Think of <span class="math inline">\(J_i=1\)</span> as a box, break it into 4 subgroups, each subgroup has an average past sales &lt;average <span class="math inline">\(X_i\)</span>&gt;</p>
+<p><span class="math display">\[
+10,15,20,25
+\]</span></p>
+<p>Then think of <span class="math inline">\(J_i=0\)</span> and make subgroups with same averages of past sales <span class="math inline">\(10,15,20,25\)</span> then we can compare and get causal effect. &lt;cause we controlled for <span class="math inline">\(X_i\)</span>&gt;</p>
+<p>We compare subgroups with equal average of <span class="math inline">\(X_i\)</span> then get weighted mean representing <span class="math inline">\(ACE\)</span></p>
+<p>Why just 4 subgroups? it can be any subgroup or even individual level</p>
+</section>
+<section id="sample-balancing-via-stratification-and-matching" class="level3">
+<h3 class="anchored" data-anchor-id="sample-balancing-via-stratification-and-matching">367. Sample balancing via stratification and matching</h3>
+<p>When we divided <span class="math inline">\(J_i=1\)</span> into subgroup, this is called <strong>stratification</strong></p>
+<p>We had the covariate <span class="math inline">\(X_i = PLS_i\)</span> past sales, but how to choose the right number of stratus?</p>
+<p>If <span class="math inline">\(X_i\)</span> was binary, life would be easy, but <span class="math inline">\(X_i\)</span> is <strong>highly dimensional</strong></p>
+<p>Imagine past year level of sales have different levels for each individual , and motivation has different levels, we plot them as a square, then stratify <draw grids=""></draw></p>
+<p>SO <span class="math inline">\(J_i=1\)</span> has <span class="math inline">\(4\times4\)</span> subsamples</p>
+<p>Then we do the same for <span class="math inline">\(J_i=0\)</span>, then we can compare subsamples and get average causal effect</p>
+<p><span class="math display">\[
+ACE \sim \dfrac 1 p \sum \Delta \mu_{(p)}
+\]</span></p>
+<p><span class="math inline">\(ACE\)</span> is the weighted average of subgroups</p>
+<p>What if we have more covariates? stratification will be not feasible &lt;think of how many subsamples we need for <span class="math inline">\(4 \times 4 \times 4\)</span>&gt;</p>
+<p>so its not feasible cuz <strong>common support</strong> <values of="" covariate="" in="" treatment="" group=""> may not overlap with values in control group</values></p>
+<p>Another problem is that its <strong>computationally expensive</strong></p>
+<p>Another solution is to to aggregate the subgroups, but this will cause <strong>heterogeneity</strong></p>
+<p>Instead, we match on propensity scores</p>
+</section>
+<section id="propensity-score---introduction-and-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="propensity-score---introduction-and-theorem">368. Propensity score - introduction and theorem</h3>
+<p>We have two groups of people: treatment <span class="math inline">\(J_i=1\)</span> and control <span class="math inline">\(J_i=0\)</span>. There is a probability of an individual to choose the treatment or not</p>
+<p><span class="math display">\[
+P(X_i) = P(J_i=1|X_i)
+\]</span></p>
+<p>This probability of choosing the treatment given the covariates is called <strong>propensity</strong></p>
+<p>To visualize, <span class="math inline">\(X_i\)</span> on x axis, probability (0 to 1) on y axis <see how="" its="" similar="" to="" logistic="" regression="">. We fit the logit model to estimate the probability</see></p>
+<p><span class="math display">\[
+P(J_i =1|X_i) = \Phi(X_i', \delta)
+\]</span></p>
+<p>as <span class="math inline">\(X_i' \to \infty, \Phi \to 1\)</span> and <span class="math inline">\(X_i' \to 0, \Phi \to 0\)</span></p>
+<p>Why bother about propensity score?</p>
+<p>Cuz it resembles <span class="math inline">\(CIA\)</span> which stated</p>
+<p><span class="math display">\[
+CIA: y_{0i}, y_{1i} \perp\!\perp J_i|X_i
+\]</span></p>
+<p>a corollary from this is</p>
+<p><span class="math display">\[
+y_{0i}, y_{1i} \perp\!\perp J_i|P(X_i)
+\]</span></p>
+<p>the difference is dealing with covariate <span class="math inline">\(X_i\)</span> <highly dimensional=""> or a function <span class="math inline">\(P(X_i)\)</span> which is scalar. Recall that we couldn’t deal with <span class="math inline">\(X_i\)</span> when we had many stratums</highly></p>
+<p>Solution: stratify on one dimensional &lt;the probability from 0 to 1&gt;Then compare subgroups with equal probabilities. This is called <strong>Propensity Score Matching</strong></p>
+</section>
+<section id="the-law-of-iterated-expectations-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="the-law-of-iterated-expectations-an-introduction">369. The law of iterated expectations: an introduction</h3>
+<p>Law of iterated expectation states</p>
+<p><span class="math display">\[
+E(y) = E(E(y|x))
+\]</span></p>
+<p>but what does it mean?</p>
+<p>Best explained with example: average IQ is</p>
+<p><span class="math display">\[
+E(IQ) = \sum_{IQ_i}IQ_iP(IQ=IQ_i)
+\]</span></p>
+<p>where <span class="math inline">\(P(IQ = IQ_i)\)</span> is proportion of population with that <span class="math inline">\(IQ_i\)</span>. so the expectation is a weighted average</p>
+<p>But we can split the population into males and females and get conditional mean for both then the <span class="math inline">\(IQ\)</span> is</p>
+<p><span class="math display">\[
+E(IQ) = E(E(IQ|sex)) = \sum_{sex_i} P(sex =sex_i )\cdot E(IQ|sex_i)
+\]</span></p>
+<p>Meaning to get IQ for entire population, get weighted average of conditional mean of both males and females</p>
+<p>If we expand the summation we get</p>
+<p><span class="math display">\[
+E(IQ) = P(sex = Male) \cdot E(IQ|Male)+P(sex= F) \cdot E(IQ|F)
+\]</span></p>
+</section>
+<section id="the-law-of-iterated-expectations-introduction-to-nested-form" class="level3">
+<h3 class="anchored" data-anchor-id="the-law-of-iterated-expectations-introduction-to-nested-form">370. The law of iterated expectations: introduction to nested form</h3>
+<p>Suppose we’re studying IQ and want to understand it <strong>within the female population</strong>. We write:</p>
+<p><span class="math display">\[
+E(\text{IQ} \mid F) = \sum_{iq} iq \cdot P(\text{IQ} = iq \mid F)
+\]</span></p>
+<p>But why stop there?</p>
+<p>Among females, we might suspect that <strong>smoking status</strong> also affects IQ. So we can <strong>break the female population into smokers and non-smokers</strong>:</p>
+<p><span class="math display">\[
+E(\text{IQ} \mid F) = \sum_{s \in \{\text{S, NS}\}} P(\text{Smoke} = s \mid F) \cdot E(\text{IQ} \mid \text{Smoke} = s, F)
+\]</span></p>
+<p>Expanding this:</p>
+<p><span class="math display">\[
+E(\text{IQ} \mid F) = P(\text{Smoke} = \text{S} \mid F) \cdot E(\text{IQ} \mid \text{S}, F) + P(\text{Smoke} = \text{NS} \mid F) \cdot E(\text{IQ} \mid \text{NS}, F)
+\]</span></p>
+<p>This is a <strong>weighted average</strong>: you’re averaging the <strong>conditional expectations within each smoking group</strong>, weighted by how common each group is among females.</p>
+<p>What we did above was <strong>nest the conditioning</strong>: first on gender, then on smoking within gender.</p>
+<p>This is the idea behind the <strong>law of iterated expectations</strong>:</p>
+<p><span class="math display">\[
+\boxed{E(Y \mid X) = E\big(E(Y \mid Z, X) \mid X\big)}
+\]</span></p>
+<p>In words:</p>
+<blockquote class="blockquote">
+<p>If you already know X, then learning Z might give you more info. But once you average that back over all possible values of Z (holding X fixed), you return to your original E(Y∣X).</p>
+</blockquote>
+</section>
+<section id="propensity-score-theorem-proof-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="propensity-score-theorem-proof-part-1">371. Propensity score theorem proof part 1</h3>
+<p>CIA states that</p>
+<p><span class="math display">\[
+CIA: y_{0i}, y_{1i} \perp\!\perp D_i|X_i
+\]</span></p>
+<p>while <span class="math inline">\(PST\)</span> states that</p>
+<p><span class="math display">\[
+PST: y_{0i}, y_{1i} \perp\!\perp D_i|P(X_i)
+\]</span></p>
+<p>But how?</p>
+<p>Based on <strong>Mostly Harmless Econometrics</strong></p>
+<p>we need to show that</p>
+<p><span class="math display">\[
+P(D_i=1|y_{ji},P(X_i)) \neq f(y_{ji})
+\]</span></p>
+<p>probability of taking the treatment given potential level of outcome and their propensity score is not a function of potential level of outcome</p>
+<p>We can write the probability as expectation</p>
+<p><span class="math display">\[
+P(D_i=1|y_{ji},P(X_i)) =E (D_i=1|y_{ji},P(X_i))
+\]</span></p>
+<p>cuz <span class="math inline">\(i=0,1\)</span> and the zero term will disappear</p>
+</section>
+<section id="propensity-score-theorem-proof-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="propensity-score-theorem-proof-part-2">372. Propensity score theorem proof part 2</h3>
+<p>Now using law of iterated expectation, we can get</p>
+<p><span class="math display">\[
+E (D_i=1|y_{ji},P(X_i))  = E[E[D_i|y_{ji}P(X_i),X_i]|y_{ji},P(X_i)]
+\]</span></p>
+<p>If we have <span class="math inline">\(X_i\)</span>, we have <span class="math inline">\(P(X_i)\)</span> so we can simplify the inner expectation</p>
+<p><span class="math display">\[
+E[E[D_i|y_{ji},X_i]|y_{ji},P(X_i)]
+\]</span></p>
+<p>and by <span class="math inline">\(CIA\)</span>, <span class="math inline">\(X_i, y_{ji}\)</span> are independent, so further simplify</p>
+<p><span class="math display">\[
+E[E[D_i|X_i]|y_{ji},P(X_i)]
+\]</span></p>
+<p>The inner expectation is just propensity score</p>
+<p><span class="math display">\[
+E[P(X_i)|y_{ji},P(X_i)]
+\]</span></p>
+<p>propensity given propensity is just propensity</p>
+<p><span class="math display">\[
+= P(X_i)
+\]</span></p>
+<p>which is not a function of <span class="math inline">\(y_{ji}\)</span></p>
+</section>
+<section id="propensity-score-matching-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="propensity-score-matching-an-introduction">373. Propensity score matching: an introduction</h3>
+<p>How to deal with selection bias? We have two samples <span class="math inline">\(D_i=1\)</span> where people chose to be treated and <span class="math inline">\(D_i=0\)</span> where people chose not to be treated.</p>
+<p>They are different due to difference in covariate <span class="math inline">\(X_i\)</span></p>
+<p><span class="math display">\[
+\Delta \mu = ACE + SB
+\]</span></p>
+<p>We can’t stratify because <span class="math inline">\(X_i\)</span> is highly dimensional, so we use <span class="math inline">\(PST\)</span> which is just a probability <scalar> and compare individuals with similar probability</scalar></p>
+<p>So here are the steps</p>
+<ol type="1">
+<li>estimate <span class="math inline">\(PS\)</span> using logit or generalized boosted modeling <span class="math inline">\(GBM\)</span><recommended by="" recent="" papers=""></recommended></li>
+<li>Matching using greedy matching or optimal matching <this will="" remove="" individuals="" that="" are="" not="" comparable=""></this></li>
+<li>create stratum in treated group and untreated with similar PS</li>
+<li>compare mean level of outcome in each strata <difference in="" means=""></difference></li>
+<li>Take weighted average to get <span class="math inline">\(ACE\)</span> for the whole stratum</li>
+</ol>
+<p><span class="math display">\[
+\widehat{ACE} \approx \sum_S (\bar y_{1s} - \bar y_{0s})
+\]</span></p>
+</section>
+<section id="propensity-score-matching---mathematics-behind-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="propensity-score-matching---mathematics-behind-estimation">374. Propensity score matching - mathematics behind estimation</h3>
+<p>We know that individual causal effect <span class="math inline">\(ICE\)</span> is</p>
+<p><span class="math display">\[
+\delta_i = y_{1i} - y_{0i}
+\]</span></p>
+<p>But we want the average causal effect <span class="math inline">\(ACE\)</span></p>
+<p><span class="math display">\[
+E[\delta_i|D_i=1] = E[y_{1i}-y_{0i}|D_i=1]
+\]</span></p>
+<p>using law of iterated expectation we get</p>
+<p><span class="math display">\[
+E[E[y_{1i}- y_{0i}|D_i=1,P(X_i)]|D_i=1]
+\]</span></p>
+<p>then separate the inner expectation</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathbb{E}[y_{1i} \mid D_i = 1, P(X_i)] - \mathbb{E}[y_{0i} \mid D_i = 1, P(X_i)] \mid D_i = 1]
+\]</span></p>
+<p>The first term is observed, but the second is counterfactual, but by <span class="math inline">\(PST\)</span>, we can say in the inner condition of the second term that <span class="math inline">\(D_i=0\)</span> so we have two observed data and can rewrite <span class="math inline">\(y_{1i} \to y_i\)</span></p>
+<p>so we are just comparing means in between different strata</p>
+<p><span class="math display">\[
+\mathbb{E}[\Delta \mu(P(X_i)) \mid D_i = 1] \approx \sum_{s} \Delta \mu(P(X_i)) \omega_s
+\]</span></p>
+</section>
+<section id="method-of-moments-and-generalized-method-of-moments---basic-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="method-of-moments-and-generalized-method-of-moments---basic-introduction">375. Method of moments and generalized method of moments - basic introduction</h3>
+<p>If we have a population with a condition like <span class="math inline">\(E[X]=\mu\)</span>, Method of Moments <span class="math inline">\(MM\)</span> and Generalized method of moments <span class="math inline">\(GMM\)</span> work based on <strong>analogy principle</strong></p>
+<p>Analogy principle: if we come up with a similar quantity in our sample to that in the population, we can use the sample equivalent condition to estimate the parameter</p>
+<p>Note, <span class="math inline">\(E[X]=\mu\)</span> is first moment condition for a distribution, we don’t have enough conditions to specify the distribution</p>
+<p>Based on weak law of large numbers, we can state that</p>
+<p><span class="math display">\[
+E[X] = \lim_{N \to \infty} \dfrac{X_1+X_2+\dots}{N}
+\]</span></p>
+<p>where the right side is sample equivalent to the left side, so we can use it to replace the population condition</p>
+<p><span class="math display">\[
+E[X] \to \dfrac 1 N \sum X_i
+\]</span></p>
+<p>Using it, we get the estimated <span class="math inline">\(\mu\)</span></p>
+<p><span class="math display">\[
+\hat \mu = \dfrac 1 N \sum X_i
+\]</span></p>
+<p>Now what happens if we have another population condition like <span class="math inline">\(E[X^2]= \sigma^2 + \mu^2\)</span></p>
+<p>its simple: replace <span class="math inline">\(E[X^2]\)</span> with <span class="math inline">\(\dfrac 1 N \sum X_i^2\)</span></p>
+<p><span class="math display">\[
+\hat \sigma^2 + \hat \mu^2 = \dfrac 1 N \sum X_i^2
+\]</span></p>
+<p>why?</p>
+<p>remember that</p>
+<p><span class="math display">\[
+Var(X) = E[X^2]-E[X]^2
+\]</span></p>
+<p>the second part is where <span class="math inline">\(\mu^2\)</span> came from</p>
+<p>Key takeaway, in <span class="math inline">\(MM, GMM\)</span> we always replace</p>
+<p><span class="math display">\[
+\boxed{E[f(X)] \to \dfrac 1 N \sum f(x)}
+\]</span></p>
+<p>Till now we had 2 parameters <span class="math inline">\(\mu, \sigma^2\)</span> and 2 population conditions, we were able to get solutions</p>
+<p>If we have the a third population condition <span class="math inline">\(E[x^4] = 3 \sigma^4\)</span>, using analogy principle</p>
+<p><span class="math display">\[
+3\hat \sigma^4 = \dfrac 1 N \sum X_i^4
+\]</span></p>
+<p>Now we have 3 equations and 2 parameters, so we are stuck.</p>
+<p>Hence: we use <span class="math inline">\(GMM\)</span> <more on="" that="" later=""></more></p>
+<p>Benefits of <span class="math inline">\(MM\)</span>:</p>
+<ol type="1">
+<li>didn’t need likelihood or know the distribution</li>
+<li>Robust to distributional assumptions like heteroscedasticity</li>
+<li>Deals with non linearities in moment conditions</li>
+<li>consistent</li>
+</ol>
+</section>
+<section id="method-of-moments-and-generalized-method-of-moments-estimation-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="method-of-moments-and-generalized-method-of-moments-estimation-part-1">376. Method of moments and generalized method of moments estimation part 1</h3>
+<p>If we have a population in which data <span class="math inline">\(X\)</span> follows normal distribution</p>
+<p><span class="math display">\[
+X \sim N(\mu, \sigma^2)
+\]</span></p>
+<p>Since that we are dealing with normal, we automatically know some conditions</p>
+<p><span class="math display">\[
+E[X]=\mu, Var(X)= \sigma^2
+\]</span></p>
+<p>We will use <span class="math inline">\(MM\)</span> to get sample analogue</p>
+<p>For<span class="math inline">\(E[X]\)</span>, we use</p>
+<p><span class="math display">\[
+\dfrac 1 N \sum X_i = \hat \mu
+\]</span></p>
+<p>For <span class="math inline">\(Var(X)\)</span> which is <span class="math inline">\(E[X-\mu]^2\)</span> we get</p>
+<p><span class="math display">\[
+\dfrac 1 N \sum(X_i - \hat \mu)^2 = \hat \sigma^2
+\]</span></p>
+<p>Notice that we have 2 equations and 2 unknowns so we used method of moments</p>
+<p>We also know that skewness of normal is</p>
+<p><span class="math display">\[
+E[(X-\mu)^3]=0
+\]</span></p>
+<p>with sample analogue</p>
+<p><span class="math display">\[
+\dfrac 1 N \sum(X_i - \hat \mu)^3 =0
+\]</span></p>
+<p>and kurtosis <span class="math inline">\(E[(X-\mu)^4]= 3 \sigma^4\)</span> with sample analogue</p>
+<p><span class="math display">\[
+\dfrac 1 N \sum(X_i - \hat \mu)^4 = 3 \hat \sigma^4
+\]</span></p>
+<p>Now we have 4 equations and 2 unknown parameters, so we use <span class="math inline">\(GMM\)</span>, no exact solutions</p>
+<p>To use <span class="math inline">\(GMM\)</span>, we use cost function</p>
+<p><span class="math display">\[
+g_1 = \dfrac 1 N\sum X_i - \hat \mu
+\]</span></p>
+<p><span class="math display">\[
+g_2 = \dfrac 1 N\sum(X_i - \hat \mu)^2 - \hat \sigma^2
+\]</span></p>
+<p><span class="math display">\[
+g_3 = \dfrac 1 N \sum(X_i - \hat \mu)^3
+\]</span></p>
+<p><span class="math display">\[
+g_4 = \dfrac 1 N \sum(X_i - \hat \mu)^4 - 3 \hat \sigma^4
+\]</span></p>
+<p>then we choose the parameters that decrease cost function</p>
+<p><strong>Note:</strong></p>
+<p>picture has a typo &lt;forgot <span class="math inline">\(\dfrac 1 N\)</span>&gt;</p>
+</section>
+<section id="method-of-moments-and-generalized-method-of-moments-estimation-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="method-of-moments-and-generalized-method-of-moments-estimation-part-2">377. Method of moments and generalized method of moments estimation part 2</h3>
+<p>Back to our cost function, in am optimal world, they should all be equal to zero</p>
+<p>We need to find <span class="math inline">\(\hat \mu, \hat \sigma\)</span> that minimize the cost function, absolute value is hard to calculate so we use sum of squares</p>
+<p><span class="math display">\[
+\boxed{S = \sum g_i^2}
+\]</span></p>
+<p>Is there a better way?</p>
+<p>yes, some cost functions tend to deviate more than others, we need <strong>weights</strong></p>
+<p>The bigger the power, the greater the deviation, so we need weights to be proportional to inverse of variance of each cost function</p>
+<p><span class="math display">\[
+\boxed{S = \sum w_j g_j^2 \qquad w_j \propto \dfrac 1 {Var(g_j)}}
+\]</span></p>
+<p>Is this the best solution?</p>
+<p>no, some of the conditions are correlated with each other, we need to account for that</p>
+<p><span class="math display">\[
+\boxed{S= \hat g' \hat w \hat g \qquad \hat g= \begin{bmatrix}
+\hat g_1 \\
+\hat g_2 \\
+\hat g_3\\
+\hat g_4
+\end{bmatrix}}
+\]</span></p>
+<p>where <span class="math inline">\(\hat w\)</span> is the weighting matrix which contains off diagonal terms, we don’t know the covariance so <span class="math inline">\(GMM\)</span> has two steps</p>
+<ol type="1">
+<li>we estimate each cost function using the <span class="math inline">\(\sum g_i^2\)</span></li>
+<li>formulate <span class="math inline">\(\hat w\)</span> then calculate <span class="math inline">\(\sum \hat g' \hat w \hat g\)</span></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter07.html" class="pagination-link" aria-label="Asymptotic Behavior of Estimators">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter09.html" class="pagination-link" aria-label="Factor Analysis &amp; SEM">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

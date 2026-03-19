@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>WLS, IV, &amp; 2SLS – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter05.html" rel="next">
+<link href="./chapter03.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter04.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#weighted-least-squares-an-introduction" id="toc-weighted-least-squares-an-introduction" class="nav-link active" data-scroll-target="#weighted-least-squares-an-introduction">128. Weighted least squares: an introduction</a></li>
+  <li><a href="#weighted-least-squares-mathematical-introduction" id="toc-weighted-least-squares-mathematical-introduction" class="nav-link" data-scroll-target="#weighted-least-squares-mathematical-introduction">129. Weighted least squares: mathematical introduction</a></li>
+  <li><a href="#weighted-least-squares-an-example" id="toc-weighted-least-squares-an-example" class="nav-link" data-scroll-target="#weighted-least-squares-an-example">130. Weighted least squares: an example</a></li>
+  <li><a href="#weighted-least-squares---feasible-gls-part-1" id="toc-weighted-least-squares---feasible-gls-part-1" class="nav-link" data-scroll-target="#weighted-least-squares---feasible-gls-part-1">131. Weighted least squares - feasible GLS part 1</a></li>
+  <li><a href="#weighted-least-squares---feasible-gls-part-2" id="toc-weighted-least-squares---feasible-gls-part-2" class="nav-link" data-scroll-target="#weighted-least-squares---feasible-gls-part-2">132. Weighted least squares - feasible GLS part 2</a></li>
+  <li><a href="#how-to-address-the-issue-of-serial-correlation" id="toc-how-to-address-the-issue-of-serial-correlation" class="nav-link" data-scroll-target="#how-to-address-the-issue-of-serial-correlation">133. How to address the issue of serial correlation</a></li>
+  <li><a href="#gls-estimation-to-correct-for-serial-correlation" id="toc-gls-estimation-to-correct-for-serial-correlation" class="nav-link" data-scroll-target="#gls-estimation-to-correct-for-serial-correlation">134. GLS estimation to correct for serial correlation</a></li>
+  <li><a href="#fgls-for-serially-correlated-errors" id="toc-fgls-for-serially-correlated-errors" class="nav-link" data-scroll-target="#fgls-for-serially-correlated-errors">135. FGLS for serially correlated errors</a></li>
+  <li><a href="#instrumental-variables---an-introduction" id="toc-instrumental-variables---an-introduction" class="nav-link" data-scroll-target="#instrumental-variables---an-introduction">136. Instrumental variables - an introduction</a></li>
+  <li><a href="#endogeneity-and-instrumental-variables" id="toc-endogeneity-and-instrumental-variables" class="nav-link" data-scroll-target="#endogeneity-and-instrumental-variables">137. Endogeneity and instrumental variables</a></li>
+  <li><a href="#instrumental-variables-intuition---part-1" id="toc-instrumental-variables-intuition---part-1" class="nav-link" data-scroll-target="#instrumental-variables-intuition---part-1">138. Instrumental variables intuition - part 1</a></li>
+  <li><a href="#instrumental-variables-intuition---part-2" id="toc-instrumental-variables-intuition---part-2" class="nav-link" data-scroll-target="#instrumental-variables-intuition---part-2">139. Instrumental variables intuition - part 2</a></li>
+  <li><a href="#instrumental-variables-example---returns-to-schooling" id="toc-instrumental-variables-example---returns-to-schooling" class="nav-link" data-scroll-target="#instrumental-variables-example---returns-to-schooling">140. Instrumental variables example - returns to schooling</a></li>
+  <li><a href="#instrumental-variables-example---classroom-size" id="toc-instrumental-variables-example---classroom-size" class="nav-link" data-scroll-target="#instrumental-variables-example---classroom-size">141. Instrumental variables example - classroom size</a></li>
+  <li><a href="#instrumental-variables-example---colonial-origins-of-economic-development" id="toc-instrumental-variables-example---colonial-origins-of-economic-development" class="nav-link" data-scroll-target="#instrumental-variables-example---colonial-origins-of-economic-development">142. Instrumental variables example - colonial origins of economic development</a></li>
+  <li><a href="#instrumental-variables-as-two-stage-least-squares" id="toc-instrumental-variables-as-two-stage-least-squares" class="nav-link" data-scroll-target="#instrumental-variables-as-two-stage-least-squares">143. Instrumental variables as two stage least squares</a></li>
+  <li><a href="#proof-that-instrumental-variables-estimators-are-two-stage-least-squares" id="toc-proof-that-instrumental-variables-estimators-are-two-stage-least-squares" class="nav-link" data-scroll-target="#proof-that-instrumental-variables-estimators-are-two-stage-least-squares">144. Proof that instrumental variables estimators are two stage least squares</a></li>
+  <li><a href="#bad-instruments-part-1" id="toc-bad-instruments-part-1" class="nav-link" data-scroll-target="#bad-instruments-part-1">145. Bad instruments part 1</a></li>
+  <li><a href="#bad-instruments-part-2" id="toc-bad-instruments-part-2" class="nav-link" data-scroll-target="#bad-instruments-part-2">146. Bad instruments part 2</a></li>
+  <li><a href="#bias-of-instrumental-variables-part-1" id="toc-bias-of-instrumental-variables-part-1" class="nav-link" data-scroll-target="#bias-of-instrumental-variables-part-1">147. Bias of instrumental variables part 1</a></li>
+  <li><a href="#bias-of-instrumental-variables-part-2" id="toc-bias-of-instrumental-variables-part-2" class="nav-link" data-scroll-target="#bias-of-instrumental-variables-part-2">148. Bias of instrumental variables part 2</a></li>
+  <li><a href="#bias-of-instrumental-variables---intuition" id="toc-bias-of-instrumental-variables---intuition" class="nav-link" data-scroll-target="#bias-of-instrumental-variables---intuition">149. Bias of instrumental variables - intuition</a></li>
+  <li><a href="#consistency-of-instrumental-variables---intuition" id="toc-consistency-of-instrumental-variables---intuition" class="nav-link" data-scroll-target="#consistency-of-instrumental-variables---intuition">150. Consistency of instrumental variables - intuition</a></li>
+  <li><a href="#consistency---comparing-ordinary-least-squares-with-instrumental-variables" id="toc-consistency---comparing-ordinary-least-squares-with-instrumental-variables" class="nav-link" data-scroll-target="#consistency---comparing-ordinary-least-squares-with-instrumental-variables">151. Consistency - comparing ordinary least squares with instrumental variables</a></li>
+  <li><a href="#inference-using-instrumental-variables-estimators" id="toc-inference-using-instrumental-variables-estimators" class="nav-link" data-scroll-target="#inference-using-instrumental-variables-estimators">152. Inference using instrumental variables estimators</a></li>
+  <li><a href="#multiple-regressor-instrumental-variables-estimation" id="toc-multiple-regressor-instrumental-variables-estimation" class="nav-link" data-scroll-target="#multiple-regressor-instrumental-variables-estimation">153. Multiple regressor instrumental variables estimation</a></li>
+  <li><a href="#two-stage-least-square---introduction" id="toc-two-stage-least-square---introduction" class="nav-link" data-scroll-target="#two-stage-least-square---introduction">154. Two stage least square - introduction</a></li>
+  <li><a href="#two-stage-least-squares---example" id="toc-two-stage-least-squares---example" class="nav-link" data-scroll-target="#two-stage-least-squares---example">155. Two stage least squares - example</a></li>
+  <li><a href="#two-stage-least-squares--multiple-endogenous-explanatory-variables" id="toc-two-stage-least-squares--multiple-endogenous-explanatory-variables" class="nav-link" data-scroll-target="#two-stage-least-squares--multiple-endogenous-explanatory-variables">156. Two stage least squares- multiple endogenous explanatory variables</a></li>
+  <li><a href="#testing-for-endogeneity" id="toc-testing-for-endogeneity" class="nav-link" data-scroll-target="#testing-for-endogeneity">157. Testing for endogeneity</a></li>
+  <li><a href="#testing-for-endogenous-instruments---test-for-overidentifying-restriction" id="toc-testing-for-endogenous-instruments---test-for-overidentifying-restriction" class="nav-link" data-scroll-target="#testing-for-endogenous-instruments---test-for-overidentifying-restriction">158. Testing for endogenous instruments - test for overidentifying restriction</a></li>
+  <li><a href="#problem-set-4" id="toc-problem-set-4" class="nav-link" data-scroll-target="#problem-set-4"><strong><em>159. Problem set 4</em></strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">WLS, IV, &amp; 2SLS</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="weighted-least-squares-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-least-squares-an-introduction">128. Weighted least squares: an introduction</h3>
+<p>Finally a new <span class="math inline">\(LS\)</span></p>
+<p><span class="math display">\[
+y_i = \alpha + \beta x_i+ \varepsilon_i\\
+var(\varepsilon|x_i) \neq \sigma^2\\
+cov(\varepsilon_i, \varepsilon_j)\neq 0
+\]</span></p>
+<p>So we have heteroscedasticity and serial correlation. We will focus on heteroscedasticity here.</p>
+<p>In undergraduate courses, we take <span class="math inline">\(WLS\)</span> from <span class="math inline">\(GLS\)</span> only to deal with heteroscedasticity.</p>
+<p>Geometrically:</p>
+<p>draw <span class="math inline">\(y_i,x_i\)</span> and notice that error terms grows, split it into two regions.</p>
+<p>variance of error in first region is smaller than variance of error in region two.</p>
+<p>SO we can call the two regions as <strong>low variance, high variance</strong></p>
+<p>If we add a new outlier point in the low variance region, the fitted line in region with low variance will shift the fitted line by a lot</p>
+<p>while in the second region with high version, we already have outliers, so a new outlier will not shift the line by much</p>
+<p>In other words, the points in first region are more influential (have higher <strong>weight</strong>) unlike OLS that treats all the points the same (equal weight)</p>
+</section>
+<section id="weighted-least-squares-mathematical-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-least-squares-mathematical-introduction">129. Weighted least squares: mathematical introduction</h3>
+<p>Here is the equation with heteroscedasticity</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta x_i+ \varepsilon_i\\
+var(\varepsilon|x_i) = \sigma^2 x_i
+\]</span></p>
+<p>Divide the equation by <span class="math inline">\(x_i^{1/2}\)</span> <more on="" why="" later=""></more></p>
+<p><span class="math display">\[
+\dfrac{y_i}{x_i^{1/2}} = \dfrac{\alpha}{x_i^{1/2}} + \beta_1 x_i^{1/2} + \dfrac{\varepsilon_i}{x_i^{1/2}}
+\]</span></p>
+<p>Then remember that <span class="math inline">\(var(ay)= a^2 var(y)\)</span>, the <span class="math inline">\(x_i^{1/2}\)</span>will be squared when its out of the variance</p>
+<p><span class="math display">\[
+\begin{align*}
+var(\dfrac{\varepsilon_i}{x_i^{1/2}}|x_i) &amp;= \dfrac{1}{x_i}var(\varepsilon_i|x_i)\\
+&amp;= \dfrac{1}{x_i}\sigma^2x_i = \sigma^2
+\end{align*}
+\]</span></p>
+<p>since Gauss Markov assumptions are now met, it became BLUE. The thing we did to turn the variance into homoscedastic is called <span class="math inline">\(WLS\)</span></p>
+<p>Notice how I created weights by dividing the equation by <span class="math inline">\(x_i\)</span>, in this example, small x means high weight</p>
+</section>
+<section id="weighted-least-squares-an-example" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-least-squares-an-example">130. Weighted least squares: an example</h3>
+<p>Relationship between wage and years of education, as years of education increase, variability increase cuz choices of employment increase.</p>
+<p>SO its a positive relationship with increasing error variance.</p>
+<p>Using the sample we have, we try to estimate <span class="math inline">\(\alpha, \beta\)</span>.</p>
+<p>If we have an outlier in the high variance region, OLS will treat all deviations equally and try to minimize sum of squared regression so line shifts more to the outlier</p>
+<p>WLS will focus on the points in the lower region so it will not shift to the outlier</p>
+</section>
+<section id="weighted-least-squares---feasible-gls-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-least-squares---feasible-gls-part-1">131. Weighted least squares - feasible GLS part 1</h3>
+<p>In practice, we do <span class="math inline">\(FGLS\)</span> . The population variance is</p>
+<p><span class="math display">\[
+var(u_i|x_i)= \sigma^2x_i
+\]</span></p>
+<p>but we don’t know the population variance , we only have a sample, so we rewrite it first then estimate it</p>
+<p><span class="math display">\[
+var(u_i|x_i)= \sigma^2 exp(\delta_0+\delta_1x_1+\dots+\delta_px_p)
+\]</span></p>
+<p>rewrite it cuz in the first form, <span class="math inline">\(x\)</span> can be negative, hence variance can appear negative too. But after rewriting it, there is no way to get a negative variance</p>
+<p>To estimate the variance:</p>
+<ol type="1">
+<li>get regression</li>
+</ol>
+<p><span class="math display">\[
+y_i = \hat \alpha + \hat \beta x_i +\dots +\hat \beta_px_p +\hat u_i
+\]</span></p>
+<ol type="1">
+<li>Run auxiliary regression on <span class="math inline">\(\log \hat u^2\)</span></li>
+</ol>
+<p><span class="math display">\[
+\log \hat u^2 = \delta_0+\delta_1x_1+\dots+\delta x_px_p
+\]</span></p>
+<p>why <span class="math inline">\(\hat u\)</span> squared?</p>
+<p><span class="math display">\[
+var(u_i|x_i) = E[u_i^2|x_i]-\cancel{[E(u_i|x_i]^2}
+\]</span></p>
+<p>the second term is zero under assumption of zero conditional mean, so only first term remains which has the error term squared</p>
+<p>We take the log to cancel the exponential that we introduced in variance rewriting</p>
+<ol type="1">
+<li>use the fitted values to estimate log of conditional variance</li>
+</ol>
+<p><span class="math display">\[
+\hat g_i = \hat \delta_0 + \hat \delta_1x_1 +\dots +\hat \delta_px_p
+\]</span></p>
+</section>
+<section id="weighted-least-squares---feasible-gls-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-least-squares---feasible-gls-part-2">132. Weighted least squares - feasible GLS part 2</h3>
+<p>continuing with last examples</p>
+<ol type="1">
+<li>take the exponent to cancel the log</li>
+</ol>
+<p><span class="math display">\[
+\hat h = \exp(\hat g) = \exp(\log \hat u^2_i) = \hat u^2_i
+\]</span></p>
+<p>we needed log to be able to estimate using maximum likelihood</p>
+<ol type="1">
+<li>divide the regression equation by <span class="math inline">\(\hat h\)</span></li>
+</ol>
+<p><span class="math display">\[
+\dfrac{y_i}{\sqrt{\hat h_i}}
+\]</span></p>
+<p>since we estimate, <span class="math inline">\(FGLS\)</span> is biased but its consistent and more efficient than <span class="math inline">\(OLS\)</span></p>
+</section>
+<section id="how-to-address-the-issue-of-serial-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-address-the-issue-of-serial-correlation">133. How to address the issue of serial correlation</h3>
+<p>If we have serial correlation</p>
+<ol type="1">
+<li>The default standard errors will be wrong so all the inference is wrong. To solve it, we use <strong>Newey west standard errors</strong></li>
+<li>OLS are no longer BLUE. To solve it, we use <span class="math inline">\(FGLS\)</span></li>
+</ol>
+<p>Solution 2 is better than 1 cuz it solves the problem not the effect of the model</p>
+<p><span class="math inline">\(GLS\)</span> deals with serial correlation and heteroscedasticity</p>
+<p><span class="math inline">\(WLS\)</span> deals with heteroscedasticity only</p>
+</section>
+<section id="gls-estimation-to-correct-for-serial-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="gls-estimation-to-correct-for-serial-correlation">134. GLS estimation to correct for serial correlation</h3>
+<p>If we have <strong>runs of positive and negative,</strong> we worry about having serial correlation.</p>
+<p>We will assume that the error term follows <span class="math inline">\(AR(1)\)</span> process</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t+u_t\\
+u_t = \rho u_{t-1} + \varepsilon_t\\
+\varepsilon_t\sim iid(0, \sigma^2)
+\]</span></p>
+<p>Solution: consider <span class="math inline">\(y\)</span> from previous time period</p>
+<p><span class="math display">\[
+y_{t-1} = \alpha + \beta x_{t-1}+u_{t-1}
+\]</span></p>
+<p>subtract <span class="math inline">\(\rho y_{t-1}\)</span> from <span class="math inline">\(y_t\)</span></p>
+<p><span class="math display">\[
+y_t - \rho y_{t-1} = \alpha (1-\rho) + \beta(x_t - \rho x_{t-1}) + \cancel{u_t - \rho u_{t-1}} + \varepsilon_t
+\]</span></p>
+<p>We replaced <span class="math inline">\(u_t - \rho u_{t-1}\)</span> by <span class="math inline">\(\varepsilon_t\)</span> which is by definition <span class="math inline">\(iid(0,\sigma^2)\)</span> So OLS becomes BLUE.</p>
+<p>Notice that we had to throw away one observation and we assumed the population variance</p>
+</section>
+<section id="fgls-for-serially-correlated-errors" class="level3">
+<h3 class="anchored" data-anchor-id="fgls-for-serially-correlated-errors">135. FGLS for serially correlated errors</h3>
+<p>In practice, we don’t know <span class="math inline">\(\rho\)</span> so we have to estimate it</p>
+<ol type="1">
+<li>fit regression</li>
+</ol>
+<p><span class="math display">\[
+y_t = \hat \alpha + \hat \beta x_t + \hat u_t
+\]</span></p>
+<ol type="1">
+<li>use residuals to estimate <span class="math inline">\(\rho\)</span></li>
+</ol>
+<p><span class="math display">\[
+\hat u_t = \hat\rho \hat u_{t-1}+ \hat \varepsilon_t
+\]</span></p>
+<p>to estimate <span class="math inline">\(\rho\)</span> we have two methods:</p>
+<ol type="1">
+<li><strong>Cochrane Orcatt</strong></li>
+<li><strong>Prais-Winsted</strong></li>
+</ol>
+<p>both are the same asymptotically</p>
+<ol type="1">
+<li>subtract</li>
+</ol>
+<p><span class="math display">\[
+y_t - \hat \rho y_{t-1} = \alpha (1-\hat \rho) + \beta(x_t -\hat  \rho x_{t-1}) +  \hat \varepsilon_t
+\]</span></p>
+<p>This <span class="math inline">\(FGLS\)</span> is</p>
+<ol type="1">
+<li>biased cuz we estimate <span class="math inline">\(\rho\)</span></li>
+<li>More efficient than OLS</li>
+<li>if we have <strong>strict endogeneity</strong>, its consistent</li>
+</ol>
+<p>Notice that strict endogeneity here means</p>
+<p><span class="math display">\[
+\boxed{E[u_t|x_t,x_{t-1},x_{t+1}] = 0}
+\]</span></p>
+<p>which is different than cross sectional endogeneity</p>
+</section>
+<section id="instrumental-variables---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables---an-introduction">136. Instrumental variables - an introduction</h3>
+<p><span class="math display">\[
+Life~Income = \alpha + \beta military ~particpation+\dots+u_i
+\]</span></p>
+<p>we expect military participation to have negative effect. The problem is that military participation is correlated with many stuff happening in the error term (prefer office? academia? attitude towards money?)</p>
+<p>This causes the OLS estimates to be overestimated</p>
+<p><strong>Joshua Angrist 1990</strong></p>
+<p>Vietnam war had soldiers split by birthday (1 to 366) then random numbers were chosen to be eligible for war <span class="math inline">\(z_i\)</span></p>
+<p>And we got four cases</p>
+<ol type="1">
+<li>Most of the people eligible participated in war</li>
+<li>most of not eligible did not participate</li>
+<li>some not eligible volunteered to participate</li>
+<li>some eligible did not participate for reasons like health issues</li>
+</ol>
+<p>Hence, there is a positive correlation between being eligible and participating in war</p>
+<p>But to capture the causal effect, think of three individuals: <span class="math inline">\(x,y,k\)</span></p>
+<p><span class="math inline">\(k\)</span> did not participate in military, doesn’t matter if they are eligible or not</p>
+<p><span class="math inline">\(x\)</span> participated in military but wasn’t eligible</p>
+<p><span class="math inline">\(y\)</span> participated in military and was eligible</p>
+<p>Then take average life income for those who participated in war <span class="math inline">\(x,y\)</span>, and those who didn’t participate <span class="math inline">\(k\)</span>. But this comparison is not fair cuz <span class="math inline">\(x\)</span> is expected to have lower life income anyway,</p>
+<p>so if we remove <span class="math inline">\(x\)</span>, we will be comparing apples with apples with only one difference: participated in war or not. But this is on individual level</p>
+<p>the eligibility status <span class="math inline">\(z_i\)</span> is correlated with <span class="math inline">\(military \,participation\)</span> and not correlated with errors.</p>
+<p>Result:</p>
+<p>The difference between the two groups in 1990 was <span class="math inline">\(-\$436\)</span> and probability of participation in war if eligible <span class="math inline">\(z_i=1\)</span> is <span class="math inline">\(16\%\)</span>. So the to get the effect we divide</p>
+<p><span class="math display">\[
+\beta_{IV} = \dfrac{-436}{0.16} = 2,741
+\]</span></p>
+<p>Another way of thinking about it</p>
+<p>Compare the people who participated despite being eligible or not. Then compare them again after war.</p>
+</section>
+<section id="endogeneity-and-instrumental-variables" class="level3">
+<h3 class="anchored" data-anchor-id="endogeneity-and-instrumental-variables">137. Endogeneity and instrumental variables</h3>
+<p>One of the assumptions is zero conditional mean</p>
+<p><span class="math display">\[
+E[\varepsilon|x]=0
+\]</span></p>
+<p>and this assumption fails when we have</p>
+<ol type="1">
+<li>omitted variables</li>
+<li>measurement error in independent variables</li>
+<li>reverse causality (selection bias)</li>
+</ol>
+<p>This causes <span class="math inline">\(\hat\beta\)</span> to be biased and inconsistent</p>
+<p>Why?</p>
+<p>cuz we focus on effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>, but if the assumption is not met, <span class="math inline">\(x\)</span> and error are correlated</p>
+<p><span class="math display">\[
+x \uparrow, \varepsilon \uparrow, y \uparrow
+\]</span></p>
+<p>we don’t know if <span class="math inline">\(y\)</span> increased due to error or due to <span class="math inline">\(x\)</span>?</p>
+</section>
+<section id="instrumental-variables-intuition---part-1" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-intuition---part-1">138. Instrumental variables intuition - part 1</h3>
+<p>If the model</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta x_i + \varepsilon_i
+\]</span></p>
+<p>has an omitted variable, model has endogeneity, zero conditional mean assumption is not met</p>
+<p><span class="math display">\[
+\hat \beta = \dfrac{\Delta y}{\Delta x} = \dfrac{\Delta y_x + \Delta y_\varepsilon }{\Delta x} = \beta + \dfrac{\Delta y_\varepsilon}{\Delta x}
+\]</span></p>
+<p>Meaning <span class="math inline">\(\beta\)</span> consists of change coming from <span class="math inline">\(x\)</span> and change coming from the error term</p>
+<p>What to do?</p>
+<p>Get a new variable <span class="math inline">\(z_i\)</span> that affects <span class="math inline">\(x\)</span> only <not with="" error=""> which in turn will affect <span class="math inline">\(y\)</span></not></p>
+<p>Example:</p>
+<p>if <span class="math inline">\(z\)</span> increases by 1, <span class="math inline">\(x\)</span> increases by 0.5, <span class="math inline">\(y\)</span> increases by 2</p>
+<p>so</p>
+<p><span class="math display">\[
+\hat \beta_{IV} = \dfrac{\Delta y}{\Delta x} =  \dfrac{2}{0.5} = 4
+\]</span></p>
+<p>Remember, we care about relation between <span class="math inline">\(x,y\)</span></p>
+<p>In other words</p>
+<p><span class="math display">\[
+\begin{align*}
+cov(z,y) &amp;= cov(z, \alpha + \beta x_i + \varepsilon)\\
+&amp;= cov(z, \alpha) + \beta cov(z,x)+ cov(z, \varepsilon)\\
+&amp;= cov(z,x)
+\end{align*}
+\]</span></p>
+<p><span class="math inline">\(z\)</span> is correlated with <span class="math inline">\(x\)</span> only</p>
+</section>
+<section id="instrumental-variables-intuition---part-2" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-intuition---part-2">139. Instrumental variables intuition - part 2</h3>
+<p>We reached that</p>
+<p><span class="math display">\[
+\boxed{cov(z,y) = \beta cov(z,x)}
+\]</span></p>
+<p>Solving for <span class="math inline">\(\beta\)</span></p>
+<p><span class="math display">\[
+\boxed{\hat \beta_{IV} = \dfrac{cov(z,y)}{cov(z,x)}}
+\]</span></p>
+<p>We have assumptions that</p>
+<ol type="1">
+<li><span class="math inline">\(cov(z,\varepsilon) = 0\)</span></li>
+<li><span class="math inline">\(cov(z,x)\neq 0\)</span> cuz if its value is small, the overall value will blow up</li>
+</ol>
+<p>Compared with OLS</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>OLS</th>
+<th>IV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>unbiased</td>
+<td><span class="math inline">\(\times\)</span></td>
+<td><span class="math inline">\(\times\)</span></td>
+</tr>
+<tr class="even">
+<td>consistency</td>
+<td><span class="math inline">\(\times\)</span></td>
+<td><span class="math inline">\(\checkmark\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="instrumental-variables-example---returns-to-schooling" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-example---returns-to-schooling">140. Instrumental variables example - returns to schooling</h3>
+<p><span class="math display">\[
+\log(wage) = \alpha + \beta~ education + \gamma ~ability + \varepsilon
+\]</span></p>
+<p>Problem is that we can’t measure ability, ability and the error are in another error called <span class="math inline">\(v_i\)</span> so <span class="math inline">\(\beta\)</span> is upwardly biased</p>
+<p><span class="math display">\[
+\log(wage) = \alpha + \beta~ education + v_i
+\]</span></p>
+<p>We want <span class="math inline">\(z\)</span> to affect education but not ability so we can measure the true effect of education on wage</p>
+<p><strong>Angrist + krueger (1990)</strong></p>
+<p>The instrument they used is the <span class="math inline">\(quarter~of~birth\)</span> as an instrument <span class="math inline">\(z\)</span></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Q</th>
+<th>Age starting school</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4Q</td>
+<td><span class="math inline">\(5 \dfrac3 4\)</span></td>
+</tr>
+<tr class="even">
+<td>1Q</td>
+<td><span class="math inline">\(6\dfrac 3 4\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>There is a minimum age for which individuals can leave school in the specified country. So people who started school early spent more time on education, so its correlated with education, but not ability.</p>
+<p>Plot quarter graphically against number of years of education for people aged 30 to 39</p>
+<p>Notice that 4Q have better wage than those with 1Q &lt;difference is 0.1&gt;</p>
+<p>Then plot quarter against log wage, same pattern of ups and downs. Difference is 0.01</p>
+<p><span class="math display">\[
+\hat \beta_{IV} \sim \dfrac{0.01}{0.1}\sim 0.1
+\]</span></p>
+<p>which was close to <span class="math inline">\(\hat \beta_{ OLS}\)</span>, Meaning education is not really correlated with ability or ability does not really affect wage (based on instrumental variable assumptions)</p>
+</section>
+<section id="instrumental-variables-example---classroom-size" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-example---classroom-size">141. Instrumental variables example - classroom size</h3>
+<p><span class="math display">\[
+\text{test~score} = \alpha + \beta \text{ class size}+ \varepsilon
+\]</span></p>
+<p>We expect that as class size decreases, teacher focus on students more so test score increase <span class="math inline">\((\beta&lt;0)\)</span></p>
+<p>But there are other omitted factors like ability, family background.</p>
+<p>We need an <span class="math inline">\(IV\)</span> that affects class size only</p>
+<p><strong>Angrist-Lawy (1999)</strong> made use of <strong>Maimonides rule</strong> in that specific country</p>
+<p>This is a rule that governs class size</p>
+$$ cs = {
+<span class="math display">\[\begin{array}{ll}
+N&amp;, N \le 40\\
+n/2&amp;, N&gt;40
+\end{array}\]</span>
+<p>. $$</p>
+<p>So If N = 40, class size = 40</p>
+<p>If N = 41, class size = 20, 21</p>
+<p>This is correlated with class size and not with error</p>
+<p>Results showed that <span class="math inline">\(\hat \beta_{OLS}\ge 0\)</span>, <span class="math inline">\(\hat \beta_{IV}&lt;0\)</span> indicating that OLS had selection bias</p>
+</section>
+<section id="instrumental-variables-example---colonial-origins-of-economic-development" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-example---colonial-origins-of-economic-development">142. Instrumental variables example - colonial origins of economic development</h3>
+<p><span class="math display">\[
+\log(GDP) = \alpha + \beta \text{ property right}+\varepsilon
+\]</span></p>
+<p>But there is a reverse causal effect, as we have more GDP, we afford more property rights, we also have omitted variables.</p>
+<p><strong>Johnson, Robinson (2001)</strong></p>
+<p>Think of East and west Germany, North and south Korea</p>
+<p>Settlement strategy the colonist decides early institution</p>
+<p>Strategy can be</p>
+<ol type="1">
+<li>extractive (extract resources) <think of="" africa=""></think></li>
+<li>Neo-colonialist (make the country their own) <us></us></li>
+</ol>
+<p>and early institution lead to the current institution which caused current GDP</p>
+<p>The researcher used mortality rate for an instrument of strategy &lt;if you have malaria, death will increase, will focus on extractive resources&gt;</p>
+<p><span class="math display">\[
+\text{mortality rate} \to \text{strategy}\to \text{early instituion} \to \text{current instituions &lt;PR&gt;} \to GDP
+\]</span></p>
+<p>Mortality rate affected property rights only and nothing else.</p>
+</section>
+<section id="instrumental-variables-as-two-stage-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="instrumental-variables-as-two-stage-least-squares">143. Instrumental variables as two stage least squares</h3>
+<p>We know that military participation is a dummy variable and we are interested in wage</p>
+<p><span class="math display">\[
+\text{wage} = \alpha + \beta +\text{military participation} + \varepsilon
+\]</span></p>
+<p>and we learnt that there is a correlation between mp and error term. So we came up with an instrument <span class="math inline">\(D_I\)</span> and derived its form</p>
+<p><span class="math display">\[
+\hat \beta_{IV} = \dfrac{cov(wage, D_i)}{cov(mp,D_I)}
+\]</span></p>
+<p>write in the sample form (cuz the above covariance is for population)</p>
+<p><span class="math display">\[
+\dfrac{\sum(wage_i-\bar{wage})(D_i - \bar D)}{\sum (MP- \bar{MP})(D_i - \bar D)}
+\]</span></p>
+<p>We can interpret <span class="math inline">\(IV\)</span> as <span class="math inline">\(2SLS\)</span></p>
+<p>meaning we have two stages of least squares</p>
+<ol type="1">
+<li><span class="math inline">\(MP_i = \delta_0 + \delta_1 D_i + v_i\)</span></li>
+</ol>
+<p>Then we use the estimated MP to get wage</p>
+<ol type="1">
+<li><span class="math inline">\(wage = \alpha + \beta \hat{MP}\)</span></li>
+</ol>
+<p>When number of instruments is 1, its 2SLS</p>
+<p>Notice that we have to do it manually to get first stage (software will provide second stage only)</p>
+<p>Also make sure that assumptions are met</p>
+</section>
+<section id="proof-that-instrumental-variables-estimators-are-two-stage-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="proof-that-instrumental-variables-estimators-are-two-stage-least-squares">144. Proof that instrumental variables estimators are two stage least squares</h3>
+<p>We have the model</p>
+<p><span class="math display">\[
+y = \alpha + \beta x + \varepsilon
+\]</span></p>
+<p>where we have endogeneity so use instrumental variable</p>
+<p><span class="math display">\[
+\hat \beta_{IV} = \dfrac{cov(z,y)}{cov(z,x)}
+\]</span></p>
+<p>we do it on two stages</p>
+<p><span class="math display">\[
+x = \delta_0+\delta_1z + u
+\]</span></p>
+<p>and since that its just OLS till now, we get that</p>
+<p><span class="math display">\[
+\boxed{\hat \delta_1 = \dfrac{cov(z,x)}{var(z)}}
+\]</span></p>
+<p>Then we use it to estimate <span class="math inline">\(y\)</span></p>
+<p><span class="math display">\[
+y = \alpha + \beta \hat x + \varepsilon
+\]</span></p>
+<p>which has <span class="math inline">\(\hat \beta\)</span></p>
+<p><span class="math display">\[
+\hat \beta_{2sls} = \dfrac{cov(y, \hat x)}{var(\hat x)}
+\]</span></p>
+<p>which can be rewritten as &lt;using form of <span class="math inline">\(\delta_1\)</span> from above&gt;</p>
+<p><span class="math display">\[
+\begin{align*}
+\hat \beta_{2sls} &amp;=
+\dfrac{cov(y, \hat \delta_0 + \hat \delta_1 z)}{var(\hat \delta_0 + \hat \delta_1,z)}\\
+&amp;= \dfrac{\hat \delta_1 cov(y,z)}{\hat \delta_1^2 var(z)}\\
+&amp;= \dfrac{cov(y,z)}{\hat \delta var(z)}\\
+&amp;= \dfrac{var(z)}{var(z)}\times \dfrac{cov(y,z)}{cov(x,z)}\\
+&amp;= \hat \beta_{IV}
+\end{align*}
+\]</span></p>
+<p>Knowing that <span class="math inline">\(\hat \delta_0\)</span> is a constant so has no covariance nor variance</p>
+</section>
+<section id="bad-instruments-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="bad-instruments-part-1">145. Bad instruments part 1</h3>
+<p><span class="math display">\[
+wage = \alpha + \beta \text{educ} + u_i
+\]</span></p>
+<p><span class="math inline">\(educ\)</span> is correlated with many variables in the error term, so we use an instrument <span class="math inline">\(\text{parental education}\)</span> and call it <span class="math inline">\(peduc\)</span></p>
+<p>The two conditions we need:</p>
+<ol type="1">
+<li><span class="math inline">\(cov(peduc, u_i) = 0\)</span></li>
+<li><span class="math inline">\(cov(peduc, educ_i)\neq 0\)</span></li>
+</ol>
+<p>We expect a positive correlation between education and parental education so second assumption is satisfied</p>
+<p>For the second assumption:</p>
+<p>we assume positive relation between parental education and parental income</p>
+<p>parental income also affects the wage in a positive way, hence <strong>its contained in the error term</strong>. Meaning first assumption is not met, <span class="math inline">\(\hat \beta_{IV}\)</span> is inconsistent.</p>
+</section>
+<section id="bad-instruments-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="bad-instruments-part-2">146. Bad instruments part 2</h3>
+<p><span class="math display">\[
+score = \alpha + \beta \,\text{class attendance} + u_i
+\]</span></p>
+<p>we expect positive correlation between attendance and score.</p>
+<p>attendance is correlated with interest and ability that are contained in error term</p>
+<p>We choose an instrument <span class="math inline">\(pregnant\)</span> and do the two assumptions</p>
+<ol type="1">
+<li><span class="math inline">\(cov(pregnant, u_i)= 0\)</span></li>
+<li><span class="math inline">\(cov(pregnant, CA) \neq 0\)</span></li>
+</ol>
+<p>We expect negative correlation between pregnancy and attendance so second assumption is ok</p>
+<p>for first assumption, there is negative correlation between ability/ interest and pregnancy, so first assumption is not met</p>
+</section>
+<section id="bias-of-instrumental-variables-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="bias-of-instrumental-variables-part-1">147. Bias of instrumental variables part 1</h3>
+<p>We have two problems: bad instruments, weak instruments</p>
+<p><strong>Bad instruments is worse than weak instruments</strong></p>
+<p>For <strong>Bad instruments</strong>:</p>
+<p>if <span class="math inline">\(cov(z, u_i) \neq 0\)</span>, IV is inconsistent. If the covariance <span class="math inline">\(\sigma_{z\varepsilon} \uparrow\)</span>, Then <span class="math inline">\(\hat \beta_{ls}\)</span> has bigger variance than <span class="math inline">\(\hat \beta_{ols}\)</span></p>
+<p><span class="math display">\[
+\boxed{E[|\hat \beta_{IV} - \beta|]&gt; E[|\hat \beta_{LS} - \beta|]}
+\]</span></p>
+<p>For <strong>weak instruments</strong></p>
+<p><span class="math inline">\(cov(z, \varepsilon) = 0\)</span> but <span class="math inline">\(cov(z,x) \sim 0\)</span> (its very small), the weak instrument is biased</p>
+<p>The bias is <no proof=""></no></p>
+<p><span class="math display">\[
+E[\hat \beta_{IV} - \beta] \approx \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}. \dfrac{1}{1+F}\\
+= \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+= E[\hat \beta_{LS} - \beta]
+\]</span></p>
+<p>Bias of weak instrument is same as the bias of OLS</p>
+</section>
+<section id="bias-of-instrumental-variables-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="bias-of-instrumental-variables-part-2">148. Bias of instrumental variables part 2</h3>
+<p><span class="math display">\[
+E[\hat \beta_{IV} - \beta] \approx \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}. \dfrac{1}{1+F}\\
+= \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+= E[\hat \beta_{LS} - \beta]
+\]</span></p>
+<p>we did not state why cuz its a little bit hard hard and out of scope.</p>
+<p>But if <span class="math inline">\(F\)</span> is very small the term will disappear and be same as bias from OLS</p>
+<p>We will focus on the OLS part</p>
+<p>$$ <span class="math display">\[\begin{align*}
+E[\hat \beta_{LS} - \beta] &amp;= E\left[  \dfrac{1/N \sum(x_i - \bar x)\varepsilon_i}{1/N S^2_{xx}} \right]\\
+&amp;= \frac{\sigma_{\varepsilon x}}{\sigma^2_x}\\
+
+&amp;= \frac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+\end{align*}\]</span> $$</p>
+<p>if <span class="math inline">\(\delta = 0\)</span> all the variance in <span class="math inline">\(x\)</span> is coming from <span class="math inline">\(u\)</span></p>
+<p><span class="math display">\[
+y = \alpha + \beta x + \varepsilon\\
+x = \delta z + u
+\]</span></p>
+<p>This is why we replace <span class="math inline">\(\sigma_{xu}\)</span> with <span class="math inline">\(\sigma^2_{u}\)</span></p>
+</section>
+<section id="bias-of-instrumental-variables---intuition" class="level3">
+<h3 class="anchored" data-anchor-id="bias-of-instrumental-variables---intuition">149. Bias of instrumental variables - intuition</h3>
+<p>We learnt that even if assumptions are met, its still biased but consistent</p>
+<p><span class="math display">\[
+y = \alpha + \beta x + \varepsilon\\
+x = \delta z + u
+\]</span></p>
+<p>If we know population <span class="math inline">\(\delta\)</span> we can get an estimate for <span class="math inline">\(x\)</span> without errors</p>
+<p><span class="math display">\[
+\tilde x = \delta z
+\]</span></p>
+<p>and use it to estimate <span class="math inline">\(y\)</span></p>
+<p><span class="math display">\[
+y = \alpha + \beta \tilde x + \varepsilon\\
+\]</span></p>
+<p>Which has no correlation between <span class="math inline">\(\tilde x, \varepsilon\)</span>.</p>
+<p>In reality we don’t know population <span class="math inline">\(\delta\)</span> so we estimate it</p>
+<p><span class="math display">\[
+\hat x = \hat\delta z \neq \tilde x
+\]</span></p>
+<p>They are not equal cuz there is sampling error from <span class="math inline">\(u\)</span> and <span class="math inline">\(z\)</span></p>
+<p><span class="math display">\[
+\hat x = f(z,u)
+\]</span></p>
+<p>So when we run second stage regression, there is correlation between <span class="math inline">\(\hat x, \varepsilon\)</span> cuz</p>
+<p><span class="math display">\[
+cov(\varepsilon, u) \neq 0
+\]</span></p>
+<p>but the dependence of <span class="math inline">\(\hat x\)</span> on <span class="math inline">\(u\)</span> decreases as sample size increases so we get asymptotic unbiasedness</p>
+</section>
+<section id="consistency-of-instrumental-variables---intuition" class="level3">
+<h3 class="anchored" data-anchor-id="consistency-of-instrumental-variables---intuition">150. Consistency of instrumental variables - intuition</h3>
+<p>We know the function for instrumental variable <span class="math inline">\(\beta\)</span></p>
+<p><span class="math display">\[
+\boxed{\hat B_{IV} = \dfrac{S_{zy}}{S_{zx}}}
+\]</span></p>
+<p>what happens as <span class="math inline">\(N \to \infty\)</span>?</p>
+<p><span class="math display">\[
+\begin{align*}
+\plim \beta_{IV} &amp;= \dfrac{cov(z,y)}{cov(z,x)}\\
+&amp;= \dfrac{cov(z, \alpha + \beta x + \varepsilon)}{cov(z,x)}\\
+&amp;= \beta + \dfrac{cov(z, \varepsilon)}{cov(z,x)}
+\end{align*}
+\]</span></p>
+<p>Which is consistent (asymptotically unbiased) if we assume that <span class="math inline">\(cov(z, \varepsilon) = 0\)</span></p>
+<p>but if we have a weak or bad instrument</p>
+<p><span class="math display">\[
+cov(z, \varepsilon) = |a|&gt;0\\
+cov(z, x) = |b|&gt;0
+\]</span></p>
+<p>even if <span class="math inline">\(a,b\)</span> are small , then asymptotically it will be</p>
+<p><span class="math display">\[
+\boxed{\beta_{IV}= \beta + \dfrac a b}
+\]</span></p>
+</section>
+<section id="consistency---comparing-ordinary-least-squares-with-instrumental-variables" class="level3">
+<h3 class="anchored" data-anchor-id="consistency---comparing-ordinary-least-squares-with-instrumental-variables">151. Consistency - comparing ordinary least squares with instrumental variables</h3>
+<p>If we have endogeneity:</p>
+<p>for OLS</p>
+<p><span class="math display">\[
+\begin{align*}
+\plim \hat \beta_{LS} &amp;= \dfrac{cov(x,y)}{\sigma^2_x}\\
+&amp;= \beta + \dfrac{cov(x, \varepsilon)}{\sigma^2_x}\\
+&amp;= \beta + \dfrac{\sigma_\varepsilon}{\sigma_x} corr(x, \varepsilon)
+\end{align*}
+\]</span></p>
+<p>Remember that correlation is</p>
+<p><span class="math display">\[
+\boxed{corr(x, \varepsilon) = \dfrac{cov(z,y)}{\sigma_x \sigma_\varepsilon}}
+\]</span></p>
+<p>as for <span class="math inline">\(\hat \beta_{IV}\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\plim \beta_{IV} &amp;= \dfrac{cov(z,y)}{cov(z,x)}\\
+&amp;= \dfrac{cov(z, \alpha + \beta x + \varepsilon)}{cov(z,x)}\\
+&amp;= \beta + \dfrac{cov(z, \varepsilon)}{cov(z,x)}\\
+&amp;= \beta + \dfrac{corr(z,\varepsilon)}{corr(z,x)} \dfrac{\sigma_{\varepsilon}}{\sigma_x}
+\end{align*}
+\]</span></p>
+<p>When to use the <span class="math inline">\(\hat \beta _{IV}\)</span>?</p>
+<p><span class="math display">\[
+\boxed{\dfrac{corr(z, \varepsilon)}{corr(z, x)} &lt; corr(x, \varepsilon)}
+\]</span></p>
+<p>which says:</p>
+<p>how bad is the instrument? &lt;<span class="math inline">\(z, \varepsilon\)</span>&gt;</p>
+<p>how weak is the instrument? &lt;<span class="math inline">\(z, x\)</span>&gt;</p>
+<p>how bad is the problem of endogeneity? &lt;<span class="math inline">\(x, \varepsilon\)</span>&gt;</p>
+</section>
+<section id="inference-using-instrumental-variables-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="inference-using-instrumental-variables-estimators">152. Inference using instrumental variables estimators</h3>
+<p>If assumptions of <span class="math inline">\(\hat \beta_{IV}\)</span> are met, then its approximately normal</p>
+<p><span class="math display">\[
+\boxed{\hat \beta_{IV} \sim N(\beta, var())}
+\]</span></p>
+<p>so we can use our <span class="math inline">\(t, F\)</span> tests</p>
+<p>The extra assumption we need to add to Gauss Markov assumptions</p>
+<p><span class="math display">\[
+\boxed{E[\varepsilon^2|z]= \sigma^2}
+\]</span></p>
+<p>which is <strong>homogeneity</strong> assumption but for the instrument</p>
+<p>we can get estimated variance</p>
+<p><span class="math display">\[
+\boxed{var(\hat \beta_{IV}) = \dfrac{\hat \sigma^2}{\sum (x_i - \bar x)^2} \dfrac{1}{R^2_{x.z}}}
+\]</span></p>
+<p>Remember that estimated variance for OLS is</p>
+<p><span class="math display">\[
+\boxed{var(\hat \beta_{LS}) = \dfrac{\hat \sigma^2}{\sum (x_i - \bar x)^2}}
+\]</span></p>
+<p>Knowing that <span class="math inline">\(0 &lt; R^2_{xz}&lt;1\)</span>, we conclude that</p>
+<p><span class="math display">\[
+var(\hat \beta_{IV}) &gt; var(\hat \beta_{LS})
+\]</span></p>
+<p>So we need more sample size, and not a weak instrument so <span class="math inline">\(R^2\)</span> doesn’t become small</p>
+</section>
+<section id="multiple-regressor-instrumental-variables-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-regressor-instrumental-variables-estimation">153. Multiple regressor instrumental variables estimation</h3>
+<p>If we have multiple regressors</p>
+<p><span class="math display">\[
+y = \alpha + \beta_1 x + \beta_2 z_1+ \varepsilon
+\]</span></p>
+<p>we use <span class="math inline">\(z_1\)</span> as an instrument for itself and <span class="math inline">\(z_2\)</span> as an instrument for <span class="math inline">\(x\)</span>.</p>
+<p>So we need three assumptions</p>
+<p><span class="math display">\[
+\begin{align}
+E[\varepsilon] &amp;= 0\\
+cov(\varepsilon, z_1) &amp;= 0, E[\varepsilon, z_1] = 0\\
+cov(\varepsilon, z_2) &amp;= 0, E[\varepsilon z_2]= 0
+\end{align}
+\]</span></p>
+<p>Remember that The first condition is that <span class="math inline">\(E[\varepsilon]=0\)</span>, therefore <span class="math inline">\(E[\varepsilon].E[Z]=0\)</span></p>
+<p><span class="math display">\[
+Cov(\varepsilon,Z) = E[\varepsilon Z] - E[\varepsilon].E[Z]
+\]</span></p>
+<p>These assumptions are for population, their sample analog is</p>
+<p><span class="math display">\[
+\begin{align}
+\sum (y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &amp;= 0\\
+\sum z_1(y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &amp;= 0\\
+\sum z_2(y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &amp;= 0
+\end{align}
+\]</span></p>
+<p>we have three equations, three unknowns <span class="math inline">\(\hat \alpha, \hat \beta_1, \hat \beta_2\)</span></p>
+<p>However, if <span class="math inline">\(z_2, x_i\)</span> are uncorrelated, we can remove the term <span class="math inline">\(\hat \beta x_i\)</span> from third term, so we have hard time estimating (think of it as column space)</p>
+</section>
+<section id="two-stage-least-square---introduction" class="level3">
+<h3 class="anchored" data-anchor-id="two-stage-least-square---introduction">154. Two stage least square - introduction</h3>
+<p>We know that <span class="math inline">\(IV\)</span> is a subset of <span class="math inline">\(2SLS\)</span>, so lets discuss <span class="math inline">\(2SLS\)</span> more</p>
+<p><span class="math display">\[
+y = \alpha + \beta_1x + \beta_2 z_1 + \varepsilon
+\]</span></p>
+<p>what if we have two instruments for x?</p>
+<p>Like <span class="math inline">\(z_2, z_3\)</span> where both are not correlated with <span class="math inline">\(\varepsilon\)</span></p>
+<p>Instead of picking out a winner, we do this</p>
+<ol type="1">
+<li>Use both to estimate <span class="math inline">\(x\)</span></li>
+</ol>
+<p><span class="math display">\[
+x = \delta_0 +\delta_1z_1 + \delta_2 z_2 + \delta_3 z_3 + v
+\]</span></p>
+<p>so we include both of them in the first stage to get <span class="math inline">\(\hat x\)</span></p>
+<ol type="1">
+<li>In second stage, we regress y on <span class="math inline">\(\hat x\)</span></li>
+</ol>
+<p><span class="math display">\[
+y = \alpha + \beta_1 \hat x + \beta_2 z_1 + \varepsilon
+\]</span></p>
+<p>Note that <span class="math inline">\(\hat \beta_{2sls}\)</span> is more efficient than <span class="math inline">\(\hat \beta_{IV}\)</span> and the main difference is that <span class="math inline">\(IV\)</span> uses one instrument for <span class="math inline">\(x\)</span> while <span class="math inline">\(2sls\)</span> uses more than one instrument.</p>
+<p>But if we add more instruments that are ineffective, it causes bias, why? remember the function</p>
+<p><span class="math display">\[
+\boxed{E[\hat \beta_{2sls} - \beta] \approx f\left( \dfrac{1}{1+F} \right)}
+\]</span></p>
+<p>if the instruments are useless, <span class="math inline">\(F\)</span> decreases, bias increases, but its still consistent</p>
+<p>To know if they are useless or not, run first stage and check <span class="math inline">\(F\)</span> test</p>
+<p>Statistical packages can do <span class="math inline">\(2SLS\)</span> automatically, we will not go through algebraic form cuz its complicated but know for now that its an example of <span class="math inline">\(GMM\)</span></p>
+<p>Why in first stage regress <span class="math inline">\(x\)</span> on other covariates not just the instruments?</p>
+<ul>
+<li>no clear answer, Monte Carlo studies shows its better this way.</li>
+</ul>
+</section>
+<section id="two-stage-least-squares---example" class="level3">
+<h3 class="anchored" data-anchor-id="two-stage-least-squares---example">155. Two stage least squares - example</h3>
+<p><span class="math display">\[
+score = \alpha + \beta_1 CA + \beta_2 SAT + \varepsilon
+\]</span></p>
+<p>where CA is class attendance and SAT is the exam. CA is correlated with <span class="math inline">\(\varepsilon\)</span> specifically <span class="math inline">\(interest\)</span> in the subject</p>
+<p>so we might use two instruments: distance from campus <span class="math inline">\(distance\)</span> and public transportation <span class="math inline">\(ptrans\)</span> for estimating <span class="math inline">\(CA\)</span> <which affect="" class="" attendance="" but="" not="" strongly="" correlated="" with="" interest=""></which></p>
+<ol type="1">
+<li>first stage</li>
+</ol>
+<p><span class="math display">\[
+\widehat{CA} = \delta_0 + \delta_1 SAT + \delta_2 dist + \delta_3 Ptrans + v
+\]</span></p>
+<p>if <span class="math inline">\(F\)</span> test shows they are significant, use them and go on to second stage and do OLS</p>
+<ol type="1">
+<li>second stage</li>
+</ol>
+<p><span class="math display">\[
+score = \alpha + \beta_1 \widehat {CA} + \beta_2 SAT + \varepsilon
+\]</span></p>
+<p>Notice that its consistent</p>
+<p><span class="math display">\[
+\hat \beta_{2sls} \overset{p} \to \beta
+\]</span></p>
+</section>
+<section id="two-stage-least-squares--multiple-endogenous-explanatory-variables" class="level3">
+<h3 class="anchored" data-anchor-id="two-stage-least-squares--multiple-endogenous-explanatory-variables">156. Two stage least squares- multiple endogenous explanatory variables</h3>
+<p>If we have the model</p>
+<p><span class="math display">\[
+y = \alpha + \beta_1x_1 + \beta_2x_2 + \beta_3z_1 + \beta_4z_2 + \varepsilon
+\]</span></p>
+<p>where <span class="math inline">\(x_1,x_2\)</span> are endogenous, <span class="math inline">\(z_1,z_2\)</span> are exogenous <not related="" to="" error=""></not></p>
+<p>we use <span class="math inline">\(z_1\)</span> for <span class="math inline">\(z_1\)</span>, <span class="math inline">\(z_2\)</span> for <span class="math inline">\(z_2\)</span></p>
+<p>if we use <span class="math inline">\(z_3\)</span> for both of <span class="math inline">\(x_2\)</span> and <span class="math inline">\(x_1\)</span>, it will not work, we need more variation</p>
+<p>so we use <span class="math inline">\(z_3,z_4\)</span> both for <span class="math inline">\(x_1,x_2\)</span></p>
+<ol type="1">
+<li>And do our first stage</li>
+</ol>
+<p><span class="math display">\[
+\hat x_1 = \delta_0 + \delta_1z_1 + \delta_2 z_2 + \delta_3z_3 + \delta_4 z_4
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\hat x_2 = \gamma + \gamma_1z_1 + \gamma_2 z_2 + \gamma_3z_3 + \gamma_4 z_4
+\]</span></p>
+<ol type="1">
+<li>second stage</li>
+</ol>
+<p><span class="math display">\[
+y = \alpha + \beta_1 \hat x_1 + \beta_2 \hat x_2 + \beta_3z_1 + \beta_4z_2 + \varepsilon
+\]</span></p>
+<p>The <span class="math inline">\(\beta's\)</span> we get are consistent.</p>
+<p><strong>Note:</strong></p>
+<p>number of instruments <exogenous variables=""> must be at least as large as number of endogenous variables, <strong>Order condition</strong></exogenous></p>
+<p><span class="math display">\[
+\boxed{\# Z \ge \#E}
+\]</span></p>
+<p>Also the original <span class="math inline">\(z_1,z_2\)</span> must be significant, can’t be rubbish</p>
+</section>
+<section id="testing-for-endogeneity" class="level3">
+<h3 class="anchored" data-anchor-id="testing-for-endogeneity">157. Testing for endogeneity</h3>
+<p>If we have the model</p>
+<p><span class="math display">\[
+y = \alpha + \beta_1x  + \beta_2 z_1 + \varepsilon
+\]</span></p>
+<p>where <span class="math inline">\(x\)</span> is suspected to be endogenous and <span class="math inline">\(z\)</span> is exogenous</p>
+<p>We can’t just measure the covariance <span class="math inline">\(cov(x,\varepsilon)\)</span> cuz we don’t have <span class="math inline">\(\varepsilon\)</span> <population error="">, we have its estimate <span class="math inline">\(\hat \varepsilon\)</span></population></p>
+<p>Another idea is to test</p>
+<p><span class="math display">\[
+\boxed{\hat \beta_{2sls} = \hat \beta_{ls}}
+\]</span></p>
+<p>If they are both equal, then we have no endogeneity. But this is a <strong>rule of thumb</strong> not a test</p>
+<p>Here is the actual test</p>
+<ol type="1">
+<li>estimate <span class="math inline">\(x\)</span> using two instruments <span class="math inline">\(z_2, z_3\)</span> and of course add the instrument u already have in the original model</li>
+</ol>
+<p><span class="math display">\[
+x = \delta_0 + \delta_1 z_1 + \delta_2 z_2 + \delta_3 z_3 + v
+\]</span></p>
+<p>the <span class="math inline">\(z\)</span> will get the exogenous part of <span class="math inline">\(x\)</span>, <span class="math inline">\(v\)</span> will get the endogenous part</p>
+<ol type="1">
+<li>regress <span class="math inline">\(y\)</span> on the original model and the <span class="math inline">\(v\)</span></li>
+</ol>
+<p><span class="math display">\[
+y = \alpha + \beta_1x  + \beta_2 z_1 + \gamma_0 \hat v+ u
+\]</span></p>
+<p>If <span class="math inline">\(\hat v\)</span> is significant aka <span class="math inline">\(\gamma_0 &gt;0\)</span> then we have endogeneity</p>
+<p>What if we have multiple <span class="math inline">\(x\)</span> not just one?</p>
+<ol type="1">
+<li>get <span class="math inline">\(\hat{v}_i\)</span> for each variable</li>
+<li>include them in model</li>
+<li>test for significant using <span class="math inline">\(f\)</span> test</li>
+</ol>
+<p>Note: in step 2, the <span class="math inline">\(\beta's\)</span> will be the same as of <span class="math inline">\(\beta_{2sls}\)</span> cuz we are doing the same thing, instead of including <span class="math inline">\(\hat x\)</span>, we include its residual <span class="math inline">\(\hat v\)</span>. SO the <span class="math inline">\(\beta's\)</span> are <strong>consistent</strong></p>
+<p>Note2: there is no simple test for endogeneity cuz we required exogenous variables <instruments> to test</instruments></p>
+</section>
+<section id="testing-for-endogenous-instruments---test-for-overidentifying-restriction" class="level3">
+<h3 class="anchored" data-anchor-id="testing-for-endogenous-instruments---test-for-overidentifying-restriction">158. Testing for endogenous instruments - test for overidentifying restriction</h3>
+<p>If we have the model</p>
+<p><span class="math display">\[
+y = \alpha + \beta x+ \varepsilon
+\]</span></p>
+<p>And we have two potential instruments for <span class="math inline">\(x\)</span> which are <span class="math inline">\(z_1, z_2\)</span></p>
+<p>We will pick one that satisfies the assumption</p>
+<ol type="1">
+<li><span class="math inline">\(cov(\varepsilon, z) = 0\)</span></li>
+</ol>
+<p>How to test that &lt;we don’t have the error term&gt;</p>
+<ol type="1">
+<li><p>Assume the assumption is true</p></li>
+<li><p>Use the instrument <span class="math inline">\(z_1\)</span> only in original model and get <span class="math inline">\(\hat \varepsilon\)</span></p></li>
+<li><p>Regress <span class="math inline">\(\hat \varepsilon\)</span> on <span class="math inline">\(z_2\)</span> to see if they are correlated or not</p>
+<p><span class="math display">\[
+\hat \varepsilon = \delta_0 + \delta_1 z_2\\
+H_0: \delta_1 = 0 \qquad H_1: \delta_1 \neq 0 &lt;z_2 \,endo&gt;
+\]</span></p></li>
+<li><p>Repeat using <span class="math inline">\(z_2\)</span></p>
+<p><span class="math display">\[
+\hat \varepsilon_2 = \gamma_0 + \gamma_1 z_2\\
+H_0: \gamma_1 = 0 \qquad H_1: \gamma_1  \neq 0 &lt;1_2 \,endo&gt;
+\]</span></p></li>
+</ol>
+<p>But we still had to make assumptions. Another method is test of <strong>overidentifying restriction</strong></p>
+<ol type="1">
+<li><p>run the regression</p>
+<p><span class="math display">\[
+y = \alpha + \beta x+ \varepsilon
+\]</span></p></li>
+<li><p>Regress <span class="math inline">\(\varepsilon\)</span> on all the instruments and get <span class="math inline">\(R^2\)</span></p>
+<p><span class="math display">\[
+\hat \varepsilon = \delta_0 + \delta_1 z_1 + \delta_2 z_2
+\]</span></p></li>
+<li><p>Check this formula</p>
+<p><span class="math display">\[
+\boxed{N R^2 \sim^{H_0} \chi^2_k}
+\]</span></p></li>
+</ol>
+<p>where <span class="math inline">\(N\)</span> is number of observations and <span class="math inline">\(k\)</span> is number of instrument variables - endogenous variables</p>
+<p><span class="math display">\[
+k = IV - E
+\]</span></p>
+<p>which here is <span class="math inline">\(2-1=1\)</span></p>
+<p>Note: This test requires that we have at least 2 instruments</p>
+<p>Note2: this test doesn’t tell us which instrument is endogenous, we still gave to refer to theory</p>
+</section>
+<section id="problem-set-4" class="level3">
+<h3 class="anchored" data-anchor-id="problem-set-4"><strong><em>159. Problem set 4</em></strong></h3>
+<p>Practical: use <span class="math inline">\(wls, IV\)</span> to see what affects wage</p>
+<p>Theoretical: <span class="math inline">\(WLS, FGLS, IV\)</span></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter03.html" class="pagination-link" aria-label="Regression Analysis">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter05.html" class="pagination-link" aria-label="Time Series">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

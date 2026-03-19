@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Calculus Cheatsheet – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter12.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter13.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#derivatives-of-polynomials" id="toc-derivatives-of-polynomials" class="nav-link active" data-scroll-target="#derivatives-of-polynomials">1. Derivatives of Polynomials</a></li>
+  <li><a href="#chain-rule-product-rule-quotient-rule" id="toc-chain-rule-product-rule-quotient-rule" class="nav-link" data-scroll-target="#chain-rule-product-rule-quotient-rule">2. Chain rule, Product rule, Quotient rule</a></li>
+  <li><a href="#derivatives-of-trig-functions" id="toc-derivatives-of-trig-functions" class="nav-link" data-scroll-target="#derivatives-of-trig-functions">3. Derivatives of trig functions</a></li>
+  <li><a href="#derivatives-of-exponentials" id="toc-derivatives-of-exponentials" class="nav-link" data-scroll-target="#derivatives-of-exponentials">4. Derivatives of exponentials</a></li>
+  <li><a href="#derivatives-of-logarithms" id="toc-derivatives-of-logarithms" class="nav-link" data-scroll-target="#derivatives-of-logarithms">5. Derivatives of logarithms</a></li>
+  <li><a href="#second-derivatives" id="toc-second-derivatives" class="nav-link" data-scroll-target="#second-derivatives">6. Second derivatives</a></li>
+  <li><a href="#extreme-values" id="toc-extreme-values" class="nav-link" data-scroll-target="#extreme-values">7. Extreme values</a></li>
+  <li><a href="#limits-and-lhopital-rule" id="toc-limits-and-lhopital-rule" class="nav-link" data-scroll-target="#limits-and-lhopital-rule">8. Limits and L’hopital rule</a></li>
+  <li><a href="#integrals-of-polynomials" id="toc-integrals-of-polynomials" class="nav-link" data-scroll-target="#integrals-of-polynomials">9. Integrals of polynomials</a></li>
+  <li><a href="#definite-integrals" id="toc-definite-integrals" class="nav-link" data-scroll-target="#definite-integrals">10. Definite integrals</a></li>
+  <li><a href="#integrals-of-trig-functions" id="toc-integrals-of-trig-functions" class="nav-link" data-scroll-target="#integrals-of-trig-functions">11. Integrals of trig functions</a></li>
+  <li><a href="#integrals-of-exponentials-and-logarithms" id="toc-integrals-of-exponentials-and-logarithms" class="nav-link" data-scroll-target="#integrals-of-exponentials-and-logarithms">12. Integrals of exponentials and logarithms</a></li>
+  <li><a href="#integration-by-polynomial-substitution" id="toc-integration-by-polynomial-substitution" class="nav-link" data-scroll-target="#integration-by-polynomial-substitution">13. Integration by polynomial substitution</a></li>
+  <li><a href="#integration-by-trigonometric-substitution" id="toc-integration-by-trigonometric-substitution" class="nav-link" data-scroll-target="#integration-by-trigonometric-substitution">14. Integration by trigonometric substitution</a></li>
+  <li><a href="#integration-by-parts" id="toc-integration-by-parts" class="nav-link" data-scroll-target="#integration-by-parts">15. Integration by parts</a></li>
+  <li><a href="#multiple-integrals" id="toc-multiple-integrals" class="nav-link" data-scroll-target="#multiple-integrals">16. Multiple integrals</a></li>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link" data-scroll-target="#practice-problems">Practice Problems</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Calculus Cheatsheet</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="derivatives-of-polynomials" class="level3">
+<h3 class="anchored" data-anchor-id="derivatives-of-polynomials">1. Derivatives of Polynomials</h3>
+<ol type="1">
+<li>Given a polynomial term of the form <span class="math inline">\(ax^b\)</span> (where a is a constant coefficient and <span class="math inline">\(b\)</span> is a constant exponent), to take a derivative with respect to the variable <span class="math inline">\(x\)</span>, first multiply the coefficient <span class="math inline">\(a\)</span> by the exponent <span class="math inline">\(b\)</span>, and then reduce the exponent by <span class="math inline">\(1\)</span> according to the following formula:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{d}{dx}(ax^b) = bax^{b-1}
+\]</span></p>
+<p>Note that a few special exponents can make a polynomial look somewhat different: 2. If you see a variable in a denominator, you may bring it to the numerator by negating its exponent according to the following rule:</p>
+<p><span class="math display">\[
+\dfrac{1}{x^n}= x^{-n}
+\]</span></p>
+<ol type="1">
+<li>If you see a square root, rewrite it using an exponent of <span class="math inline">\(\dfrac 1 2\)</span></li>
+</ol>
+<p><span class="math display">\[
+\sqrt{x} = x^{\frac 1 2}
+\]</span></p>
+<ol type="1">
+<li>If no coefficient or exponent is observed, the number <span class="math inline">\(1\)</span> is implied:</li>
+</ol>
+<p><span class="math display">\[
+x = 1x^1
+\]</span></p>
+<p><span class="math display">\[
+\dfrac 1 x = \dfrac{1}{x^1} = x^{-1}
+\]</span></p>
+<ol type="1">
+<li>It may help to recall the following rules of algebra regarding exponents:</li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+x^mx^n &amp;= x^{m+n}\\
+\dfrac{x^m}{x^n} &amp;= x^{m-n}\\
+x^0 &amp;=1\\
+(x^m)^n &amp;= x^{mn}\\
+(ax)^m&amp;= a^mx^m\\
+(a^mx^n)^p &amp;= a^{mp}x^{np}\\
+\sqrt{ax} &amp;= (ax)^{\frac 1 2} = a^{\frac 1 2}x^{\frac 1 2}
+\end{align*}
+\]</span></p>
+<ol type="1">
+<li>If a polynomial includes multiple terms, find the derivative of each term individually and then add the results together:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{d}{dx}(y_1 + y_2 + \dots + y_n) = \dfrac{dy_1}{dx}+\dfrac{dy_2}{dx}+ \cdots+\dfrac{dy_n}{dx}
+\]</span></p>
+<ol type="1">
+<li>the derivative of a constant equals zero:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{d}{dx}c=0
+\]</span></p>
+</section>
+<section id="chain-rule-product-rule-quotient-rule" class="level3">
+<h3 class="anchored" data-anchor-id="chain-rule-product-rule-quotient-rule">2. Chain rule, Product rule, Quotient rule</h3>
+<ol type="1">
+<li>If <span class="math inline">\(f(u)\)</span> is a function of one variable <span class="math inline">\(u\)</span>, and if <span class="math inline">\(u(x)\)</span> is itself a function of a second variable <span class="math inline">\(x\)</span>, then the chain rule may be applied in order to find a derivative of the function <span class="math inline">\(f(u(x))\)</span> with respect to the second variable <span class="math inline">\(x\)</span>:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{df}{dx} = \dfrac{df}{du} \dfrac{du}{dx}
+\]</span></p>
+<ol type="1">
+<li>Note the following:</li>
+</ol>
+<ul>
+<li>f(u) is called the outside function.</li>
+<li>u(x) is called the inside function.</li>
+<li>The chain rule basically states that df/dx equals the product of the derivatives of the outside function (df/du) and the inside function (du/dx).</li>
+<li>The chain rule is often helpful when taking derivatives of functions like these:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+&amp; \dfrac{d}{dx} (3x-2)^{20}\\
+&amp; \dfrac{d}{dx}\sqrt{2x^2+1}\\
+&amp; \dfrac{d}{dx} \dfrac{1}{x^2-4x+5}\\
+&amp;\dfrac{d}{dx}\sin(4x^3+3)
+\end{align*}
+\]</span></p>
+<ol type="1">
+<li>The product rule allows you to take a derivative of two different functions, <span class="math inline">\(f(x)\)</span> and <span class="math inline">\(g(x)\)</span>, of the same argument <span class="math inline">\((x)\)</span>, when the functions are multiplied together:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{d}{dx}(fg) = g\dfrac{df}{dx}+f\dfrac{dg}{dx}
+\]</span></p>
+<ol type="1">
+<li>The quotient rule allows you to take a derivative of two different functions, <span class="math inline">\(f(x)\)</span> and <span class="math inline">\(g(x)\)</span>, of the same argument <span class="math inline">\((x)\)</span>, when the functions are being divided:</li>
+</ol>
+<p><span class="math display">\[
+\dfrac{d}{dx}\left(\dfrac f g\right) = \dfrac{g \dfrac{df}{dx}-f\dfrac{dg}{dx}}{g^2}
+\]</span></p>
+<ol type="1">
+<li>The product rule is useful when taking derivatives like these:</li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+&amp;\dfrac{d}{dx}(2x+3)^8(x^2-1)^5\\
+&amp;\dfrac{d}{dx}(5x^2-2)\sqrt{8x+3}\\
+&amp;\dfrac{d}{dx}x^3 \sin(2x)
+\end{align*}
+\]</span></p>
+<ol type="1">
+<li>The quotient rule is useful when taking derivatives like these:</li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+\dfrac{d}{dx} \dfrac{x^2+4}{x-3}\\
+\dfrac{d}{dx} \dfrac{\sqrt x}{3x-4}\\
+\dfrac{d}{dx} \dfrac{\tan(4x)}{x}
+\end{align*}
+\]</span></p>
+</section>
+<section id="derivatives-of-trig-functions" class="level3">
+<h3 class="anchored" data-anchor-id="derivatives-of-trig-functions">3. Derivatives of trig functions</h3>
+<ol type="1">
+<li>The derivatives of the basic trig functions are:</li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+\dfrac{d}{d \theta} \sin \theta &amp;= \cos \theta \\
+\dfrac{d}{d \theta} \cos \theta &amp;= - \sin \theta\\
+\dfrac{d}{d \theta} \tan \theta &amp;= \sec^2 \theta\\
+\dfrac{d}{d \theta} \csc \theta &amp;= - \csc \theta \cot \theta\\
+\dfrac{d}{d \theta} \sec \theta &amp;= \sec \theta \tan \theta \\
+\dfrac{d}{d \theta} \cot \theta &amp;= - \csc^2 \theta
+\end{align*}
+\]</span></p>
+<p><strong>15.</strong>&nbsp;The derivatives of the inverse trigonometric functions are:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d}{dx} \sin^{-1}(x) &amp;= \frac{1}{\sqrt{1-x^2}} \quad \text{for } |x| &lt; 1, \\
+\frac{d}{dx} \cos^{-1}(x) &amp;= \frac{-1}{\sqrt{1-x^2}} \quad \text{for } |x| &lt; 1, \\
+\frac{d}{dx} \tan^{-1}(x) &amp;= \frac{1}{1+x^2}, \\
+\frac{d}{dx} \cot^{-1}(x) &amp;= \frac{-1}{1+x^2}, \\
+\frac{d}{dx} \sec^{-1}(x) &amp;= \frac{1}{|x| \sqrt{x^2-1}} \quad \text{for } |x| &gt; 1, \\
+\frac{d}{dx} \csc^{-1}(x) &amp;= \frac{-1}{|x| \sqrt{x^2-1}} \quad \text{for } |x| &gt; 1
+\end{align*}
+\]</span></p>
+<p><strong>16.</strong>&nbsp;Recall the following fundamental trigonometric relations and identities:</p>
+<p>$$ <span class="math display">\[\begin{align*}
+\tan \theta &amp;= \frac{\sin \theta}{\cos \theta}, \\
+\csc \theta &amp;= \frac{1}{\sin \theta}, \\
+\sec \theta &amp;= \frac{1}{\cos \theta}, \\
+\cot \theta &amp;= \frac{1}{\tan \theta} = \frac{\cos \theta}{\sin \theta}\\
+
+\sin^2 \theta + \cos^2 \theta &amp;= 1, \\
+1 + \tan^2 \theta &amp;= \sec^2 \theta, \\
+1 + \cot^2 \theta &amp;= \csc^2 \theta
+\\
+\sin 2\theta &amp;= 2 \sin \theta \cos \theta, \\
+\cos 2\theta &amp;= \cos^2 \theta - \sin^2 \theta
+\end{align*}\]</span> $$</p>
+</section>
+<section id="derivatives-of-exponentials" class="level3">
+<h3 class="anchored" data-anchor-id="derivatives-of-exponentials">4. Derivatives of exponentials</h3>
+<p><strong>17.</strong>&nbsp;The derivative of the basic exponential function is:</p>
+<p><span class="math display">\[
+\begin{align*}\frac{d}{dx} e^{ax} &amp;= ae^{ax}\end{align*}
+\]</span></p>
+<p><strong>18.</strong>&nbsp;Two simple cases correspond to setting&nbsp;<span class="math inline">\(a\)</span>&nbsp;equal to&nbsp;<span class="math inline">\(+1\)</span>&nbsp;or&nbsp;<span class="math inline">\(−1\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}\frac{d}{dx} e^x &amp;= e^x \\ \frac{d}{dx} e^{-x} &amp;= -e^{-x}\end{align*}
+\]</span></p>
+<p><strong>19.</strong>&nbsp;Numerically, Euler’s number is&nbsp;<span class="math inline">\(e=2.718281828\)</span> recall the following properties regarding exponentials:</p>
+<p><span class="math display">\[
+\begin{align*}
+e^{x+y} &amp;= e^xe^y \\
+e^{x-y} &amp;= e^xe^{-y} \\
+e^{-x} &amp;= \frac{1}{e^x} \\
+(e^x)^a &amp;= e^{ax} \\
+e^0 &amp;= 1
+\end{align*}
+\]</span></p>
+<p><strong>20.</strong>&nbsp;The hyperbolic functions are defined in terms of exponentials:</p>
+<p><span class="math display">\[
+\begin{align*}
+\sinh x &amp;= \frac{e^x - e^{-x}}{2} \\
+\cosh x &amp;= \frac{e^x + e^{-x}}{2} \\
+\tanh x &amp;= \frac{\sinh x}{\cosh x} = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+\end{align*}
+\]</span></p>
+<p><strong>21.</strong>&nbsp;Note the following properties regarding hyperbolic functions:</p>
+<p><span class="math display">\[
+\begin{align*}
+\cosh^2 x - \sinh^2 x &amp;= 1 \\
+\cosh(-x) &amp;= \cosh(x) \\
+\sinh(-x) &amp;= -\sinh(x)\\
+\sinh 0 &amp;= 0 \\
+\cosh 0 &amp;= 1 \\
+\tanh 0 &amp;= 0
+\end{align*}
+\]</span></p>
+<ol type="1">
+<li>The derivatives of the hyperbolic functions (not the ordinary trig functions) are:</li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d}{dx} \sinh x &amp;= \cosh x \\
+\frac{d}{dx} \cosh x &amp;= \sinh x \\
+\frac{d}{dx} \tanh x &amp;= \text{sech}^2 x = \frac{1}{\cosh^2 x}
+\end{align*}
+\]</span></p>
+</section>
+<section id="derivatives-of-logarithms" class="level3">
+<h3 class="anchored" data-anchor-id="derivatives-of-logarithms">5. Derivatives of logarithms</h3>
+<p><strong>23.</strong>&nbsp;The derivative of the natural logarithm function is:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d}{dx} \ln x &amp;= \frac{1}{x}
+\end{align*}
+\]</span></p>
+<p><strong>24.</strong>&nbsp;Note that a constant multiplying the variable inside the argument has no effect on the derivative:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d}{dx} \ln (ax) &amp;= \frac{1}{x} \quad \text{(the constant&nbsp;aa&nbsp;vanishes)}
+\end{align*}
+\]</span></p>
+<p><strong>25.</strong>&nbsp;Recall that a natural logarithm is a function used to determine the exponent in the equation&nbsp;<span class="math inline">\(y=e^x\)</span>. The equation&nbsp;<span class="math inline">\(\ln ⁡y=x\)</span>&nbsp;is equivalent to&nbsp;<span class="math inline">\(y=e^x\)</span></p>
+<p><strong>26.</strong>&nbsp;Recall the following properties regarding logarithms:</p>
+<p><span class="math display">\[
+\begin{align*}
+\ln(xy) &amp;= \ln x + \ln y \\
+\ln(x/y) &amp;= \ln x - \ln y \\
+\ln(1/x) = \ln(x^{-1}) &amp;= -\ln x \\
+\ln(x^a) &amp;= a \ln x \\
+\ln(e^x) &amp;= x \\
+e^{\ln x} &amp;= x \\
+\ln(e) &amp;= 1 \\
+\ln(1) &amp;= 0
+\end{align*}
+\]</span></p>
+<p><strong>26.</strong>&nbsp;The natural logarithm&nbsp;is a logarithm with base Euler’s number&nbsp;(<span class="math inline">\(e \approx 2.718281828\)</span>) so&nbsp;<span class="math inline">\(\ln ⁡x=\log_⁡e^x\)</span>. A general logarithm of base&nbsp;<span class="math inline">\(b\)</span>&nbsp;can be related to the natural logarithm using the change of base formula:</p>
+<p><span class="math display">\[
+\begin{align*}\log_b x &amp;= \frac{\ln x}{\ln b}\end{align*}
+\]</span></p>
+<p><strong>27.</strong>&nbsp;This allows you to take a derivative of a logarithm of any base&nbsp;<span class="math inline">\(b\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d}{dx} \log_b x = \frac{d}{dx} \left( \frac{\ln x}{\ln b} \right) = \frac{1}{\ln b} \frac{d}{dx} \ln(x) = \frac{1}{\ln b} \frac{1}{x} = \frac{1}{x \ln b}
+\end{align*}
+\]</span></p>
+<p><strong>28.</strong>&nbsp;A natural logarithm is also involved in the derivative of the power function:</p>
+<p><span class="math display">\[
+\begin{align*}\dfrac{d}{dx} b^x &amp;= b^x \ln b, \\
+\dfrac{d}{dx} b^{-x} &amp;= -b^{-x} \ln b\end{align*}
+\]</span></p>
+<p><strong>29.</strong>&nbsp;If you set&nbsp;<span class="math inline">\(b=e\)</span>&nbsp;in the above formulas, you get the special cases:</p>
+<p><span class="math display">\[
+\begin{align*}\frac{d}{dx} e^x &amp;= e^x \\
+\frac{d}{dx} e^{-x} &amp;= -e^{-x}\end{align*}
+\]</span></p>
+<p>which we explored in the previous chapter (note that&nbsp;<span class="math inline">\(\ln \⁡e=1\)</span>).</p>
+</section>
+<section id="second-derivatives" class="level3">
+<h3 class="anchored" data-anchor-id="second-derivatives">6. Second derivatives</h3>
+<p><strong>30.</strong>&nbsp;A second derivative means to take two consecutive derivatives:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{d^2y}{dx^2} &amp;= \frac{d}{dx}\left(\frac{dy}{dx}\right)
+\end{align*}
+\]</span></p>
+</section>
+<section id="extreme-values" class="level3">
+<h3 class="anchored" data-anchor-id="extreme-values">7. Extreme values</h3>
+<p><strong>31.</strong>&nbsp;To find the&nbsp;<em>relative extrema</em>&nbsp;for a function, <span class="math inline">\(f(x)\)</span>, follow these steps:</p>
+<ol type="1">
+<li>Take the first derivative of the function, <span class="math inline">\(\frac{df}{dx}\)</span>.</li>
+<li>Set the first derivative equal to zero: <span class="math inline">\(\frac{df}{dx} = 0\)</span>. (Why? The slope of the tangent line is zero, corresponding to <span class="math inline">\(\frac{df}{dx} = 0\)</span>, at the relative extrema.)</li>
+<li>Solve for the values of <span class="math inline">\(x\)</span> that make the first derivative zero. Call these <span class="math inline">\(x_c\)</span> (A few books also include points where the slope is vertical or undefined.)</li>
+<li>Take the second derivative of the function, <span class="math inline">\(\frac{d^2f}{dx^2}\)</span>, by taking a derivative of the result from step 1.</li>
+<li>Evaluate the second derivative at each value of <span class="math inline">\(x_c\)</span> found in step 3.</li>
+<li>For each value of <span class="math inline">\(x_c\)</span> obtained in step 3, follow these steps to classify the type of relative extrema associated with that value of <span class="math inline">\(x_c\)</span>:
+<ul>
+<li>If <span class="math inline">\(\frac{d^2f}{dx^2} &gt; 0\)</span> at <span class="math inline">\(x_c\)</span>, classify that point as a relative (or local) minimum.</li>
+<li>If <span class="math inline">\(\frac{d^2f}{dx^2} &lt; 0\)</span> at <span class="math inline">\(x_c\)</span>, classify that point as a relative (or local) maximum.</li>
+<li>If <span class="math inline">\(\frac{d^2f}{dx^2} = 0\)</span> at <span class="math inline">\(x_c\)</span>, examine the first derivative just before and just after <span class="math inline">\(x_c\)</span>.</li>
+</ul></li>
+<li>Evaluate the function, <span class="math inline">\(f(x)\)</span>, at each value of <span class="math inline">\(x_c\)</span> obtained in step 3 corresponding to a relative minimum or maximum. These are the values of the function at each relative (or local) extremum.</li>
+</ol>
+<p><strong>32.</strong>&nbsp;To find the&nbsp;<em>absolute extrema</em>&nbsp;of the function over a specified interval, <span class="math inline">\((a,b)\)</span>, evaluate the function at the endpoints of the interval, <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. Follow these steps:</p>
+<ul>
+<li>Compare the values of <span class="math inline">\(f(x_c)\)</span> from step 7. Also compare <span class="math inline">\(f(a)\)</span> and <span class="math inline">\(f(b)\)</span>. The largest of these values is the absolute maximum.</li>
+<li>Compare the values of <span class="math inline">\(f(x_c)\)</span> from step 7. Also compare <span class="math inline">\(f(a)\)</span> and <span class="math inline">\(f(b)\)</span>. The smallest of these values is the absolute minimum.</li>
+</ul>
+<p><strong>33.</strong>&nbsp;If the second derivative equals zero at <span class="math inline">\(x_c\)</span>, follow these steps:</p>
+<ol type="1">
+<li>Determine the sign of the first derivative just&nbsp;<em>before</em>&nbsp;<span class="math inline">\(x_c\)</span>.</li>
+<li>Determine the sign of the first derivative just&nbsp;<em>after</em>&nbsp;<span class="math inline">\(x_c\)</span>.</li>
+<li>Interpret your answers to steps 1-2 as follows:
+<ul>
+<li>The sign of the first derivative changes from&nbsp;<strong>positive to negative</strong>&nbsp;at a relative (or local)&nbsp;<strong>maximum</strong>.</li>
+<li>The sign of the first derivative changes from&nbsp;<strong>negative to positive</strong>&nbsp;at a relative (or local)&nbsp;<strong>minimum</strong>.</li>
+<li>If the first derivative&nbsp;<strong>doesn’t change sign</strong>, this is a&nbsp;<strong>point of inflection</strong>&nbsp;(where the second derivative, relating to concavity, changes sign).</li>
+</ul></li>
+</ol>
+</section>
+<section id="limits-and-lhopital-rule" class="level3">
+<h3 class="anchored" data-anchor-id="limits-and-lhopital-rule">8. Limits and L’hopital rule</h3>
+<p><strong>34.</strong>&nbsp;The following notation asks, “What value does the function <span class="math inline">\(f(x)\)</span> approach as the variable <span class="math inline">\(x\)</span> approaches <span class="math inline">\(c\)</span>?” It describes the function’s behavior as <span class="math inline">\(x\)</span> gets closer to <span class="math inline">\(c\)</span>.</p>
+<p><span class="math display">\[
+\begin{align*}\lim_{x \to c} f(x)\end{align*}
+\]</span></p>
+<p><strong>35.</strong>&nbsp;A one-sided limit asks how the function behaves as <span class="math inline">\(x\)</span> approaches <span class="math inline">\(c\)</span> from a specified direction:</p>
+<ul>
+<li><p>A <span class="math inline">\(+\)</span> sign means to let <span class="math inline">\(x\)</span> approach <span class="math inline">\(c\)</span> from the right (start with <span class="math inline">\(x &gt; c\)</span> and let <span class="math inline">\(x\)</span> decrease towards <span class="math inline">\(c\)</span>).</p></li>
+<li><p>A <span class="math inline">\(-\)</span> sign means to let <span class="math inline">\(x\)</span> approach <span class="math inline">\(c\)</span> from the left (start with <span class="math inline">\(x &lt; c\)</span> and let <span class="math inline">\(x\)</span> increase towards <span class="math inline">\(c\)</span>).</p>
+<p><span class="math display">\[
+  \begin{align*}\lim_{x \to c^+} f(x)\\  \lim_{x \to c^-} f(x)\end{align*}
+  \]</span></p></li>
+</ul>
+<p><strong>36.</strong>&nbsp;When finding the limit of a ratio of two functions, if both approach zero or both approach infinity, l’Hôpital’s rule may apply:</p>
+<p><span class="math display">\[
+\begin{align*}
+\lim_{x \to c} \frac{f(x)}{g(x)} &amp;= \frac{\frac{df}{dx}}{\frac{dg}{dx}} \bigg|{x=c} \quad \text{if } \lim{x \to c} f(x) = 0 \text{ and } \lim_{x \to c} g(x) = 0 \\
+\lim_{x \to c} \frac{f(x)}{g(x)} &amp;= \frac{\frac{df}{dx}}{\frac{dg}{dx}} \bigg|{x=c} \quad \text{if } \lim{x \to c} f(x) = \pm \infty \text{ and } \lim_{x \to c} g(x) = \pm \infty
+\end{align*}
+\]</span></p>
+</section>
+<section id="integrals-of-polynomials" class="level3">
+<h3 class="anchored" data-anchor-id="integrals-of-polynomials">9. Integrals of polynomials</h3>
+<p><strong>38.</strong>&nbsp;Given a polynomial term of the form <span class="math inline">\(ax^b\)</span> (where <span class="math inline">\(a\)</span> is a constant coefficient and <span class="math inline">\(b\)</span> is a constant exponent), to perform an indefinite integral over the variable <span class="math inline">\(x\)</span>, increase the exponent to <span class="math inline">\(b + 1\)</span> and then divide by <span class="math inline">\(b + 1\)</span>, and add the constant of integration <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\int ax^b dx &amp;= \frac{ax^{b+1}}{b+1} + c \quad \text{(if } b \neq -1\text{)}
+\end{align*}
+\]</span></p>
+<p><strong>39.</strong>&nbsp;The special case for <span class="math inline">\(b = -1\)</span> is:</p>
+<p><span class="math display">\[
+\begin{align*}
+\int ax^{-1} dx = \int \frac{a}{x} dx &amp;= a \ln |x| + c
+\end{align*}
+\]</span></p>
+<p><strong>40.</strong>&nbsp;Special exponent rules for rewriting expressions:</p>
+<ul>
+<li><p>A variable in a denominator can be brought to the numerator by negating its exponent:</p>
+<p><span class="math display">\[
+  \begin{align*}
+  \frac{1}{x^n} &amp;= x^{-n}
+  \end{align*}
+  \]</span></p></li>
+<li><p>A square root can be rewritten using a fractional exponent:</p>
+<p><span class="math display">\[
+  \begin{align*}
+  \sqrt{x} &amp;= x^{1/2}
+  \end{align*}
+  \]</span></p></li>
+</ul>
+<p><strong>41.</strong>&nbsp;If no coefficient or exponent is written, the number <span class="math inline">\(1\)</span> is implied:</p>
+<p><span class="math display">\[
+\begin{align*}
+x &amp;= 1x^1\\ \frac{1}{x} = \frac{1}{x^1} &amp;= x^{-1}
+\end{align*}
+\]</span></p>
+<p><strong>42.</strong>&nbsp;Recall the following rules of algebra regarding exponents:</p>
+<p><span class="math display">\[
+\begin{align*}
+x^m x^n &amp;= x^{m+n}\\ \frac{x^m}{x^n} &amp;= x^{m-n} \\
+x^0 &amp;= 1\\ (x^m)^n &amp;= x^{mn} \\
+(ax)^m &amp;= a^mx^m\\
+\sqrt{ax} = (ax)^{1/2} &amp;= a^{1/2}x^{1/2}
+\end{align*}
+\]</span></p>
+<p><strong>43.</strong>&nbsp;If a polynomial includes multiple terms, integrate each term individually:</p>
+<p><span class="math display">\[
+\begin{align*}
+\int (y_1 + y_2 + \cdots + y_n) dx &amp;= \int y_1 dx + \int y_2 dx + \cdots + \int y_n dx
+\end{align*}
+\]</span></p>
+<p><strong>44.</strong>&nbsp;<strong>Example:</strong>&nbsp;If <span class="math inline">\(y_1 = 3x^2\)</span>, <span class="math inline">\(y_2 = -2x\)</span>, and <span class="math inline">\(y_3 = 4\)</span>, this means:</p>
+<p><span class="math display">\[
+\begin{align*}
+\int (3x^2 - 2x + 4) dx &amp;= \int 3x^2 dx - \int 2x dx + \int 4 dx
+\end{align*}
+\]</span></p>
+<p><strong>45.</strong>&nbsp;Tip: After you finish an indefinite integral, take a derivative to check your answer.</p>
+</section>
+<section id="definite-integrals" class="level3">
+<h3 class="anchored" data-anchor-id="definite-integrals">10. Definite integrals</h3>
+<p><strong>46.</strong>&nbsp;An indefinite integral, or antiderivative, of a function includes a constant of integration <span class="math inline">\(c\)</span>. If <span class="math inline">\(f(x)\)</span> is the derivative of <span class="math inline">\(g(x)\)</span>, then <span class="math inline">\(g(x)\)</span> is an antiderivative of <span class="math inline">\(f(x)\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}f(x) &amp;= \frac{d}{dx}g(x) \\ \int f(x) dx &amp;= g(x) + c\end{align*}
+\]</span></p>
+<p><strong>47.</strong>&nbsp;<strong>Example:</strong>&nbsp;Using <span class="math inline">\(g(x) = x^4\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+4x^{3} &amp;= \frac{d}{dx}(x^{4})\\
+\int 4x^{3} dx &amp;= x^{4} + c
+\end{align*}
+\]</span></p>
+<p>An indefinite integral is the opposite of a derivative.</p>
+<p><strong>48.</strong>&nbsp;A definite integral includes limits, specifying an interval <span class="math inline">\([a, b]\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\int_{a}^{b} f(x) dx\)</span> is a definite integral.</li>
+<li><span class="math inline">\(\int f(x) dx\)</span> is an indefinite integral.</li>
+</ul>
+<p><strong>49.</strong>&nbsp;The Fundamental Theorem of Calculus is used to evaluate a definite integral:</p>
+<p><span class="math display">\[
+\begin{align*}\int_{a}^{b} f(x) dx = g(b) - g(a)\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(g(x)\)</span> is any antiderivative of <span class="math inline">\(f(x)\)</span> (i.e., <span class="math inline">\(\frac{d}{dx}g(x) = f(x)\)</span>).</p>
+<p><strong>50.</strong>&nbsp;The procedure to evaluate a definite integral is:</p>
+<ol type="1">
+<li>Find the antiderivative, <span class="math inline">\(g(x)\)</span>, of the integrand <span class="math inline">\(f(x)\)</span>.</li>
+<li>Evaluate this antiderivative at the upper limit, <span class="math inline">\(g(b)\)</span>.</li>
+<li>Evaluate this antiderivative at the lower limit, <span class="math inline">\(g(a)\)</span>.</li>
+<li>Subtract the result from step 3 from the result from step 2.</li>
+</ol>
+<p><strong>51.</strong>&nbsp;The constant of integration <span class="math inline">\(c\)</span> is not needed for a definite integral because it cancels out in the subtraction:</p>
+<p><span class="math display">\[
+\begin{align*}g(b) + c - (g(a) + c) = g(b) - g(a)\end{align*}
+\]</span></p>
+</section>
+<section id="integrals-of-trig-functions" class="level3">
+<h3 class="anchored" data-anchor-id="integrals-of-trig-functions">11. Integrals of trig functions</h3>
+<p><strong>52.</strong>&nbsp;The integrals of the basic trigonometric functions are:</p>
+<p><span class="math display">\[
+\begin{align*}\int \sin \theta d\theta &amp;= -\cos \theta + c \\
+\int \cos \theta d\theta &amp;= \sin \theta + c \\
+\int \tan \theta d\theta &amp;= \ln |\sec \theta| + c \\
+\int \sec \theta d\theta &amp;= \ln |\sec \theta + \tan \theta| + c \\
+\int \cot \theta d\theta &amp;= \ln |\sin \theta| + c \\
+\int \csc \theta d\theta &amp;= -\ln |\csc \theta + \cot \theta| + c\end{align*}
+\]</span></p>
+<p><strong>53.</strong>&nbsp;Recall the following trigonometric relations and identities:</p>
+<p><span class="math display">\[
+\begin{align*}
+\tan \theta &amp;= \frac{\sin \theta}{\cos \theta} \\
+\csc \theta &amp;= \frac{1}{\sin \theta} \\
+\sec \theta &amp;= \frac{1}{\cos \theta}
+\\
+\cot \theta &amp;= \frac{1}{\tan \theta} = \frac{\cos \theta}{\sin \theta}
+\\
+\sin^2 \theta + \cos^2 \theta &amp;= 1 \\
+\tan^2 \theta + 1 &amp;= \sec^2 \theta \\
+1 + \cot^2 \theta &amp;= \csc^2 \theta
+\\
+\sin 2\theta &amp;= 2 \sin \theta \cos \theta \\
+\cos 2\theta &amp;= \cos^2 \theta - \sin^2 \theta
+\\
+\pi \text{ radians} &amp;= 180^\circ
+\end{align*}
+\]</span></p>
+</section>
+<section id="integrals-of-exponentials-and-logarithms" class="level3">
+<h3 class="anchored" data-anchor-id="integrals-of-exponentials-and-logarithms">12. Integrals of exponentials and logarithms</h3>
+<p><strong>54.</strong>&nbsp;The integrals of the basic exponential, logarithm, and power functions are:</p>
+<p><span class="math display">\[
+\begin{align*}\int e^{ax} dx &amp;= \frac{e^{ax}}{a} + c \\
+\int \ln x dx &amp;= x \ln x - x + c \\
+\int b^{x} dx &amp;= \frac{b^{x}}{\ln b} + c\end{align*}
+\]</span></p>
+<p><strong>55.</strong>&nbsp;The integrals of the hyperbolic functions are:</p>
+<p><span class="math display">\[
+\begin{align*}\int \sinh x dx &amp;= \cosh x + c \\
+\int \cosh x dx &amp;= \sinh x + c \\
+\int \tanh x dx &amp;= \ln |\cosh x| + c
+\end{align*}
+\]</span></p>
+<p><strong>56.</strong>&nbsp;Recall the following relations and identities:</p>
+<p><span class="math display">\[
+\begin{align*}
+e &amp;= 2.718281828...\\ e^{-x} &amp;= \frac{1}{e^x} \\
+e^{0} &amp;= 1 \\
+\ln(e) &amp;= 1 \\
+\ln(1) &amp;= 0 \\
+\ln(xy) &amp;= \ln x + \ln y \\
+\ln\left(\frac{x}{y}\right) &amp;= \ln x - \ln y \\
+\ln\left(\frac{1}{x}\right) = \ln(x^{-1}) &amp;= -\ln x \\
+\ln(x^{n}) &amp;= n \ln x \\
+\ln(e^{x}) &amp;= x \\
+e^{\ln x} &amp;= x \\
+\log_{b}x &amp;= \frac{\ln x}{\ln b}\\
+\sinh x &amp;= \frac{e^{x}-e^{-x}}{2}\\
+\cosh x &amp;= \frac{e^{x}+e^{-x}}{2}\\
+\tanh x &amp;= \frac{\sinh x}{\cosh x} = \frac{e^{x}-e^{-x}}{e^{x}+e^{-x}} \\
+\cosh^{2}x - \sinh^{2}x &amp;= 1\\
+\cosh(-x) &amp;= \cosh x \\
+\sinh(-x) &amp;= -\sinh x \\
+\sinh 0 &amp;= 0 \\
+\cosh 0 &amp;= 1 \\
+\tanh 0 &amp;= 0
+\end{align*}
+\]</span></p>
+</section>
+<section id="integration-by-polynomial-substitution" class="level3">
+<h3 class="anchored" data-anchor-id="integration-by-polynomial-substitution">13. Integration by polynomial substitution</h3>
+<ol type="1">
+<li>A common method for performing integration is to make a change of variables (substitution). An integral over variable <span class="math inline">\(x\)</span> can be transformed to an integral over a new variable <span class="math inline">\(u\)</span>:</li>
+</ol>
+<p><span class="math display">\[ \begin{align*} \int_{x=x_1}^{x_2} f(x) dx = \int_{u=u_1}^{u_2} g(u) du \end{align*} \]</span></p>
+<ol type="1">
+<li>To apply the method of substitution, follow these steps:
+<ol type="1">
+<li><p>Choose a substitution <span class="math inline">\(u = u(x)\)</span> that will simplify the integral.</p></li>
+<li><p>Differentiate the substitution equation to relate <span class="math inline">\(du\)</span> and <span class="math inline">\(dx\)</span>:</p>
+<p><span class="math display">\[ \begin{align*}du = \frac{du}{dx} dx\end{align*} \]</span></p></li>
+<li><p>Solve the above equation for <span class="math inline">\(dx\)</span> in terms of <span class="math inline">\(du\)</span>.</p></li>
+<li><p>Substitute <span class="math inline">\(u(x)\)</span> and <span class="math inline">\(dx\)</span> into the original integral.</p>
+<ul>
+<li>Replace all <span class="math inline">\(x\)</span> terms (including in <span class="math inline">\(dx\)</span>) with <span class="math inline">\(u\)</span> terms.</li>
+</ul></li>
+<li><p><strong>For definite integrals:</strong>&nbsp;Change the limits of integration.</p>
+<ul>
+<li>The new lower limit <span class="math inline">\(u_1\)</span> is found by evaluating <span class="math inline">\(u(x_1)\)</span>.</li>
+<li>The new upper limit <span class="math inline">\(u_2\)</span> is found by evaluating <span class="math inline">\(u(x_2)\)</span>.</li>
+</ul></li>
+<li><p>Evaluate the new, simpler integral in terms of <span class="math inline">\(u\)</span>.</p></li>
+<li><p><strong>For indefinite integrals:</strong>&nbsp;After integrating, substitute back to express the answer in terms of the original variable <span class="math inline">\(x\)</span>.</p></li>
+</ol></li>
+</ol>
+<p>59.&nbsp;If the chosen substitution does not simplify the integral, try a different substitution or another integration method.</p>
+</section>
+<section id="integration-by-trigonometric-substitution" class="level3">
+<h3 class="anchored" data-anchor-id="integration-by-trigonometric-substitution">14. Integration by trigonometric substitution</h3>
+<ol type="1">
+<li>Trigonometric substitutions are often helpful for two types of integrals:</li>
+</ol>
+<ul>
+<li><p>Integrals involving trigonometric functions:</p>
+<p><span class="math display">\[ \begin{align*}\int \sin \theta \cos \theta d\theta, \quad \int \sin^3 \theta d\theta, \quad \int \frac{\sin \theta}{\cos^2 \theta} d\theta\end{align*} \]</span></p></li>
+<li><p>Integrals where <span class="math inline">\(x^2\)</span> is added or subtracted from a constant:</p>
+<p><span class="math display">\[ \begin{align*} \int \sqrt{x^2 + 4} dx, \quad \int \frac{dx}{9 - x^2}, \quad \int \frac{dx}{(x^2 - 1)^{3/2}} \end{align*} \]</span></p></li>
+</ul>
+<ol type="1">
+<li>Recall the following trigonometric identities and relations:</li>
+</ol>
+<p>$$ <span class="math display">\[\begin{align*} \tan \theta &amp;= \frac{\sin \theta}{\cos \theta}\\ \csc \theta &amp;= \frac{1}{\sin \theta} \\ \sec \theta &amp;= \frac{1}{\cos \theta}\\ \cot \theta &amp;= \frac{1}{\tan \theta} = \frac{\cos \theta}{\sin \theta}\\
+
+\sin^2 \theta + \cos^2 \theta &amp;= 1\\ \tan^2 \theta + 1 &amp;= \sec^2 \theta\\ 1 + \cot^2 \theta &amp;= \csc^2 \theta \\
+
+\sin 2\theta &amp;= 2 \sin \theta \cos \theta \\ \cos 2\theta &amp;= \cos^2 \theta - \sin^2 \theta \\ \sin^2 \theta &amp;= \frac{1 - \cos 2\theta}{2} \\ \cos^2 \theta &amp;= \frac{1 + \cos 2\theta}{2} \end{align*}\]</span> $$</p>
+<ol type="1">
+<li>For expressions of the form <span class="math inline">\((a^2 - x^2)^p\)</span>:</li>
+</ol>
+<ul>
+<li>Use the substitution: <span class="math inline">\(x = a \sin \theta\)</span>, <span class="math inline">\(dx = a \cos \theta d\theta\)</span></li>
+<li>Then: <span class="math inline">\(a^2 - x^2 = a^2 - a^2 \sin^2 \theta = a^2(1 - \sin^2 \theta) = a^2 \cos^2 \theta\)</span></li>
+</ul>
+<ol type="1">
+<li>For expressions of the form <span class="math inline">\((x^2 + a^2)^p\)</span>:</li>
+</ol>
+<ul>
+<li>Use the substitution: <span class="math inline">\(x = a \tan \theta\)</span>, <span class="math inline">\(dx = a \sec^2 \theta d\theta\)</span></li>
+<li>Then: <span class="math inline">\(x^2 + a^2 = a^2 \tan^2 \theta + a^2 = a^2(\tan^2 \theta + 1) = a^2 \sec^2 \theta\)</span></li>
+</ul>
+<ol type="1">
+<li>For expressions of the form <span class="math inline">\((x^2 - a^2)^p\)</span>:</li>
+</ol>
+<ul>
+<li>Use the substitution: <span class="math inline">\(x = a \sec \theta\)</span>, <span class="math inline">\(dx = a \sec \theta \tan \theta d\theta\)</span></li>
+<li>Then: <span class="math inline">\(x^2 - a^2 = a^2 \sec^2 \theta - a^2 = a^2(\sec^2 \theta - 1) = a^2 \tan^2 \theta\)</span></li>
+</ul>
+<ol type="1">
+<li>Note: The constant <span class="math inline">\(a\)</span> is squared in these forms.</li>
+</ol>
+<ul>
+<li><strong>Example:</strong>&nbsp;<span class="math inline">\(\sqrt{x^2 + 4} = \sqrt{x^2 + 2^2} = (x^2 + 2^2)^{1/2}\)</span>. Here, <span class="math inline">\(a = 2\)</span>, <span class="math inline">\(p = 1/2\)</span>.</li>
+<li><strong>Example:</strong>&nbsp;<span class="math inline">\(9 - x^2 = 3^2 - x^2\)</span>. Here, <span class="math inline">\(a = 3\)</span>, <span class="math inline">\(p = 1\)</span>.</li>
+</ul>
+</section>
+<section id="integration-by-parts" class="level3">
+<h3 class="anchored" data-anchor-id="integration-by-parts">15. Integration by parts</h3>
+<ol type="1">
+<li>Integration by parts involves using the following formula:</li>
+</ol>
+<p><span class="math display">\[ \begin{align*} \int u dv &amp;= uv - \int v du\\ \int_{a}^{b} u dv &amp;= \left[ uv \right]{a}^{b} - \int{a}^{b} v du \end{align*} \]</span></p>
+<ol type="1">
+<li>To apply the method of integration by parts, follow these steps:
+<ol type="1">
+<li><p>Given an integral <span class="math inline">\(\int f(x) dx\)</span>, try to identify parts to set <span class="math inline">\(u\)</span> and <span class="math inline">\(dv\)</span> such that the new integral <span class="math inline">\(\int v du\)</span> is simpler than the original.</p>
+<ul>
+<li>Choose <span class="math inline">\(u\)</span> and <span class="math inline">\(dv\)</span> from the integrand, where <span class="math inline">\(dv\)</span> includes the differential <span class="math inline">\(dx\)</span>.</li>
+<li>Your goal is to make <span class="math inline">\(\int v du\)</span> easier to solve than <span class="math inline">\(\int u dv\)</span>.</li>
+<li>When choosing <span class="math inline">\(dv\)</span>, ensure you can find its antiderivative <span class="math inline">\(v\)</span>.</li>
+<li>A common strategy for a product of two functions (e.g., <span class="math inline">\(\int x^2 \ln x dx\)</span>) is to try:
+<ul>
+<li><span class="math inline">\(u = \ln x\)</span> and <span class="math inline">\(dv = x^2 dx\)</span>, or</li>
+<li><span class="math inline">\(u = x^2\)</span> and <span class="math inline">\(dv = \ln x dx\)</span>.</li>
+</ul></li>
+<li>Experience and practice help in making the best choice.</li>
+</ul></li>
+<li><p>Find the antiderivative of <span class="math inline">\(dv\)</span> to get <span class="math inline">\(v\)</span>.</p></li>
+<li><p>Find the derivative of <span class="math inline">\(u\)</span> to get <span class="math inline">\(du\)</span>.</p></li>
+<li><p>Substitute <span class="math inline">\(u\)</span>, <span class="math inline">\(v\)</span>, <span class="math inline">\(du\)</span>, and <span class="math inline">\(dv\)</span> into the integration by parts formula:</p>
+<p><span class="math display">\[ \begin{align*}\int u dv &amp;= uv - \int v du\end{align*} \]</span></p>
+<p>For a definite integral, remember to evaluate the term <span class="math inline">\(uv\)</span> over the limits:</p>
+<p><span class="math display">\[ \begin{align*}\int_{a}^{b} u dv &amp;= \left[ uv \right]{a}^{b} - \int{a}^{b} v du\end{align*} \]</span></p></li>
+<li><p>If the new integral <span class="math inline">\(\int v du\)</span> is not simpler, try starting over with a different choice for <span class="math inline">\(u\)</span> and <span class="math inline">\(dv\)</span>. Trial and error is often necessary.</p></li>
+</ol></li>
+</ol>
+</section>
+<section id="multiple-integrals" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-integrals">16. Multiple integrals</h3>
+<ol type="1">
+<li>To perform a double or triple integral, follow these steps:
+<ol type="1">
+<li>The order of the differential elements (e.g., <span class="math inline">\(dx,dy\)</span> vs.&nbsp;<span class="math inline">\(dy,dx\)</span>) does not dictate the order of integration. The limits of integration determine the order.</li>
+<li>Examine the limits of integration:
+<ul>
+<li>If a variable (like <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, or <span class="math inline">\(z\)</span>) appears in a limit of integration, you&nbsp;<strong>must</strong>&nbsp;perform the integral for that variable&nbsp;<strong>first</strong>.</li>
+</ul></li>
+<li>When integrating over one variable, treat all other independent variables as constants.
+<ul>
+<li>For example, when integrating with respect to <span class="math inline">\(x\)</span>, treat <span class="math inline">\(y\)</span> as a constant.</li>
+<li>When integrating with respect to <span class="math inline">\(y\)</span>, treat <span class="math inline">\(x\)</span> as a constant.</li>
+</ul></li>
+<li>After performing an integral, evaluate its antiderivative over its limits&nbsp;<strong>before</strong>&nbsp;beginning the next integral. Work from the inside out.</li>
+</ol></li>
+<li>The end!</li>
+</ol>
+</section>
+<section id="practice-problems" class="level3">
+<h3 class="anchored" data-anchor-id="practice-problems">Practice Problems</h3>
+<p>Find derivative of</p>
+<ol type="1">
+<li><span class="math inline">\(\frac d {dx}5x^3\)</span></li>
+<li><span class="math inline">\(\frac d {dt}t^4\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}6x^\frac 2 3\)</span></li>
+<li><span class="math inline">\(\frac d {du}\frac 7 u\)</span></li>
+<li><span class="math inline">\(\frac d {dx} \sqrt{3x}\)</span></li>
+<li><span class="math inline">\(\frac d{dx} 6x^3-12x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 8x^4\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 5x^{-2}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \frac 1 t\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 8x^{\frac 7 4}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{x^\frac 3 5}{6}\)</span></li>
+<li><span class="math inline">\(\frac{d}{du}u\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \sqrt{2t}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}\frac{1}{\sqrt x}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 5x^3+4x^2-3x+2\)</span></li>
+<li><span class="math inline">\(\frac{d}{du}1-u\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 3x^\frac 3 2 + 12x^\frac 1 2\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \sqrt t - \frac 1 t\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\frac{d}{dx} (2x^2-5)^5\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \sqrt{t^3-8}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} (3x^4-7)(2x^3-6)\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{x^4+3x^2-6}{x^2+1}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}(x^3-3x^2+4x-5)^8\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}\frac{1}{\sqrt{5t^2-3t+6}}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}(4x^2-6)\sqrt x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{3-2x^2}{4-3x^2}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}\frac{1}{x^3-4x}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}(4+x)^9(2-x)^5\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \sqrt{t^2+9}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{x^4}{\sqrt{x^2+4}}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}(2x^\frac 5 2 - 8x^\frac 3 2)^6\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{x^2+3x-4}{2x+5}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}\sqrt{2+\sqrt{x}}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt}(4t^2-9)(t^4+8t^2-3)^9\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\frac{d}{d\theta}4\sin3\theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d\theta}2\cos^3 \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d\theta}\sec \theta \tan \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta} \frac{1 + \sin \theta}{\cos \theta}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 4 \tan^{-1}x^3\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \sin^{-1} x \cos^{-1}x\)</span>, x is not equal to <span class="math inline">\(\pm1\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta}7 \tan 5 \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d\theta} 3 \sin^4 \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta} \csc \theta \sec \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta} \frac{\sin \theta + \cos \theta}{\sin \theta}\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta} \cos(\theta^2-2 \theta +4)\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta} 2 \cot \sqrt \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d\theta} \theta \sin \theta\)</span></li>
+<li><span class="math inline">\(\frac{d}{d \theta}\sqrt{1 + \sin \theta}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 3 \cot^{-1}4x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} x \csc^{-1}x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \sin^{-1}x+ \cos^{-1}x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{\sec^{-1}x}{x}\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\frac{d}{dx} 3e^{x^2}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} t \cosh t\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{2+e^{-2x}}{3^{3x}}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 4e^{x^2} - 6e^{4x}+9\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 4 \cosh^3 x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \sinh t \cosh t\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \sinh [\cosh(x)]\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \tanh \sqrt x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} t^2 e^t\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx}\sqrt{1+e^{-x}}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{1 - \sinh x}{\sinh x}\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\frac{d}{dx} \ln (ax)\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} t \ln(t)\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \log_{10}x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} 2^x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} e^x \ln x\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \frac{\ln(t)}{t}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \ln|\cos x|\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \ln(\cosh x)\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \sqrt{\ln(x)}\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \ln(\sqrt x)\)</span></li>
+<li><span class="math inline">\(\frac{d}{dt} \log_2 t\)</span></li>
+<li><span class="math inline">\(\frac{d}{dx} \frac{2^x}{x^2}\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\frac{d^2}{dx^2} 2x^6\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{d\theta^2} \sin \theta\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2} \frac{1}{x^2}\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2}  x^7 - 3x^5 +5x^3 - 7x\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{d\theta^2} \cos 3 \theta\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2}  \ln x\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dt^2} e^{-3t^2}\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{d\theta^2} \sin(\theta^2)\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2}  \tan \theta\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dt^2} (t \ln t)\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2}  \sqrt x\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dx^2}  \frac 1 x\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{d\theta^2} \sec \theta\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{dt^2} \tan^{-1} t\)</span></li>
+<li><span class="math inline">\(\frac{d^2}{d\theta^2} (\theta \sin \theta)\)</span></li>
+</ol>
+<hr>
+<p>Find absolute extrema below or over the interval</p>
+<ol type="1">
+<li><span class="math inline">\(f(x) = x^3-12x+4, (-3,5)\)</span></li>
+<li><span class="math inline">\(f(x) = 2x^4-8x^3, (2,4)\)</span></li>
+<li><span class="math inline">\(f(x) = \frac{4}{x^6} - \frac{3}{x^8}, (\frac 1 2, 10)\)</span></li>
+</ol>
+<hr>
+<p>Evaluate the following limit</p>
+<ol type="1">
+<li><span class="math inline">\(\lim\limits_{x \to \infty}e^{-x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{6x^3-8x^2}{2x^3+4x^2}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{\sin x}{x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{2x}{e^x-1}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 2} \frac{x^2-3x+6}{x^2+3x-2}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{\sqrt{144-x^2}}{\sqrt{9-x^2}}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 1} e^x \ln(x)\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \pi} x \cos x\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{2x-8}{6x-4}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 4}\frac{x^2-16}{x-4}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{2x^2-3x}{4x^2+9x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 1} \frac{\ln x}{x-1}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{\tan x}{x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{2x^4 + 4x^2 +6}{x^4+2x^2+3}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac x {e^x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{\sqrt{x+4}-2}{x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{8x^4-3x^3}{2x^6-9x^2}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to 0} \frac{e^x- e^{-x}}{x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \frac \pi 2} \frac{2x - \pi}{\cos x}\)</span></li>
+<li><span class="math inline">\(\lim\limits_{x \to \infty} \frac{\ln(x)}{x}\)</span></li>
+</ol>
+<hr>
+<p>Perform the integral</p>
+<ol type="1">
+<li><span class="math inline">\(\int 12x^3 ~dx\)</span></li>
+<li><span class="math inline">\(\int \frac 6 {t^4} ~dt\)</span></li>
+<li><span class="math inline">\(\int \frac 2 x ~dx\)</span></li>
+<li><span class="math inline">\(\int \sqrt x ~dx\)</span></li>
+<li><span class="math inline">\(\int (5u^4 + 9u^2)~du\)</span></li>
+<li><span class="math inline">\(\int 35x^6 ~dx\)</span></li>
+<li><span class="math inline">\(\int \frac{63}{t^8}~dt\)</span></li>
+<li><span class="math inline">\(\int 15 x^{\frac 2 3}~dx\)</span></li>
+<li><span class="math inline">\(\int 48 u^{-5}~du\)</span></li>
+<li><span class="math inline">\(\int t ~dt\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{\sqrt x}\)</span></li>
+<li><span class="math inline">\(\int 4 ~du\)</span></li>
+<li><span class="math inline">\(\int \frac{8dx}{x^\frac 1 3}\)</span></li>
+<li><span class="math inline">\(\int (x^2 - 3x +4)~dx\)</span></li>
+<li><span class="math inline">\(\int (\frac{1}{u^2}- \frac 4 u)~du\)</span></li>
+<li><span class="math inline">\(\int (10x^\frac 3 2+ 6x^\frac 1 2)~dx\)</span></li>
+<li><span class="math inline">\(\int (\sqrt t + \frac {1} {\sqrt t})~dt\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int \limits^2_{x=1} 9x^2 ~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{12}_{x=4} \frac{dx}{x^2}\)</span></li>
+<li><span class="math inline">\(\int \limits^2_{x=1}8x^3~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^6_{x=3} \frac{dx}{x^3}\)</span></li>
+<li><span class="math inline">\(\int \limits^9_{t=4} \frac{dt}{\sqrt t}\)</span></li>
+<li><span class="math inline">\(\int \limits^2_{x=-2}(x^3 - 6x^2 + 4x -8)~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^5_{x=0} \frac{x^4}{5}~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^6_{x=-3} (t^2-2)~dt\)</span></li>
+<li><span class="math inline">\(\int \limits^4_{x=1} \sqrt x ~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^e_{x=1} \frac{dx}{x}\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int \limits^{\pi/2}_{\theta=0} \cos \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi}_{\theta=0} \sin \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/3}_{\theta=0} \tan \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/6}_{\theta= - \pi/6} \sec \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/3}_{\theta=0}(\theta + \cos \theta) ~d \theta\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int \limits^{1}_{x=0} \sinh x~ dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\infty}_{x=0} e^{-x}~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{e}_{x=1} \ln (x)~ dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{2}_{t=1} \cosh t ~dt\)</span></li>
+<li><span class="math inline">\(\int \limits^{4}_{x=3}2^x~dx\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int(3x+4)^5 ~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi / 8}_{\theta=0} \cos(4 \theta)~ d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{2}_{x=1} x^2 \sqrt{x^3 + 8}~dx\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{2x+3}\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/9}_{\theta=0} 6 \sin(3 \theta) ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{\sqrt{x-1}}\)</span></li>
+<li><span class="math inline">\(\int \limits^{\infty}_{t=0} t e^{-t^2}~dt\)</span></li>
+<li><span class="math inline">\(\int \frac{8x^3}{x^4-2}~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\sqrt \pi/2}_{\theta=0} \theta \cos(\theta^2)~d \theta\)</span></li>
+<li><span class="math inline">\(\int \frac{12z^2}{(x^3+16)^2}~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi^2/4}_{\theta=0} \frac{\sin(\sqrt \theta)}{\sqrt \theta}~d \theta\)</span></li>
+<li><span class="math inline">\(\int \sqrt{1- \sqrt x}~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{4}_{x=0} \sqrt{3x+4}~dx\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int \sin^3 \theta \cos \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \sin^2 \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/2}_{\theta=0} \cos^3 \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{3}_{x=0} \frac{dx}{\sqrt{x^2+9}}\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{\sqrt{16-x^2}}\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/3}_{\theta=0} \cos^4 \theta \sin \theta ~d\theta\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{x^2+25}\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/4}_{\theta=0} \tan^3 \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \sin^4 \theta ~d \theta\)</span></li>
+<li><span class="math inline">\(\int \limits^{1}_{x=0} \frac{dx}{(x^2+1)^2}\)</span></li>
+<li><span class="math inline">\(\int \frac{dx}{(9-x^2)^\frac 3 2}\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/2}_{\theta=\pi/6} \frac{\cos \theta}{\sin^3 \theta} d\theta\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int x \sin x ~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{e}_{x=1} x^3 \ln(x)~dx\)</span></li>
+<li><span class="math inline">\(\int x e^x ~dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/2}_{x=0} x \cos x ~dx\)</span></li>
+<li><span class="math inline">\(\int \frac{\ln(x)}{x^2}dx\)</span></li>
+<li><span class="math inline">\(\int \limits^{\pi/6}_{x=0} \sin x \tan x ~dx\)</span></li>
+<li><span class="math inline">\(\int x^2 \cos x ~dx\)</span></li>
+<li><span class="math inline">\(\int e^x \sin x ~dx\)</span></li>
+</ol>
+<hr>
+<ol type="1">
+<li><span class="math inline">\(\int \limits^{2}_{x=0} \int \limits^{x^2}_{y=0} xy ~dx dy\)</span></li>
+<li><span class="math inline">\(\int \limits^{1/y}_{x=0} \int \limits^{3}_{y=1} xy^2 ~dxdy\)</span></li>
+<li><span class="math inline">\(\int \limits^{1/3}_{x=0} \int \limits^{3}_{y=0} x^2 y^2 ~dxdy\)</span></li>
+<li><span class="math inline">\(\int \limits^{1}_{x=0} \int \limits^{x^2}_{y=0} \int \limits^{y}_{z=0} xyz ~dxdydz\)</span></li>
+<li><span class="math inline">\(\int \limits^{3}_{x=0} \int \limits^{\sqrt x}_{y=0} xy ~dxdy\)</span></li>
+<li><span class="math inline">\(\int \limits^{y^2}_{x=0} \int \limits^{2}_{y=1} \frac{y^2}{\sqrt x} dxdy\)</span></li>
+<li><span class="math inline">\(\int \limits^{4}_{x=1} \int \limits^{9}_{y=4} \frac{dxdy}{\sqrt{xy}}\)</span></li>
+<li><span class="math inline">\(\int \limits^{5}_{x=0}\int \limits^{2x}_{y=x} x^2y ~dxdy\)</span></li>
+<li><span class="math inline">\(\int \limits^{y}_{x=0}\int \limits^{2}_{y=0}\int \limits^{x}_{z=0} xy^2z^3 ~dxdydz\)</span></li>
+<li><span class="math inline">\(\int \limits^{\sqrt y}_{x=0}\int \limits^{\sqrt z}_{y=0}\int \limits^{4}_{z=0} x^3y~ dxdydz\)</span></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter12.html" class="pagination-link" aria-label="DAG &amp; Causal Inference Intuition">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

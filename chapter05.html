@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter06.html" rel="next">
+<link href="./chapter04.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter05.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#time-series-vs-cross-sectional-data" id="toc-time-series-vs-cross-sectional-data" class="nav-link active" data-scroll-target="#time-series-vs-cross-sectional-data">160. Time series vs cross sectional data</a></li>
+  <li><a href="#time-series-gauss-markov-conditions" id="toc-time-series-gauss-markov-conditions" class="nav-link" data-scroll-target="#time-series-gauss-markov-conditions">161. Time series Gauss Markov conditions</a></li>
+  <li><a href="#strict-exogeneity" id="toc-strict-exogeneity" class="nav-link" data-scroll-target="#strict-exogeneity">162. Strict exogeneity</a></li>
+  <li><a href="#strict-exogeneity-intuition" id="toc-strict-exogeneity-intuition" class="nav-link" data-scroll-target="#strict-exogeneity-intuition">163. Strict exogeneity intuition</a></li>
+  <li><a href="#lagged-dependent-variable-model---strict-exogeneity" id="toc-lagged-dependent-variable-model---strict-exogeneity" class="nav-link" data-scroll-target="#lagged-dependent-variable-model---strict-exogeneity">164. Lagged dependent variable model - strict exogeneity</a></li>
+  <li><a href="#asymptotic-assumptions-for-time-series-least-squares" id="toc-asymptotic-assumptions-for-time-series-least-squares" class="nav-link" data-scroll-target="#asymptotic-assumptions-for-time-series-least-squares">165. Asymptotic assumptions for time series least squares</a></li>
+  <li><a href="#conditions-for-stationary-and-weakly-dependent-series" id="toc-conditions-for-stationary-and-weakly-dependent-series" class="nav-link" data-scroll-target="#conditions-for-stationary-and-weakly-dependent-series">166. Conditions for stationary and weakly dependent series</a></li>
+  <li><a href="#stationary-in-mean" id="toc-stationary-in-mean" class="nav-link" data-scroll-target="#stationary-in-mean">167. Stationary in mean</a></li>
+  <li><a href="#spurious-regression" id="toc-spurious-regression" class="nav-link" data-scroll-target="#spurious-regression">168. Spurious regression</a></li>
+  <li><a href="#spurious-regression-2" id="toc-spurious-regression-2" class="nav-link" data-scroll-target="#spurious-regression-2">169. Spurious regression 2</a></li>
+  <li><a href="#variance-stationary-process" id="toc-variance-stationary-process" class="nav-link" data-scroll-target="#variance-stationary-process">170. Variance stationary process</a></li>
+  <li><a href="#covariance-stationary-processes" id="toc-covariance-stationary-processes" class="nav-link" data-scroll-target="#covariance-stationary-processes">171. Covariance stationary processes</a></li>
+  <li><a href="#stationary-series-summary" id="toc-stationary-series-summary" class="nav-link" data-scroll-target="#stationary-series-summary">172. Stationary series summary</a></li>
+  <li><a href="#weakly-dependent-time-series" id="toc-weakly-dependent-time-series" class="nav-link" data-scroll-target="#weakly-dependent-time-series">173. Weakly dependent time series</a></li>
+  <li><a href="#moving-average-o1-process" id="toc-moving-average-o1-process" class="nav-link" data-scroll-target="#moving-average-o1-process">174. Moving average O(1) process</a></li>
+  <li><a href="#moving-average-process-stationary-and-weakly-dependent" id="toc-moving-average-process-stationary-and-weakly-dependent" class="nav-link" data-scroll-target="#moving-average-process-stationary-and-weakly-dependent">175. Moving average process, stationary and weakly dependent</a></li>
+  <li><a href="#autoregressive-o1-introduction-and-example" id="toc-autoregressive-o1-introduction-and-example" class="nav-link" data-scroll-target="#autoregressive-o1-introduction-and-example">176. Autoregressive O(1) introduction and example</a></li>
+  <li><a href="#autoregressive-order-1-conditions-for-stationary-in-mean" id="toc-autoregressive-order-1-conditions-for-stationary-in-mean" class="nav-link" data-scroll-target="#autoregressive-order-1-conditions-for-stationary-in-mean">177. Autoregressive order (1) conditions for stationary in mean</a></li>
+  <li><a href="#autoregressive-order-1-conditions-for-stationary-in-variance" id="toc-autoregressive-order-1-conditions-for-stationary-in-variance" class="nav-link" data-scroll-target="#autoregressive-order-1-conditions-for-stationary-in-variance">178. Autoregressive order (1) conditions for stationary in variance</a></li>
+  <li><a href="#autoregressive-order-1-conditions-for-stationary-covariance-and-weak-dependence" id="toc-autoregressive-order-1-conditions-for-stationary-covariance-and-weak-dependence" class="nav-link" data-scroll-target="#autoregressive-order-1-conditions-for-stationary-covariance-and-weak-dependence">179. Autoregressive order (1) conditions for stationary covariance and weak dependence</a></li>
+  <li><a href="#autoregressive-vs-moving-average-order-1-part-1" id="toc-autoregressive-vs-moving-average-order-1-part-1" class="nav-link" data-scroll-target="#autoregressive-vs-moving-average-order-1-part-1">180. Autoregressive vs moving average order 1 part 1</a></li>
+  <li><a href="#autoregressive-vs-moving-average-order-1-part-2" id="toc-autoregressive-vs-moving-average-order-1-part-2" class="nav-link" data-scroll-target="#autoregressive-vs-moving-average-order-1-part-2">181. Autoregressive vs moving average order 1 part 2</a></li>
+  <li><a href="#partial-vs-total-autocorrelation" id="toc-partial-vs-total-autocorrelation" class="nav-link" data-scroll-target="#partial-vs-total-autocorrelation">182. Partial vs total autocorrelation</a></li>
+  <li><a href="#a-random-walk---introduction-and-properties" id="toc-a-random-walk---introduction-and-properties" class="nav-link" data-scroll-target="#a-random-walk---introduction-and-properties">183. A random walk - introduction and properties</a></li>
+  <li><a href="#qualitative-difference-between-stationary-and-non-stationary-ar1" id="toc-qualitative-difference-between-stationary-and-non-stationary-ar1" class="nav-link" data-scroll-target="#qualitative-difference-between-stationary-and-non-stationary-ar1">184. Qualitative difference between stationary and non stationary AR(1)</a></li>
+  <li><a href="#random-walk-not-weakly-dependent" id="toc-random-walk-not-weakly-dependent" class="nav-link" data-scroll-target="#random-walk-not-weakly-dependent">185. Random walk not weakly dependent</a></li>
+  <li><a href="#random-walk-with-drift" id="toc-random-walk-with-drift" class="nav-link" data-scroll-target="#random-walk-with-drift">186. Random walk with drift</a></li>
+  <li><a href="#deterministic-vs-stochastic-trends" id="toc-deterministic-vs-stochastic-trends" class="nav-link" data-scroll-target="#deterministic-vs-stochastic-trends">187. Deterministic vs stochastic trends</a></li>
+  <li><a href="#dickey-fuller-test-for-unit-root" id="toc-dickey-fuller-test-for-unit-root" class="nav-link" data-scroll-target="#dickey-fuller-test-for-unit-root">188. Dickey fuller test for unit root</a></li>
+  <li><a href="#augmented-dickey-fuller-tests" id="toc-augmented-dickey-fuller-tests" class="nav-link" data-scroll-target="#augmented-dickey-fuller-tests">189. Augmented dickey fuller tests</a></li>
+  <li><a href="#dickey-fuller-test-with-time-trend" id="toc-dickey-fuller-test-with-time-trend" class="nav-link" data-scroll-target="#dickey-fuller-test-with-time-trend">190. Dickey fuller test with time trend</a></li>
+  <li><a href="#highly-persistent-time-series" id="toc-highly-persistent-time-series" class="nav-link" data-scroll-target="#highly-persistent-time-series">191. Highly persistent time series</a></li>
+  <li><a href="#integrated-order-of-processes" id="toc-integrated-order-of-processes" class="nav-link" data-scroll-target="#integrated-order-of-processes">192. Integrated order of processes</a></li>
+  <li><a href="#cointegration---an-introduction" id="toc-cointegration---an-introduction" class="nav-link" data-scroll-target="#cointegration---an-introduction">193. Cointegration - an introduction</a></li>
+  <li><a href="#cointegration-tests" id="toc-cointegration-tests" class="nav-link" data-scroll-target="#cointegration-tests">194. Cointegration tests</a></li>
+  <li><a href="#levels-vs-difference-regression---motivation-for-cointegrated-regression" id="toc-levels-vs-difference-regression---motivation-for-cointegrated-regression" class="nav-link" data-scroll-target="#levels-vs-difference-regression---motivation-for-cointegrated-regression">195. levels vs difference regression - motivation for cointegrated regression</a></li>
+  <li><a href="#leads-and-lags-estimator-for-inference-in-cointegrated-models" id="toc-leads-and-lags-estimator-for-inference-in-cointegrated-models" class="nav-link" data-scroll-target="#leads-and-lags-estimator-for-inference-in-cointegrated-models">196. Leads and lags estimator for inference in cointegrated models</a></li>
+  <li><a href="#lagged-independent-variables" id="toc-lagged-independent-variables" class="nav-link" data-scroll-target="#lagged-independent-variables">197. Lagged independent variables</a></li>
+  <li><a href="#problem-set-5" id="toc-problem-set-5" class="nav-link" data-scroll-target="#problem-set-5"><strong><em>198. Problem set 5</em></strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Time Series</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="time-series-vs-cross-sectional-data" class="level3">
+<h3 class="anchored" data-anchor-id="time-series-vs-cross-sectional-data">160. Time series vs cross sectional data</h3>
+<p>In cross sectional, we have a population that we take a random sample from. So each observation is <span class="math inline">\(iid\)</span> making</p>
+<p><span class="math display">\[
+\boxed{E[u_i|x_i] =0}
+\]</span></p>
+<p>meaning error term is not related to independent variables.</p>
+<p>If they were dependent, we need to strengthen the assumption</p>
+<p><span class="math display">\[
+E[u_i|x_j] =0
+\]</span></p>
+<p>Meaning: error term of an individual is not related to independent variables of any other individual</p>
+<p>In Time Series, we have a <strong>process</strong> that we sample from at different times, we can’t capture all the time possible so we have <strong>no population,</strong> and the data is <strong>not iid</strong></p>
+<p>A key difference is that data are dependent, so we have to make a more strict assumption</p>
+<p><span class="math display">\[
+\boxed{E[u_t|x_j] =0}
+\]</span></p>
+<p>meaning error term is not related to independent variables in the past, present, future</p>
+</section>
+<section id="time-series-gauss-markov-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="time-series-gauss-markov-conditions">161. Time series Gauss Markov conditions</h3>
+<p>For time series data, we modify the assumptions a little bit</p>
+<ol type="1">
+<li><strong>Linear</strong></li>
+</ol>
+<p><span class="math display">\[
+y_t = \alpha + \beta_1 x_{1t} +\beta_2 x_{2t} + u_t
+\]</span></p>
+<ol type="1">
+<li><strong>Zero conditional mean of error</strong></li>
+</ol>
+<p><span class="math display">\[
+E[u_t|x_{jk}] =0
+\]</span></p>
+<p>Meaning error term at time <span class="math inline">\(t\)</span> is not related to values of independent variables at any time (past, present, future)</p>
+<p>which is different that in cross sectional where <span class="math inline">\(E[u_i|x_{ji}]=0\)</span> meaning error term for individual <span class="math inline">\(i\)</span> is unrelated to to the independent variables for that individual</p>
+<ol type="1">
+<li><strong>No perfect collinearity</strong></li>
+</ol>
+<p>If these three are met, they are <strong>unbiased</strong></p>
+<ol type="1">
+<li><strong>Homoscedasticity</strong></li>
+</ol>
+<p><span class="math display">\[
+var(u_t|x_{jk}) = \sigma^2
+\]</span></p>
+<p>The variance of the error term is constant over time and does not depend on the independent variables</p>
+<ol type="1">
+<li><strong>No serial correlation</strong></li>
+</ol>
+<p>which disappears with random sampling</p>
+<p><span class="math display">\[
+cov(u_t,u_s|x_{jk}) =0
+\]</span></p>
+<p>meaning error terms are not correlated across time</p>
+<p>If these five are met, its BLUE</p>
+</section>
+<section id="strict-exogeneity" class="level3">
+<h3 class="anchored" data-anchor-id="strict-exogeneity">162. Strict exogeneity</h3>
+<p>If we have the model</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_{t} + u_t
+\]</span></p>
+<p><strong>Strict exogeneity</strong> assumption means that</p>
+<p><span class="math display">\[
+\boxed{E[u_t|x_s] = 0 \quad \forall s}
+\]</span></p>
+<p>meaning error term is not related to independent variables in all periods</p>
+<p>which is different than weak exogeneity in cross sectional</p>
+<p><span class="math display">\[
+E[u_i |x_i] = 0
+\]</span></p>
+<p>aka error term of an individual is not related to the individual</p>
+<p>Strict exogeneity fails if we have lagged effect</p>
+<p><span class="math display">\[
+GDP_{t} = \alpha + \delta MP_t + u_t
+\]</span></p>
+<p>If <span class="math inline">\(u_t\)</span> includes <span class="math inline">\(\beta MP_{t-2}\)</span> then we have lagged effect</p>
+<p>Plot <span class="math inline">\(u_t\)</span> against <span class="math inline">\(MP_{t-2}\)</span>, if there is a relation, <span class="math inline">\(\hat \delta\)</span> is biased</p>
+<p><strong>Solution:</strong> include l<strong>agged effect</strong></p>
+<p><span class="math display">\[
+GDP_{t} = \alpha + \delta_1 MP_t + \delta_2 MP_{t-2}+u_t
+\]</span></p>
+<p>We can also have strict exogeneity violated if &lt;like reverse causality but called here <strong>feed forward effect</strong>&gt;</p>
+<p><span class="math display">\[
+sales_t = \alpha + \beta A_t + u_t\\
+A_{t+1} = f(sales_t) = g(u_t)
+\]</span></p>
+<p>Advertisement in the future depends on present sales, which is some function of the present error term</p>
+<p>So <span class="math inline">\(A_{t+1}, u_t\)</span> are correlated. And it can’t be solved by just adding lagged variable. This is hard to solve</p>
+<p>However, large sample properties depend on <strong>weak exogeneity</strong> so we forget about <strong>strict exogeneity</strong></p>
+</section>
+<section id="strict-exogeneity-intuition" class="level3">
+<h3 class="anchored" data-anchor-id="strict-exogeneity-intuition">163. Strict exogeneity intuition</h3>
+<p>We have strict exogeneity when we have</p>
+<ol type="1">
+<li><p><strong>lagged independent variables</strong></p>
+<p>independent variable in past affects error term in present, so strict exogeneity is violated and we have bias but why?</p>
+<p>In the example of GDP affected by military policy</p>
+<p><span class="math display">\[
+GDP_t = \alpha + \beta MP_t + u_t
+\]</span></p>
+<p>with the assumption that <not met="" here=""></not></p>
+<p><span class="math display">\[
+E[u_t|MP_s]= 0
+\]</span></p>
+<p>The military policy in the present is correlated with itself in the past, so we have <strong>omitted variable bias</strong> cuz military policy in the past is found in the current error term</p></li>
+<li><p><strong>Feed forward</strong></p>
+<p>Like in the sales and advertisement example</p>
+<p><span class="math display">\[
+sales_t = \alpha + \beta A_t + u_t\\
+A_t = f(sales_{t-1}) = f(u_{t-1})
+\]</span></p>
+<p>advertisement in present depends on sales on past aka depends on error in past , so strict exogeneity is violated. why bias?</p>
+<ol type="1">
+<li>sales now is function of ads now</li>
+<li>ads now is function of sales in past</li>
+<li>sales in past includes advertisement in past and error in past</li>
+<li>sales now is correlated with errors in past</li>
+</ol></li>
+</ol>
+<p><strong>Key difference</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Violation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>lagged independent variable</td>
+<td>lagged <span class="math inline">\(X_{t-1}\)</span> is correlated with current error <span class="math inline">\(\varepsilon_t\)</span></td>
+</tr>
+<tr class="even">
+<td>Feed-Forward</td>
+<td>current <span class="math inline">\(X_t\)</span> is correlated with past error <span class="math inline">\(\varepsilon_{t-1}\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="lagged-dependent-variable-model---strict-exogeneity" class="level3">
+<h3 class="anchored" data-anchor-id="lagged-dependent-variable-model---strict-exogeneity">164. Lagged dependent variable model - strict exogeneity</h3>
+<p>If we have the model</p>
+<p><span class="math display">\[
+Sales_t = \alpha + \beta ~Sales_{t-1} + u_t
+\]</span></p>
+<p>The strict exogeneity is &lt;remember <span class="math inline">\(sales_s\)</span> is the <span class="math inline">\(x\)</span> here&gt;</p>
+<p><span class="math display">\[
+E[u_t|sales_s] = 0 \quad \forall s, &lt;even \,s=t&gt;
+\]</span></p>
+<p>we can see that covariance has to be zero for all time periods</p>
+<p><span class="math display">\[
+cov(u_t, sales_{t-s})=0
+\]</span></p>
+<p>In our example, error term should not be correlated with independent variable in the present too, which is not the case</p>
+<p><span class="math display">\[
+\begin{align*}
+cov(u_t, sales_t)&amp;= cov(u_t, \alpha + \beta sales_{t-1}+ u_t)\\
+&amp;= var(u_t) = \sigma^2 \neq 0
+\end{align*}
+\]</span></p>
+<p>So strict exogeneity fails and <span class="math inline">\(\hat \beta_{OLS}\)</span> is biased. But it is consistent after other assumptions</p>
+</section>
+<section id="asymptotic-assumptions-for-time-series-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="asymptotic-assumptions-for-time-series-least-squares">165. Asymptotic assumptions for time series least squares</h3>
+<p>We need new assumptions to ensure that least square is asymptotically unbiased aka <strong>consistent</strong> which allows us to do normal inference.</p>
+<p>These assumptions are</p>
+<ol type="1">
+<li><strong>linear</strong></li>
+</ol>
+<p><span class="math display">\[
+y_t = \alpha + \beta_1x_{1t}+\beta_2x_{2t} + u_t
+\]</span></p>
+<ol type="1">
+<li><p><strong>stationary + weakly dependent</strong></p>
+<p>more on this later on</p></li>
+<li><p><strong>weak exogeneity</strong></p>
+<p><span class="math display">\[
+\boxed{E[u_t|x_{it}] = 0}
+\]</span></p>
+<p>error is not related to independent variable at a particular time <not all="" times=""></not></p>
+<p>which is way easier than <strong>strict exogeneity</strong> which says</p>
+<p><span class="math display">\[
+E[u_t|x_{is}] = 0 \quad \forall s
+\]</span></p>
+<p>meaning error is not related to independent variable in the past, present or future</p>
+<ol type="1">
+<li><strong>No perfect collinearity</strong></li>
+</ol>
+<p>If these 4 assumptions are met, then <span class="math inline">\(\hat\beta_{ls}\)</span> is <strong>consistent</strong></p>
+<ol type="1">
+<li><p><strong>Homoskedasticity</strong></p>
+<p><span class="math display">\[
+\boxed{var(u_t|x_{it}) = \sigma^2}
+\]</span></p></li>
+</ol>
+<p>which means constant variance at a particular time</p>
+<p>which is less restrictive than Gauss Markov condition that states</p>
+<p><span class="math display">\[
+Var(u_t|x_{is}) = \sigma^2 \quad \forall s
+\]</span></p>
+<p>for all <span class="math inline">\(s\)</span> including <span class="math inline">\(s=t\)</span></p>
+<ol type="1">
+<li><strong>No serial correlation</strong></li>
+</ol>
+<p><span class="math display">\[
+\boxed{Cov(u_t, u_s|x_t,x_s)= 0}
+\]</span></p>
+<p>which is less restrictive than Gauss Markov condition that said</p>
+<p><span class="math display">\[
+cov(u_t,u_s|x_{ik}) = 0 \quad\forall k
+\]</span></p>
+<p>If all the six are met, <span class="math inline">\(\hat \beta_{ls}\)</span> behaves <strong>normally</strong> too</p></li>
+</ol>
+</section>
+<section id="conditions-for-stationary-and-weakly-dependent-series" class="level3">
+<h3 class="anchored" data-anchor-id="conditions-for-stationary-and-weakly-dependent-series">166. Conditions for stationary and weakly dependent series</h3>
+<p>If <span class="math inline">\(x_t\)</span> is a <strong>process</strong> that we can’t even see all its outputs, instead we see its <strong>realizations,</strong> think of it as the value you see at a specific time. We say <span class="math inline">\(x_t\)</span> is <strong>stochastic process</strong> meaning, before we see the realization, we are not sure what value <span class="math inline">\(x_t\)</span> will take in the future.</p>
+<p>If <span class="math inline">\(x_t\)</span> is stationary and weakly dependent then <span class="math inline">\(\hat \beta_{ls} \to \beta\)</span></p>
+<p>To be <strong>stationary</strong> it has to meet these conditions</p>
+<p><span class="math display">\[
+\begin{align*}
+E[x_t] &amp;= \mu \\
+Var(x_t) &amp;= \sigma^2\\
+cov(x_t,x_{t+h}) &amp;= f(h)
+\end{align*}
+\]</span></p>
+<p>And to be <strong>weakly dependen</strong>t it must satisfy</p>
+<p><span class="math display">\[
+corr(x_t,x_{t+h}) \to 0 \quad h \to \infty
+\]</span></p>
+<p>Meaning The value of <span class="math inline">\(x_t\)</span> depend more on <span class="math inline">\(x_{t-1}\)</span> and less on <span class="math inline">\(x_1\)</span>. It will be better if correlation goes to zero fast</p>
+</section>
+<section id="stationary-in-mean" class="level3">
+<h3 class="anchored" data-anchor-id="stationary-in-mean">167. Stationary in mean</h3>
+<p><strong>Stationary in mean</strong> is written as</p>
+<p><span class="math display">\[
+\boxed{E[x_t] = \mu}
+\]</span></p>
+<p>If we plot <span class="math inline">\(t\)</span> on x axis and <span class="math inline">\(x_t\)</span> on y axis as line plot, if its staying around <span class="math inline">\(\mu\)</span> then its stationary in mean. If its going up with respect to time or down, its not stationary.</p>
+<p>&lt;is it like a heart rate? or like a ladder&gt;</p>
+<p>Why bother?</p>
+<p>If we plot <span class="math inline">\(x_t,y_t\)</span> on y axis, and try to predict</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t + \varepsilon _t
+\]</span></p>
+<p>and <span class="math inline">\(x_t\)</span> is not stationary, its increasing, it will meet <span class="math inline">\(y_t\)</span> in a point, be smaller than it before the point where the relation is <span class="math inline">\(y_t \sim 2x_t\)</span> then <span class="math inline">\(x_t\)</span> becomes bigger than <span class="math inline">\(y_t\)</span> so relation becomes <span class="math inline">\(y_t \sim 0.5 x_t\)</span></p>
+<p>Meaning I can’t have stationary <span class="math inline">\(y\)</span> and one non stationary <span class="math inline">\(x\)</span></p>
+<p>So make <span class="math inline">\(x_t, y_t\)</span> both non stationary?</p>
+<p>again, the non stationarity will change with respect to time, so one can increase way faster than the other preventing linear relationship between both (same explanation as above).</p>
+<p>Solution is to have two stationary processes, and have a constant gap between them, the slope <span class="math inline">\(\beta\)</span> represents this gap</p>
+</section>
+<section id="spurious-regression" class="level3">
+<h3 class="anchored" data-anchor-id="spurious-regression">168. Spurious regression</h3>
+<p><strong>Hendry (1980)</strong></p>
+<p>He was trying to explain changes of price level with respect to time and money supply. They were both non stationary but have strong correlation and got <span class="math inline">\(R^2 \sim 0.99\)</span></p>
+<p>Then he did the same between price and <span class="math inline">\(x_t\)</span> and got <span class="math inline">\(R^2 \sim 0.998\)</span> so its better. This <span class="math inline">\(x_t\)</span> is actually rainfall!</p>
+<p>Cuz both of them were increasing with respect to time, it appeared that there is a correlation where there is not.</p>
+<p><strong>Rule of thumb for diagnosing spurious regression by Grenger &amp; newbold (1974)</strong></p>
+<p><span class="math display">\[
+\boxed{R^2&gt;DW \to spurious}
+\]</span></p>
+<p>Remember that Durbin Watson will be low if we have runs of positive and negative</p>
+</section>
+<section id="spurious-regression-2" class="level3">
+<h3 class="anchored" data-anchor-id="spurious-regression-2">169. Spurious regression 2</h3>
+<p>If we have the process</p>
+<p><span class="math display">\[
+x_t = x_{t-1} + \varepsilon_t\\
+\varepsilon \sim iid(0, \sigma^2)
+\]</span></p>
+<p>and we have another process (both are named random walk)</p>
+<p><span class="math display">\[
+y_t = y_{t-1} + \varepsilon_t\\
+\varepsilon \sim iid(0, \sigma^2)
+\]</span></p>
+<p>One can go upwards, one can go downwards, but there will seem that there is a correlation between them. They are just random walks</p>
+<p>Note:</p>
+<p>if we do the simulation we will get <strong>duck scatter plot</strong></p>
+</section>
+<section id="variance-stationary-process" class="level3">
+<h3 class="anchored" data-anchor-id="variance-stationary-process">170. Variance stationary process</h3>
+<p>Draw constant mean line, if the deviation from it increase with time, its variance is related to time. We want it to be stationary in variance aka can be drawn between two parallel lines</p>
+<p><span class="math display">\[
+\boxed{Var(x_t) = \sigma^2}
+\]</span></p>
+<p>why?</p>
+<p>if <span class="math inline">\(y_t\)</span> is variance stationary, and <span class="math inline">\(x_t\)</span> is not variance stationary. we can’t fit it using linear regression cuz there is no constant relationship between them</p>
+<p>Remember that in time series, relation between <span class="math inline">\(x,y\)</span> is a <strong>constant magnification.</strong> &lt;<span class="math inline">\(y\)</span> looks like <span class="math inline">\(x\)</span> shifted up&gt;</p>
+<p>If both of them are non stationary in variance, we can get spurious regression</p>
+</section>
+<section id="covariance-stationary-processes" class="level3">
+<h3 class="anchored" data-anchor-id="covariance-stationary-processes">171. Covariance stationary processes</h3>
+<p>This is the last condition for a process to be stationary: constant covariance</p>
+<p>Mathematically:</p>
+<p><span class="math display">\[
+\boxed{cov(X_t, x_{t+h}) = f(h) \neq g(t)}
+\]</span></p>
+<p>what does that mean?</p>
+<ol type="1">
+<li>constant mean means the mean line is in the middle of the graph</li>
+<li>constant variance means we can draw it between two parallel lines</li>
+<li>constant covariance means the waves are similar (like same frequency)</li>
+</ol>
+<p>If the waves change after some point, maybe we have two functions for <span class="math inline">\(x_t\)</span> like</p>
+<p><span class="math display">\[
+x_t = 0.5 x_{t-1}+ \epsilon_t \qquad x_t = -0.5x_t + \epsilon_t
+\]</span></p>
+<p>That point splits the two functions, so the covariance depends on time</p>
+<p><span class="math display">\[
+cov(x_t, x_{t-1}) = f(t)
+\]</span></p>
+<p>Why bother?</p>
+<p>If we have stationary <span class="math inline">\(y_t\)</span> and <span class="math inline">\(x_t\)</span> does not have constant covariance. we cant regress <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> in a linear manner &lt;if x changes at some point, y should change too&gt;. SO to regress, we need both <span class="math inline">\(y_t\)</span> and <span class="math inline">\(x_t\)</span> to be stationary</p>
+</section>
+<section id="stationary-series-summary" class="level3">
+<h3 class="anchored" data-anchor-id="stationary-series-summary">172. Stationary series summary</h3>
+<p>We have three conditions for stationary</p>
+<p><span class="math display">\[
+\boxed{E[x_t] = u}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{var(x_t) = \sigma^2}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{cov(x_t,x_{t+h}) = f(h) \neq g(t)}
+\]</span></p>
+<p>If the three conditions are met, we can say that <span class="math inline">\(x_t\)</span> has one data generating process for all time <does not="" have="" two="" dgp=""></does></p>
+<p>Why we need stationary data?</p>
+<ol type="1">
+<li><p>If we have the model <practical></practical></p>
+<p><span class="math display">\[
+y_t  = \alpha + \beta x_t + \varepsilon_t
+\]</span></p>
+<p>if <span class="math inline">\(y, x\)</span> are non stationary, we can’t have a relationship <span class="math inline">\(\beta\)</span> that holds for all time</p>
+<p>and we don’t allow for different <span class="math inline">\(\beta_t\)</span> cuz this allows us to connect any two processes and get confused with spurious regression</p></li>
+<li><p>If the processes are stationary, we can use <span class="math inline">\(LLN+CLT\)</span> and make inference easily. <theory></theory></p></li>
+</ol>
+</section>
+<section id="weakly-dependent-time-series" class="level3">
+<h3 class="anchored" data-anchor-id="weakly-dependent-time-series">173. Weakly dependent time series</h3>
+<p>Weakly dependence means the independent variable is less correlated with previous values as time passes</p>
+<p><span class="math display">\[
+corr(x_t, x_{t+h})\to 0 \qquad h \to \infty
+\]</span></p>
+<p>Example 1: <strong>Moving average process</strong></p>
+<p><span class="math display">\[
+\boxed{x_t = \varepsilon_t + \theta \varepsilon_{t-1}}
+\]</span></p>
+<p>This model has <span class="math inline">\(\epsilon_t \sim iid(0, \sigma^2)\)</span> so the correlation is</p>
+<p><span class="math display">\[
+corr(x_t,x_{t-1}) \neq 0 \qquad corr(x_t. x_{t-\tau})= 0 ,J&gt;1
+\]</span></p>
+<p>Example 2: <strong>Autoregressive process</strong></p>
+<p><span class="math display">\[
+\boxed{x_t = \rho x_{t-1}+ \epsilon_t}
+\]</span></p>
+<p>if <span class="math inline">\(|\rho|&lt;1\)</span>, the process is weakly dependent</p>
+<p><span class="math display">\[
+corr(x_t, x_{t-1})\sim \rho \qquad
+\]</span></p>
+<p>but to find correlation for <span class="math inline">\(x_{t-2}\)</span> we need to <strong>back substitute</strong> for <span class="math inline">\(x_{t-1}\)</span></p>
+<p><span class="math display">\[
+x_{t-1} = \rho x_{t-2} + \epsilon_{t-1}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{x_t = \rho^2x_{t-2}+ \rho \epsilon_{t-1}+ \epsilon_t}
+\]</span></p>
+<p>Then the correlation will be</p>
+<p><span class="math display">\[
+corr(x_t, x_{t-2}) \sim \rho^2
+\]</span></p>
+<p>if <span class="math inline">\(|\rho|&lt;1\)</span> the power will make it even smaller</p>
+<p>What if the series is not weakly dependent?</p>
+<p>Example: <strong>Random walk</strong></p>
+<p><span class="math display">\[
+\boxed{x_t = x_{t-1}+ \epsilon_t}
+\]</span></p>
+<p>A function like this will have equal correlation for all intervals</p>
+<p><span class="math display">\[
+corr(x_t, x_{t-1}) = corr(x_t, x_{t-2})
+\]</span></p>
+<p>Why do we need weakly dependence?</p>
+<ul>
+<li>in cross sectional, we needed random sample to use <span class="math inline">\(CLT\)</span></li>
+<li>in time series, we need weakly dependence to use <span class="math inline">\(CLT\)</span>, cuz if <span class="math inline">\(x_t\)</span> is not really related with lagged variables, we can treat them as random sample</li>
+</ul>
+</section>
+<section id="moving-average-o1-process" class="level3">
+<h3 class="anchored" data-anchor-id="moving-average-o1-process">174. Moving average O(1) process</h3>
+<p>A moving average process</p>
+<p><span class="math display">\[
+x_t = \varepsilon_t + \theta \varepsilon_{t-1}, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+\]</span></p>
+<p>Is called <span class="math inline">\(MA(1)\)</span> &lt;moving average of order 1&gt; cuz we have one lagged error only</p>
+<p><strong>Example of MA(1):</strong></p>
+<p>Change in demand of lemonade</p>
+<p><span class="math display">\[
+\Delta \text{lemonade}_t = \varepsilon_t - 0.5 \varepsilon_{t-1}
+\]</span></p>
+<p>where epsilon represent change in temperature <span class="math inline">\(\varepsilon_t = \Delta \text{temp}_t\)</span></p>
+<p>If change in temperature is greater than zero, we have</p>
+<p><span class="math display">\[
+\varepsilon_t &gt; 0 \Rightarrow \Delta \text{lemonade}_t &gt; 0
+\]</span></p>
+<p>But what does the <span class="math inline">\(\varepsilon_{t-1}\)</span>?</p>
+<p>If the future temperature does not change, <span class="math inline">\(\varepsilon_{t+1}=0\)</span></p>
+<p><span class="math display">\[
+\varepsilon_{t+1} = 0 \Rightarrow \Delta \text{lemonade}_{t+1} = -0.5 \varepsilon_t
+\]</span></p>
+<p>Lemonade demand will decrease, cuz people bought it yesterday and there are still leftovers. SO although temp is still high, demand of lemonade will decrease</p>
+<p>If lemonade bottle stays for two days, we will have in the model <span class="math inline">\(\varepsilon_{t-2}\)</span></p>
+<p><strong>Example 2:</strong> change in oil price</p>
+<p><span class="math display">\[
+\Delta \text{OilP}_{t} =  \varepsilon_t + 0.5\varepsilon_{t-1}
+\]</span></p>
+<p>Where <span class="math inline">\(\varepsilon_t\)</span> represent a catastrophe like a typhoon or hurricane so if it occurs, price increase</p>
+<p><span class="math display">\[
+\varepsilon_t &gt; 0 \Rightarrow \Delta \text{OilP}_t &gt; 0
+\]</span></p>
+<p>What about after a week with no hurricanes <span class="math inline">\(\varepsilon_{t+1} = 0\)</span>, supply is still recovering from the catastrophe so oil price increases</p>
+<p>After 2 weeks, it recovers finally</p>
+<p><span class="math display">\[
+\Delta \text{OilP}_{t+2} = 0
+\]</span></p>
+<p>Notice that in MA(1) models, error effect appears in two periods: when it happened, and afterwards.</p>
+</section>
+<section id="moving-average-process-stationary-and-weakly-dependent" class="level3">
+<h3 class="anchored" data-anchor-id="moving-average-process-stationary-and-weakly-dependent">175. Moving average process, stationary and weakly dependent</h3>
+<p>We said that an MA(1) has the form</p>
+<p><span class="math display">\[
+X_t = \varepsilon_t + \theta \varepsilon_{t-1}, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+\]</span></p>
+<p>For a process to be stationary it should has</p>
+<ol type="1">
+<li>constant mean</li>
+</ol>
+<p><span class="math display">\[
+\mathbb{E}[X_t] = \mathbb{E}[\varepsilon_t + \theta \varepsilon_{t-1}]&nbsp;= \mathbb{E}[\varepsilon_t] + \theta \mathbb{E}[\varepsilon_{t-1}] = 0
+\]</span></p>
+<p><span class="math inline">\(\theta\)</span> is constant, and since that <span class="math inline">\(\varepsilon_t \sim iid(0,\sigma^2)\)</span>. expectation is <span class="math inline">\(0\)</span></p>
+<ol type="1">
+<li>constant variance</li>
+</ol>
+<p><span class="math display">\[
+\text{Var}(X_t) = \text{Var}(\varepsilon_t + \theta \varepsilon_{t-1})&nbsp;= \text{Var}(\varepsilon_t) + \theta^2 \text{Var}(\varepsilon_{t-1})&nbsp;= \sigma^2 + \theta^2 \sigma^2&nbsp;= \sigma^2(1 + \theta^2)
+\]</span></p>
+<p>we have no covariance terms cuz <span class="math inline">\(\varepsilon_t \sim iid(0,\sigma^2)\)</span></p>
+<ol type="1">
+<li>covariance does not depend on time</li>
+</ol>
+<p><span class="math display">\[
+\text{Cov}(X_t, X_{t+h}) = f(h) \not= f(t+h)
+\]</span></p>
+<p>To prove it, we check it with 1 lag</p>
+<p><span class="math display">\[
+\text{Cov}(X_t, X_{t-1})&nbsp;= \text{Cov}(\varepsilon_t + \theta \varepsilon_{t-1}, \varepsilon_{t-1} + \theta \varepsilon_{t-2})= \theta \cdot \text{Cov}(\varepsilon_{t-1}, \varepsilon_{t-1}) = \theta \sigma^2
+\]</span></p>
+<p>Remember that expanding covariance is like expanding a bracket. the only common term is <span class="math inline">\(\varepsilon_{t-1}\)</span></p>
+<p>for <span class="math inline">\(j&gt;1\)</span></p>
+<p><span class="math display">\[
+\text{Cov}(X_t, X_{t-j})&nbsp;= \text{Cov}(\varepsilon_t + \theta \varepsilon_{t-1}, \varepsilon_{t-j} + \theta \varepsilon_{t-1-j}) = 0
+\]</span></p>
+<p>from 3. we know that its also weakly dependent</p>
+</section>
+<section id="autoregressive-o1-introduction-and-example" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-o1-introduction-and-example">176. Autoregressive O(1) introduction and example</h3>
+<p>An auto regressive model assumption is</p>
+<p><span class="math display">\[
+x_t = \rho x_{t-1}+ \epsilon_t \qquad \varepsilon_t \sim iid(0,\sigma^2)
+\]</span></p>
+<p>Why is it called auto regressive?</p>
+<p>because <span class="math inline">\(x\)</span> is regressed on previous value of itself.</p>
+<p>Example: changes in oil prices</p>
+<p><span class="math display">\[
+\Delta \text{OilP}_{t} =  0.5 \Delta \text{OilP}_{t-1} + \varepsilon_t
+\]</span></p>
+<p>If <span class="math inline">\(\varepsilon\)</span> is constant <zero> then a pipe excluded and resulted in a <strong>shock</strong> with a value of $10 then returned to zero again.</zero></p>
+<p>The price of the oil will take time to return to its original price</p>
+<p>For example</p>
+<p><span class="math display">\[
+\Delta \text{OilP}_{t+1} = 0.5 \cdot 10 = \$5
+\]</span></p>
+<p>Why oil follows AR?</p>
+<p>Due to <strong>inertia</strong>, investor may think its a terrorist attack and supply decreases</p>
+<p>AR vs MA:</p>
+<p>MA effect lasts for two time periods while AR effect stays for infinite time <in theory=""></in></p>
+<p><span class="math display">\[
+MA \to 2\\
+AR \to \infty
+\]</span></p>
+</section>
+<section id="autoregressive-order-1-conditions-for-stationary-in-mean" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-order-1-conditions-for-stationary-in-mean">177. Autoregressive order (1) conditions for stationary in mean</h3>
+<p>For an autoregression model to be stationary in mean, we need to back substitute first</p>
+<p><span class="math display">\[
+\begin{align*}x_t &amp;= \rho x_{t-1} + \varepsilon_t \qquad   \varepsilon_t \sim \text{iid}~(0, \sigma^2) \\&amp;= \rho \left[\rho x_{t-2} + \varepsilon_{t-1} \right] + \varepsilon_t \\&amp;= \rho^2 x_{t-2} + \rho \varepsilon_{t-1} + \varepsilon_t \\&amp;= \cdots \\&amp;= \rho^t x_0 + \sum_{i=0}^{t-1} \rho^i \varepsilon_{t-i} \end{align*}
+\]</span></p>
+<p>We better add it in a box</p>
+<p><span class="math display">\[
+\boxed{x_t =\rho^t x_0 + \sum_{i=0}^{t-1} \rho^i \varepsilon_{t-i} }
+\]</span></p>
+<p>Now we can check if the expectation is constant or not</p>
+<p><span class="math display">\[
+\text{(i)}\quad \mathbb{E}[X_t] = \rho^t \mathbb{E}[X_0] + \sum_{i=0}^{t-1} \rho^i \mathbb{E}[\varepsilon_{t-i}] \\
+= \rho^t \mathbb{E}[X_0]\\
+\]</span></p>
+<p>Since that <span class="math inline">\(\varepsilon\)</span> has mean of zero, it disappears</p>
+<p>For the expectation to be constant, it must be that</p>
+<p><span class="math display">\[
+\Rightarrow \mathbb{E}[x_0] = 0 \\\Rightarrow \mathbb{E}[x_t] = 0
+\]</span></p>
+</section>
+<section id="autoregressive-order-1-conditions-for-stationary-in-variance" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-order-1-conditions-for-stationary-in-variance">178. Autoregressive order (1) conditions for stationary in variance</h3>
+<p>Back to our Auto regressive model</p>
+<p><span class="math display">\[
+x_t = \rho x_{t-1} + \varepsilon_t ;  \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+\]</span></p>
+<p>To check if its stationary in variance</p>
+<p><span class="math display">\[
+\text{Var}(x_t) = \rho^2 \text{Var}(x_{t-1}) + \text{Var}(\varepsilon_t)
+\]</span></p>
+<p>We need <span class="math inline">\(\text{Var}(x_t) = \text{Var}(x_{t-1})\)</span></p>
+<p>SO we substitute in the original model</p>
+<p><span class="math display">\[
+\text{Var}(x_t) = {\rho^2 \text{Var}(x_t)} + \sigma^2
+\]</span></p>
+<p>Solving it gets</p>
+<p><span class="math display">\[
+(1 - \rho^2) \text{Var}(x_t) = \sigma^2
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\boxed{\text{Var}(x_t) = \dfrac{\sigma^2}{1 - \rho^2}}
+\]</span></p>
+<p>If <span class="math inline">\(|\rho|\)</span> = 1, variance is infinite <non stationary=""></non></p>
+<p>if <span class="math inline">\(|\rho|&gt;1\)</span>, variance is negative <not possible=""></not></p>
+<p>so</p>
+<p><span class="math display">\[
+\boxed{|\rho|&lt;1}
+\]</span></p>
+</section>
+<section id="autoregressive-order-1-conditions-for-stationary-covariance-and-weak-dependence" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-order-1-conditions-for-stationary-covariance-and-weak-dependence">179. Autoregressive order (1) conditions for stationary covariance and weak dependence</h3>
+<p>To check for stationary covariance and weak dependence, we need back substitution</p>
+<p><span class="math display">\[
+\begin{align*}\\
+x_t &amp;= \rho x_{t-1} + \varepsilon_t ;  \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)\\
+&amp;= \rho[\rho x_{t-2} + \varepsilon_{t-1}]+ \varepsilon_t\\
+&amp;= \rho^2x_{t-2}+ \rho \varepsilon_{t-1}+ \varepsilon_t\\
+&amp;= \vdots\\
+x_{t+h} &amp;= \rho^h x_t + \sum \rho^i \varepsilon_{t+h}
+\end{align*}
+\]</span></p>
+<p>Last term is important so lets put it in a box</p>
+<p><span class="math display">\[
+\boxed{x_{t+h} = \rho^h x_t + \sum \rho^i \varepsilon_{t+h}}
+\]</span></p>
+<p>To take the covariance, we expand</p>
+<p><span class="math display">\[
+\text{Cov}(x_t, x_{t+h}) = \text{Cov}(x_t, \rho^h x_t + \cancel{\sum_{i=0}^{h-1} \rho^i \varepsilon_{t+h-i}})
+\]</span></p>
+<p>we cancelled the last part cuz there is no relation between <span class="math inline">\(x, \varepsilon\)</span>. So we get</p>
+<p><span class="math display">\[
+\text{Cov}(x_t, x_{t+h}) = \rho^h cov(x_t,x_t) = \rho^h var(x_t)
+\]</span></p>
+<p>which we derived from last section to get</p>
+<p><span class="math display">\[
+\boxed{\text{Cov}(x_t, x_{t+h}) = \dfrac{\rho^h \sigma^2}{1-\rho^2} \qquad |\rho|&lt;1}
+\]</span></p>
+<p>To be weakly dependent, we check the correlation, remember that its covariance/ variance and we assume equal variance</p>
+<p><span class="math display">\[
+corr(x_t, x_{t+h}) = \dfrac{\text{Cov}(x_t, x_{t+h}) }{var(x_t)} = \rho^h
+\]</span></p>
+<p>so <span class="math inline">\(|\rho|\)</span> has to be <span class="math inline">\(&lt;1\)</span> in order to correlation to reach zero</p>
+<p>So final conditions for AR(1) to be stationary:</p>
+<ol type="1">
+<li><span class="math inline">\(|\rho| &lt;1\)</span></li>
+<li><span class="math inline">\(E[x_0] = 0\)</span></li>
+</ol>
+</section>
+<section id="autoregressive-vs-moving-average-order-1-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-vs-moving-average-order-1-part-1">180. Autoregressive vs moving average order 1 part 1</h3>
+<p>How to know if my data follows MA or AR?</p>
+<ol type="1">
+<li>Plot the data and it must have
+<ol type="1">
+<li>constant mean</li>
+<li>constant variance</li>
+</ol></li>
+<li>check covariance
+<ol type="1">
+<li><p>For MA(1):</p>
+<p><span class="math display">\[
+cov(x_t,x_{t+h})\begin{cases}
+= \theta \sigma^2, &amp;h=1\\
+=0, &amp;h &gt;1
+\end{cases}
+\]</span></p>
+<p>and variance is <span class="math inline">\(var(x_t)= \sigma^2 (1+\theta^2)\)</span></p>
+<p>combining both, we get</p>
+<p><span class="math display">\[
+corr(x_t,x_{t+h})\begin{cases}
+= \dfrac{\theta}{(1+\theta^2)}, &amp;h=1\\
+=0, &amp;h &gt;1
+\end{cases}
+\]</span></p>
+<ol start="2" type="a">
+<li>For AR(1):</li>
+</ol>
+<p><span class="math display">\[
+corr(x_t.x_{t+h}) = \rho^h
+\]</span></p>
+<p>Since both MA and AR have same mean and variance, we use correlation to differentiate</p></li>
+</ol></li>
+</ol>
+</section>
+<section id="autoregressive-vs-moving-average-order-1-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="autoregressive-vs-moving-average-order-1-part-2">181. Autoregressive vs moving average order 1 part 2</h3>
+<p>To represent the correlation, we write <span class="math inline">\(\Gamma\)</span> instead of <span class="math inline">\(corr\)</span></p>
+<p>So for AR(1)</p>
+<p><span class="math display">\[
+\Gamma^h = \rho^h
+\]</span></p>
+<p>For MA(1)</p>
+<p><span class="math display">\[
+\Gamma^h\begin{cases}
+= \dfrac{\theta}{(1+\theta^2)}, &amp;h=1\\
+=0, &amp;h &gt;1
+\end{cases}
+\]</span></p>
+<p>Continuing with the previous steps</p>
+<ol type="1">
+<li>Plot a correlogram &lt;h on x axis, <span class="math inline">\(\Gamma\)</span> on y axis&gt;
+<ol type="1">
+<li>at lag <span class="math inline">\(0\)</span>, correlation = 1</li>
+<li>For MA(1): it will have corr at lag 1, then other lags will have corr near zero <not exactly="" zero="" due="" to="" random="" error=""></not></li>
+<li>For AR(1): corr will decrease gradually as lags increase</li>
+</ol></li>
+</ol>
+<p>Note: For MA(1): correlogram allows us to estimate <span class="math inline">\(\theta\)</span> using method of moments, we need to know correlation of first period <span class="math inline">\(r(1)\)</span></p>
+<p><span class="math display">\[
+\dfrac{\hat \theta}{1 + \hat \theta^2} = r
+\]</span></p>
+<p>Using method of moments</p>
+<p><span class="math display">\[
+\boxed{\hat \theta} = \dfrac{1 \pm \sqrt{1-4r^2}}{2r}
+\]</span></p>
+<p>For <span class="math inline">\(\theta\)</span> to be <strong>invertible</strong>, we take the negative equation only <more on="" this="" later=""></more></p>
+</section>
+<section id="partial-vs-total-autocorrelation" class="level3">
+<h3 class="anchored" data-anchor-id="partial-vs-total-autocorrelation">182. Partial vs total autocorrelation</h3>
+<p>We learnt about Total correlogram</p>
+<p>For recap: Total correlogram</p>
+<ol type="1">
+<li>AR(1) decreases gradually</li>
+<li>MA(1) will vanish after first lag <not really="" vanish="" but="" real="" zero="" due="" to="" sampling="" error=""></not></li>
+</ol>
+<p>why AR(1) doesn’t vanish?</p>
+<p>cuz we can write it in back substitution as</p>
+<p><span class="math display">\[
+x_t = \rho^2x_{t-2}+ \rho \varepsilon_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>Here is the problem</p>
+<p>AR(2), AR(3) will also have total correlogram that decays gradually, so how to differentiate?</p>
+<p>Use <strong>PACF:</strong> partial correlogram</p>
+<ol type="1">
+<li>find correlation of a variable with itself lagged</li>
+<li>subtract that effect from the variable</li>
+<li>check what residual correlation is left over between the variable and itself lagged</li>
+</ol>
+<p>For AR(1):</p>
+<p>PACF: will have strong correlation at lag(1), then correlation vanishes <not really="" vanish="" due="" to="" sampling="" error=""></not></p>
+<p>For AR(2):</p>
+<p>PACF: will have strong correlation at lag(1) and lag(2) cuz the function is</p>
+<p><span class="math display">\[
+x_t = \rho_1 x_{t-1} + \rho_2 x_{t-2} + \varepsilon_t
+\]</span></p>
+<p>see how <span class="math inline">\(x_{t-2}\)</span> affects <span class="math inline">\(x_t\)</span>?</p>
+<p>SO: use PACF to know type of AR</p>
+</section>
+<section id="a-random-walk---introduction-and-properties" class="level3">
+<h3 class="anchored" data-anchor-id="a-random-walk---introduction-and-properties">183. A random walk - introduction and properties</h3>
+<p>A random walk is just AR(1) with <span class="math inline">\(\rho = 1\)</span></p>
+<p><span class="math display">\[
+x_t = x_{t-1} + \varepsilon_t, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2), \quad |\rho| &lt; 1
+\]</span></p>
+<p>We know that its non stationary, but why? back substitute</p>
+<p><span class="math display">\[
+x_t = x_{t-2} + \varepsilon_{t-1} + \varepsilon_t
+\]</span></p>
+<p>If we continue expanding to time zero we get</p>
+<p>$$ </p>
+<p>$$</p>
+<p>Now if we take the expectation, the <span class="math inline">\(\varepsilon\)</span> term disappears</p>
+<p><span class="math display">\[
+E[x_t]= E[x_0]
+\]</span></p>
+<p>To be constant mean, we need to force <span class="math inline">\(E[x_0] =0\)</span></p>
+<p>As for the variance</p>
+<p><span class="math display">\[
+\text{Var}(x_t) = \sum_{i=0}^{t-1} \text{Var}(\varepsilon_{t-i}) = t\sigma^2 = f(t)
+\]</span></p>
+<p>remember that <span class="math inline">\(\varepsilon\)</span> is <span class="math inline">\(iid\)</span>, hence no covariance terms. since it depends on time, its not stationary</p>
+<p>For the covariance we need form of future terms first</p>
+<p><span class="math display">\[
+x_{t+h} = x_t + \sum_{i=0}^{h-1} \varepsilon_{t+h-i}
+\]</span></p>
+<p>Then the covariance is</p>
+<p><span class="math display">\[
+\text{Cov}(x_t, x_{t+h}) = \text{Var}(x_t)
+\]</span></p>
+<p>cuz from <span class="math inline">\(x_{t+h}\)</span>, only <span class="math inline">\(x_t\)</span> is useful in the covariance. Since variance has <span class="math inline">\(t\)</span>, covariance is also violated</p>
+</section>
+<section id="qualitative-difference-between-stationary-and-non-stationary-ar1" class="level3">
+<h3 class="anchored" data-anchor-id="qualitative-difference-between-stationary-and-non-stationary-ar1">184. Qualitative difference between stationary and non stationary AR(1)</h3>
+<p>We compare two series: AR(1) and a random walk</p>
+<p>Draw a line representing zero. In the AR process, it will look like a <strong>random noise.</strong> runs of ups and downs return to zero quickly <span class="math inline">\(|\rho|=0.7\)</span></p>
+<p>as <span class="math inline">\(\rho\)</span> increases, runs take longer time to return to zero until we get <span class="math inline">\(|\rho| = 1\)</span> where its behavior changes</p>
+<p>At <span class="math inline">\(|\rho|
+= 1\)</span> series can keep having a down run. or 1 up run. It will take very long runs to return to zero</p>
+<p>Both the series have unconditional mean of zero but the difference is in the conditional mean</p>
+<p>For AR(1)</p>
+<p><span class="math display">\[
+E[x_t|x_{t-1}] = \rho x_{t-1}
+\]</span></p>
+<p>as <span class="math inline">\(|\rho| &lt;1\)</span>, if x is high, <span class="math inline">\(\rho\)</span> will make it downward, and vice versa</p>
+<p>For random walk</p>
+<p><span class="math display">\[
+E[x_t|x_{t-1}] = x_{t-1}
+\]</span></p>
+<p>There is no <span class="math inline">\(\rho\)</span> so nothing forcing the series to return to zero</p>
+<p>Here is simulation of 10,000 steps at <span class="math inline">\(\rho=0.8, 0.99,1\)</span></p>
+</section>
+<section id="random-walk-not-weakly-dependent" class="level3">
+<h3 class="anchored" data-anchor-id="random-walk-not-weakly-dependent">185. Random walk not weakly dependent</h3>
+<p>Now we will prove that a random walk is not weakly dependent</p>
+<p>We already proves that the covariance is</p>
+<p><span class="math display">\[
+\begin{align*}\text{Cov}(x_t, x_{t+h}) &amp;= \text{Var}(x_t) = t \sigma^2
+\end{align*}
+\]</span></p>
+<p>Then the correlation is</p>
+<p><span class="math display">\[
+\text{Corr}(x_t, x_{t+h}) = \frac{\text{Cov}(x_t, x_{t+h})}{\sqrt{\text{Var}(x_t) \text{Var}(x_{t+h})}} = \frac{t \alpha^2}{\sqrt{t \sigma^2(t+h) \alpha^2}}
+\]</span></p>
+<p>Note that</p>
+<p><span class="math display">\[
+{Var}(x_{t+h}) = (t+h) \sigma^2
+\]</span></p>
+<p>We can clean the correlation by canceling terms to get</p>
+<p><span class="math display">\[
+\text{Corr}(x_t, x_{t+h}) = \frac{t}{\sqrt{t(t+h)}} = \sqrt{\frac{t}{t+h}}
+\]</span></p>
+<p>We require the correlation <span class="math inline">\(\Gamma^h \to 0\)</span> as <span class="math inline">\(h \to \infty\)</span> to be weakly dependent, which is not the case here</p>
+</section>
+<section id="random-walk-with-drift" class="level3">
+<h3 class="anchored" data-anchor-id="random-walk-with-drift">186. Random walk with drift</h3>
+<p>A random walk with a drift is a regular random walk with a kickstart <span class="math inline">\(\alpha\)</span></p>
+<p><span class="math display">\[
+\boxed{x_t = \alpha + x_{t-1} + \varepsilon_t} \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+\]</span></p>
+<p>To know its properties, back substitute</p>
+<p>$$ <span class="math display">\[\begin{align*}
+x_t &amp;=  \alpha + \alpha + x_{t-2} + \varepsilon_{t-1} + \varepsilon_t\\
+&amp;= \alpha + \alpha + \alpha + x_{t-3} + \varepsilon_{t-2} + \varepsilon_{t-1} + \varepsilon_t\\
+&amp;= \alpha t + x_0 + \sum_{i=0}^{t-1} \varepsilon_{t-i}
+
+\end{align*}\]</span> $$</p>
+<p>Lets put it in a box cuz its important</p>
+<p><span class="math display">\[
+\boxed{x_t = \alpha t + x_0 + \sum_{i=0}^{t-1} \varepsilon_{t-i}}
+\]</span></p>
+<p>If we take the expectation</p>
+<p><span class="math display">\[
+\mathbb{E}[x_t] = \alpha t
+\]</span></p>
+<p>Depends on time, not constant, so not stationary &lt;assuming <span class="math inline">\(x_0\)</span> has mean of <span class="math inline">\(0\)</span>&gt;</p>
+<p>as for the variance</p>
+<p><span class="math display">\[
+\text{Var}(x_t) = \sum_{i=0}^{t-1} \text{Var}(\varepsilon_{t-i}) = t\sigma^2
+\]</span></p>
+<p>The only term that varies is the <span class="math inline">\(\varepsilon\)</span>, variance depends on time so not stationary</p>
+<p>If we draw it, the runs of ups and downs will be centered around <span class="math inline">\(x = \alpha t\)</span> which is an increasing line</p>
+</section>
+<section id="deterministic-vs-stochastic-trends" class="level3">
+<h3 class="anchored" data-anchor-id="deterministic-vs-stochastic-trends">187. Deterministic vs stochastic trends</h3>
+<p>A deterministic trend is a model like</p>
+<p><span class="math display">\[
+x_t = \alpha t + \varepsilon_t \qquad\varepsilon_t \sim \text{iid}(0, \sigma^2)
+\]</span></p>
+<p>If we take its expectation we get</p>
+<p><span class="math display">\[
+E[x_t] = \alpha t
+\]</span></p>
+<p>Since <span class="math inline">\(\alpha\)</span> is a constant, the only term that varies is <span class="math inline">\(\varepsilon\)</span></p>
+<p><span class="math display">\[
+\text{Var}(x_t) = \sigma^2
+\]</span></p>
+<p>The variance is constant, we can consider this model <strong>stationary with a linear trend</strong></p>
+<p>As for a stochastic trend</p>
+<p><span class="math display">\[
+x_t = \alpha + x_{t-1} + \varepsilon_t
+\]</span></p>
+<p>with an expectation of</p>
+<p><span class="math display">\[
+E[x_t] = \alpha t
+\]</span></p>
+<p>and variance of</p>
+<p><span class="math display">\[
+\text{Var}(x_t) = t\sigma^2
+\]</span></p>
+<p>Both the mean and variance are not constant here</p>
+<p>To visualize the difference:</p>
+<p>Draw the line <span class="math inline">\(x= \alpha t\)</span>, the deterministic model looks like a random noise above the line</p>
+<p>The stochastic trend may have massive runs of ups and downs, or keep going up or down</p>
+<p>Here is a simulation of the two models</p>
+</section>
+<section id="dickey-fuller-test-for-unit-root" class="level3">
+<h3 class="anchored" data-anchor-id="dickey-fuller-test-for-unit-root">188. Dickey fuller test for unit root</h3>
+<p>Dicky fuller test checks if the model is non stationary</p>
+<p><span class="math display">\[
+x_t = \alpha + \rho x_{t-1} + \varepsilon_t
+\]</span></p>
+<p>we add <span class="math inline">\(\alpha\)</span> by default. It doesn’t matter if we have a random walk or a random walk with a drift</p>
+<p>the null hypothesis is</p>
+<p><span class="math display">\[
+H_0: \rho=1 \qquad H_1: \rho&lt;1
+\]</span></p>
+<p>Under null hypothesis, <span class="math inline">\(x_t, x_{t-1}\)</span> are non stationery, so we can’t depend on CLT and just test <span class="math inline">\(\rho\)</span></p>
+<p>Solution: subtract</p>
+<p><span class="math display">\[
+x_t - x_{t-1} = \alpha + (\rho-1) x_{t-1} + \varepsilon_t
+\]</span></p>
+<p>which can be written more neatly to</p>
+<p><span class="math display">\[
+\boxed{\Delta x_t  = \alpha + \delta x_{t-1} + \varepsilon_t}
+\]</span></p>
+<p>Under the null hypothesis <span class="math inline">\(\rho =1\)</span>, the <span class="math inline">\(\delta=0\)</span> and <span class="math inline">\(x_{t-1}\)</span> vanishes</p>
+<p>but if <span class="math inline">\(\rho&lt;1\)</span>, <span class="math inline">\(x_{t-1}\)</span> is stationary</p>
+<p>So this is better scenario than the original model</p>
+<p>Now we test for the <strong>unit root</strong> aka <span class="math inline">\(\rho=1\)</span> using <span class="math inline">\(t\)</span> statistic &lt;apply it on <span class="math inline">\(\hat \delta\)</span>&gt;</p>
+<p>One problem remains</p>
+<p>under null hypothesis, <span class="math inline">\(x_{t-1}\)</span> is non stationary, so we still can’t count on <strong>CLT</strong></p>
+<p>But <strong>Dickey Fuller</strong> tabulated the values of <span class="math inline">\(\delta\)</span> under the <span class="math inline">\(H_0\)</span> so we can compare <span class="math inline">\(t\)</span> with <strong>Dickey fuller DF</strong></p>
+<p><span class="math display">\[
+\boxed{t &lt; DF} \to \text{reject null}
+\]</span></p>
+</section>
+<section id="augmented-dickey-fuller-tests" class="level3">
+<h3 class="anchored" data-anchor-id="augmented-dickey-fuller-tests">189. Augmented dickey fuller tests</h3>
+<p>Last section dealt with AR(1) models, but what if we have more complicated models?</p>
+<p>ADF extends DF test to AR(p) models</p>
+<p>For example, an AR(2) model would be written in the difference form</p>
+<p><span class="math display">\[
+\Delta y_t = \alpha + \delta y_{t-1}+ \beta \Delta y_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>and test for <span class="math inline">\(\delta\)</span></p>
+<p>For any AR order process</p>
+<p><span class="math display">\[
+\Delta y_t = \alpha + \delta y_{t-1}+\sum^h_{i=1}\beta_i \Delta y_{t-i}+ \varepsilon_t
+\]</span></p>
+<p>Again, we just test for <span class="math inline">\(H_o: \delta = 0 &lt;NS&gt;\)</span></p>
+<p>Each <span class="math inline">\(\beta_i\)</span> has <span class="math inline">\(t\)</span> distribution so we can test them all using <span class="math inline">\(F\)</span> test</p>
+<p>Another way is adding lagged variables until we have no serial correlation in the error term. Just compare t test with DF</p>
+<p><span class="math display">\[
+t &lt; DF
+\]</span></p>
+</section>
+<section id="dickey-fuller-test-with-time-trend" class="level3">
+<h3 class="anchored" data-anchor-id="dickey-fuller-test-with-time-trend">190. Dickey fuller test with time trend</h3>
+<p>We can also expand dickey fuller to deal with time trends</p>
+<p>For example a random walk with drift</p>
+<p><span class="math display">\[
+y_t = \alpha + y_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>and <trend stationary=""></trend></p>
+<p><span class="math display">\[
+y_t = \alpha t + \varepsilon_t
+\]</span></p>
+<p>Remember that its trend stationary cuz</p>
+<p><span class="math display">\[
+y_t - \alpha t = \varepsilon_t
+\]</span></p>
+<p>Meaning its stationary once the trend is removed</p>
+<p>To test if we have deterministic or stochastic trend we do auxiliary regression of the change in <span class="math inline">\(y_t\)</span></p>
+<p><span class="math display">\[
+\boxed{\Delta y_t = \alpha + \delta y_{t-1}+ \gamma t + \varepsilon_t}
+\]</span></p>
+<p><span class="math inline">\(\gamma\)</span> checks if the relation is linear or quadratic or higher order</p>
+<p><span class="math display">\[
+H_0: \delta = 0, \gamma=0
+\]</span></p>
+<p>But we don’t need to worry about the <span class="math inline">\(\gamma\)</span>, just add it to the auxiliary regression and check the hypothesis of <span class="math inline">\(\delta\)</span></p>
+<p><span class="math display">\[
+H_0: \delta = 0 \quad \text{unit root|NS}
+\]</span></p>
+<p><span class="math display">\[
+H_1: \delta &lt; 0  \quad \text{Stationary}
+\]</span></p>
+<p>and test <span class="math inline">\(\hat \delta\)</span> using</p>
+<p><span class="math display">\[
+t &lt; DF
+\]</span></p>
+<p>including time trend would make it more likely to incorrectly reject the null hypothesis of a unit process (i.e., falsely conclude trend stationarity)</p>
+<p>Solution: DF critical values are adjusted <even more="" negative=""></even></p>
+<p>How to decide whether to include time trend?</p>
+<p>plot it, if it increases over time, include trend</p>
+<p>If it fluctuates around mean, don’t include it</p>
+<p>But there is <strong>no rule of thumb</strong></p>
+</section>
+<section id="highly-persistent-time-series" class="level3">
+<h3 class="anchored" data-anchor-id="highly-persistent-time-series">191. Highly persistent time series</h3>
+<p>A random walk is highly persistent</p>
+<p><span class="math display">\[
+x_t = x_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>If i am at time <span class="math inline">\(t\)</span> and want to predict value at time <span class="math inline">\(h\)</span>, we back substitute</p>
+<p><span class="math display">\[
+x_{t+h} = x_t + \varepsilon_{t+1}+\varepsilon_{t+2}+\dots + \varepsilon_{t+h}
+\]</span></p>
+<p>To predict the value, just take expectation</p>
+<p><span class="math display">\[
+E[x_{t+h}|x_t]= x_t
+\]</span></p>
+<p>which shows that no matter how far in the future <span class="math inline">\(h\)</span> is, my best prediction is <span class="math inline">\(x_t\)</span>. This is <strong>high persistence</strong></p>
+<p>Another way to show it is that correlation between <span class="math inline">\(x_t, x_{t+h}\)</span> is high. SO its not weakly dependent, we can’t use CLT</p>
+<p>To deal with it, take <strong>first difference</strong></p>
+<p><span class="math display">\[
+\Delta x_t  = \varepsilon_t
+\]</span></p>
+<p>When we take a difference to fix it, its called <strong>Integrated process of order 1 I(1)</strong></p>
+<p>We can also take difference of differences for I(2)</p>
+<p><span class="math display">\[
+\Delta(\Delta x_t) = \varepsilon_t
+\]</span></p>
+<p>Examples of I(1):</p>
+<ul>
+<li>interest</li>
+<li>GDP</li>
+</ul>
+<p>Examples of I(2):</p>
+<ul>
+<li>price level</li>
+</ul>
+</section>
+<section id="integrated-order-of-processes" class="level3">
+<h3 class="anchored" data-anchor-id="integrated-order-of-processes">192. Integrated order of processes</h3>
+<p>If we plot <span class="math inline">\(x_t\)</span> and find it highly persistent, we guess its an integrated process. so check ADF</p>
+<ul>
+<li>if we reject null (meaning its stationary) then its I(0) <not likely=""></not></li>
+<li>if we don’t reject (its non stationary). its a process of order <span class="math inline">\(I(k)\)</span>
+<ul>
+<li>take first difference and plot to see if it became stationary <and do="" adf="" on="" it="" too="">
+<ul>
+<li>if first difference is not stationary, take another difference <span class="math inline">\(I(2)\)</span> <very rare=""></very></li>
+</ul></and></li>
+</ul></li>
+</ul>
+</section>
+<section id="cointegration---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="cointegration---an-introduction">193. Cointegration - an introduction</h3>
+<p>If we have a non stationary time series, its a bad idea to use it in regression</p>
+<p>any two non stationary processes are mostly correlates just cuz both of them increase with time. So <span class="math inline">\(\beta\)</span> will appear significant although its not</p>
+<p>This is why we take differences like I(1), but its not enough sometimes</p>
+<p><span class="math inline">\(y_t\)</span> and <span class="math inline">\(x_t\)</span> can both be non stationary, both increase with time and are I(1). There may be a <span class="math inline">\(\beta\)</span> that makes <span class="math inline">\(x_t\)</span> rotate and looks so similar to <span class="math inline">\(y_t\)</span></p>
+<p>and the distance between <span class="math inline">\(y_t, \text{rotated } x_t\)</span> is constant</p>
+<p><span class="math display">\[
+\boxed{y_t - \beta x_t = I(0)}
+\]</span></p>
+<p>If this happens, then they are <strong>cointegrated</strong> meaning there is a true relationship between them</p>
+<p>In the top picture, we can’t have cointegration cuz <span class="math inline">\(y_t\)</span> has a drop at some interval while <span class="math inline">\(x_t\)</span> doesn’t</p>
+</section>
+<section id="cointegration-tests" class="level3">
+<h3 class="anchored" data-anchor-id="cointegration-tests">194. Cointegration tests</h3>
+<p>If distance between two non stationary processes is constant, then we have cointegration with <span class="math inline">\(I(0)\)</span></p>
+<p><span class="math display">\[
+y_t - \beta x_t = \varepsilon_t
+\]</span></p>
+<p>But this depends on <span class="math inline">\(\beta\)</span> which we don’t know, so we estimate it</p>
+<p><span class="math display">\[
+y_t = \hat \alpha + \hat \beta x_t + \hat u_t
+\]</span></p>
+<p>Then isolate the residuals</p>
+<p><span class="math display">\[
+\hat u_t = y_t - \hat \alpha - \hat \beta x_t
+\]</span></p>
+<p>If distance is constant, <span class="math inline">\(\hat u_t\)</span> will be <span class="math inline">\(I(0)\)</span>, we use <span class="math inline">\(DF\)</span> test</p>
+<p><span class="math display">\[
+\Delta \hat u_t = \delta_0 + \delta_1 \hat u_{t-1}+\dots + v_t
+\]</span></p>
+<p>and do <span class="math inline">\(t\)</span> test on <span class="math inline">\(\delta_1\)</span> using <span class="math inline">\(t &lt; DF\)</span></p>
+<p>if we reject the null, then error is <span class="math inline">\(I(0)\)</span> and there is cointegration</p>
+<p>But there is a problem, we used DF test on estimates so its not accurate. It needs some tweaks</p>
+<p><span class="math display">\[
+t &lt; DF_{\text{new}}&lt; DF_{\text{original}}
+\]</span></p>
+<p>cuz the <span class="math inline">\(H_0: \beta = 0 \text{ spurious regression}\)</span></p>
+<p>And chance of running spurious regression is actually big</p>
+</section>
+<section id="levels-vs-difference-regression---motivation-for-cointegrated-regression" class="level3">
+<h3 class="anchored" data-anchor-id="levels-vs-difference-regression---motivation-for-cointegrated-regression">195. levels vs difference regression - motivation for cointegrated regression</h3>
+<p>A level regression uses levels of <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span></p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t + \varepsilon_t
+\]</span></p>
+<p>A regression with first differences will use differences of <span class="math inline">\(y,x\)</span></p>
+<p><span class="math display">\[
+\Delta y_t = \delta \Delta x_t + u_t
+\]</span></p>
+<p>A common mistake is assuming these two regression are actually the same and <span class="math inline">\(\delta = \beta\)</span></p>
+<p>If we have relationship in levels → there is relationship in differences. Opposite is not true</p>
+<p>Proof: take the difference</p>
+<p><span class="math display">\[
+y_t - y_{t-1} = \alpha + \beta x_t + \varepsilon_t - \alpha - \beta x_{t-1} + \varepsilon_{t-1}
+\]</span></p>
+<p>writing it as a change:</p>
+<p><span class="math display">\[
+\Delta y_t = \beta \Delta x_t + \Delta \varepsilon_t
+\]</span></p>
+<p>This process is the same as the difference regression</p>
+<p>The converse is not true, due to the error term <span class="math inline">\(u_t\)</span>. after some time, <span class="math inline">\(u_t\)</span> builds up and makes <span class="math inline">\(\Delta y_t\)</span> different than <span class="math inline">\(\Delta x_t\)</span></p>
+<p>To simulate it, let <span class="math inline">\(x(1)=0, y(1)=0\)</span></p>
+<p>green line represents <span class="math inline">\(x\)</span>, blue line represents <span class="math inline">\(y\)</span></p>
+<p>Although <span class="math inline">\(x,y\)</span> in levels show no relationship and diverge. The difference show a stable relationship between them</p>
+<p>But this is the idea of cointegration.</p>
+</section>
+<section id="leads-and-lags-estimator-for-inference-in-cointegrated-models" class="level3">
+<h3 class="anchored" data-anchor-id="leads-and-lags-estimator-for-inference-in-cointegrated-models">196. Leads and lags estimator for inference in cointegrated models</h3>
+<p>If we are interested in long run cointegration</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t + \varepsilon_t
+\]</span></p>
+<p>OLS is consistent</p>
+<p><span class="math display">\[
+\hat \beta_{LS}\to \beta
+\]</span></p>
+<p>But cause both <span class="math inline">\(x,y\)</span> are both <span class="math inline">\(I(1)\)</span>, we can’t depend on asymptotic theory</p>
+<p>If we make the assumptions of</p>
+<ol type="1">
+<li><span class="math inline">\(E[\varepsilon_t|x_s]=0\)</span></li>
+<li>Homoscedastic</li>
+<li>No SC</li>
+<li>Normal errors</li>
+</ol>
+<p>Then we can say that ols <span class="math inline">\(\hat\beta\)</span> is normally distributed around <span class="math inline">\(\beta\)</span></p>
+<p><span class="math display">\[
+\hat \beta \sim N(\beta)
+\]</span></p>
+<p>But strict exogeneity is hard to achieve, until we write it in this form</p>
+<p><span class="math display">\[
+E[\varepsilon_t|x_s]= E[\varepsilon_t|\Delta x_s]=0
+\]</span></p>
+<p>This form helps cuz we can write the error as a function of <span class="math inline">\(\Delta x\)</span> cuz strict exogeneity is not satisfied</p>
+<p><span class="math display">\[
+\varepsilon_t = \gamma_k \Delta x_{t+k} + \gamma_{k-1}\Delta_{t+k-1}+\dots+ \gamma_0 \Delta x_t + \dots + \gamma_{-k}\Delta x_{t-k}+ v_t
+\]</span></p>
+<p>Since we extracted all <span class="math inline">\(x_t\)</span> <leads and="" lags="">, <span class="math inline">\(v_t\)</span> actually satisfies strict exogeneity</leads></p>
+<p>If we add it to the original model, we have all assumptions met</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t + \dots \text{leads and lags} + v_t
+\]</span></p>
+<p>How many leads and lags?</p>
+<p>depends on data</p>
+<p>Now that all assumptions are met, we can make inference.</p>
+</section>
+<section id="lagged-independent-variables" class="level3">
+<h3 class="anchored" data-anchor-id="lagged-independent-variables">197. Lagged independent variables</h3>
+<p>If we have a model in which sales depend on advertisement and advertisement at previous day and two days</p>
+<p><span class="math display">\[
+s_t = \alpha + \beta_0 A_t + \beta_1 A_{t-1}+ \beta_2 A_{t-2}+ \varepsilon_t
+\]</span></p>
+<p><span class="math inline">\(\beta_0\)</span> tells us instantaneous effect of a change in ads and called <strong>impact parameter</strong></p>
+<p><span class="math inline">\(\beta_1\)</span> tells us how sales tomorrow are affected by ads today</p>
+<p><span class="math inline">\(\beta_2\)</span> tells how sales after two days are affected by ads today</p>
+<p>Its common to graph strength of <span class="math inline">\(\beta\)</span> with respect to lags. If we connect the dots, its called <strong>lag distribution</strong></p>
+<p>We can also get the long run impact if we make ads constant</p>
+<p><span class="math display">\[
+A_t = \bar A\\
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)\bar A
+\]</span></p>
+<p>What if ads increase by one?</p>
+<p><span class="math display">\[
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)(\bar A+1)
+\]</span></p>
+<p>when multiplied we get</p>
+<p><span class="math display">\[
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)\bar A + (\beta_0 +\beta_1 + \beta_2)
+\]</span></p>
+<p>so an increase in ads by 1 results in</p>
+<p><span class="math display">\[
+\bar A \to \bar A +1\\
+\Delta \bar s = \beta_0 + \beta_1 + \beta_2 = \beta_{LR}
+\]</span></p>
+</section>
+<section id="problem-set-5" class="level3">
+<h3 class="anchored" data-anchor-id="problem-set-5"><strong><em>198. Problem set 5</em></strong></h3>
+<p>Practical: Non stationary, Cointegration, spurious regression, AR(1),MA(1)</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter04.html" class="pagination-link" aria-label="WLS, IV, &amp; 2SLS">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter06.html" class="pagination-link" aria-label="Advanced Topics in Econometrics">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

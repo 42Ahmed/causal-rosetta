@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Advanced Topics in Econometrics – All of Business</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter07.html" rel="next">
+<link href="./chapter05.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7c8ba9dac8feea6a77ed63b2e2898d0e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Deriving OLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gauss-Markov assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">WLS, IV, &amp; 2SLS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Advanced Topics in Econometrics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Causal Inference &amp; Matrix Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Factor Analysis &amp; SEM</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Econometrics: Emperically…</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">R &amp; Tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">DAG &amp; Causal Inference Intuition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calculus Cheatsheet</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#mean-and-median-lag" id="toc-mean-and-median-lag" class="nav-link active" data-scroll-target="#mean-and-median-lag">199. Mean and median lag</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">200. Part 2</a></li>
+  <li><a href="#lagged-dependent-variable-arma" id="toc-lagged-dependent-variable-arma" class="nav-link" data-scroll-target="#lagged-dependent-variable-arma">201. Lagged dependent variable ARMA</a></li>
+  <li><a href="#koyck-transformation" id="toc-koyck-transformation" class="nav-link" data-scroll-target="#koyck-transformation">202. Koyck transformation</a></li>
+  <li><a href="#invertibility---converting-an-ma1-to-an-arinfinite-process" id="toc-invertibility---converting-an-ma1-to-an-arinfinite-process" class="nav-link" data-scroll-target="#invertibility---converting-an-ma1-to-an-arinfinite-process">203. Invertibility - converting an MA(1) to an AR(infinite) process</a></li>
+  <li><a href="#arma11-process---introduction-and-examples" id="toc-arma11-process---introduction-and-examples" class="nav-link" data-scroll-target="#arma11-process---introduction-and-examples">204. ARMA(1,1) process - introduction and examples</a></li>
+  <li><a href="#the-partial-adjustment-model" id="toc-the-partial-adjustment-model" class="nav-link" data-scroll-target="#the-partial-adjustment-model">205. The partial adjustment model</a></li>
+  <li><a href="#error-correction-model-part-1" id="toc-error-correction-model-part-1" class="nav-link" data-scroll-target="#error-correction-model-part-1">206. Error correction model part 1</a></li>
+  <li><a href="#error-correction-model-part-2" id="toc-error-correction-model-part-2" class="nav-link" data-scroll-target="#error-correction-model-part-2">207. Error correction model part 2</a></li>
+  <li><a href="#pooled-cross-sectional-models-introduction" id="toc-pooled-cross-sectional-models-introduction" class="nav-link" data-scroll-target="#pooled-cross-sectional-models-introduction">208. Pooled cross sectional models introduction</a></li>
+  <li><a href="#pooled-cross-sectional-data-benefits-part-1-dd" id="toc-pooled-cross-sectional-data-benefits-part-1-dd" class="nav-link" data-scroll-target="#pooled-cross-sectional-data-benefits-part-1-dd">209. Pooled cross sectional data benefits part 1 DD</a></li>
+  <li><a href="#big-note" id="toc-big-note" class="nav-link" data-scroll-target="#big-note">Big Note</a></li>
+  <li><a href="#pooled-cross-sectional-data-benefits-part-2" id="toc-pooled-cross-sectional-data-benefits-part-2" class="nav-link" data-scroll-target="#pooled-cross-sectional-data-benefits-part-2">210. Pooled cross sectional data benefits part 2</a></li>
+  <li><a href="#panel-vs-pooled-data" id="toc-panel-vs-pooled-data" class="nav-link" data-scroll-target="#panel-vs-pooled-data">211. Panel vs pooled data</a></li>
+  <li><a href="#panel-data-econometrics---an-introduction" id="toc-panel-data-econometrics---an-introduction" class="nav-link" data-scroll-target="#panel-data-econometrics---an-introduction">212. Panel data econometrics - an introduction</a></li>
+  <li><a href="#first-difference-estimator" id="toc-first-difference-estimator" class="nav-link" data-scroll-target="#first-difference-estimator">213. First difference estimator</a></li>
+  <li><a href="#fixed-effects-estimators-an-introduction" id="toc-fixed-effects-estimators-an-introduction" class="nav-link" data-scroll-target="#fixed-effects-estimators-an-introduction">214. Fixed effects estimators: an introduction</a></li>
+  <li><a href="#least-squares-dummy-variables-estimators" id="toc-least-squares-dummy-variables-estimators" class="nav-link" data-scroll-target="#least-squares-dummy-variables-estimators">215. Least squares dummy variables estimators</a></li>
+  <li><a href="#estimating-unobserved-heterogeneity" id="toc-estimating-unobserved-heterogeneity" class="nav-link" data-scroll-target="#estimating-unobserved-heterogeneity">216. Estimating unobserved heterogeneity</a></li>
+  <li><a href="#the-concept-of-r-squared-in-fixed-effects-and-lsdv-estimators" id="toc-the-concept-of-r-squared-in-fixed-effects-and-lsdv-estimators" class="nav-link" data-scroll-target="#the-concept-of-r-squared-in-fixed-effects-and-lsdv-estimators">217. The concept of R squared in fixed effects and LSDV estimators</a></li>
+  <li><a href="#fixed-effects-first-difference-and-pooled-ols---intuition" id="toc-fixed-effects-first-difference-and-pooled-ols---intuition" class="nav-link" data-scroll-target="#fixed-effects-first-difference-and-pooled-ols---intuition">218. Fixed effects, first difference and pooled OLS - intuition</a></li>
+  <li><a href="#fixed-effects-and-first-difference-comparisons-part-1" id="toc-fixed-effects-and-first-difference-comparisons-part-1" class="nav-link" data-scroll-target="#fixed-effects-and-first-difference-comparisons-part-1">219. Fixed effects and first difference comparisons part 1</a></li>
+  <li><a href="#fixed-effects-and-first-difference-comparisons-part-2" id="toc-fixed-effects-and-first-difference-comparisons-part-2" class="nav-link" data-scroll-target="#fixed-effects-and-first-difference-comparisons-part-2">220. Fixed effects and first difference comparisons part 2</a></li>
+  <li><a href="#fixed-effects-and-first-difference-comparisons-part-3" id="toc-fixed-effects-and-first-difference-comparisons-part-3" class="nav-link" data-scroll-target="#fixed-effects-and-first-difference-comparisons-part-3">221. Fixed effects and first difference comparisons part 3</a></li>
+  <li><a href="#random-effects-estimator---an-introduction" id="toc-random-effects-estimator---an-introduction" class="nav-link" data-scroll-target="#random-effects-estimator---an-introduction">222. Random effects estimator - an introduction</a></li>
+  <li><a href="#how-does-random-effects-work" id="toc-how-does-random-effects-work" class="nav-link" data-scroll-target="#how-does-random-effects-work">223. How does random effects work</a></li>
+  <li><a href="#random-effects-estimators-as-fgls" id="toc-random-effects-estimators-as-fgls" class="nav-link" data-scroll-target="#random-effects-estimators-as-fgls">224. Random effects estimators as FGLS</a></li>
+  <li><a href="#random-effects-estimators---time-invariant-variable-effects-benefit" id="toc-random-effects-estimators---time-invariant-variable-effects-benefit" class="nav-link" data-scroll-target="#random-effects-estimators---time-invariant-variable-effects-benefit">225. Random effects estimators - time invariant variable effects benefit</a></li>
+  <li><a href="#random-effects-vs-fixed-effects-estimators" id="toc-random-effects-vs-fixed-effects-estimators" class="nav-link" data-scroll-target="#random-effects-vs-fixed-effects-estimators">226. Random effects vs fixed effects estimators</a></li>
+  <li><a href="#hausman-test-for-random-effects-vs-fixed-effects" id="toc-hausman-test-for-random-effects-vs-fixed-effects" class="nav-link" data-scroll-target="#hausman-test-for-random-effects-vs-fixed-effects">227. Hausman test for random effects vs fixed effects</a></li>
+  <li><a href="#panel-data-conditions-for-consistency-and-unbiasedness-of-estimators" id="toc-panel-data-conditions-for-consistency-and-unbiasedness-of-estimators" class="nav-link" data-scroll-target="#panel-data-conditions-for-consistency-and-unbiasedness-of-estimators">228. Panel data conditions for consistency and unbiasedness of estimators</a></li>
+  <li><a href="#panel-data-conditions-for-blue-estimation-and-inference" id="toc-panel-data-conditions-for-blue-estimation-and-inference" class="nav-link" data-scroll-target="#panel-data-conditions-for-blue-estimation-and-inference">229. Panel data conditions for BLUE estimation and inference</a></li>
+  <li><a href="#the-linear-probability-model---an-introduction" id="toc-the-linear-probability-model---an-introduction" class="nav-link" data-scroll-target="#the-linear-probability-model---an-introduction">230. The linear probability model - an introduction</a></li>
+  <li><a href="#the-linear-probability-model---example" id="toc-the-linear-probability-model---example" class="nav-link" data-scroll-target="#the-linear-probability-model---example">231. The linear probability model - example</a></li>
+  <li><a href="#the-problems-with-the-linear-probability-model-part-1" id="toc-the-problems-with-the-linear-probability-model-part-1" class="nav-link" data-scroll-target="#the-problems-with-the-linear-probability-model-part-1">232. The problems with the linear probability model part 1</a></li>
+  <li><a href="#the-problems-with-the-linear-probability-model-part-2" id="toc-the-problems-with-the-linear-probability-model-part-2" class="nav-link" data-scroll-target="#the-problems-with-the-linear-probability-model-part-2">233. The problems with the linear probability model part 2</a></li>
+  <li><a href="#the-problems-with-the-linear-probability-model-part-3" id="toc-the-problems-with-the-linear-probability-model-part-3" class="nav-link" data-scroll-target="#the-problems-with-the-linear-probability-model-part-3">234. The problems with the linear probability model part 3</a></li>
+  <li><a href="#nonlinear-discrete-choice-models---an-introduction" id="toc-nonlinear-discrete-choice-models---an-introduction" class="nav-link" data-scroll-target="#nonlinear-discrete-choice-models---an-introduction">235. Nonlinear discrete choice models - an introduction</a></li>
+  <li><a href="#discrete-choice-models---introduction-to-logit-and-probit" id="toc-discrete-choice-models---introduction-to-logit-and-probit" class="nav-link" data-scroll-target="#discrete-choice-models---introduction-to-logit-and-probit">236. Discrete choice models - introduction to logit and Probit</a></li>
+  <li><a href="#discrete-choice-models---partial-effect-part-1" id="toc-discrete-choice-models---partial-effect-part-1" class="nav-link" data-scroll-target="#discrete-choice-models---partial-effect-part-1">237. Discrete choice models - partial effect part 1</a></li>
+  <li><a href="#discrete-choice-models---partial-effect-part-2" id="toc-discrete-choice-models---partial-effect-part-2" class="nav-link" data-scroll-target="#discrete-choice-models---partial-effect-part-2">238. Discrete choice models - partial effect part 2</a></li>
+  <li><a href="#non-linear-discrete-choice-model-estimation" id="toc-non-linear-discrete-choice-model-estimation" class="nav-link" data-scroll-target="#non-linear-discrete-choice-model-estimation">239. Non linear discrete choice model estimation</a></li>
+  <li><a href="#maximum-likelihood-estimation---an-introduction-part-1" id="toc-maximum-likelihood-estimation---an-introduction-part-1" class="nav-link" data-scroll-target="#maximum-likelihood-estimation---an-introduction-part-1">240. Maximum likelihood estimation - an introduction part 1</a></li>
+  <li><a href="#extra-example" id="toc-extra-example" class="nav-link" data-scroll-target="#extra-example">Extra example:</a></li>
+  <li><a href="#maximum-likelihood-estimation---an-introduction-part-2" id="toc-maximum-likelihood-estimation---an-introduction-part-2" class="nav-link" data-scroll-target="#maximum-likelihood-estimation---an-introduction-part-2">241. Maximum likelihood estimation - an introduction part 2</a></li>
+  <li><a href="#maximum-likelihood-estimation---an-introduction-part-3" id="toc-maximum-likelihood-estimation---an-introduction-part-3" class="nav-link" data-scroll-target="#maximum-likelihood-estimation---an-introduction-part-3">242. Maximum likelihood estimation - an introduction part 3</a></li>
+  <li><a href="#why-maximize-log-likelihood" id="toc-why-maximize-log-likelihood" class="nav-link" data-scroll-target="#why-maximize-log-likelihood">243. Why maximize log likelihood?</a></li>
+  <li><a href="#the-cramer-rao-lower-bound-inference-in-maximum-likelihood" id="toc-the-cramer-rao-lower-bound-inference-in-maximum-likelihood" class="nav-link" data-scroll-target="#the-cramer-rao-lower-bound-inference-in-maximum-likelihood">244. The Cramer Rao lower Bound: inference in maximum likelihood</a></li>
+  <li><a href="#maximum-likelihood---cramer-rao-lower-bound-intuition" id="toc-maximum-likelihood---cramer-rao-lower-bound-intuition" class="nav-link" data-scroll-target="#maximum-likelihood---cramer-rao-lower-bound-intuition">245. Maximum likelihood - Cramer Rao lower bound intuition</a></li>
+  <li><a href="#likelihood-ratio-test---introduction" id="toc-likelihood-ratio-test---introduction" class="nav-link" data-scroll-target="#likelihood-ratio-test---introduction">246. Likelihood ratio test - introduction</a></li>
+  <li><a href="#wald-test---introduction" id="toc-wald-test---introduction" class="nav-link" data-scroll-target="#wald-test---introduction">247. Wald test - introduction</a></li>
+  <li><a href="#score-test-lagrange-multiplier-test---introduction" id="toc-score-test-lagrange-multiplier-test---introduction" class="nav-link" data-scroll-target="#score-test-lagrange-multiplier-test---introduction">248. Score test (Lagrange Multiplier test) - introduction</a></li>
+  <li><a href="#maximum-likelihood-estimators-of-population-mean-and-variance-part-1" id="toc-maximum-likelihood-estimators-of-population-mean-and-variance-part-1" class="nav-link" data-scroll-target="#maximum-likelihood-estimators-of-population-mean-and-variance-part-1">249. Maximum likelihood estimators of population mean and variance part 1</a></li>
+  <li><a href="#maximum-likelihood-estimators-of-population-mean-and-variance-part-2" id="toc-maximum-likelihood-estimators-of-population-mean-and-variance-part-2" class="nav-link" data-scroll-target="#maximum-likelihood-estimators-of-population-mean-and-variance-part-2">250. Maximum likelihood estimators of population mean and variance part 2</a></li>
+  <li><a href="#maximum-likelihood-estimators-of-population-mean-and-variance-part-3" id="toc-maximum-likelihood-estimators-of-population-mean-and-variance-part-3" class="nav-link" data-scroll-target="#maximum-likelihood-estimators-of-population-mean-and-variance-part-3">251. Maximum likelihood estimators of population mean and variance part 3</a></li>
+  <li><a href="#maximum-likelihood-normal-error-distribution---estimator-variance-part-1" id="toc-maximum-likelihood-normal-error-distribution---estimator-variance-part-1" class="nav-link" data-scroll-target="#maximum-likelihood-normal-error-distribution---estimator-variance-part-1">252. Maximum likelihood: Normal error distribution - estimator variance part 1</a></li>
+  <li><a href="#maximum-likelihood-normal-error-distribution---estimator-variance-part-2" id="toc-maximum-likelihood-normal-error-distribution---estimator-variance-part-2" class="nav-link" data-scroll-target="#maximum-likelihood-normal-error-distribution---estimator-variance-part-2">253. Maximum likelihood: Normal error distribution - estimator variance part 2</a></li>
+  <li><a href="#maximum-likelihood-normal-error-distribution---estimator-variance-part-3" id="toc-maximum-likelihood-normal-error-distribution---estimator-variance-part-3" class="nav-link" data-scroll-target="#maximum-likelihood-normal-error-distribution---estimator-variance-part-3">254. Maximum likelihood: Normal error distribution - estimator variance part 3</a></li>
+  <li><a href="#maximum-likelihood-bernoulli-random-variable-estimator-variance-part-1" id="toc-maximum-likelihood-bernoulli-random-variable-estimator-variance-part-1" class="nav-link" data-scroll-target="#maximum-likelihood-bernoulli-random-variable-estimator-variance-part-1">255. Maximum likelihood: Bernoulli random variable estimator variance part 1</a></li>
+  <li><a href="#maximum-likelihood-bernoulli-random-variable-estimator-variance-part-2" id="toc-maximum-likelihood-bernoulli-random-variable-estimator-variance-part-2" class="nav-link" data-scroll-target="#maximum-likelihood-bernoulli-random-variable-estimator-variance-part-2">256. Maximum likelihood: Bernoulli random variable estimator variance part 2</a></li>
+  <li><a href="#least-squares-as-a-maximum-likelihood-estimator" id="toc-least-squares-as-a-maximum-likelihood-estimator" class="nav-link" data-scroll-target="#least-squares-as-a-maximum-likelihood-estimator">257. Least squares as a maximum likelihood estimator</a></li>
+  <li><a href="#least-squares-comparison-with-maximum-likelihood---proof-that-ols-is-bue" id="toc-least-squares-comparison-with-maximum-likelihood---proof-that-ols-is-bue" class="nav-link" data-scroll-target="#least-squares-comparison-with-maximum-likelihood---proof-that-ols-is-bue">258. Least squares comparison with maximum likelihood - proof that OLS is BUE</a></li>
+  <li><a href="#maximum-likelihood-estimation-of-logit-and-probit" id="toc-maximum-likelihood-estimation-of-logit-and-probit" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-of-logit-and-probit">259. Maximum likelihood estimation of Logit and Probit</a></li>
+  <li><a href="#log-odds-interpretation-of-logistic-regression" id="toc-log-odds-interpretation-of-logistic-regression" class="nav-link" data-scroll-target="#log-odds-interpretation-of-logistic-regression">260. Log odds interpretation of logistic regression</a></li>
+  <li><a href="#probit-model-as-a-result-of-a-latent-variable-model" id="toc-probit-model-as-a-result-of-a-latent-variable-model" class="nav-link" data-scroll-target="#probit-model-as-a-result-of-a-latent-variable-model">261. Probit model as a result of a latent variable model</a></li>
+  <li><a href="#simultaneous-equation-models---an-introduction" id="toc-simultaneous-equation-models---an-introduction" class="nav-link" data-scroll-target="#simultaneous-equation-models---an-introduction">262. Simultaneous equation models - an introduction</a></li>
+  <li><a href="#simultaneous-equation-models---reduced-form-and-structural-equations" id="toc-simultaneous-equation-models---reduced-form-and-structural-equations" class="nav-link" data-scroll-target="#simultaneous-equation-models---reduced-form-and-structural-equations">263. Simultaneous equation models - reduced form and structural equations</a></li>
+  <li><a href="#simultaneous-equation-models---parameter-identification" id="toc-simultaneous-equation-models---parameter-identification" class="nav-link" data-scroll-target="#simultaneous-equation-models---parameter-identification">264. Simultaneous equation models - parameter identification</a></li>
+  <li><a href="#simultaneous-equation-models-order-conditions-for-parameter-identification" id="toc-simultaneous-equation-models-order-conditions-for-parameter-identification" class="nav-link" data-scroll-target="#simultaneous-equation-models-order-conditions-for-parameter-identification">265. Simultaneous equation models: order conditions for parameter identification</a></li>
+  <li><a href="#monte-carlo-simulation-for-estimators-an-introduction" id="toc-monte-carlo-simulation-for-estimators-an-introduction" class="nav-link" data-scroll-target="#monte-carlo-simulation-for-estimators-an-introduction">266. Monte Carlo simulation for estimators: an introduction</a></li>
+  <li><a href="#monte-carlo-simulation-for-ordinary-least-squares" id="toc-monte-carlo-simulation-for-ordinary-least-squares" class="nav-link" data-scroll-target="#monte-carlo-simulation-for-ordinary-least-squares">267. Monte Carlo simulation for ordinary least squares</a></li>
+  <li><a href="#monte-carlo-simulation-of-omitted-variable-bias-in-least-squares" id="toc-monte-carlo-simulation-of-omitted-variable-bias-in-least-squares" class="nav-link" data-scroll-target="#monte-carlo-simulation-of-omitted-variable-bias-in-least-squares">268. Monte Carlo simulation of omitted variable bias in least squares</a></li>
+  <li><a href="#testing-for-significance-on-correlation" id="toc-testing-for-significance-on-correlation" class="nav-link" data-scroll-target="#testing-for-significance-on-correlation">269. Testing for significance on correlation</a></li>
+  <li><a href="#one-sample-t-test-on-mean" id="toc-one-sample-t-test-on-mean" class="nav-link" data-scroll-target="#one-sample-t-test-on-mean">270. One sample t test on mean</a></li>
+  <li><a href="#independent-two-sample-t-test-for-populations-with-equal-variances" id="toc-independent-two-sample-t-test-for-populations-with-equal-variances" class="nav-link" data-scroll-target="#independent-two-sample-t-test-for-populations-with-equal-variances">271. Independent two sample t test for populations with equal variances</a></li>
+  <li><a href="#variance-inflation-factors-testing-for-multicollinearity" id="toc-variance-inflation-factors-testing-for-multicollinearity" class="nav-link" data-scroll-target="#variance-inflation-factors-testing-for-multicollinearity">272. Variance inflation factors: testing for multicollinearity</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Advanced Topics in Econometrics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="mean-and-median-lag" class="level3">
+<h3 class="anchored" data-anchor-id="mean-and-median-lag">199. Mean and median lag</h3>
+<p>If we have a model of sales regressed on ads where <span class="math inline">\(t\)</span> is weeks</p>
+<p><span class="math display">\[
+S_e = 10 + 3A_t + 2A_{t-1} + A_{t-2}+ \varepsilon_t
+\]</span></p>
+<p>We know that long run change is</p>
+<p><span class="math display">\[
+\Delta s_{LR} = 3+2+1=6
+\]</span></p>
+<p>We want to know what happens if ads increase by one temporary unit</p>
+<p>from lag distribution, instantaneous effect is 3, then it drops to 2 and 1 then vanishes</p>
+<p>We can use <strong>mean lag</strong></p>
+<p><span class="math display">\[
+\boxed{\text{Mean Lag} = \frac{\sum_{i=0}^{2} i \beta_i}{\sum_{i=0}^{2} \beta_i}}
+\]</span></p>
+<p>which is calculated here as</p>
+<p><span class="math display">\[
+= \frac{2 \times 1 + 1 \times 2}{6} = \frac{2}{3}
+\]</span></p>
+<p>Interpretation: time it takes for model to adjust for ads change is between zero lag and first lag and is more towards first lag</p>
+<p>We also have a <strong>median lag</strong> which represents adjustment in sales by 50% of the effect</p>
+<p><span class="math display">\[
+\boxed{\text{Median lag C} = \dfrac{\sum_{i=0}^c \beta_i}{\sum_{i=0}^2 \beta_i} = 0.5}
+\]</span></p>
+<p>Result must be 0.5, and we know <span class="math inline">\(\sum^2_{i=0}\)</span>, then the value is 3 <coefficient of="" zero="" lag=""> hence median lag is 0.</coefficient></p>
+</section>
+<section id="part-2" class="level3">
+<h3 class="anchored" data-anchor-id="part-2">200. Part 2</h3>
+<p>Starting from here is part 2, pooled and panel data and some theory</p>
+</section>
+<section id="lagged-dependent-variable-arma" class="level3">
+<h3 class="anchored" data-anchor-id="lagged-dependent-variable-arma">201. Lagged dependent variable ARMA</h3>
+<p>What if we have a lagged dependent variable, like how sales today depend on sales of yesterday</p>
+<p><span class="math display">\[
+s_t = \alpha + \beta_1 A_t + \beta_2 A_{t-1}+ \gamma s_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>why add a lagged dependent variable</p>
+<ol type="1">
+<li>for theory</li>
+<li>to control for omitted variables</li>
+<li>practical reason: addictive factor <like cigarettes=""></like></li>
+</ol>
+<p>If advertisement increases by one unit change, what happens to sales?</p>
+<p><span class="math display">\[
+\bar A = \bar A +1
+\]</span></p>
+<p>just use the original model with <span class="math inline">\(\bar s\)</span> instead and remember error term disappears</p>
+<p><span class="math display">\[
+\overline{S} = \alpha + \beta_1 \overline{A} + \beta_2 \overline{A} + \gamma \overline{S}
+\]</span></p>
+<p>Then isolate <span class="math inline">\(\bar s\)</span></p>
+<p><span class="math display">\[
+\overline{S} (1-\gamma) = \alpha + (\beta_1 + \beta_2) \overline{A}
+\]</span></p>
+<p>Divide to get</p>
+<p><span class="math display">\[
+\bar{S} = \frac{\alpha}{1-\gamma} + \frac{\beta_1 + \beta_2}{1 - \gamma} \bar{A}
+\]</span></p>
+<p>The coefficient of <span class="math inline">\(\bar A\)</span> represents long run effect. The denominator shows the addictive effect</p>
+<p>What is the effect of a temporary effect of ads?</p>
+<p><span class="math display">\[
+A_t \to A_t +1
+\]</span></p>
+<p>In period it occurred: <span class="math inline">\(\beta_1\)</span></p>
+<p>In first period: <span class="math inline">\(\beta_2 + \gamma \beta_1\)</span></p>
+<p>In second period: <span class="math inline">\((\beta_2 + \gamma \beta)\gamma\)</span></p>
+<p>In third period: <span class="math inline">\((\beta_2 + \gamma \beta)\gamma^2\)</span></p>
+<p>Notice that <span class="math inline">\(\gamma\)</span> must be <span class="math inline">\(&lt;1\)</span> so effect doesn’t explode</p>
+<p>If you plot the effects: it increases at first period then decreases exponentially</p>
+<p>If you split the graph at first period, the decaying side is a process of<span class="math inline">\(AR\)</span> and right side is <span class="math inline">\(MA\)</span></p>
+<p>This is referred to as <span class="math inline">\(ARMA\)</span></p>
+</section>
+<section id="koyck-transformation" class="level3">
+<h3 class="anchored" data-anchor-id="koyck-transformation">202. Koyck transformation</h3>
+<p>If we have an AR process</p>
+<p><span class="math display">\[
+x_t = \rho x_{t-1}+ \varepsilon_t
+\]</span></p>
+<p>then take difference</p>
+<p><span class="math display">\[
+x_t - \rho x_{t-1} = \varepsilon_t
+\]</span></p>
+<p>We can write it in another way using <strong>lag operator</strong></p>
+<p><span class="math display">\[
+\boxed{(1-\rho L)x_t = \varepsilon_t}
+\]</span></p>
+<p>where <span class="math inline">\(Lx_t = x_{t-1}\)</span> and <span class="math inline">\(L^2 x_t = x_{t-2}\)</span> <it gives="" us="" the="" lag=""></it></p>
+<p>We then isolate for <span class="math inline">\(x_t\)</span> to get</p>
+<p><span class="math display">\[
+x_t = \dfrac{\varepsilon_t}{1-\rho L}
+\]</span></p>
+<p>This should remind you of geometric series</p>
+<p><span class="math display">\[
+S_\infty = a+ar+ar^2+\dots = \dfrac{a}{1-r}\quad |r|&lt;1
+\]</span></p>
+<p>To make use of geometric series, rewrite <span class="math inline">\(x_t\)</span></p>
+<p><span class="math display">\[
+x_t = \dfrac{\varepsilon_t}{1-\rho L}= \varepsilon_t + \rho L \varepsilon_t+ \rho^2  L^2  \varepsilon_t+\dots
+\]</span></p>
+<p>where <span class="math inline">\(a=\varepsilon_t\)</span>, <span class="math inline">\(ra= \rho L \varepsilon_t\)</span></p>
+<p>Since that <span class="math inline">\(L\)</span> is a function that gets lags, we can say</p>
+<p><span class="math display">\[
+x_t = \dfrac{\varepsilon_t}{1-\rho L} = \varepsilon_t + \rho \varepsilon_{t-1}+\rho \varepsilon_{t-2} +\dots = \sum \rho^i \varepsilon_{t-i}
+\]</span></p>
+<p>Notice what we did</p>
+<p><span class="math display">\[
+\boxed{AR(1) \iff MA(\infty)}
+\]</span></p>
+<p>But how?</p>
+<p>if <span class="math inline">\(x_t\)</span> is sales, and <span class="math inline">\(\varepsilon_t\)</span> is ads. if ads go up, it will have an effect of sales, and sales in the future, meaning it will have an infinite effect</p>
+<p>Of think that ads have direct effect of sales and indirect from yesterday and before</p>
+</section>
+<section id="invertibility---converting-an-ma1-to-an-arinfinite-process" class="level3">
+<h3 class="anchored" data-anchor-id="invertibility---converting-an-ma1-to-an-arinfinite-process">203. Invertibility - converting an MA(1) to an AR(infinite) process</h3>
+<p>We can turn <span class="math inline">\(AR(1) \iff MA(1)\)</span> via Koyck. and we can turn <span class="math inline">\(MA(1)\iff AR(\infty)\)</span> via <strong>invertibility</strong></p>
+<p>Here is our <span class="math inline">\(MA\)</span></p>
+<p><span class="math display">\[
+x_t = \varepsilon_t + \theta \varepsilon_{t-1}
+\]</span></p>
+<p>write it using lag operator</p>
+<p><span class="math display">\[
+x_t = (1-\theta L)\varepsilon_t
+\]</span></p>
+<p>Isolate</p>
+<p><span class="math display">\[
+\varepsilon_t = \frac{x_t}{1 - \theta L} \quad
+\]</span></p>
+<p>Using geometric series again given <span class="math inline">\(|\theta|&lt;1\)</span> and <span class="math inline">\(a=x_t, r = \theta L\)</span>, we get</p>
+<p><span class="math display">\[
+\varepsilon_t= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \cdots
+\]</span></p>
+<p>Isolate for <span class="math inline">\(x_t\)</span> to get</p>
+<p><span class="math display">\[
+x_t = -\theta x_{t-1} - \theta^2 x_{t-2} - \theta^3 x_{t-3} - \cdots + \varepsilon_t
+\]</span></p>
+<p>which is <span class="math inline">\(AR(\infty)\)</span></p>
+<p>But how?</p>
+<p>We know from correlogram of <span class="math inline">\(MA\)</span> that first interval is <span class="math inline">\(&gt;0\)</span> then its zero. in the <span class="math inline">\(AR(\infty)\)</span>, when we take covairnace between <span class="math inline">\(x\)</span> terms, they cancel each other</p>
+</section>
+<section id="arma11-process---introduction-and-examples" class="level3">
+<h3 class="anchored" data-anchor-id="arma11-process---introduction-and-examples">204. ARMA(1,1) process - introduction and examples</h3>
+</section>
+<section id="the-partial-adjustment-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-partial-adjustment-model">205. The partial adjustment model</h3>
+</section>
+<section id="error-correction-model-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="error-correction-model-part-1">206. Error correction model part 1</h3>
+</section>
+<section id="error-correction-model-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="error-correction-model-part-2">207. Error correction model part 2</h3>
+</section>
+<section id="pooled-cross-sectional-models-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="pooled-cross-sectional-models-introduction">208. Pooled cross sectional models introduction</h3>
+<p>New data type <span class="math inline">\(:)\)</span></p>
+<p>The idea here is that we have population at time <span class="math inline">\(1\)</span>, take a sample from it called <span class="math inline">\(s_1\)</span>.</p>
+<p>Then that same population, at another time <span class="math inline">\(2\)</span>, we take another sample <span class="math inline">\(s_2\)</span> &lt;not same individuals in <span class="math inline">\(s_1\)</span>&gt; and so on</p>
+<p>Although the samples are independent, they are not identically distributed.</p>
+<p>A typical model will be</p>
+<p>$$ </p>
+<p>$$</p>
+<p>where</p>
+<p><span class="math display">\[
+i = 1,2,\dots,N,N+1,\dots,2N
+\]</span></p>
+<p>from <span class="math inline">\(1\to N\)</span> are individuals from first sample, <span class="math inline">\(N+1 \to 2N\)</span> are individuals from second sample</p>
+<p>and <span class="math inline">\(\delta_2\)</span> is a dummy variable indicating the time period</p>
+<p><span class="math display">\[
+\delta_2 = \begin{cases}
+1, &amp;t=2\\
+0, &amp;t=1
+\end{cases}
+\]</span></p>
+<p><span class="math inline">\(x_i\)</span> is our independent variable. <span class="math inline">\(\beta_3\)</span> represents the interaction term between the independent variable and the time</p>
+</section>
+<section id="pooled-cross-sectional-data-benefits-part-1-dd" class="level3">
+<h3 class="anchored" data-anchor-id="pooled-cross-sectional-data-benefits-part-1-dd">209. Pooled cross sectional data benefits part 1 DD</h3>
+<p>If we want to know if a new police policy decreases crime rate or not</p>
+<p><span class="math display">\[
+crime = \alpha + \beta \, police + \varepsilon
+\]</span></p>
+<p>where police is a dummy variable, 1 if new policy, 0 otherwise</p>
+<p>If time did not affect the population, we will take a sample and find the problem</p>
+<p>The estimates is</p>
+<p><span class="math display">\[
+\widehat {crime} =35 + 5 police
+\]</span></p>
+<p>while he hypothesis are:</p>
+<p><span class="math display">\[
+H_0: \beta=0 \quad H_1: \beta&lt;0
+\]</span></p>
+<p>How did we get a positive coefficient?</p>
+<p><strong>Selection bias</strong></p>
+<p>Cities that have many crimes, chose the new policy, while cities with low crimes decided they don’t need a change</p>
+<p>The coefficient of <span class="math inline">\(5\)</span> shows that cities that made the policy have higher crime rate</p>
+<p>Solution:</p>
+<p>look at same population at time period <span class="math inline">\(1\)</span> before the policy, get the sample and regress</p>
+<p><span class="math display">\[
+\widehat{crime} = 40 + 10 \, police
+\]</span></p>
+<p>Before the policy, coefficient was even higher than after the policy, showing its effectiveness</p>
+<p>How to quantify the effect? check past average crime rate for cities that implemented policy now and those who didn’t, aka at time 1 <before policy=""></before></p>
+<p><span class="math display">\[
+\overline{crime_{p_1}} = 50 \qquad \overline{crime_{np_1}} = 40
+\]</span></p>
+<p>Then calculate the average now &lt;time 2&gt;</p>
+<p><span class="math display">\[
+\overline{crime_{p_2}} = 40 \qquad \overline{crime_{np_2}} = 35
+\]</span></p>
+<p>The gap between policy implementers and those who are not, was 10, became 5</p>
+<p>So the <strong>Difference in difference is</strong></p>
+<p><span class="math display">\[
+\hat d = 5-10=-5
+\]</span></p>
+<p>policy decreased crime rate by 5</p>
+</section>
+<section id="big-note" class="level3">
+<h3 class="anchored" data-anchor-id="big-note">Big Note</h3>
+<p>The DiD is just the equation we used in the last section but in means form</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta_1 \delta_{2i} + \beta_2 x_i+ \beta_3 \delta_{2i}x_i + \varepsilon_i
+\]</span></p>
+<p>check next section</p>
+</section>
+<section id="pooled-cross-sectional-data-benefits-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="pooled-cross-sectional-data-benefits-part-2">210. Pooled cross sectional data benefits part 2</h3>
+<p>Continuing with the last example. The ols we did for time period after the policy implementation was not causal cuz cities with high crime rate already chose it</p>
+<p>And solution was to calculate differences in differences DD</p>
+<p>in which we calculate the difference bet policy vs no policy in time 1 &lt;50-40=10&gt; then in time 2 &lt;40-35=5&gt; then take difference of differences &lt;5-10=-5&gt;</p>
+<p>Problem with the estimate <span class="math inline">\(\hat d = -5\)</span> is that no easy way to do inference</p>
+<p>Solution: do a pooled cross sectional model</p>
+<p><span class="math display">\[
+\widehat{crime} = \beta_0 + \beta_1 \delta_{2i}+ \beta_2 \, police + \beta_3 \delta_{2i} \,police
+\]</span></p>
+<p>And the fun part?</p>
+<p><span class="math display">\[
+\boxed{\hat \beta_3 = \hat d}
+\]</span></p>
+<p>With the advantage that we can do inference on <span class="math inline">\(\hat \beta_3\)</span></p>
+</section>
+<section id="panel-vs-pooled-data" class="level3">
+<h3 class="anchored" data-anchor-id="panel-vs-pooled-data">211. Panel vs pooled data</h3>
+<p>Pooled cross sectional:</p>
+<p>If we have a population at time 1, take a sample <span class="math inline">\(S_1\)</span></p>
+<p>Then after some time 2, take a sample <span class="math inline">\(S_2\)</span></p>
+<p>where individuals in <span class="math inline">\(S_1\)</span> are not the same in <span class="math inline">\(S_2\)</span>.</p>
+<p>we do <span class="math inline">\(OLS\)</span> with dummy variable and take interaction into account</p>
+<p>Panel data:</p>
+<p>If we have individuals at time 1, and same individuals at time 2.</p>
+<p>Meaning: samples are <strong>not independent</strong></p>
+<p>How to solve this problem?</p>
+<p>we can’t count on <span class="math inline">\(OLS\)</span>, so we develop new tools</p>
+<p>Benefits of panel data:</p>
+<p>in pooled cross sectional, if unemployment rate in sample at time 1 was 50% and in the sample at time 2 is still 50%, we have no idea if they are the same people or maybe fresh graduates</p>
+<p>while in panel data, we can tell for how long are people unemployed</p>
+</section>
+<section id="panel-data-econometrics---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="panel-data-econometrics---an-introduction">212. Panel data econometrics - an introduction</h3>
+<p>New data type.</p>
+<p>If we want to know what influences</p>
+<ol type="1">
+<li>house prices at different times based on</li>
+<li>crime rates</li>
+<li>factors that depend on time</li>
+<li>factors that depend on cities</li>
+<li>idiosyncratic errors</li>
+</ol>
+<p><span class="math display">\[
+\boxed{HP_{it} = \beta_0+\beta_1 \, crime_{it} + v_t + \alpha_i + u_{it}}
+\]</span></p>
+<p>We have three error terms</p>
+<ol type="1">
+<li><span class="math inline">\(v_t\)</span> is time dependent that does not depend on cities, like upward house prices in the population cuz people got richer across time</li>
+<li><span class="math inline">\(\alpha_i\)</span> is city dependent and doesn’t depend on time, like geography, demographics, race, education &lt;they change on very long period of time, doesn’t count&gt;</li>
+</ol>
+<p>Panel data are written in different way</p>
+<p>Knowing that <span class="math inline">\(t = 1,\dots, T\)</span> and <span class="math inline">\(i = 1,\dots N\)</span></p>
+<p><span class="math display">\[
+HP_{it} = \beta_0+\beta_1 \, crime_{it} + \gamma_1 \delta_{2t} + \gamma_2 \delta_{3t}+ \dots + \gamma_{T-1}\delta_{Tt} + \alpha_i + u_{it}
+\]</span></p>
+<p>we add <span class="math inline">\(\delta\)</span> which is a dummy variable for each time period &lt; subtracted by one to avoid dummy variable trap&gt;</p>
+<p>We don’t do the same for <span class="math inline">\(\alpha_i\)</span> cuz <span class="math inline">\(N\)</span> is so large so we add <span class="math inline">\(\alpha_i\)</span> in the model.</p>
+<p>Let</p>
+<p><span class="math display">\[
+\boxed{\eta_{it} = \alpha_i + u_{it}}
+\]</span></p>
+<p>We can’t use OLS cuz from OLS assumptions to be consistent is</p>
+<p><span class="math display">\[
+cov(\eta_{it}, \, crime_{it}) = 0 \qquad \forall i, \forall_t
+\]</span></p>
+<p>which is not the case here cuz</p>
+<p><span class="math display">\[
+cov(\alpha_i + u_{it}, \, crime_{it})= cov(\alpha_i ,\, crime_{it}) \neq 0
+\]</span></p>
+<p>remember that demographics <age> is correlated with crime and depends on cities</age></p>
+<p>Hence: OLS is both biased and inconsistent</p>
+<p>because <span class="math inline">\(\alpha_i\)</span> is so important, we call it <strong>unobserved heterogeneity</strong> &lt;unobserved cuz we don’t observe them, and hetero cuz they vary between cities&gt;</p>
+</section>
+<section id="first-difference-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="first-difference-estimator">213. First difference estimator</h3>
+<p>Back to our example</p>
+<p><span class="math display">\[
+HP_{it} = \beta_0+\beta_1 \, crime_{it} + \gamma_1 \delta_{2t} + \gamma_2 \delta_{3t}+ \dots + \gamma_{T-1}\delta_{Tt} + \alpha_i + u_{it}
+\]</span></p>
+<p>where <span class="math inline">\(\delta\)</span> show the overall trends, <span class="math inline">\(u_{it}\)</span> is idiosyncratic error that is uncorrelated with crime rate but varies across city and time</p>
+<p>Our problem mainly lies within the unobserved heterogeneity which caused <strong>problem of endogeneity</strong></p>
+<p>Solution: First differences</p>
+<p><span class="math display">\[
+HP_{it} - HP_{it-1} = \Delta HP_{it}= \beta_1 \Delta \, crime_{it} + \gamma_1 \Delta_{2t}+ \dots + \cancel{\alpha_i - \alpha_i}+ \Delta u_{it}
+\]</span></p>
+<p>Now the covariance is zero, so we have consistent estimators</p>
+<p><span class="math display">\[
+cov(\Delta crime_{it}, \Delta u_{it})= 0
+\]</span></p>
+<p>But there is an assumption that we made</p>
+<ul>
+<li>variance in <span class="math inline">\(\Delta crime\)</span> across time and across city</li>
+</ul>
+<p>Cost of first difference:</p>
+<ul>
+<li>if there are significant deviation in crime across time and city, the significance can be small in the difference meaning higher standard error meaning harder inference</li>
+<li>No time independent factors &lt;called <strong>time invariant factors</strong> meaning they don’t change over time&gt; <we took="" difference="" to="" remove="" time="" independent="" factors=""></we></li>
+</ul>
+</section>
+<section id="fixed-effects-estimators-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-estimators-an-introduction">214. Fixed effects estimators: an introduction</h3>
+<p>This new estimator can also remove unobserved heterogeneity</p>
+<p>Recall the example: house price as a function of crime rate and unemployment rate</p>
+<p><span class="math display">\[
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+\]</span></p>
+<p>where <span class="math inline">\(\alpha_i\)</span> is the unobserved heterogeneity, which has the problem that</p>
+<p><span class="math display">\[
+cov(\alpha_i, x_{it}) \neq 0
+\]</span></p>
+<p>Here is what we do:</p>
+<p>calculate average house prices across time</p>
+<p><span class="math display">\[
+\overline{HP}_i = \dfrac 1 T\sum_{t=1}^T HP_{it}
+\]</span></p>
+<p>expand <span class="math inline">\(HP\)</span> to get</p>
+<p><span class="math display">\[
+\overline{HP}_i = \beta_1 \, \overline{crime}_i + \beta_2 \, \overline{unem}_i + \alpha_i + \overline{u}_i
+\]</span></p>
+<p>Notice: <span class="math inline">\(\alpha_i\)</span> doesn’t depend on time</p>
+<p><span class="math display">\[
+\overline \alpha_i = \dfrac 1 T \sum \alpha _i = \dfrac 1 T T \alpha_i = \alpha_i
+\]</span></p>
+<p>We call the new equation <strong>time averaged equation</strong></p>
+<p>To get <strong>fixed effect estimator</strong>, we subtract</p>
+<p><span class="math display">\[
+HP_{it} - \overline{HP}_i = \beta_1(crime_{it} - \overline {crime}_i)+ \beta_2 \, (unem_{it} - \overline{unem}_i)+ \alpha_i - \alpha_i + (u_{it} - \overline{u}_i)
+\]</span></p>
+<p>The <span class="math inline">\(\alpha_i - \alpha_i =0\)</span>, so we removed the unobserved heterogeneity, so our estimates are <strong>consistent</strong> if</p>
+<p><span class="math display">\[
+cov(x_{it}, u_{it}) = 0
+\]</span></p>
+<p>aka <strong>weak exogeneity</strong></p>
+<p>to be unbiased, we should check covariance with <span class="math inline">\(u_{is}\)</span>, but consistency is enough</p>
+<p>We can rewrite the transformed model as</p>
+<p><span class="math display">\[
+\widetilde{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  - \text{time constant}
+\]</span></p>
+<p>But why prefer fixed effect estimator over first difference?</p>
+</section>
+<section id="least-squares-dummy-variables-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="least-squares-dummy-variables-estimators">215. Least squares dummy variables estimators</h3>
+<p>This is the third estimator, back to our example of house prices again</p>
+<p><span class="math display">\[
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+\]</span></p>
+<p>where <span class="math inline">\(i=1,2,3\)</span></p>
+<p>we can’t use <span class="math inline">\(OLS\)</span> due to the unobserved heterogeneity</p>
+<p>Solution: Dummy variables for cities <span class="math inline">\(i=2,3\)</span> but not <span class="math inline">\(1\)</span> to avoid dummy variable trap &lt;like splitting <span class="math inline">\(\alpha_i\)</span>&gt;</p>
+<p><span class="math display">\[
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + u_1d_2+ u_2d_3 + u_{it}
+\]</span></p>
+<p>by including dummy variables, each city has a different intercept which fixes problem of unobserved heterogeneity, no need to implicitly add <span class="math inline">\(\beta_0\)</span></p>
+<p>so model is consistent</p>
+<p><span class="math display">\[
+\hat \beta_{dv} \to \beta
+\]</span></p>
+<p>If we have</p>
+<ol type="1">
+<li><span class="math inline">\(cov(x_{it}, u_{it}) = 0\)</span></li>
+<li>No SC</li>
+<li>Homoscedasticity</li>
+</ol>
+<p>ALSO</p>
+<p><span class="math display">\[
+\hat \beta_{dv}^* = \hat \beta_{FE}^*
+\]</span></p>
+<p>with the pros of ability to estimate <span class="math inline">\(\alpha_i\)</span></p>
+<p>But has cons of having to add many dummy variables if <span class="math inline">\(i\)</span> is large</p>
+</section>
+<section id="estimating-unobserved-heterogeneity" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-unobserved-heterogeneity">216. Estimating unobserved heterogeneity</h3>
+<p>Same example</p>
+<p><span class="math display">\[
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+\]</span></p>
+<p>How to estimate <span class="math inline">\(\alpha_i\)</span>, the unobserved heterogeneity?</p>
+<p>Use <span class="math inline">\(LSDV\)</span> <what we="" took="" last="" time=""></what></p>
+<p><span class="math display">\[
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + u_1d_2+ u_2d_3 + u_{it}
+\]</span></p>
+<p>The estimates <span class="math inline">\(u_1, u_2\)</span> will be unbiased estimates</p>
+<p>The other way is to use <span class="math inline">\(FE\)</span> <fixed effect="" estimator=""></fixed></p>
+<p><span class="math display">\[
+\widetilde{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  + \widetilde{u}_{it}
+\]</span></p>
+<p>although we lost unobserved heterogeneity, we can still estimate it using estimates of <span class="math inline">\(\beta_1, \beta_2\)</span></p>
+<p><span class="math display">\[
+\hat \alpha_i = \overline{HP}_i - \hat \beta_1 \overline{crime}_i - \hat \beta_2 \overline{unem}_i
+\]</span></p>
+<p>In both cases, our estimates are unbiased</p>
+<p><span class="math display">\[
+E[\hat \alpha_i] = \alpha_i
+\]</span></p>
+<p>But it can still be inconsistent</p>
+<p>when <span class="math inline">\(T\)</span> is fixed and <span class="math inline">\(N \to \infty\)</span>, sample size increase, dummy variables increase in <span class="math inline">\(LSDV\)</span> or <span class="math inline">\(\hat \beta\)</span> in <span class="math inline">\(FE\)</span>, problem gets harder, so its asymptotically unbiased, <strong>but still inconsistent</strong> cuz variance doesn’t approach zero</p>
+<p>Why estimate unobserved heterogeneity? to know the effect of all time constant variables like demographics and education</p>
+</section>
+<section id="the-concept-of-r-squared-in-fixed-effects-and-lsdv-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="the-concept-of-r-squared-in-fixed-effects-and-lsdv-estimators">217. The concept of R squared in fixed effects and LSDV estimators</h3>
+<p>Fixed Effects Model (Time-Demeaned Form)</p>
+<p>We estimate:</p>
+<p><span class="math display">\[
+{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  + \widetilde{u}_{it}
+\]</span></p>
+<p><span class="math inline">\(R^2 = 0.65\)</span> → this refers to ability to explain <strong>variation in house prices <em>within each city over time</em></strong> (not across cities).</p>
+<hr>
+<p>What is <strong>within</strong> vs <strong>across</strong> variation?</p>
+<p>Say we have 2 cities: Cairo and Alexandria</p>
+<p>We observe house prices for 3 years (2019, 2020, 2021)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>City</th>
+<th>Year</th>
+<th>HP (House Price)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cairo</td>
+<td>2019</td>
+<td>300</td>
+</tr>
+<tr class="even">
+<td>Cairo</td>
+<td>2020</td>
+<td>310</td>
+</tr>
+<tr class="odd">
+<td>Cairo</td>
+<td>2021</td>
+<td>305</td>
+</tr>
+<tr class="even">
+<td>Alexandria</td>
+<td>2019</td>
+<td>250</td>
+</tr>
+<tr class="odd">
+<td>Alexandria</td>
+<td>2020</td>
+<td>255</td>
+</tr>
+<tr class="even">
+<td>Alexandria</td>
+<td>2021</td>
+<td>245</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>Within variation</strong> = changes <em>inside each city</em></p>
+<p>Ex: Cairo: 300 → 310 → 305</p>
+<p>We’re explaining how house prices <strong>change over time in Cairo</strong></p>
+<p>Same for Alexandria: 250 → 255 → 245</p></li>
+<li><p><strong>Across variation</strong> = comparing <em>between cities</em></p>
+<p>Ex: Cairo’s average = 305</p>
+<p>Alexandria’s average = 250</p>
+<p>→ Difference in <strong>levels between cities</strong></p></li>
+</ul>
+<p><strong>FE only looks at variation inside each city over time</strong></p>
+<p>→ So <span class="math inline">\(R^2 = 0.65\)</span> means our model explains 65% of the changes in HP <strong>within each city over time</strong></p>
+<hr>
+<p>What software shows</p>
+<p>When you run FE in software:</p>
+<ul>
+<li>You don’t see variation in <span class="math inline">\(\overline{HP}_i\)</span> (the city means)</li>
+<li>You see how much variation is explained in <span class="math inline">\(\widetilde{HP}_{it}\)</span> (demeaned values)</li>
+</ul>
+<p>Some software shows:</p>
+<ul>
+<li><strong>Within <span class="math inline">\(R^2\)</span></strong> (main one in FE model)</li>
+<li><strong>Between <span class="math inline">\(R^2\)</span></strong> (variation in <span class="math inline">\(\overline{HP}_i\)</span>)</li>
+<li><strong>Overall <span class="math inline">\(R^2\)</span></strong> (uses total variation)</li>
+</ul>
+<hr>
+<p>LSDV Model</p>
+<p>Instead of demeaning, we add dummy variables for each city:</p>
+<p><span class="math display">\[
+HP_{it} = \alpha_1 D_{\text{Cairo}} +   \beta_1 crime_{it} + \beta_2 unem_{it} + u_{it}
+\]</span></p>
+<ul>
+<li>Each city gets its own intercept</li>
+<li><span class="math inline">\(R^2\)</span> is usually high → dummies absorb big part of the variation <strong>between cities</strong></li>
+<li>Dummies explain <strong>why Cairo has higher HP than Alexandria</strong> (across variation)</li>
+</ul>
+<hr>
+<p>F-test (optional)</p>
+<p>We can compare:</p>
+<ul>
+<li>Restricted model: no dummies</li>
+<li>Unrestricted (LSDV): with dummies</li>
+</ul>
+<p>→ Use F-test to see if dummies are <strong>jointly significant</strong></p>
+<p>→ Usually they are → fixed effects matter</p>
+</section>
+<section id="fixed-effects-first-difference-and-pooled-ols---intuition" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-first-difference-and-pooled-ols---intuition">218. Fixed effects, first difference and pooled OLS - intuition</h3>
+<p>Why is <span class="math inline">\(FE\)</span> or <span class="math inline">\(FD\)</span> <first difference=""> better than pooled <span class="math inline">\(OLS\)</span>?</first></p>
+<p><span class="math display">\[
+crime_{it} = \alpha_i + \beta \, unem_{it} + u_{it}
+\]</span></p>
+<p>we expect <span class="math inline">\(\beta&gt;0\)</span></p>
+<p>what pooled data does?</p>
+<p>add all sample together like its one big cross sectional, plot crime vs unemployment, fit a line</p>
+<p>We get <span class="math inline">\(\beta&lt;0\)</span> which doesn’t make sense</p>
+<p><span class="math inline">\(FE/FD\)</span> assume cities are different and try to remove unobserved heterogeneity <span class="math inline">\(\alpha_i\)</span> then compare cities at different time</p>
+<p>For <span class="math inline">\(FD\)</span></p>
+<p>They assume that we disregard the difference in crime rate between the three cities &lt;ex: London, Alex, Cairo&gt; and assume the difference is due to city characteristic traits that don’t change across time</p>
+<p>Then they fit a regression line for each city, and get that <span class="math inline">\(\beta&gt;0\)</span> indicating increase of unemployment is associated with increase in crime rate</p>
+<p>For <span class="math inline">\(FE\)</span></p>
+<p>regress time demeaned crime rate on time demeaned unemployment. This will get us the middle point for each city &lt;intersection of pooled and <span class="math inline">\(FD\)</span>&gt;</p>
+<p>Then fit a line for each city that passes through the midpoint &lt;will be equal to <span class="math inline">\(FD\)</span> here&gt;</p>
+</section>
+<section id="fixed-effects-and-first-difference-comparisons-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-and-first-difference-comparisons-part-1">219. Fixed effects and first difference comparisons part 1</h3>
+</section>
+<section id="fixed-effects-and-first-difference-comparisons-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-and-first-difference-comparisons-part-2">220. Fixed effects and first difference comparisons part 2</h3>
+</section>
+<section id="fixed-effects-and-first-difference-comparisons-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-and-first-difference-comparisons-part-3">221. Fixed effects and first difference comparisons part 3</h3>
+</section>
+<section id="random-effects-estimator---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="random-effects-estimator---an-introduction">222. Random effects estimator - an introduction</h3>
+</section>
+<section id="how-does-random-effects-work" class="level3">
+<h3 class="anchored" data-anchor-id="how-does-random-effects-work">223. How does random effects work</h3>
+</section>
+<section id="random-effects-estimators-as-fgls" class="level3">
+<h3 class="anchored" data-anchor-id="random-effects-estimators-as-fgls">224. Random effects estimators as FGLS</h3>
+</section>
+<section id="random-effects-estimators---time-invariant-variable-effects-benefit" class="level3">
+<h3 class="anchored" data-anchor-id="random-effects-estimators---time-invariant-variable-effects-benefit">225. Random effects estimators - time invariant variable effects benefit</h3>
+</section>
+<section id="random-effects-vs-fixed-effects-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="random-effects-vs-fixed-effects-estimators">226. Random effects vs fixed effects estimators</h3>
+</section>
+<section id="hausman-test-for-random-effects-vs-fixed-effects" class="level3">
+<h3 class="anchored" data-anchor-id="hausman-test-for-random-effects-vs-fixed-effects">227. Hausman test for random effects vs fixed effects</h3>
+</section>
+<section id="panel-data-conditions-for-consistency-and-unbiasedness-of-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="panel-data-conditions-for-consistency-and-unbiasedness-of-estimators">228. Panel data conditions for consistency and unbiasedness of estimators</h3>
+</section>
+<section id="panel-data-conditions-for-blue-estimation-and-inference" class="level3">
+<h3 class="anchored" data-anchor-id="panel-data-conditions-for-blue-estimation-and-inference">229. Panel data conditions for BLUE estimation and inference</h3>
+</section>
+<section id="the-linear-probability-model---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="the-linear-probability-model---an-introduction">230. The linear probability model - an introduction</h3>
+<p>If we have a dependent variable <span class="math inline">\(y\)</span></p>
+<p><span class="math display">\[
+y = \beta_0 + \beta_1 x + \varepsilon \qquad \varepsilon \sim iid(0, \sigma^2)
+\]</span></p>
+<p>But <span class="math inline">\(y\)</span> is a binary variable</p>
+<p><span class="math display">\[
+y = \begin{cases}0 &amp;, Not\\
+1 &amp;, college \end{cases}
+\]</span></p>
+<p>The conditional expectation will be a weighted sum</p>
+<p><span class="math display">\[
+E[y|x] = \sum_i p(y=y_i)y_i
+\]</span></p>
+<p>where <span class="math inline">\(y_i=0,1\)</span> so it becomes</p>
+<p><span class="math display">\[
+p(y=0|x)\cdot0 + p(y=1|x)\cdot 1 = p(y=1|x)
+\]</span></p>
+<p>first term disappeared cuz its multiplied by zero, so</p>
+<p><span class="math display">\[
+E[y|x] = \beta_0 + \beta_1 x = p(y=1|x)
+\]</span></p>
+<p>what does <span class="math inline">\(\beta_1\)</span> mean?</p>
+<p>change of probability of y given x if x increases by one</p>
+<p><span class="math display">\[
+\Delta p(y=1|x)|_{x\to x+1} = \beta_1
+\]</span></p>
+<p>and <span class="math inline">\(\beta_0\)</span> means probability of y given <span class="math inline">\(x=0\)</span></p>
+<p><span class="math display">\[
+p(y=1|0)= \beta_0
+\]</span></p>
+</section>
+<section id="the-linear-probability-model---example" class="level3">
+<h3 class="anchored" data-anchor-id="the-linear-probability-model---example">231. The linear probability model - example</h3>
+<p>Here is an example, does an individual go to college or not?</p>
+<p><span class="math display">\[
+college = \begin{cases}0 &amp;, Not\\
+1 &amp;, college \end{cases}
+\]</span></p>
+<p>The regression equation is</p>
+<p><span class="math display">\[
+college = \alpha + \beta_1 \, Pwage + \beta_2 \, CS + \varepsilon
+\]</span></p>
+<p>The conditional expectation is</p>
+<p><span class="math display">\[
+E[college|Pwage, CS] = P(college=1|Pwage, CS)
+\]</span></p>
+<p>cuz college = 0 will disappear, so we end up with</p>
+<p><span class="math display">\[
+E[college|Pwage, CS] = \alpha + \beta_1 \, Pwage + \beta_2 \, CS
+\]</span></p>
+<p><span class="math inline">\(\beta_1\)</span> here is the increment of probability of attending school given one extra unit change in pwage</p>
+<p><span class="math inline">\(CS\)</span> is ‘complete school’, a dummy variable</p>
+<p>so <span class="math inline">\(\beta_2\)</span> is the increment of probability of attending college if individual completes school</p>
+</section>
+<section id="the-problems-with-the-linear-probability-model-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="the-problems-with-the-linear-probability-model-part-1">232. The problems with the linear probability model part 1</h3>
+<p>There are several problems with linear probability model</p>
+<ol type="1">
+<li>Probabilities of dependent variable can pass the <span class="math inline">\([0,1]\)</span> range</li>
+</ol>
+<p>Example:</p>
+<p><span class="math display">\[
+college = 0.3 + 0.21 \, \log Pwage + \varepsilon
+\]</span></p>
+<p>Hence the probability of attending college is</p>
+<p><span class="math display">\[
+P(college=1| \log \, Pwage) = 0.3 + 0.21 \, \log Pwage
+\]</span></p>
+<p>If <span class="math inline">\(\log Pwage =-5\)</span>, then the ptobability of attending college is</p>
+<p><span class="math display">\[
+P(college=1| \log \, Pwage = -5) = 0.3 + 0.21 \times -5 = -0.7
+\]</span></p>
+<p>But probability can’t be a negative value, and can’t be higher than 1 &lt;ig <span class="math inline">\(\log Pwage = 10\)</span>, we get probability of <span class="math inline">\(2.3\)</span>&gt;</p>
+<p>The main problem: the dependent variable is bounded by the range <span class="math inline">\(0,1\)</span> aka <strong>limited dependent variable</strong> while the independent variable is not limited</p>
+<p><span class="math display">\[
+- \infty &lt; \log Pwage &lt; + \infty
+\]</span></p>
+</section>
+<section id="the-problems-with-the-linear-probability-model-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="the-problems-with-the-linear-probability-model-part-2">233. The problems with the linear probability model part 2</h3>
+<p>Another problem is</p>
+<ol type="1">
+<li>Heteroscedasticity</li>
+</ol>
+<p>If we have the equation &lt;we can add <span class="math inline">\(\alpha\)</span>&gt;</p>
+<p><span class="math display">\[
+y_i = \beta X_i + \varepsilon
+\]</span></p>
+<p>and we are concerned with <span class="math inline">\(\varepsilon_i\)</span></p>
+<p><span class="math display">\[
+\varepsilon_i = \begin{cases}
+- \beta x_i , &amp;y_i=0\\
+1- \beta x_i, &amp;y_i=1
+\end{cases}
+\]</span></p>
+<p>How did we get them?</p>
+<p>substitute in <span class="math inline">\(y\)</span> by 0 or 1 and solve for <span class="math inline">\(\varepsilon\)</span></p>
+<p>The conditional variance will be</p>
+<p><span class="math display">\[
+Var(\varepsilon_i|x_i) = E[\varepsilon_i^2|x_i] = \sum_j P(y_i = y_j)\cdot \varepsilon_j^2
+\]</span></p>
+<p>Remember that that <span class="math inline">\(E[\varepsilon_i]=0\)</span>, this is why we wrote the variance in that form</p>
+<p>expand the summation to get</p>
+<p><span class="math display">\[
+Var(\varepsilon_i|x_i) = P(y_i =0|x_i)(- \beta x_i)^2 + P(y_i=1|x_i)(1- \beta x_i)^2
+\]</span></p>
+<p>remember that</p>
+<p><span class="math display">\[
+P(y_i =0|x_i) + P(y_i =1|x_i) =1
+\]</span></p>
+<p>so we can simplify by writing</p>
+<p><span class="math display">\[
+P(y_i =0|x_i) = 1 - p_i = 1 \beta x_i\\
+P(y_i =1|x_i) = p_i = \beta x_i
+\]</span></p>
+<p>&lt;check the regression model when <span class="math inline">\(y_i=1\)</span>&gt;</p>
+<p>Using this notation, we get</p>
+<p><span class="math display">\[
+Var(\varepsilon_i|x_i) = (1-p_i)(- \beta x_i)^2 + p_i (1- \beta x_i)^2
+\]</span></p>
+<p>replace <span class="math inline">\(p_i\)</span> to get</p>
+<p><span class="math display">\[
+Var(\varepsilon_i|x_i) = (1-\beta x_i)(- \beta x_i)^2 + \beta x_i (1- \beta x_i)^2
+\]</span></p>
+<p>Factorize to get</p>
+<p><span class="math display">\[
+(1 - \beta x_i) \beta x_i \cdot[\beta x_i + 1 - \beta x_i]
+\]</span></p>
+<p>Second term vanishes so we get</p>
+<p><span class="math display">\[
+Var(\varepsilon_i|x_i) = (1 - \beta x_i) \beta x_i = f(x_i)
+\]</span></p>
+<p>variance is a function of <span class="math inline">\(x_i\)</span> so we have heteroscedasticity, the estimators are not blue and should use <span class="math inline">\(WLS\)</span></p>
+</section>
+<section id="the-problems-with-the-linear-probability-model-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="the-problems-with-the-linear-probability-model-part-3">234. The problems with the linear probability model part 3</h3>
+<p>The last problem is</p>
+<ol type="1">
+<li>Non normality</li>
+</ol>
+<p>We know that the error term has the values</p>
+<p><span class="math display">\[
+\varepsilon_i = \begin{cases}
+- \beta x_i , &amp;y_i=0\\
+1- \beta x_i, &amp;y_i=1
+\end{cases}
+\]</span></p>
+<p>So the distribution is discrete <just two="" bars="">, so its not normal, we will have to do <strong>non normal inference</strong></just></p>
+</section>
+<section id="nonlinear-discrete-choice-models---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="nonlinear-discrete-choice-models---an-introduction">235. Nonlinear discrete choice models - an introduction</h3>
+<p>We said that the linear model</p>
+<p><span class="math display">\[
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+\]</span></p>
+<p>has a problem that the right side can result in values <span class="math inline">\([-\infty, \infty]\)</span> while dependent variable is <span class="math inline">\([0,1]\)</span></p>
+<p>We can plot it to see the areas where value passes 0 and 1. We need a <strong>nonlinear</strong> transformation that will bound the values between 0 and 1</p>
+<p>Or to be more clearer, <span class="math inline">\(f(- \infty)=0, f(\infty)=1\)</span></p>
+<p>two candidates are <strong>logit</strong>, <strong>probit</strong> models</p>
+</section>
+<section id="discrete-choice-models---introduction-to-logit-and-probit" class="level3">
+<h3 class="anchored" data-anchor-id="discrete-choice-models---introduction-to-logit-and-probit">236. Discrete choice models - introduction to logit and Probit</h3>
+<p>We made the equation</p>
+<p><span class="math display">\[
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+\]</span></p>
+<p>But this resulted in nonsensical results, so we decided to do a transformation using a function <span class="math inline">\(f\)</span> that has properties of <span class="math inline">\(f(- \infty) = 0, f(\infty)=1\)</span> so result be in the interval <span class="math inline">\([0,1]\)</span></p>
+<p>First candidate is the <strong>logit model</strong></p>
+<p><span class="math display">\[
+\boxed{F(z) = \dfrac{\exp (z)}{1 + \exp (z)} = L(z)}
+\]</span></p>
+<p>if <span class="math inline">\(z \to -\infty\)</span>, numerator will be <span class="math inline">\(e^{- \infty}\)</span> so numerator <span class="math inline">\(N \to 0\)</span> and denominator tends to <span class="math inline">\(D \to 1\)</span>, then the ratio <span class="math inline">\(F \to 0\)</span></p>
+<p>If <span class="math inline">\(z \to \infty\)</span>, 1 in the denominator becomes unimportant, so</p>
+<p><span class="math display">\[
+F \to \dfrac{e^z}{e^z}=1
+\]</span></p>
+<p>conditions satisfied</p>
+<p>The second candidate is the <strong>probit model</strong></p>
+<p><span class="math display">\[
+\boxed{F(z)= \int^z_{-\infty} \phi(u)du}
+\]</span></p>
+<p>where <span class="math inline">\(\phi\)</span> is the normal pdf, to visualize, plot the pdf of the normal distribution, <span class="math inline">\(F(z)\)</span> will be summation from negative infinity to <span class="math inline">\(z\)</span></p>
+<p>If <span class="math inline">\(z  \to - \infty\)</span>, it will be on the left tail at its end, <span class="math inline">\(F(z)\to 0\)</span> cuz there are no data under its tail</p>
+<p>if <span class="math inline">\(z \to \infty\)</span>, it will be on the right tail at its end, <span class="math inline">\(F(z)\to 1\)</span> cuz its property of pdf</p>
+<p>Notice that integral of pdf is the <span class="math inline">\(CDF\)</span></p>
+<p>The difference</p>
+<p>in logit, we can write the exact function while in probit, we have to integrate the <span class="math inline">\(pdf\)</span></p>
+<p>Notice that both the probit and the logit result in a <span class="math inline">\(\dfrac 1 2\)</span> if <span class="math inline">\(z=0\)</span></p>
+<p>Dealing with logit is easier, but we use probit sometimes if the error term behaves as a normally distributed</p>
+</section>
+<section id="discrete-choice-models---partial-effect-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="discrete-choice-models---partial-effect-part-1">237. Discrete choice models - partial effect part 1</h3>
+<p>Same example</p>
+<p><span class="math display">\[
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+\]</span></p>
+<p>We discussed the CDF of probit <span class="math inline">\(\Phi\)</span> and the logit function <span class="math inline">\(L\)</span></p>
+<p>Now we interpret what happens if <span class="math inline">\(\log pwage\)</span> increases by 1</p>
+<p><span class="math display">\[
+\Delta P = F(\alpha + \beta \log Pwage + 1) -  F(\alpha + \beta \log Pwage) \neq \beta
+\]</span></p>
+<p>Cuz <span class="math inline">\(F\)</span> is non linear, the difference will not be equal to <span class="math inline">\(\beta\)</span></p>
+<p>Solution:</p>
+<p>check how slope changes</p>
+<p><span class="math display">\[
+\dfrac{\delta P}{\delta \log Pwage} = \beta F'(\alpha + \beta \, \log Pwage) = \beta f(\alpha + \beta \, \log Pwage)
+\]</span></p>
+<p>where <span class="math inline">\(f\)</span> is the differential &lt;think of <span class="math inline">\(pdf\)</span> incase of probit&gt; . Notice that the change is <span class="math inline">\(\beta\)</span> multiplied by other stuff</p>
+<p>why? draw a graph, we know the graph looks like a sleeping s. when wage is small, a one unit change in it will not affect the probability <almost zero="">. Same for high wages &lt;1 million is like 1 billion here u must have attended college&gt;</almost></p>
+<p>But at maximum slope around the middle, a small shift on right or left will cause a high change in probability</p>
+</section>
+<section id="discrete-choice-models---partial-effect-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="discrete-choice-models---partial-effect-part-2">238. Discrete choice models - partial effect part 2</h3>
+<p>Here is another example: probability of having civil war</p>
+<p><span class="math display">\[
+P(CW_i=1|landlocked_i + GDP_i) = F(\alpha + \beta_1 \, landlocked + \beta_2 GDP_i)
+\]</span></p>
+<p>And we want to estimate the partial effect of GDP, so we take partial derivative</p>
+<p><span class="math display">\[
+\dfrac{\delta P_i}{\delta GDP_i} = \beta_2f(\alpha + \beta_1 \, landlocked_i + \beta_2 GDP_i)
+\]</span></p>
+<p>so the effect changes based on value of the independent variables, but what if we want just one answer? one solution is to take the average</p>
+<p><span class="math display">\[
+\dfrac{\delta P_i}{\delta GDP_i} = \beta_2f(\alpha + \beta_1 \, \overline{landlocked_i} + \beta_2 \overline{ GDP_i})
+\]</span></p>
+</section>
+<section id="non-linear-discrete-choice-model-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="non-linear-discrete-choice-model-estimation">239. Non linear discrete choice model estimation</h3>
+<p>We have the function</p>
+<p><span class="math display">\[
+y = F(\alpha+ \beta_1 x_1 + \beta_2x_2 + \dots + \beta_px_p)+ \varepsilon
+\]</span></p>
+<p>we have error term, so we try to minimize it</p>
+<p><span class="math display">\[
+\sum \varepsilon_i^2 = \sum[y_i - F(\alpha + \beta_1 x_{1i}+ \beta_2 x-{2i}+ \dots+ \beta_p x_{pi})]^2
+\]</span></p>
+<p>which is like in <span class="math inline">\(OLS\)</span>, but with the addition of <span class="math inline">\(F\)</span></p>
+<p>To estimate effect of <span class="math inline">\(\beta\)</span>, we differentiate with respect to it</p>
+<p><span class="math display">\[
+\dfrac{\delta s}{\delta \hat \beta_1} = -2 \sum_i x_{1i}f(\hat \alpha + \hat \beta_1 x_{1i}+ \dots + \hat \beta_p x_{pi})[y_i - F()]
+\]</span></p>
+<p>where <span class="math inline">\(f\)</span> is the differential, then we set the differential to zero</p>
+<p>unlike OLS, we don’t get a closed form solution for <span class="math inline">\(\hat \beta\)</span> cuz its more complicated. SO we do <strong>numeric search</strong> to get a number as close as possible. This is called <strong>Nonlinear LS</strong></p>
+<p><strong>Nonlinear LS</strong> is messy. we use instead <strong>maximum likelihood</strong></p>
+<p>General idea of maximum likelihood:</p>
+<p>we have a population, get a sample from it and estimate the probability that our dependent sample we estimate is equal to the true dependent variable</p>
+<p><span class="math display">\[
+p_i(y_i=y_j)
+\]</span></p>
+<p>That was for one individual, for multiple individuals we make</p>
+<p><span class="math display">\[
+p = p_1 \times p_2 \times \dots \times p_n
+\]</span></p>
+<p>The idea with maximum likelihood is we choose the estimates <span class="math inline">\(\hat \beta\)</span> that maximize the probability <likelihood></likelihood></p>
+</section>
+<section id="maximum-likelihood-estimation---an-introduction-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation---an-introduction-part-1">240. Maximum likelihood estimation - an introduction part 1</h3>
+<p>UK has a population of 70 million, we can’t access them all, so we get a sample of size <span class="math inline">\(N=10\)</span></p>
+<p>We want to model the probability that a randomly chosen individual is male. Let <span class="math inline">\(\theta\)</span> be the proportion of males in the population, and let each observation <span class="math inline">\(x_i\)</span> indicate whether the <span class="math inline">\(ith\)</span> individual is male</p>
+<p>think of the <strong>probability mass function</strong> <span class="math inline">\(f(x_i \mid \theta)\)</span> where <span class="math inline">\(\theta\)</span> is the unknown proportion of males, and <span class="math inline">\(x_i\)</span> is a dummy variable indicating if the individual is male.</p>
+<p><span class="math display">\[
+x_i = \begin{cases}
+1, &amp;male\\
+0, &amp;female
+\end{cases}
+\]</span></p>
+<p>and the function has a value of</p>
+<p><span class="math display">\[
+f(x_i|\theta) = \theta^x_i(1-\theta)^{1-x_i}
+\]</span></p>
+<p>For example, if <span class="math inline">\(x=1\)</span></p>
+<p><span class="math display">\[
+f(1|\theta) = \theta^1(1-\theta)^0= \theta
+\]</span></p>
+<p>&lt;If I know coin is biased with heads 70%, probability of heads is 0.7&gt;</p>
+<p>and <span class="math inline">\(x=0\)</span></p>
+<p><span class="math display">\[
+f(0|\theta) = \theta^0(1-\theta)^1= 1-\theta
+\]</span></p>
+<p>What if we have many individuals?</p>
+<p><span class="math display">\[
+f(x_1,x_2,\dots,x_N|\theta) = \theta^{x_1}(1-\theta)^{1-x_1}\theta^{x_2}(1-\theta)^{1-x_2}\dots
+\]</span></p>
+<p>We can clean up</p>
+<p><span class="math display">\[
+f(x_1,x_2.\dots,x_N|\theta) =\prod^n_{i=1} \theta^{x_i}(1-\theta)^{1-x_i}
+\]</span></p>
+<p>This is equivalent to asking if first individual was male, second was male and so on</p>
+<p><span class="math display">\[
+\begin{align*}
+&amp;f(x_1,x_2,\dots,x_N|\theta) \\ &amp;=
+\prod^n_{i=1} \theta^{x_i}(1-\theta)^{1-x_i}
+\\
+&amp;=P(X_1=x_1,X_2=x_2,\dots,X_n=x_n)
+\end{align*}
+\]</span></p>
+<p>This joint probability <span class="math inline">\(f(x_1, \dots,x_n​∣\theta)\)</span> or equivalently <span class="math inline">\(P(X_1 = x_1, \dots, X_n = x_n \mid \theta)\)</span>, when viewed as a function of <span class="math inline">\(\theta\)</span> given fixed data, is called the likelihood function.</p>
+<p>&lt;if i saw 7 heads and 3 tails, what bias makes this data more likely&gt;</p>
+<p>But the idea is that we don’t know the <span class="math inline">\(\theta\)</span>,</p>
+<p>we maximize the likelihood function with respect to <span class="math inline">\(\theta\)</span> to find the value of <span class="math inline">\(\theta\)</span> that best explains the observed sample.</p>
+<p>But because differentiation <span class="math inline">\(\prod \theta^{x_i}(1-\theta)^{1-x_i}\)</span> is hard, we use log to turn product into summations</p>
+</section>
+<section id="extra-example" class="level3">
+<h3 class="anchored" data-anchor-id="extra-example">Extra example:</h3>
+<p>You flipped a coin three times: got heads, heads, tails</p>
+<p>If I assume <span class="math inline">\(\theta = 0.6\)</span> what’s the probability of observing this exact outcome?</p>
+<p><span class="math display">\[
+P(x∣θ=0.6)=(0.6)^2⋅(1−0.6)^1=0.6^2-0.4=0.144
+\]</span></p>
+<p>If the coin is 60% biased toward heads, this sample has a 14.4% chance</p>
+<p>What <span class="math inline">\(\theta\)</span> makes this data most likely?</p>
+<p>$$ <span class="math display">\[\begin{align*}
+ℓ(θ)&amp;=logL(θ∣x)=2logθ+log(1−θ)\\
+
+\frac{d\ell}{d\theta} &amp;= \frac{2}{\theta} - \frac{1}{1 - \theta}
+\\
+\dfrac2\theta &amp;= \dfrac1{1−θ}\\
+⇒\hat θ &amp;= \dfrac23
+
+\end{align*}\]</span> $$</p>
+</section>
+<section id="maximum-likelihood-estimation---an-introduction-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation---an-introduction-part-2">241. Maximum likelihood estimation - an introduction part 2</h3>
+<p>Continuing with our example, we have a population of 70 million in UK population, and there is <span class="math inline">\(\theta\)</span> that indicates probability of being a male</p>
+<p>We only have a sample and we try to get <span class="math inline">\(\hat \theta\)</span> to estimate <span class="math inline">\(\theta\)</span>, to do so, we use likelihood</p>
+<p><span class="math display">\[
+L = \prod\theta^{x_i}(1-\theta)^{1-x_i}
+\]</span></p>
+<p>likelihood represents probability of getting the data given the <span class="math inline">\(\theta\)</span></p>
+<p>To get <span class="math inline">\(\theta\)</span>, we differentiate</p>
+<p><span class="math display">\[
+\dfrac{\delta L}{\delta \theta} = 0 \to \hat \theta_{ML}
+\]</span></p>
+<p>But differentiation products is so hard, but we can turn it into sums if we take the log</p>
+<p><span class="math display">\[
+l = \log L = \log(\prod\theta^{x_i}(1-\theta)^{1-x_i})
+\]</span></p>
+<p>Then differentiate and we will get the <span class="math inline">\(\hat \theta_{ML}\)</span></p>
+<p><span class="math display">\[
+\dfrac{\delta L}{\delta \theta} = 0 \to \hat \theta_{ML} \leftarrow \dfrac{\delta l}{\delta \theta} =0
+\]</span></p>
+<p>when we take the log, the product will turn into summation</p>
+<p><span class="math display">\[
+l = \sum \log[\theta^{x_i}(1-\theta)^{1-x_i}]
+\]</span></p>
+<p>Remember the two log rules</p>
+<ol type="1">
+<li><span class="math inline">\(\log(ab ) = \log a + \log b\)</span></li>
+<li><span class="math inline">\(\log a^b = b \log a\)</span></li>
+</ol>
+<p>Using these properties we can get</p>
+<p><span class="math display">\[
+l = \sum x_i \log \theta + (1-x_i) \log(1-\theta)
+\]</span></p>
+<p>we know that <span class="math inline">\(\theta\)</span> is constant, so get it out of the sum</p>
+<p><span class="math display">\[
+l = \log \theta \sum x_i + \log (1- \theta)\sum (1-x_i)
+\]</span></p>
+<p>Remember that <span class="math inline">\(\sum x_i = N \bar x\)</span> to get</p>
+<p><span class="math display">\[
+l = \log \theta N\bar x + \log(1 - \theta) N \bar x
+\]</span></p>
+</section>
+<section id="maximum-likelihood-estimation---an-introduction-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation---an-introduction-part-3">242. Maximum likelihood estimation - an introduction part 3</h3>
+<p>Continuing with our example</p>
+<p><span class="math display">\[
+l = \log \theta N\bar x + \log(1 - \theta) N \bar x
+\]</span></p>
+<p>To maximize, we need to differentiate</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \theta} = \dfrac{N \bar x}{\hat \theta} - \dfrac{N(1 - \bar x)}{1 - \hat \theta} = 0
+\]</span></p>
+<p>The second fraction is negative due to <strong>chain rule</strong></p>
+<p>We get</p>
+<p><span class="math display">\[
+\dfrac{N \bar x}{\hat \theta} = \dfrac{N(1 - \bar x)}{1 - \hat \theta}
+\]</span></p>
+<p>Cancel <span class="math inline">\(N\)</span> from both sides then multiply denominator by nominarator</p>
+<p><span class="math display">\[
+\dfrac{\bar x}{\hat \theta} = \dfrac{(1 - \bar x)}{1 - \hat \theta}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align*}\bar x (1 - \hat \theta) &amp;= \hat \theta(1 - \bar x)\\
+\bar x - \hat \theta \bar x &amp;= \hat \theta - \hat \theta \bar x
+\end{align*}
+\]</span></p>
+<p>cancel <span class="math inline">\(\hat \theta\)</span> from both sides to get</p>
+<p><span class="math display">\[
+\hat \theta_{ML} = \bar x = \dfrac{\sum x_i}{N}
+\]</span></p>
+<p>What does that mean?</p>
+<p>the <span class="math inline">\(\theta\)</span> value which will maximize the likelihood of the data <individuals being="" males="">, is the sample mean <fraction of="" individuals="" in="" sample="" being="" males=""></fraction></individuals></p>
+</section>
+<section id="why-maximize-log-likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="why-maximize-log-likelihood">243. Why maximize log likelihood?</h3>
+<p>Why is it ok to use ‘<span class="math inline">\(\log\)</span>’?</p>
+<p>Here is the setting: we have a population with a defined probability density function <span class="math inline">\(f(x_i|\theta)\)</span> but we don’t have access to the population, so we take sample and estimate it</p>
+<p>Cuz we don’t know <span class="math inline">\(\theta\)</span>, the sample probability density function is different from the population <span class="math inline">\(f(x_i| \hat \theta)\)</span></p>
+<p>If we have a random sample, we can get <span class="math inline">\(\hat \theta\)</span> by multiplying product of individual probabilities</p>
+<p><span class="math display">\[
+L = \prod f(x_i| \theta)
+\]</span></p>
+<p>we don’t know <span class="math inline">\(\theta\)</span>, so we differentiate and send it to zero to get <span class="math inline">\(\hat \theta\)</span></p>
+<p><span class="math display">\[
+\dfrac{\delta L}{\delta \theta} \to \hat \theta_{ML}
+\]</span></p>
+<p>But differentiating product is so hard so we take <span class="math inline">\(\log\)</span>, both will give the same <span class="math inline">\(\hat \theta\)</span></p>
+<p>But why?</p>
+<p>if we plot <span class="math inline">\(l \, vs \, L\)</span> where <span class="math inline">\(L\)</span> on x axis, the curve will be <strong>increasing</strong></p>
+<p>so if <span class="math inline">\(L\)</span> increases, <span class="math inline">\(l\)</span> increases <monotonic property=""></monotonic></p>
+<p>If we plot <span class="math inline">\(\theta\)</span> on x axis and <span class="math inline">\(L, l\)</span> on y axis, we will get the exact downward parabola</p>
+<p>Is this true for all transformations not just <span class="math inline">\(\log\)</span>?</p>
+<p>no, the another transformation when plotted against <span class="math inline">\(L\)</span> can give us a <strong>wiggly</strong> line which we can’t count on</p>
+</section>
+<section id="the-cramer-rao-lower-bound-inference-in-maximum-likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="the-cramer-rao-lower-bound-inference-in-maximum-likelihood">244. The Cramer Rao lower Bound: inference in maximum likelihood</h3>
+<p>We covered the estimation, but how to make inference?</p>
+<p>If we the estimator is unbiased then the variance is greater than CRLB</p>
+<p><span class="math display">\[
+\boxed{E[\hat \theta] = \theta \to Var(\hat \theta)\ge CRLB}
+\]</span></p>
+<p>But maximum likelihood estimator is biased sometimes so</p>
+<p><span class="math display">\[
+E[\hat \theta_{ML}] \neq 0 \to Var(\hat \theta_{ML})&gt; CRLB
+\]</span></p>
+<p>So what is Cramer Rao Lower Bound?</p>
+<p><span class="math display">\[
+\boxed{CRLB = [I(\theta)]^{-1}}
+\]</span></p>
+<p>Its the inverse information matrix. Information matrix is</p>
+<p><span class="math display">\[
+I(\theta) = - E[\dfrac{\delta^2 \log L}{\delta \theta \delta \theta'}]
+\]</span></p>
+<p>Its the negative expectation of the second derivative with respect to <span class="math inline">\(\theta\)</span> and its transpose, where <span class="math inline">\(\theta\)</span> is a vector</p>
+<p>Cuz <span class="math inline">\(\hat \theta_{ML}\)</span> are consistent, they approach <span class="math inline">\(\theta\)</span>, using CLT</p>
+<p><span class="math display">\[
+N^{\frac 1 2}(\hat \theta_{ML} - \theta) \to N(0,H(\theta))
+\]</span></p>
+<p>It approaches normal distribution with mean <span class="math inline">\(0\)</span> and variance of <span class="math inline">\(H(\theta)\)</span></p>
+<p>We use this to derive asymptotic distribution <approximate></approximate></p>
+<p><span class="math display">\[
+\hat \theta_{ML} \to N(\theta, I(\theta)^{-1})
+\]</span></p>
+</section>
+<section id="maximum-likelihood---cramer-rao-lower-bound-intuition" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood---cramer-rao-lower-bound-intuition">245. Maximum likelihood - Cramer Rao lower bound intuition</h3>
+<p>What are we doing??</p>
+<p>Imagine that we have data that defines Likelihood</p>
+<p>we plot <span class="math inline">\(\theta\)</span> on x axis and <span class="math inline">\(L\)</span> on y axis</p>
+<p>If we get a bell shaped curve, The peak will be our estimator <span class="math inline">\(\hat \theta_{ML}\)</span></p>
+<p>The variance of the estimator will be asymptotically</p>
+<p><span class="math display">\[
+\boxed{Var(\hat \theta_{ML}) = I^{-1}(\theta) = \left[- E \left( \dfrac{\delta^2 L}{\delta \theta^2}\right)\right]^{-1}}
+\]</span></p>
+<p>But what is that and why??</p>
+<p>The derivative can be considered as the derivative of the gradient <think of="" gradient="" as="" slope=""></think></p>
+<p>Since that we are dealing with a downward parabola, the gradient will be positive and decrease till its zero then becomes negative, so the second derivative is negative</p>
+<p>We put <span class="math inline">\(-\)</span> sign before the expectation so the variance becomes positive</p>
+<p>But why the relationship?</p>
+<p>On the same graph from above, if we plot a new function &lt;more efficient, imagine the bell shape is pulled up&gt;</p>
+<p>The two functions are centered around <span class="math inline">\(\hat \theta\)</span>, but the pulled curve is better <more efficient=""></more></p>
+<p>Remember that any point on x axis under the curve is a possible estimator, in the pulled up curve case, we have fewer options hence more confidence</p>
+<p>Or in other words</p>
+<p><span class="math display">\[
+Var(\hat \theta_{ML}[new])&lt; Var(\hat \theta_{ML}[old])
+\]</span></p>
+<p>why inverse relationship between variance and second derivative? cuz in the formula we take inverse <span class="math inline">\(-1\)</span></p>
+<p>If we zoom on the peak of the pulled curve, we will find the second derivative is changing very rapidly <high curvature="">and bigger than the previous curve</high></p>
+<p>The high curvature, shows how confident we are in the estimator, hence the relation with the variance</p>
+<p>In other words, the formula just states that</p>
+<p><span class="math display">\[
+Var(\hat \theta_{ML}) \sim \dfrac 1 {curvature}
+\]</span></p>
+<p><strong>Big Note</strong></p>
+<p><strong>The information matrix</strong> is just the <strong>Curvature</strong></p>
+</section>
+<section id="likelihood-ratio-test---introduction" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood-ratio-test---introduction">246. Likelihood ratio test - introduction</h3>
+<p>Likelihood ratio statistic is calculated using</p>
+<p><span class="math display">\[
+\boxed{LR = 2\left((\log L|\hat \theta_{ML})- \log L(\theta_{H_0})\right)\sim \chi^2_q}
+\]</span></p>
+<p>Why though?</p>
+<p>back to our plot y axis has likelihood of <span class="math inline">\(y|\theta\)</span> and <span class="math inline">\(\theta\)</span> on x axis</p>
+<p>our null hypothesis is</p>
+<p><span class="math display">\[
+H_0: \theta = \theta_{H_0} \qquad H_1: \theta &gt; \theta_{H_0}
+\]</span></p>
+<p>In practice, <span class="math inline">\(H_0\)</span> is usually zero to measure the effect.</p>
+<p>Imagine the bell shaped curve, <span class="math inline">\(\hat \theta_{ML}\)</span> is under its peak while <span class="math inline">\(\theta_{H_0}\)</span> is on the side</p>
+<p>we measure the distance on the y axis corresponding to the two <span class="math inline">\(\theta's\)</span>. Then we check if this distance is significant or not</p>
+<p>If the distance is large, <span class="math inline">\(LR \uparrow\)</span> reject <span class="math inline">\(H_0\)</span></p>
+<p>However, if another curve is wide, the peak will be low, so the distance will be small <span class="math inline">\(LR \downarrow\)</span> fail to reject <span class="math inline">\(H_0\)</span> cuz the small distance may be due to sampling error</p>
+<p>Remember that <span class="math inline">\(\chi^2\)</span> probability is around zero, so any high value is usually rejected</p>
+</section>
+<section id="wald-test---introduction" class="level3">
+<h3 class="anchored" data-anchor-id="wald-test---introduction">247. Wald test - introduction</h3>
+<p>Wald test has the following form</p>
+<p><span class="math display">\[
+\boxed{w = (\hat\theta - \theta_0)'\left[Var(\hat \theta) \right]^{-1}(\hat \theta - \theta_0) \sim \chi^2_q}
+\]</span></p>
+<p>In the univariate case</p>
+<p><span class="math display">\[
+\boxed{w = \dfrac{(\hat \theta - \theta_0)^2}{Var(\hat \theta) } \sim \chi^2_1}
+\]</span></p>
+<p>Intuition:</p>
+<p>Plot <span class="math inline">\(L(y| \theta)\)</span> on y axis against <span class="math inline">\(\theta\)</span> on x axis</p>
+<p>Note that <span class="math inline">\(\theta_0  == \theta_{H_0}\)</span> just easier notation</p>
+<p>add the bell shaped curve, <span class="math inline">\(\hat \theta\)</span> is under the peak while <span class="math inline">\(\theta_0\)</span> is at the sides</p>
+<p>we measure the distance between the two <span class="math inline">\(\theta's\)</span> on the x axis, if its big, we reject <span class="math inline">\(H_0\)</span></p>
+<p>But what does the variance mean here?</p>
+<p>Add another likelihood <another curve=""> witch has peak under the previous peak aka same <span class="math inline">\(\hat \theta\)</span>, but this time its so wide <inefficient></inefficient></another></p>
+<p>In the first curve, peak was high, variance is smaller than distance between <span class="math inline">\(\theta's\)</span> squared, so ratio is large, and we reject</p>
+<p>while in the inefficient curve, the variance is so big, we are not confident, even distance squared is near the variance resulting in small ratio aka failing to reject</p>
+</section>
+<section id="score-test-lagrange-multiplier-test---introduction" class="level3">
+<h3 class="anchored" data-anchor-id="score-test-lagrange-multiplier-test---introduction">248. Score test (Lagrange Multiplier test) - introduction</h3>
+<p>Last test is the score test</p>
+<p><strong>Score</strong> is a vector that contains derivative of log likelihood with respect to the <span class="math inline">\(\theta's\)</span> and each derivative is considered a function of the parameter <span class="math inline">\(\theta\)</span></p>
+<p><span class="math display">\[
+\begin{align*}S &amp;=&nbsp;\begin{bmatrix}\dfrac{\partial}{\partial \theta_1} \\\dfrac{\partial}{\partial \theta_2} \\\vdots\end{bmatrix}=\begin{bmatrix}f_1(\theta) \\f_2(\theta) \\\vdots\end{bmatrix}\end{align*}
+\]</span></p>
+<p>The test is called <span class="math inline">\(LM\)</span></p>
+<p><span class="math display">\[
+\boxed{LM = S(\theta_0)'[Var(\theta_0)]^{-1}S(\theta_0) \sim \chi^2_q}
+\]</span></p>
+<p>Notice that all the <span class="math inline">\(\theta's\)</span> are under the null hypothesis, we don’t even estimate <span class="math inline">\(\hat \theta\)</span></p>
+<p>In the univariate case,</p>
+<p><span class="math display">\[
+\boxed{LM = \dfrac{S(\theta_0)^2}{Var(\theta_0)}}
+\]</span></p>
+<p>Intuition:</p>
+<p>Under the maximum likelihood, <span class="math inline">\(S(\hat \theta) = 0\)</span> &lt;remember that S is just some derivatives, and <span class="math inline">\(\hat \theta\)</span> is the result when derivative is zero&gt;</p>
+<p>But here, we evaluate score at <span class="math inline">\(\theta_0\)</span> which is not zero <span class="math inline">\(S(\theta_0) \neq 0\)</span></p>
+<p>plot <span class="math inline">\(L\)</span> on y axis, <span class="math inline">\(\theta\)</span> at x axis.</p>
+<p>we know that <span class="math inline">\(\theta_0\)</span> will be near the side, not under the peak. Score is the gradient <think slope="">, the score <slope> is positive, would be zero at the peak, so the numerator is positive and large, hence reject <span class="math inline">\(H_0\)</span></slope></think></p>
+<p>But if <span class="math inline">\(\theta_0\)</span> is close towards the peak, score <slope> will be around zero, so we fail to reject <span class="math inline">\(H_0\)</span>. We use this <span class="math inline">\(\theta_0\)</span></slope></p>
+</section>
+<section id="maximum-likelihood-estimators-of-population-mean-and-variance-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimators-of-population-mean-and-variance-part-1">249. Maximum likelihood estimators of population mean and variance part 1</h3>
+<p>Population has a process</p>
+<p><span class="math display">\[
+x_i = \mu +\varepsilon_i \qquad \varepsilon_i \sim N(0, \sigma^2)
+\]</span></p>
+<p>we don’t have the full population, so we take a sample and estimate</p>
+<p>We will estimate using <span class="math inline">\(ML\)</span>. First we need is the probability distribution for <span class="math inline">\(x_i\)</span></p>
+<p><span class="math display">\[
+f(x_i| \mu, \sigma^2)
+\]</span></p>
+<p>To find it, check the process</p>
+<p><span class="math display">\[
+\varepsilon_i = x_i - \mu
+\]</span></p>
+<p>and <span class="math inline">\(\varepsilon_i\)</span> is normal with mean zero and variance <span class="math inline">\(\sigma^2\)</span>, so will be the probability distribution <normal></normal></p>
+<p><span class="math display">\[
+\boxed{f(x_i|\mu, \sigma^2) = \dfrac{1}{\sqrt{2 \pi \sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}}
+\]</span></p>
+<p>But that was for one variable, cuz they are independent, all the individuals probability distribution will be the product <and consider="" it="" log="" likelihood="" due="" to="" equivalence="" principle=""></and></p>
+<p><span class="math display">\[
+L = \prod \dfrac{1}{\sqrt{2 \pi \sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+\]</span></p>
+<p>the 2<span class="math inline">\(\pi\)</span> is a constant, get it out of the product</p>
+<p><span class="math display">\[
+L = \left( \dfrac{1}{\sqrt{2 \pi \sigma^2}} \right)^N \prod e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+\]</span></p>
+<p>Good luck differentiating that, take log</p>
+<p>Remember these log rules</p>
+<ol type="1">
+<li><span class="math inline">\(\log e^x =x\)</span></li>
+<li><span class="math inline">\(\log ab = \log a +\log b\)</span></li>
+<li><span class="math inline">\(\log a^b = b \log a\)</span></li>
+</ol>
+<p>Using these rules, we get</p>
+<p><span class="math display">\[
+\log L = N \log \left(\dfrac{1}{\sqrt{2 \pi \sigma^2}} \right) - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+\]</span></p>
+<p>easier, but we can further simplify on the fraction</p>
+<p><span class="math display">\[
+\log L = \cancel{N \log 1} - N \log \sqrt{2 \pi \sigma^2} - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+\]</span></p>
+</section>
+<section id="maximum-likelihood-estimators-of-population-mean-and-variance-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimators-of-population-mean-and-variance-part-2">250. Maximum likelihood estimators of population mean and variance part 2</h3>
+<p>we reached</p>
+<p><span class="math display">\[
+\log L = \cancel{N \log 1} - N \log \sqrt{2 \pi \sigma^2} - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+\]</span></p>
+<p>we can simplify even more by turning sqrt into fraction <span class="math inline">\(\dfrac 1 2\)</span> then using log rule</p>
+<p><span class="math display">\[
+\log L = - \dfrac{N}{2} \log 2 \pi - \dfrac{N}{2} \log \sigma^2 - \dfrac{1}{2\sigma^2} \sum(x_i - \mu)^2
+\]</span></p>
+<p>Note: we wrote <span class="math inline">\(\sigma^2\)</span> and didn’t apply log rule on it, cuz we are trying to estimate it</p>
+<p>To estimate <span class="math inline">\(\mu\)</span>, differentiate with respect to it</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu)
+\]</span></p>
+<p>set it equal to zero and use <span class="math inline">\(\hat \mu\)</span></p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \hat \mu)  = 0
+\]</span></p>
+<p>multiply both sides by the constant <span class="math inline">\(\sigma^2\)</span> to get</p>
+<p><span class="math display">\[
+\sum(x_i - \mu) = 0
+\]</span></p>
+<p>which means</p>
+<p><span class="math display">\[
+\begin{align*}  N\hat \mu &amp;= \sum x_i\\
+\hat \mu  &amp;= \dfrac 1 N \sum x_i \\
+\hat \mu &amp;= \bar x
+\end{align*}
+\]</span></p>
+</section>
+<section id="maximum-likelihood-estimators-of-population-mean-and-variance-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimators-of-population-mean-and-variance-part-3">251. Maximum likelihood estimators of population mean and variance part 3</h3>
+<p>This time, we differentiate with respect to variance, here is the log likelihood</p>
+<p><span class="math display">\[
+\log L = - \dfrac{N}{2} \log 2 \pi - \dfrac{N}{2} \log \sigma^2 - \dfrac{1}{2\sigma^2} \sum(x_i - \mu)^2
+\]</span></p>
+<p>Differentiate with respect to <span class="math inline">\(\sigma^2\)</span></p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \sigma^2} = -\dfrac{N}{2 \sigma^2} + \dfrac{1}{2 \sigma^4} \sum(x_i - \mu)^2
+\]</span></p>
+<p>Note:</p>
+<p>why <span class="math inline">\(\sigma^4?\)</span> think of <span class="math inline">\(\sigma^2 ==x\)</span> so after differentiation it will be <span class="math inline">\(x^2 == \sigma^4\)</span></p>
+<p>Now make it equal to zero</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+\]</span></p>
+<p>After some arrangements we get</p>
+<p><span class="math display">\[
+\hat \sigma^2_{ML} = \dfrac{1}{N} \sum(x_i - \hat \mu)^2
+\]</span></p>
+<p>which is biased but consistent</p>
+</section>
+<section id="maximum-likelihood-normal-error-distribution---estimator-variance-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-normal-error-distribution---estimator-variance-part-1">252. Maximum likelihood: Normal error distribution - estimator variance part 1</h3>
+<p>How to get the variance of maximum likelihood estimators?</p>
+<p>we get the estimators for <span class="math inline">\(\mu, \sigma^2\)</span> using these functions</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+\]</span></p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu)
+\]</span></p>
+<p>To get the variance, check information matrix <which will="" be="" matrix="" cuz="" we="" have="" two="" estimators=""></which></p>
+<p><span class="math display">\[
+I = (\mu, \sigma^2) = -E\left[ \dfrac{\delta^2 l}{\delta \theta \delta \theta'} \right] \qquad \theta = \begin{bmatrix}
+\mu\\
+\sigma^2
+\end{bmatrix}
+\]</span></p>
+<p>So the information matrix here will be</p>
+<p>$$ () = - E</p>
+<span class="math display">\[\begin{bmatrix}\dfrac{\partial^2 \ell}{\partial \mu^2} &amp; \dfrac{\partial^2 \ell}{\partial \mu \, \partial \sigma^2} \\\dfrac{\partial^2 \ell}{\partial \sigma^2 \, \partial \mu} &amp; \dfrac{\partial^2 \ell}{\partial (\sigma^2)^2}\end{bmatrix}\]</span>
+<p>$$</p>
+<p>But we don’t know the parameters <span class="math inline">\(\mu, \sigma^2\)</span>, luckily,</p>
+<p><span class="math display">\[
+I(\hat \mu, \hat \sigma^2) \to I(\mu,  \sigma^2)
+\]</span></p>
+<p>why? cuz our estimators are themselves consistent</p>
+</section>
+<section id="maximum-likelihood-normal-error-distribution---estimator-variance-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-normal-error-distribution---estimator-variance-part-2">253. Maximum likelihood: Normal error distribution - estimator variance part 2</h3>
+<p>$$ () = - E</p>
+<span class="math display">\[\begin{bmatrix}\dfrac{\partial^2 \ell}{\partial \mu^2} &amp; \dfrac{\partial^2 \ell}{\partial \mu \, \partial \sigma^2} \\\dfrac{\partial^2 \ell}{\partial \sigma^2 \, \partial \mu} &amp; \dfrac{\partial^2 \ell}{\partial (\sigma^2)^2}\end{bmatrix}\]</span>
+<p>$$</p>
+<p>we start by getting the off diagonal values</p>
+<p>knowing that</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu)
+\]</span></p>
+<p>we calculate</p>
+<p><span class="math display">\[
+\dfrac{\delta^2l}{\delta \mu \delta \sigma^2} = - \dfrac{1}{(\hat \sigma^2)^2} \sum(x_i - \hat \mu) = 0
+\]</span></p>
+<p>Remember that first differential was zero, so the bracket <span class="math inline">\(\sum(x_i - \hat u )\)</span> = 0, hence second differential is also zero</p>
+<p>For the diagonal elements</p>
+<p><span class="math display">\[
+\dfrac{\delta^2 l}{\delta \mu ^2} = \dfrac{-N}{\hat\sigma^2}
+\]</span></p>
+<p><span class="math display">\[
+\dfrac{\delta^2 l}{\delta (\sigma^2)^2} = \dfrac{N}{2 \sigma^4} - \dfrac{2}{2\sigma^6}\sum(x_i - \hat \mu)^2
+\]</span></p>
+<p>substitute the summation with <span class="math inline">\(N\sigma^2\)</span> to get</p>
+<p><span class="math display">\[
+\dfrac{\delta^2 l}{\delta (\sigma^2)^2} = \dfrac{N}{2 \sigma^4} - \dfrac{2N\hat \sigma^2 }{2 \hat \sigma^6} = - \dfrac{N}{2 \hat \sigma^4}
+\]</span></p>
+</section>
+<section id="maximum-likelihood-normal-error-distribution---estimator-variance-part-3" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-normal-error-distribution---estimator-variance-part-3">254. Maximum likelihood: Normal error distribution - estimator variance part 3</h3>
+<p>Finally, substitute in the information matrix</p>
+<p><span class="math display">\[
+I(\hat \mu, \hat \sigma^2) = - \begin{bmatrix}
+\dfrac{-n}{\hat \sigma^2}&amp; 0\\
+0 &amp; \dfrac{-n}{2\hat \sigma^4}
+\end{bmatrix}
+\]</span></p>
+<p>Getting inverse is easy cuz its diagonal</p>
+<p><span class="math display">\[
+I(\hat \mu, \hat \sigma^2)^{-1} = - \begin{bmatrix}
+\dfrac{\hat \sigma^2}{n}&amp; 0\\
+0 &amp; \dfrac{2\hat \sigma^4}{n}
+\end{bmatrix} = CRLB
+\]</span></p>
+<p>If we let maximum likelihood estimator</p>
+<p><span class="math display">\[
+\hat \theta = \begin{bmatrix}\hat \mu \\
+\hat \sigma^2
+\end{bmatrix}
+\]</span></p>
+<p>Then by CLT,</p>
+<p><span class="math display">\[
+\hat \theta \to N(\theta, I(\hat \mu, \hat \sigma^2)^{-1})
+\]</span></p>
+<p>cuz the diagonals are zero, its means we have no covariance so we can consider each estimator in isolation</p>
+<p><span class="math display">\[
+\hat \mu \to N(\mu, \dfrac{\hat \sigma^2}{n}) \qquad \hat \sigma^2 \to(\sigma^2, \dfrac{2 \hat \sigma^4}{n})
+\]</span></p>
+<p>so we can use inference like <span class="math inline">\(t\)</span> tests</p>
+</section>
+<section id="maximum-likelihood-bernoulli-random-variable-estimator-variance-part-1" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-bernoulli-random-variable-estimator-variance-part-1">255. Maximum likelihood: Bernoulli random variable estimator variance part 1</h3>
+</section>
+<section id="maximum-likelihood-bernoulli-random-variable-estimator-variance-part-2" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-bernoulli-random-variable-estimator-variance-part-2">256. Maximum likelihood: Bernoulli random variable estimator variance part 2</h3>
+</section>
+<section id="least-squares-as-a-maximum-likelihood-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="least-squares-as-a-maximum-likelihood-estimator">257. Least squares as a maximum likelihood estimator</h3>
+</section>
+<section id="least-squares-comparison-with-maximum-likelihood---proof-that-ols-is-bue" class="level3">
+<h3 class="anchored" data-anchor-id="least-squares-comparison-with-maximum-likelihood---proof-that-ols-is-bue">258. Least squares comparison with maximum likelihood - proof that OLS is BUE</h3>
+</section>
+<section id="maximum-likelihood-estimation-of-logit-and-probit" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation-of-logit-and-probit">259. Maximum likelihood estimation of Logit and Probit</h3>
+</section>
+<section id="log-odds-interpretation-of-logistic-regression" class="level3">
+<h3 class="anchored" data-anchor-id="log-odds-interpretation-of-logistic-regression">260. Log odds interpretation of logistic regression</h3>
+</section>
+<section id="probit-model-as-a-result-of-a-latent-variable-model" class="level3">
+<h3 class="anchored" data-anchor-id="probit-model-as-a-result-of-a-latent-variable-model">261. Probit model as a result of a latent variable model</h3>
+</section>
+<section id="simultaneous-equation-models---an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="simultaneous-equation-models---an-introduction">262. Simultaneous equation models - an introduction</h3>
+<p>If status and policy determine the wage</p>
+<p><span class="math display">\[
+wage = \beta_0 + \beta_1 \, status + \beta_2 \, policy + \varepsilon_1
+\]</span></p>
+<p>and status is a function of wage</p>
+<p><span class="math display">\[
+status = \gamma_0 + \gamma_1\, wage + \gamma_2 \, marriage + \varepsilon_2
+\]</span></p>
+<p>notice that wage, the dependent became independent, same for status</p>
+<p>SO we have <strong>simultaneality bias,</strong> meaning we have bias due to endogeneity, these equations are called <span class="math inline">\(SEM\)</span></p>
+<p>Solution: substitute in one equation</p>
+<p><span class="math display">\[
+wage  = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_1 \, wage + \beta_1 \gamma_2 \, Marrianfe + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+\]</span></p>
+<p>then isolate for wage</p>
+<p><span class="math display">\[
+(1-\beta_1\gamma_1)wage = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_2 \, marriage + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+\]</span></p>
+<p>Notice that <span class="math inline">\(\beta_0 + \beta_1 \gamma_0\)</span> is just a constant</p>
+<p>Notice the problem: wage is a function of status which itself is a function of wage and <span class="math inline">\(\varepsilon_2\)</span>, hence wage is correlated with <span class="math inline">\(\varepsilon_2\)</span> so we have <strong>endogeneity</strong></p>
+<p>OLS is biased and inconsistent</p>
+<p>If we do the same equation for status, we will get that its correlated with <span class="math inline">\(\varepsilon_1\)</span>. OLS fails</p>
+</section>
+<section id="simultaneous-equation-models---reduced-form-and-structural-equations" class="level3">
+<h3 class="anchored" data-anchor-id="simultaneous-equation-models---reduced-form-and-structural-equations">263. Simultaneous equation models - reduced form and structural equations</h3>
+<p>Continuing with last example</p>
+<p><span class="math display">\[
+\begin{align*}
+wage &amp;= \beta_0 + \beta_1 \, status + \beta_2 \, policy + \varepsilon_1
+\\
+status &amp;= \gamma_0 + \gamma_1\, wage + \gamma_2 \, marriage + \varepsilon_2\end{align*}
+\]</span></p>
+<p>These two equations are called structural equations cuz they represent the structure in the economy</p>
+<p>This mess</p>
+<p><span class="math display">\[
+wage  = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_1 \, wage + \beta_1 \gamma_2 \, Marriage + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+\]</span></p>
+<p>That we derived, can be written as</p>
+<p><span class="math display">\[
+wage = \delta_0 + \delta_1 policy +\delta_2 \, Marriage + v_1
+\]</span></p>
+<p>and status will be</p>
+<p><span class="math display">\[
+status = \eta_0 + \eta_1 \, policy + \eta_2 \, Marriage + v_2
+\]</span></p>
+<p>these two forms are called <strong>reduced form</strong> cuz its just rewriting equations and we lost the theoretical meaning</p>
+<p>But now we can use OLS and it will be unbiased and consistent, but there is no way to know <span class="math inline">\(\beta\)</span> from estimating <span class="math inline">\(\delta\)</span></p>
+</section>
+<section id="simultaneous-equation-models---parameter-identification" class="level3">
+<h3 class="anchored" data-anchor-id="simultaneous-equation-models---parameter-identification">264. Simultaneous equation models - parameter identification</h3>
+<p><strong>Identification</strong> means ability of estimating parameters</p>
+<p>Famous example:</p>
+<p>quantity supplied is a function of price and weather</p>
+<p>quantity demanded is a function of price</p>
+<p><span class="math display">\[
+\begin{align*}
+q &amp;= \beta_0 + \beta_1 P + \beta_2 Z + \varepsilon_1\\
+q &amp;= \gamma_0 + \gamma_1 P + \varepsilon_2
+\end{align*}
+\]</span></p>
+<p>we expect <span class="math inline">\(\beta_1 &gt;0, \gamma_1 &lt;0\)</span></p>
+<p>OLS fails, so we use <span class="math inline">\(Z\)</span> as an instrument for <span class="math inline">\(P\)</span> in the demand equation</p>
+<p>Because <span class="math inline">\(Z\)</span> is contained in the supply equation so its correlated with <span class="math inline">\(P\)</span> but its not contained in the demand so its not correlated with <span class="math inline">\(\varepsilon_2\)</span> hence a good instrument for estimating <span class="math inline">\(\gamma_1\)</span></p>
+<p>But we can’t use <span class="math inline">\(Z\)</span> to estimate <span class="math inline">\(\beta_1\)</span></p>
+<p>Why?</p>
+<p>graph it, <span class="math inline">\(P\)</span> on y axis, <span class="math inline">\(Q\)</span> on x axis, if <span class="math inline">\(Z\)</span> changes, supply curve shifts right or left, but demand stays the same. we get a new <span class="math inline">\(Q\)</span></p>
+<p>If we keep changing <span class="math inline">\(Z\)</span>, and draw a line of the shifts of supply, we can deduce the demand curve, other way is not true</p>
+<p>What we need is something to shift demand and keep supply constant, so we can deduce the supply curve too</p>
+</section>
+<section id="simultaneous-equation-models-order-conditions-for-parameter-identification" class="level3">
+<h3 class="anchored" data-anchor-id="simultaneous-equation-models-order-conditions-for-parameter-identification">265. Simultaneous equation models: order conditions for parameter identification</h3>
+<p><span class="math display">\[
+\begin{align*}
+q &amp;= \beta_0 + \beta_1 P + \beta_2 Z_1 + \varepsilon_1\\
+q &amp;= \gamma_0 + \gamma_1 P + \gamma_2 Z_2 +\varepsilon_2
+\end{align*}
+\]</span></p>
+<p>Now we have two exogenous variables <span class="math inline">\(Z_1, Z_2\)</span> so we can identify <span class="math inline">\(\beta, \gamma\)</span></p>
+<p>But to do so, we need to meet the <strong>rank condition</strong> which states</p>
+<blockquote class="blockquote">
+<p>for each equation, there must be at least as many exogenous variables which aren’t included in that equation which can act as IV for each endogenous variable in that equation</p>
+</blockquote>
+<p>Example</p>
+<p><span class="math display">\[
+\begin{align*}
+y_1 &amp;= \beta_0 + \beta_1 y_2 + \delta_2 Z_1  + \delta_2 Z_2 + \delta_3 Z_3 + \varepsilon_1\\
+y_2 &amp;= \alpha_0 + \alpha_1 y_1 + \alpha_2 y_3 + \gamma_1Z_1 + \gamma_2 Z_4 + \varepsilon_2\\
+y_3 &amp;= \eta_0 + \eta_1 y_1 + \eta_2 Z_3 + \varepsilon_3
+\end{align*}
+\]</span></p>
+<p>to estimate <span class="math inline">\(y_2\)</span> in first equation, we need exogenous variable not included in the equation, like <span class="math inline">\(Z_4\)</span>, so its full identified</p>
+<p>For <span class="math inline">\(y_1, y_3\)</span> in the second equation, we can use <span class="math inline">\(Z_1, Z_3\)</span> cuz they are not included, fully identified</p>
+<p>for <span class="math inline">\(y_1\)</span> in third equation, we can use <span class="math inline">\(Z_1, Z_2,Z_3\)</span>, we have <strong>overidentification</strong></p>
+<p>Anyway, we can estimate the full system, this was the <strong>order condition</strong></p>
+</section>
+<section id="monte-carlo-simulation-for-estimators-an-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-simulation-for-estimators-an-introduction">266. Monte Carlo simulation for estimators: an introduction</h3>
+<p>We assume a population process like</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta x_i + \varepsilon_i
+\]</span></p>
+<p>we take sample to estimate the parameters. If we take <span class="math inline">\(N\)</span> samples, each sample will get us a slightly different <span class="math inline">\(\hat \beta\)</span> but it satisfies some properties like unbiasedness, consistent and efficiency</p>
+<p>Problem: we don’t know the population parameter</p>
+<p>Solution: use Monte Carlo simulation</p>
+<ol type="1">
+<li>specify population process with known parameters and distribution for error term <span class="math inline">\(y_i = \alpha + \beta x_i + \varepsilon_i \quad \varepsilon_i \sim N(0, \sigma^2)\)</span></li>
+<li>Generate multiple samples using the process</li>
+<li>get estimator for the parameters in each sample</li>
+<li>plot the estimators in a histogram <sampling distribution=""></sampling></li>
+<li>If its centered around <span class="math inline">\(\beta\)</span>, its unbiased,</li>
+<li>can check its variance compared to other estimators <like gls=""></like></li>
+<li>can check for consistency &lt;increase sample size from 100 to 10,000 and check if it gets closer&gt;</li>
+</ol>
+<p>Benefits of simulation:</p>
+<ol type="1">
+<li>examine properties of new estimators <ls are="" boring="" and="" known=""></ls></li>
+</ol>
+</section>
+<section id="monte-carlo-simulation-for-ordinary-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-simulation-for-ordinary-least-squares">267. Monte Carlo simulation for ordinary least squares</h3>
+<p>To do the simulation</p>
+<ol type="1">
+<li>generate random normal data for <span class="math inline">\(x\)</span> multiplied by 4 <to have="" higher="" variance="" than="" error="" term=""></to></li>
+<li>generate random normal data for the error term</li>
+<li>calculate <span class="math inline">\(y\)</span> where <span class="math inline">\(y_i = \alpha + \beta x_i + \varepsilon_i\)</span> &lt;<span class="math inline">\(\alpha=1, \beta=1\)</span>&gt;</li>
+<li>generate 1000 samples</li>
+<li>apply <span class="math inline">\(OLS\)</span> on each sample</li>
+<li>draw histogram for the estimator</li>
+<li>check for unbiasedness</li>
+<li>increase sample size and check for consistency</li>
+</ol>
+</section>
+<section id="monte-carlo-simulation-of-omitted-variable-bias-in-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-simulation-of-omitted-variable-bias-in-least-squares">268. Monte Carlo simulation of omitted variable bias in least squares</h3>
+<p>To check for omitted variable bias</p>
+<ol type="1">
+<li><p>generate random normal data for <span class="math inline">\(x_1\)</span> multiplied by 4 <to have="" higher="" variance="" than="" error="" term=""></to></p>
+<p><span class="math display">\[
+x_1 \sim 4 \cdot randn()
+\]</span></p></li>
+<li><p>generate another variable <span class="math inline">\(x_2\)</span> which is correlated with <span class="math inline">\(x_1\)</span></p>
+<p><span class="math display">\[
+x_2 = x_1 \cdot 0.35 + randn()
+\]</span></p></li>
+<li><p>Let <span class="math inline">\(y\)</span> be a function of <span class="math inline">\(x_1, x_2\)</span></p>
+<p><span class="math display">\[
+y = \alpha + \beta_1 x_1 + \beta_2 x_2 + randn()
+\]</span></p></li>
+<li><p>generate 100 samples</p></li>
+<li><p>Use OLS using <span class="math inline">\(x_1\)</span> only</p>
+<p><span class="math display">\[
+y = \alpha + \beta_1 x_1 + \varepsilon
+\]</span></p></li>
+<li><p>plot histogram <we expect="" bias="" cuz="" of="" endogeneity=""></we></p></li>
+<li><p>Increase sample size <inconsistent></inconsistent></p></li>
+</ol>
+</section>
+<section id="testing-for-significance-on-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="testing-for-significance-on-correlation">269. Testing for significance on correlation</h3>
+<p>The formula of Pearson correlation <span class="math inline">\(r\)</span> is covariance over variance</p>
+<p><span class="math display">\[
+r = \dfrac{\sum(x_i - \bar x)(y_i - \bar y)}{\sum(x_i - \bar x)^2\sum(y_i - \bar y)^2}
+\]</span></p>
+correlation is bounded between -1 to 0 <perpendicular>and 1
+<form a="" straight="" line="">
+<p>From the graph, find <span class="math inline">\(\bar x, \bar y\)</span> and check if <span class="math inline">\(x\)</span> is above or below it, same for <span class="math inline">\(y\)</span> and their product is positive or negative</p>
+<p>How to test for correlation?</p>
+<p><span class="math display">\[
+H_0: \rho=0 \quad H_1: \rho\neq 0
+\]</span></p>
+<p>we can test it with the statistic</p>
+<p><span class="math display">\[
+\boxed{t = r \sqrt{\dfrac{N-2}{1-r^2}} \sim t_{N-2}}
+\]</span></p>
+<p>How does it work?</p>
+<p>If <span class="math inline">\(r \to 1\)</span>, denominator approaches zero, <span class="math inline">\(t \to \infty\)</span>,</p>
+<p>same for <span class="math inline">\(r \to -1\)</span>, but the <span class="math inline">\(r\)</span> outside the square root will make <span class="math inline">\(t \to - \infty\)</span></p>
+<p>Both cases will result in rejecting <span class="math inline">\(H_0\)</span></p>
+<p>if <span class="math inline">\(r=0, t=0\)</span>, we will not reject <span class="math inline">\(H_0\)</span></p>
+</form></perpendicular></section>
+<section id="one-sample-t-test-on-mean" class="level3">
+<h3 class="anchored" data-anchor-id="one-sample-t-test-on-mean">270. One sample t test on mean</h3>
+<p>If population has a parameter <span class="math inline">\(\mu\)</span>, we need a sample estimator like <span class="math inline">\(\bar x\)</span></p>
+<p>But we still need to infer on <span class="math inline">\(\mu\)</span></p>
+<p><span class="math display">\[
+H_0: \mu = \mu_0 \qquad u \neq u_0
+\]</span></p>
+<p>Here is the test</p>
+<p><span class="math display">\[
+\boxed{t = \dfrac{\bar x - \mu}{\dfrac{S}{\sqrt N}} \sim t_{N-1}}
+\]</span></p>
+<p>Where <span class="math inline">\(S\)</span> is the corrected standard error</p>
+<p><span class="math display">\[
+\boxed{S = \sqrt{\dfrac 1 {N-1} \sum(x_i - \bar x)^2}}
+\]</span></p>
+<p><span class="math inline">\(t\)</span> is wider than <span class="math inline">\(z\)</span>, the idea is if the nominator is so big, <span class="math inline">\(t\)</span> will be really big or really small resulting in us rejecting <span class="math inline">\(H_0\)</span></p>
+</section>
+<section id="independent-two-sample-t-test-for-populations-with-equal-variances" class="level3">
+<h3 class="anchored" data-anchor-id="independent-two-sample-t-test-for-populations-with-equal-variances">271. Independent two sample t test for populations with equal variances</h3>
+<p>If we have population 1 with parameter <span class="math inline">\(\mu_1\)</span> and population with parameter <span class="math inline">\(\mu_2\)</span></p>
+<p>we want to test</p>
+<p><span class="math display">\[
+H_0: \mu_1 = \mu_2 \qquad H_1: \mu_1 \neq \mu_2
+\]</span></p>
+<p>But we don’t know either <span class="math inline">\(\mu\)</span> so we get estimates for them and calculate</p>
+<p><span class="math display">\[
+\boxed{t = \dfrac{\bar x_1 - \bar x_2}{s_{12} \sqrt{\frac 2 N}}\sim t_{2N-2}}
+\]</span></p>
+<p>What is the <span class="math inline">\(S\)</span>?</p>
+<p><span class="math display">\[
+\boxed{S^2_{12} = \dfrac{s_1^2+s_2^2}{2}}
+\]</span></p>
+<p>Its like average variance of the two variances</p>
+<p>Intuition:</p>
+<p>plot the <span class="math inline">\(t\)</span> distribution centered around zero, if there is a big difference, numerator is big and so is <span class="math inline">\(t\)</span> so we reject</p>
+<p>But we need some assumptions to do this test</p>
+<ol type="1">
+<li>the samples are independent &lt;no correlation bet. <span class="math inline">\(\bar x_1, \bar x_2\)</span>&gt;</li>
+<li>the two variances are equal</li>
+</ol>
+</section>
+<section id="variance-inflation-factors-testing-for-multicollinearity" class="level3">
+<h3 class="anchored" data-anchor-id="variance-inflation-factors-testing-for-multicollinearity">272. Variance inflation factors: testing for multicollinearity</h3>
+<p>If we have the regression equation</p>
+<p><span class="math display">\[
+y_i = \alpha + \beta_1x_{1i}+ \beta_2x_{2i}+ \dots + \beta_px_p + \varepsilon_i
+\]</span></p>
+<p>We may have multicollinearity &lt;the <span class="math inline">\(X's\)</span> are correlated&gt;, to check</p>
+<ol type="1">
+<li>correlation matrix</li>
+<li>scatterplot</li>
+</ol>
+<p>But these two methods are bivariate, what if we want to check for a linear combination</p>
+<p>Hence: check variance inflation factor</p>
+<ol type="1">
+<li>regress <span class="math inline">\(x_{1i}\)</span> on the remaining variables</li>
+</ol>
+<p><span class="math display">\[
+x_{1i} = \delta_0 + \delta_1x_{2i}+ \delta_2x_{3i}+\dots +\delta_{p-1}x_{p-1}+v_i
+\]</span></p>
+<ol type="1">
+<li><p>get <span class="math inline">\(R^2\)</span> <high r="" squared="" indicates="" the="" chance="" of="" multicollinearity=""></high></p></li>
+<li><p>get <span class="math inline">\(R^2\)</span> for the remaining variables too <span class="math inline">\(R^2_1 \to R^2_p\)</span></p></li>
+<li><p>calculate <span class="math inline">\(VIF\)</span></p>
+<p><span class="math display">\[
+\boxed{VIF= \dfrac{1}{1- R^2_j}}
+\]</span></p>
+<p>If <span class="math inline">\(R^2\)</span> is close to 1, denominator is small, VIF is large.</p>
+<p>IF <span class="math inline">\(VIF \ge 5\)</span>, don’t include he variable</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter05.html" class="pagination-link" aria-label="Time Series">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time Series</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter07.html" class="pagination-link" aria-label="Asymptotic Behavior of Estimators">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Asymptotic Behavior of Estimators</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
