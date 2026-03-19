@@ -10,13 +10,4 @@ As a Teaching Assistant, my job is not to invent new theorems. My job is to tran
 
 This book is a pragmatic synthesis. It is an attempt to blend the wisdom of the giants into a single, accessible manual.
 
-### The Philosophy of This Book
-
-* **Synthesis, Not Invention:** I have read the chapters from the competing books so you don't have to. This book aggregates the best explanation for each technique.
-* **The "Cheat Sheet" Approach:** We keep the theory light. The heavy mathematical lifting is already done better elsewhere (and I will cite those sources extensively if you wish to dive deeper).
-* **Bilingual by Design:** Every concept is implemented side-by-side in **R** and **Python**. Whether you are an econometrics traditionalist or a data science modernist, you belong here.
-* **Code-First:** The focus is on the "Do." We start with data and end with a results table.
-
-If the other books are the lectures, think of this book as the lab session.
-
-Enjoy the ride.
+Enough with the formalities, even as a TA I find it hellish to master econometrics. This book records my learning journey. Each chapter is my notes from a specific source. I ordered the chapters in a way that will get you in business ASAP. Starting from absolutely nothing till the moment you or I reach noble prize level like Angrist or Dufflo.

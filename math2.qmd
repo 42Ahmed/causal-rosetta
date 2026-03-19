@@ -1,0 +1,1134 @@
+---
+title: "Introductory Econometrics: Panel Math"
+format: html
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+## Basic Regression Analysis with Time Series Data
+
+### The Nature of Time Series Data
+
+Unlike cross-sectional data, time series data are temporally ordered.
+A sequence of random variables indexed by time is a stochastic process or time series process.
+We observe a single realization of this process over $n$ time periods, indexing observations as $t = 1, 2, \dots, n$.
+
+### Examples of Time Series Regression Models
+
+#### Static Models
+
+A static model assumes a contemporaneous relationship between $y$ and $z$: $y_t = \beta_0 + \beta_1 z_t + u_t$.
+The change in $y$ is strictly driven by an immediate, same-period change in $z$: $\Delta y_t = \beta_1 \Delta z_t$ (assuming $\Delta u_t = 0$).
+
+#### Finite Distributed Lag (FDL) Models
+
+An FDL model of order $q$ allows $z$ to affect $y$ with a lag: $y_t = \alpha_0 + \delta_0 z_t + \delta_1 z_{t-1} + \dots + \delta_q z_{t-q} + u_t$.
+
+**Impact Propensity:** The immediate change in $y$ given a one-unit change in $z_t$ is the coefficient on the contemporaneous variable, $\delta_0$.
+
+**Long-Run Propensity (LRP):** If $z$ permanently increases by one unit, the total cumulative long-run change in $y$ after $q$ periods is the sum of all coefficients: $LRP = \delta_0 + \delta_1 + \dots + \delta_q$.
+
+**Cumulative Effect:** The change in $y$ evaluated $h$ periods after a permanent change in $z$ is algebraically defined as $\sum_{j=0}^h \delta_j$.
+
+#### A Convention about the Time Index
+
+When using lags, initial observations are lost.
+If an FDL model involves variables up to $z_{t-q}$, the available sample for estimation computationally begins at $t = q + 1$.
+
+### Finite Sample Properties of OLS under Classical Assumptions
+
+To establish the finite sample properties of OLS for time series, we define the matrix $\mathbf{X}$ as the $n \times k$ array of all independent variables across all $t$ periods.
+
+#### Unbiasedness of OLS
+
+Unbiasedness strictly requires three assumptions:
+
+1\.
+**TS.1 (Linear in Parameters):** The stochastic process follows $y_t = \beta_0 + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + u_t$.
+
+2\.
+**TS.2 (No Perfect Collinearity):** No independent variable is constant or a perfect linear combination of others.
+
+3\.
+**TS.3 (Zero Conditional Mean / Strict Exogeneity):** The expected value of the error at time $t$, given the entire matrix $\mathbf{X}$ of explanatory variables for *all* time periods, is zero: $E(u_t | \mathbf{X}) = 0$.
+
+This implies contemporaneous exogeneity ($E(u_t|x_t) = 0$) but is mathematically much stronger: it requires $Cov(x_{sj}, u_t) = 0$ for any $s \neq t$.
+It strictly rules out feedback from $y_t$ to future values of $x$.
+
+**Theorem 10.1:** Under TS.1 through TS.3, the OLS estimators are unbiased conditional on $\mathbf{X}$: $E(\hat{\beta}_j) = \beta_j$.
+
+#### The Variances of the OLS Estimators and the Gauss-Markov Theorem
+
+To calculate the OLS variances, two additional assumptions are required:
+
+4\.
+**TS.4 (Homoskedasticity):** The conditional variance of the error is constant over time: $Var(u_t | \mathbf{X}) = Var(u_t) = \sigma^2$.
+
+5\.
+**TS.5 (No Serial Correlation):** Conditional on $\mathbf{X}$, the errors in two different time periods are strictly uncorrelated: $Corr(u_t, u_s | \mathbf{X}) = 0$, for all $t \neq s$.
+
+**Theorem 10.2 (OLS Sampling Variances):** Under TS.1 through TS.5, the variance of the OLS estimator is mathematically identical to the cross-sectional formula: $Var(\hat{\beta}_j | \mathbf{X}) = \frac{\sigma^2}{SST_j (1 - R_j^2)}$.
+**Theorem 10.3:** The estimator $\hat{\sigma}^2 = \frac{SSR}{n - k - 1}$ is an unbiased estimator of $\sigma^2$.
+
+**Theorem 10.4 (Gauss-Markov):** Under TS.1 through TS.5, the OLS estimators are the Best Linear Unbiased Estimators (BLUE).
+
+#### Inference under the Classical Linear Model Assumptions
+
+6.  **TS.6 (Normality):** The errors $u_t$ are independent of $\mathbf{X}$ and are i.i.d. as $\text{Normal}(0, \sigma^2)$.
+
+**Theorem 10.5:** Under TS.1 through TS.6, the standardized OLS estimators follow exact $t$ distributions, allowing valid use of standard $t$ and $F$ statistics for hypothesis testing.
+
+### Functional Form, Dummy Variables, and Index Numbers
+
+Logarithmic forms are heavily used in time series to evaluate percentage changes.
+Changing the base period of an index number mechanically changes only the intercept $\hat{\beta}_0$ of a log-level or log-log regression; all slope coefficients ($\hat{\beta}_j$) remain absolutely invariant because $\log(cy) = \log(c) + \log(y)$.
+
+### Trends and Seasonality
+
+#### Characterizing Trending Time Series
+
+A trending variable has an expected value that is a function of time.
+
+**Linear Trend:** $y_t = \alpha_0 + \alpha_1 t + e_t$.
+The average change is constant: $E(\Delta y_t) = \alpha_1$.
+
+**Exponential Trend:** Models constant growth rates.
+$\log(y_t) = \beta_0 + \beta_1 t + e_t$.
+The exact per-period growth rate evaluates to $\Delta \log(y_t) = \beta_1$, meaning $y_t$ grows at an approximate rate of $(100 \cdot \beta_1)\%$ per period.
+
+**Quadratic Trend:** $y_t = \alpha_0 + \alpha_1 t + \alpha_2 t^2 + e_t$.
+The marginal effect of time depends on $t$: $\frac{\Delta y_t}{\Delta t} \approx \alpha_1 + 2\alpha_2 t$.
+
+#### Using Trending Variables in Regression Analysis
+
+If unobserved trending factors affect $y_t$ and are correlated with an explanatory variable $x_t$, a simple regression of $y_t$ on $x_t$ yields a **spurious regression**.
+Mathematically, including a time trend ($t$) as an independent variable controls for these unobserved growing/shrinking factors: $y_t = \beta_0 + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + \beta_{k+1} t + u_t$.
+
+#### A Detrending Interpretation of Regressions with a Time Trend
+
+Applying the Frisch-Waugh theorem, the OLS estimators $\hat{\beta}_j$ from a model including a time trend $t$ can be computed via a two-step mathematical equivalent:
+
+1\.
+Regress $y_t$ and each $x_{tj}$ on $t$, and save the residuals.
+This process algebraically detrends the data.
+Let $\ddot{y}_t$ and $\ddot{x}_{tj}$ be these detrended residuals.
+
+2\.
+Run the regression of $\ddot{y}_t$ on $\ddot{x}_{t1}, \dots, \ddot{x}_{tk}$.
+The resulting slope estimates are exactly identical to those from the regression that directly includes $t$.
+
+#### Computing R-Squared When the Dependent Variable Is Trending
+
+Because time trends often explain an artificially massive portion of $SST_y$, a more accurate goodness-of-fit measure calculates the $R^2$ using the variation of $y$ *around its trend*: $R_{detrended}^2 = 1 - \frac{SSR}{\sum_{t=1}^n \ddot{y}_t^2}$ where $SSR$ is the sum of squared residuals from the original model, and the denominator is the sum of squares of the detrended dependent variable.
+
+#### Seasonality
+
+If data (monthly, quarterly) display deterministic seasonal patterns, we incorporate $g-1$ seasonal dummy variables.
+For monthly data: $y_t = \beta_0 + \delta_1 \text{feb}_t + \dots + \delta_{11} \text{dec}_t + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + u_t$.
+Similar to detrending, including seasonal dummies mathematically acts as a complete **deseasonalization** of both the dependent and independent variables prior to estimating their partial effects.
+
+## Further Issues in Using OLS with Time Series Data
+
+### Stationary and Weakly Dependent Time Series
+
+#### Stationary and Nonstationary Time Series
+
+A stationary time series process is one in which the probability distributions are stable over time, meaning that if you take any collection of random variables in the sequence and shift that sequence ahead $h$ time periods, the joint probability distribution must remain exactly unchanged.
+Covariance stationarity is a weaker form of stationarity requiring that the expected value $E(y_t)$ is constant, the variance $Var(y_t)$ is constant, and the covariance between any two terms, $Cov(y_t, y_{t+h})$, depends strictly on the distance between the terms ($h$), not on their specific time index ($t$).
+
+#### Weakly Dependent Time Series
+
+Weak dependence replaces the assumption of random sampling to ensure that the Law of Large Numbers (LLN) and the Central Limit Theorem (CLT) hold.
+It requires the correlation between $x_t$ and $x_{t+h}$ to approach zero "sufficiently quickly" as $h \to \infty$.
+
+**Moving Average Process of Order One \[MA(1)\]:** Defined as $x_t = e_t + \alpha_1 e_{t-1}$, where $e_t$ is an independent, identically distributed (i.i.d.) sequence with zero mean and variance $\sigma_e^2$.
+The variance is $Var(x_t) = (1 + \alpha_1^2)\sigma_e^2$.
+The covariance between adjacent terms is $Cov(x_t, x_{t+1}) = \alpha_1\sigma_e^2$, yielding a correlation of $Corr(x_t, x_{t+1}) = \alpha_1 / (1 + \alpha_1^2)$.
+For variables two or more periods apart ($h \ge 2$), the correlation drops strictly to zero.
+
+**Autoregressive Process of Order One \[AR(1)\]:** Defined as $y_t = \rho_1 y_{t-1} + e_t$.
+The crucial stability condition for weak dependence is $|\rho_1| < 1$.
+Under covariance stationarity, $E(y_t) = 0$.
+The variance is $\sigma_y^2 = \sigma_e^2 / (1 - \rho_1^2)$.
+The covariance is $Cov(y_t, y_{t+h}) = \rho_1^h \sigma_y^2$, which yields a correlation of $Corr(y_t, y_{t+h}) = \rho_1^h$.
+Because $|\rho_1| < 1$, $\rho_1^h \to 0$ as $h \to \infty$, demonstrating asymptotic uncorrelation.
+
+### Asymptotic Properties of OLS
+
+To apply large-sample approximations, the time series Gauss-Markov assumptions are mathematically relaxed.
+
+**Assumption TS.1' (Linearity and Weak Dependence):** The process $\{(x_t, y_t)\}$ is stationary, weakly dependent, and follows the linear model $y_t = \beta_0 + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + u_t$.
+
+**Assumption TS.2' (No Perfect Collinearity):** No independent variable is constant or a perfect linear combination of others.
+
+**Assumption TS.3' (Zero Conditional Mean):** The explanatory variables are contemporaneously exogenous: $E(u_t | x_t) = 0$.
+This allows for correlation between $u_t$ and past or future values of $x$, permitting feedback from $y$ to future $z$.
+Consistency mathematically only requires $E(u_t) = 0$ and $Cov(x_{tj}, u_t) = 0$.
+
+**Theorem 11.1 (Consistency of OLS):** Under TS.1', TS.2', and TS.3', OLS estimators are consistent: $plim(\hat{\beta}_j) = \beta_j$.
+*Note on AR(1) models:* A model with a lagged dependent variable, $y_t = \beta_0 + \beta_1 y_{t-1} + u_t$, violates strict exogeneity because $y_t$ and $u_t$ are correlated ($Cov(y_t, u_t) = Var(u_t) > 0$).
+However, it satisfies TS.3' if $E(u_t | y_{t-1}, y_{t-2}, \dots) = 0$, guaranteeing consistency if $|\beta_1| < 1$.
+
+**Theorem 11.2 (Asymptotic Normality of OLS):** By adding **Assumption TS.4' (Homoskedasticity:** $Var(u_t|x_t) = \sigma^2$) and **Assumption TS.5' (No Serial Correlation:** $Corr(u_t, u_s|x_t, x_s) = 0$), the standardized OLS estimators are asymptotically normally distributed.
+Therefore, standard $t$, $F$, and $LM$ statistics are asymptotically valid.
+
+### Using Highly Persistent Time Series in Regression Analysis
+
+#### Highly Persistent Time Series
+
+-   **Random Walk:** Occurs in an AR(1) model when $\rho_1 = 1$, generating $y_t = y_{t-1} + e_t$. Using repeated substitution, $y_t = e_t + e_{t-1} + \dots + e_1 + y_0$. The variance grows linearly with time, $Var(y_t) = \sigma_e^2 t$, making the process strictly nonstationary. The best prediction of the future is today's value: $E(y_{t+h} | y_t) = y_t$ for all $h \ge 1$.
+-   **Random Walk with Drift:** Adds a constant $\alpha_0$ to the equation: $y_t = \alpha_0 + y_{t-1} + e_t$. The expected value grows linearly with time: $E(y_t) = \alpha_0 t + E(y_0)$, while the variance remains $\sigma_e^2 t$. The prediction becomes $E(y_{t+h} | y_t) = \alpha_0 h + y_t$.
+
+#### Transformations on Highly Persistent Time Series
+
+A random walk is an Integrated of order one, or I(1), process.
+Using I(1) variables directly in regression invalidates OLS inference.
+
+**Differencing:** An I(1) process is transformed into a weakly dependent I(0) sequence by first differencing: $\Delta y_t = y_t - y_{t-1} = e_t$.
+
+**Logarithmic Differencing:** If $\log(y_t)$ is I(1), the difference $\Delta \log(y_t) = \log(y_t) - \log(y_{t-1})$ approximates the proportionate growth rate $\approx (y_t - y_{t-1})/y_{t-1}$.
+
+**Testing:** First order autocorrelation, $\hat{\rho}_1$, estimates the correlation between $y_t$ and $y_{t-1}$.
+Values approaching $1$ (e.g., $>0.9$) strongly suggest unit root behavior requiring differencing.
+
+### Dynamically Complete Models and the Absence of Serial Correlation
+
+A model is **dynamically complete** if further lags of $y$ and the explanatory variables do not matter for explaining $y_t$: $E(y_t | x_t, y_{t-1}, x_{t-1}, \dots) = E(y_t | x_t)$.
+This condition algebraically dictates that the error is unpredicted by all past information: $E(u_t | x_t, u_{t-1}, x_{t-1}, u_{t-2}, \dots) = 0$.
+By the law of iterated expectations, this strictly implies that the errors are serially uncorrelated (satisfying TS.5'): $E(u_t u_s | x_t, x_s) = 0$ for all $t \neq s$.
+*Note on Sequential Exogeneity:* The variables $x_t$ are sequentially exogenous if $E(u_t | x_t, x_{t-1}, \dots) = E(u_t) = 0$.
+This is mathematically implied by dynamic completeness, but sequential exogeneity alone does not require the dynamics to be fully complete.
+
+### The Homoskedasticity Assumption for Time Series Models
+
+The homoskedasticity assumption TS.4' restricts the conditional variance to a constant over time.
+
+For a static model $y_t = \beta_0 + \beta_1 z_t + u_t$, the assumption requires $Var(u_t | z_t) = \sigma^2$.
+
+For a dynamic model $y_t = \beta_0 + \beta_1 z_t + \beta_2 y_{t-1} + \beta_3 z_{t-1} + u_t$, the variance cannot depend on current or past values of any variables in the regression: $Var(u_t | z_t, y_{t-1}, z_{t-1}) = Var(y_t | z_t, y_{t-1}, z_{t-1}) = \sigma^2$.
+This formally rules out dynamic forms of heteroskedasticity.
+
+## Serial Correlation and Heteroskedasticity in Time Series Regressions
+
+### Properties of OLS with Serially Correlated Errors
+
+#### Unbiasedness, Consistency, Efficiency and Inference
+
+As long as the explanatory variables are strictly exogenous, the OLS estimators remain unbiased.
+If the data are weakly dependent, OLS is consistent.
+However, under serial correlation, OLS is no longer the Best Linear Unbiased Estimator (BLUE), and the usual standard errors are mathematically invalid.
+Assuming an AR(1) serial correlation model for the errors: $u_t = \rho u_{t-1} + e_t$, where $|\rho| < 1$ and $e_t$ has variance $\sigma_e^2$.
+In a simple regression, $y_t = \beta_0 + \beta_1 x_t + u_t$ (assuming the sample average of $x_t$ is zero), the true variance of the OLS slope estimator accounts for the correlated errors: $Var(\hat{\beta}_1) = \frac{\sigma^2}{SST_x} + \frac{2\sigma^2}{SST_x^2} \sum_{t=1}^{n-1} \sum_{j=1}^{n-t} \rho^j x_t x_{t+j}$ The first term is the standard OLS variance, and the second term is the omitted correlation factor, which usually causes the standard formula to severely underestimate the true variance when $\rho > 0$.
+
+#### Goodness of Fit
+
+Because the population $R^2$ is evaluated via the unconditional variance $1 - (\sigma_u^2 / \sigma_y^2)$, the presence of serial correlation does not invalidate the mathematical computation or consistency of the sample $R^2$ or adjusted $R^2$.
+
+#### Serial Correlation in the Presence of Lagged Dependent Variables
+
+If a model contains a lagged dependent variable, $y_t = \beta_0 + \beta_1 y_{t-1} + u_t$, and the errors follow an AR(1) process, $u_t = \rho u_{t-1} + e_t$, OLS is strictly inconsistent because $y_{t-1}$ and $u_t$ are algebraically correlated: $Cov(y_{t-1}, u_t) \neq 0$.
+Mathematically, this misspecification implies that the true conditional expectation is actually an AR(2) model: $y_t = \alpha_0 + \alpha_1 y_{t-1} + \alpha_2 y_{t-2} + e_t$ where $\alpha_0 = \beta_0(1 - \rho)$, $\alpha_1 = \beta_1 + \rho$, and $\alpha_2 = -\rho\beta_1$.
+
+### Serial Correlation–Robust Inference after OLS
+
+To perform valid inference with OLS under arbitrary serial correlation, we compute Serial Correlation-Robust (HAC or Newey-West) standard errors.
+For a parameter $\hat{\beta}_1$, let $\hat{r}_t$ be the residuals from the auxiliary regression of $x_{t1}$ on all other independent variables.
+Define $\hat{a}_t = \hat{r}_t \hat{u}_t$ (where $\hat{u}_t$ are the original OLS residuals).
+For a chosen truncation lag $g$, compute the variance correction factor: $\hat{v} = \sum_{t=1}^n \hat{a}_t^2 + 2 \sum_{h=1}^g \left[1 - \frac{h}{g + 1}\right] \sum_{t=h+1}^n \hat{a}_t \hat{a}_{t-h}$ The Newey-West serial correlation-robust standard error for $\hat{\beta}_1$ is then algebraically constructed as: $se(\hat{\beta}_1) = \frac{[se(\hat{\beta}_1)_{OLS}]^2}{\hat{\sigma}^2} \sqrt{\hat{v}}$ where $\hat{\sigma}^2$ is the standard error of the regression.
+
+### Testing for Serial Correlation
+
+#### A t Test for AR(1) Serial Correlation with Strictly Exogenous Regressors
+
+The null hypothesis of no AR(1) serial correlation is $H_0: \rho = 0$.
+
+1\.
+Estimate the main model by OLS to obtain the residuals $\hat{u}_t$.
+
+2\.
+Run the regression: $\hat{u}_t \text{ on } \hat{u}_{t-1} \text{, for all } t=2, \dots, n$.
+
+3\.
+Use the $t$ statistic on $\hat{u}_{t-1}$ to evaluate the null hypothesis.
+
+#### The Durbin-Watson Test under Classical Assumptions
+
+The Durbin-Watson (DW) statistic is strictly defined using the OLS residuals: $DW = \frac{\sum_{t=2}^n (\hat{u}_t - \hat{u}_{t-1})^2}{\sum_{t=1}^n \hat{u}_t^2}$ Algebraically, the DW statistic maps directly to the $\hat{\rho}$ estimate from the $t$ test: $DW \approx 2(1 - \hat{\rho})$ A DW statistic close to 2 indicates $\hat{\rho} = 0$ (no serial correlation).
+A value significantly less than 2 indicates positive serial correlation.
+
+#### Testing for AR(1) Serial Correlation without Strictly Exogenous Regressors
+
+If the model contains lagged dependent variables or other non-strictly exogenous regressors, the previous tests are invalid.
+The mathematically valid test requires including all explanatory variables in the auxiliary regression: $\hat{u}_t \text{ on } \hat{u}_{t-1}, x_{t1}, x_{t2}, \dots, x_{tk} \text{, for } t=2, \dots, n$ Evaluate the $t$ statistic on $\hat{u}_{t-1}$.
+
+#### Testing for Higher-Order Serial Correlation
+
+For an AR(q) model, $u_t = \rho_1 u_{t-1} + \dots + \rho_q u_{t-q} + e_t$, the null hypothesis is $H_0: \rho_1 = 0, \dots, \rho_q = 0$.
+1.
+Run the auxiliary regression: $\hat{u}_t \text{ on } \hat{u}_{t-1}, \dots, \hat{u}_{t-q}, x_{t1}, \dots, x_{tk}$.
+2.
+Compute the Breusch-Godfrey LM statistic: $LM = (n-q)R_{\hat{u}}^2$.
+Under the null, $LM \sim^a \chi^2_q$.
+
+### Correcting for Serial Correlation with Strictly Exogenous Regressors
+
+#### Obtaining the Best Linear Unbiased Estimator in the AR(1) Model
+
+If $u_t$ follows an AR(1) process, the equation can be algebraically quasi-differenced to produce serially uncorrelated errors $e_t$: $\tilde{y}_t = y_t - \rho y_{t-1}$ and $\tilde{x}_{tj} = x_{tj} - \rho x_{t-1,j}$ The transformed equation for $t \ge 2$ is: $\tilde{y}_t = \beta_0(1 - \rho) + \beta_1 \tilde{x}_{t1} + \dots + \beta_k \tilde{x}_{tk} + e_t$ To preserve the first observation ($t=1$) for the Generalized Least Squares (GLS) estimator, it is multiplied by the stationary variance adjustment: $\tilde{y}_1 = (1 - \rho^2)^{1/2}y_1$ and $\tilde{x}_{1j} = (1 - \rho^2)^{1/2}x_{1j}$
+
+#### Feasible GLS Estimation with AR(1) Errors
+
+Because $\rho$ is unknown, we estimate it via $\hat{\rho}$ from the residual regression $\hat{u}_t$ on $\hat{u}_{t-1}$.
+Plugging $\hat{\rho}$ into the quasi-differencing formulas yields the Feasible GLS (FGLS) estimator.
+
+**Cochrane-Orcutt (CO) estimation:** Drops the first observation ($t=1$).
+
+**Prais-Winsten (PW) estimation:** Retains the first observation using the $(1-\hat{\rho}^2)^{1/2}$ weighting.
+
+#### Comparing OLS and FGLS
+
+FGLS imposes a stricter mathematical condition for consistency than OLS.
+While OLS only requires contemporaneous exogeneity ($Cov(x_t, u_t) = 0$), FGLS requires that the sum of the adjacent regressors is also uncorrelated with the error: $Cov((x_{t-1} + x_{t+1}), u_t) = 0$
+
+#### Correcting for Higher-Order Serial Correlation
+
+For an AR(2) error process, the algebraic quasi-differencing transformation to eliminate serial correlation becomes: $\tilde{y}_t = y_t - \rho_1 y_{t-1} - \rho_2 y_{t-2}$ The intercept is scaled by $(1 - \rho_1 - \rho_2)$, and the regressors are transformed symmetrically.
+
+#### What if the Serial Correlation Model Is Wrong?
+
+If the assumed serial correlation model (e.g., AR(1)) is incorrect, the errors in the quasi-differenced equation will still be serially correlated.
+FGLS remains consistent under strict exogeneity, but its standard errors will be mathematically invalid.
+The solution is to compute Newey-West HAC standard errors directly on the quasi-differenced equation.
+
+### Differencing and Serial Correlation
+
+When data are highly persistent (e.g., an Integrated I(1) process where $\rho=1$), the AR(1) variance grows unboundedly: $Var(u_t) = \sigma_e^2 t$.
+The algebraic solution is to strictly difference the equation: $\Delta y_t = \beta_1 \Delta x_t + \Delta u_t$ If $u_t$ is a random walk, the new error term $\Delta u_t = e_t$ is rendered completely serially uncorrelated and homoskedastic, allowing standard OLS inference.
+
+### Heteroskedasticity in Time Series Regressions
+
+#### Heteroskedasticity-Robust Statistics and Testing
+
+The Breusch-Pagan and White tests from cross-sectional analysis strictly apply to time series *only if* the errors $u_t$ are completely free of serial correlation.
+Serial correlation mechanically invalidates the $F$ and $LM$ distributions of these tests.
+
+#### Autoregressive Conditional Heteroskedasticity
+
+Even if unconditional variance is constant, the *conditional* variance of the error might depend dynamically on past errors.
+The first-order ARCH model mathematically defines this conditional variance as: $E(u_t^2 | u_{t-1}, u_{t-2}, \dots) = \alpha_0 + \alpha_1 u_{t-1}^2$ This can be rewritten as an autoregressive process in the squared errors: $u_t^2 = \alpha_0 + \alpha_1 u_{t-1}^2 + v_t$ where $E(v_t) = 0$.
+The stability condition requires $\alpha_1 < 1$.
+Standard heteroskedasticity-robust standard errors remain mathematically valid under ARCH.
+
+#### Heteroskedasticity and Serial Correlation in Regression Models
+
+If a model suffers from both known heteroskedasticity ($Var(u_t|x_t) = \sigma^2 h_t$) and AR(1) serial correlation, you sequentially apply Weighted Least Squares (WLS) followed by quasi-differencing: 1.
+Divide the equation by $\sqrt{h_t}$ to stabilize the variance: $y_t / \sqrt{h_t} = \beta_0(1/\sqrt{h_t}) + \beta_1(x_{t1}/\sqrt{h_t}) + \dots + \eta_t$ 2.
+The new error $\eta_t = u_t / \sqrt{h_t}$ is homoskedastic but still follows an AR(1) process.
+3.
+Apply the Prais-Winsten or Cochrane-Orcutt quasi-differencing transformation to the weighted equation.
+
+## Pooling Cross Sections across Time: Simple Panel Data Methods
+
+### Pooling Independent Cross Sections across Time
+
+To increase sample size or to evaluate changes in relationships over time, independent cross sections from different time periods can be pooled.
+
+**Time Dummy Variables:** To account for secular changes in the dependent variable, time period dummy variables are strictly included.
+For two years, $t=1$ and $t=2$, the equation is: $y = \beta_0 + \delta_0 d_2 + \beta_1 x_1 + \dots + \beta_k x_k + u$ The parameter $\delta_0$ mathematically isolates the change in the intercept between the base year and the second year.
+
+**Interacting Time Dummies with Explanatory Variables:** To test whether a partial effect changes over time, the time dummy is interacted with the explanatory variable: $y = \beta_0 + \delta_0 d_2 + \beta_1 x_1 + \delta_1 (d_2 \cdot x_1) + u$ The slope for the base year is $\beta_1$, and the slope for the second year is algebraically defined as $\beta_1 + \delta_1$.
+A standard $t$ test on $\delta_1$ evaluates the hypothesis $H_0: \delta_1 = 0$ (no structural change in the parameter over time).
+
+**The Chow Test for Structural Change:** To test if *all* parameters (intercepts and slopes) differ across two time periods, you use the $F$ statistic.
+The restricted sum of squared residuals ($SSR_P$) is obtained from the pooled regression, and the unrestricted ($SSR_{ur}$) is the algebraic sum of the $SSR$ from two separate regressions for each time period.
+
+### Policy Analysis with Pooled Cross Sections
+
+#### The Difference-in-Differences (DD) Estimator
+
+Pooled cross sections are widely used to evaluate policy changes via natural experiments.
+We define a control group ($C$) unaffected by the policy, and a treatment group ($T$) subject to the policy in the second time period.
+
+**Equation:** $y = \beta_0 + \delta_0 d_2 + \beta_1 d_T + \delta_1 (d_2 \cdot d_T) + u$
+
+$d_2$ is a dummy for the post-policy time period.
+
+$d_T$ is a dummy for the treatment group.
+
+$\delta_1$ strictly captures the policy effect.
+
+**Mathematical Representation:** The OLS estimate $\hat{\delta}_1$ evaluates to the exact difference in differences of the sample averages: $\hat{\delta}_1 = (\bar{y}_{2,T} - \bar{y}_{1,T}) - (\bar{y}_{2,C} - \bar{y}_{1,C})$ This algebraically removes the time trend affecting both groups ($\bar{y}_{2,C} - \bar{y}_{1,C}$) from the total change in the treatment group ($\bar{y}_{2,T} - \bar{y}_{1,T}$).
+
+#### Adding an Additional Control Group
+
+To relax the parallel trends assumption, a third dimension can be added, yielding the **Difference-in-Difference-in-Differences (DDD)** estimator.
+
+**Equation:** $y = \beta_0 + \beta_1 d_L + \beta_2 d_B + \beta_3 (d_L \cdot d_B) + \delta_0 d_2 + \delta_1 (d_2 \cdot d_L) + \delta_2 (d_2 \cdot d_B) + \delta_3 (d_2 \cdot d_L \cdot d_B) + u$.
+
+**Algebraic Derivation:** The parameter $\delta_3$ isolates the policy effect by calculating a DD for the targeted state ($B$) and subtracting the DD for a control state ($A$): $\hat{\delta}_3 = \hat{\delta}_{DD,B} - \hat{\delta}_{DD,A}$.
+
+#### A General Framework for Policy Analysis
+
+For $G$ groups over $T$ time periods, the general pooled cross-section policy equation incorporates full time effects ($\lambda_t$) and group effects ($\alpha_g$): $y_{igt} = \lambda_t + \alpha_g + \beta x_{gt} + z_{igt}\gamma + u_{igt}$ where $x_{gt}$ is the policy variable (often a dummy), and $z_{igt}$ are individual specific covariates.
+
+### Two-Period Panel Data Analysis
+
+Panel data follows the exact same cross-sectional units ($i$) over time ($t$).
+The error term is decomposed into a time-constant unobserved effect ($a_i$) and a time-varying idiosyncratic error ($u_{it}$).
+
+**Unobserved Effects Model (Fixed Effects Model):** $y_{it} = \beta_0 + \delta_0 d2_t + \beta_1 x_{it} + a_i + u_{it}, \quad t = 1, 2$
+
+**Heterogeneity Bias:** If $a_i$ is correlated with $x_{it}$, pooled OLS suffers from omitted variable bias because the composite error is $v_{it} = a_i + u_{it}$.
+
+**First-Differencing (FD):** To eliminate $a_i$, we algebraically subtract the $t=1$ equation from the $t=2$ equation: $\Delta y_i = \delta_0 + \beta_1 \Delta x_i + \Delta u_i$ where $\Delta y_i = y_{i2} - y_{i1}$.
+The intercept $\delta_0$ measures the change in the intercept across periods.
+
+**Assumptions for FD:** The key mathematical requirement for pooled OLS on the differenced equation to be consistent is strict exogeneity: $Cov(\Delta x_i, \Delta u_i) = 0$.
+This means the idiosyncratic error $u_{it}$ must be uncorrelated with the explanatory variable in *both* time periods.
+Additionally, $\Delta x_i$ must exhibit sample variation; variables strictly constant over time for all $i$ (like gender or race) are differenced away and their partial effects cannot be estimated.
+
+### Policy Analysis with Two-Period Panel Data
+
+Panel data strengthens program evaluation by differencing out unit-specific unobserved heterogeneity ($a_i$).
+
+**Model:** $y_{it} = \beta_0 + \delta_0 d2_t + \beta_1 prog_{it} + a_i + u_{it}$.
+
+**FD Policy Equation:** $\Delta y_i = \delta_0 + \beta_1 \Delta prog_i + \Delta u_i$.
+If program participation only occurs in the second period ($prog_{i1} = 0$), then $\Delta prog_i = prog_{i2}$.
+The OLS estimator $\hat{\beta}_1$ reduces to a panel data equivalent of the DD estimator: $\hat{\beta}_1 = \overline{\Delta y}_{treat} - \overline{\Delta y}_{control}$.
+
+### Differencing with More Than Two Time Periods
+
+When $T > 2$, the unobserved effects model includes $T-1$ time dummies: $y_{it} = \delta_1 + \delta_2 d2_t + \dots + \delta_T dT_t + \beta_1 x_{it1} + \dots + \beta_k x_{itk} + a_i + u_{it}$
+
+**First-Differencing Transformation:** Subtracting period $t-1$ from period $t$ eliminates $a_i$.
+The resulting model for $t = 2, 3, \dots, T$ is: $\Delta y_{it} = \delta_2 \Delta d2_t + \dots + \delta_T \Delta dT_t + \beta_1 \Delta x_{it1} + \dots + \beta_k \Delta x_{itk} + \Delta u_{it}$ This creates $T-1$ time periods of data for each cross-sectional unit.
+
+**Serial Correlation in FD:** Even if the original idiosyncratic errors $u_{it}$ are completely uncorrelated over time, the differenced errors $\Delta u_{it} = u_{it} - u_{i,t-1}$ and $\Delta u_{i,t+1} = u_{i,t+1} - u_{it}$ share the term $u_{it}$.
+Mathematically, this induces an exact correlation of $-0.5$ (assuming constant variance).
+
+**Testing for Serial Correlation:** A simple test evaluates $H_0: \rho = 0$ by regressing the OLS residuals from the FD equation ($\hat{r}_{it}$) on their lag ($\hat{r}_{i, t-1}$) using pooled OLS.
+If serial correlation is present, fully robust standard errors (cluster-robust standard errors) should be computed, which allow for unrestricted serial correlation and heteroskedasticity across $t$ within each $i$.
+
+**Potential Pitfalls:** If the regressors are not strictly exogenous (e.g., if a lagged dependent variable $y_{i,t-1}$ is included), the FD estimator remains biased and inconsistent because $\Delta y_{i,t-1} = y_{i,t-1} - y_{i,t-2}$ is mathematically correlated with $\Delta u_{it} = u_{it} - u_{i,t-1}$.
+
+## Advanced Panel Data Methods
+
+### Fixed Effects Estimation
+
+The fixed effects (FE) estimator, also known as the within estimator, is a mathematical transformation used to eliminate the unobserved time-constant effect ($a_i$) in panel data.
+Given the unobserved effects model with $k$ explanatory variables: $y_{it} = \beta_1 x_{it1} + \dots + \beta_k x_{itk} + a_i + u_{it}, \quad t = 1, \dots, T$
+
+**Time-Averaging:** First, for each cross-sectional unit $i$, average the equation over time: $\bar{y}_i = \beta_1 \bar{x}_{i1} + \dots + \beta_k \bar{x}_{ik} + a_i + \bar{u}_i$ where $\bar{y}_i = T^{-1} \sum_{t=1}^T y_{it}$.
+Because $a_i$ is fixed over time, its time average is exactly $a_i$.
+
+**Time-Demeaning (Within Transformation):** Subtract the time-averaged equation from the original equation for each $t$: $(y_{it} - \bar{y}_i) = \beta_1(x_{it1} - \bar{x}_{i1}) + \dots + \beta_k(x_{itk} - \bar{x}_{ik}) + (u_{it} - \bar{u}_i)$ This is rewritten using "double dot" or "demeaned" notation as: $\ddot{y}_{it} = \beta_1 \ddot{x}_{it1} + \dots + \beta_k \ddot{x}_{itk} + \ddot{u}_{it}, \quad t = 1, \dots, T$
+
+**Estimation & Degrees of Freedom:** The FE estimator is strictly the pooled OLS estimator computed on the time-demeaned variables.
+Because the demeaned errors $\ddot{u}_{it}$ sum to exactly zero for each $i$ ($\sum_{t=1}^T \ddot{u}_{it} = 0$), one degree of freedom is lost per cross-sectional unit.
+The exact degrees of freedom is $df = NT - N - k = N(T - 1) - k$.
+
+**Time-Constant Variables:** Any variable that is strictly constant over time for all $i$ (e.g., gender, distance) has a time-demeaned value of absolutely zero ($\ddot{x}_{it} = 0$).
+Thus, these variables are mathematically eliminated and their partial effects ($\beta_j$) cannot be estimated by FE.
+
+#### The Dummy Variable Regression
+
+The FE estimates can be equivalently derived by treating each $a_i$ as an individual intercept parameter to be estimated.
+By including a separate dummy variable for every single cross-sectional unit $i$ (the dummy variable regression), the OLS estimates of the $\beta_j$ are mathematically identical to the within estimator.
+Once the $\beta_j$ are estimated, the individual intercepts can be recovered algebraically: $\hat{a}_i = \bar{y}_i - \hat{\beta}_1 \bar{x}_{i1} - \dots - \hat{\beta}_k \bar{x}_{ik}$
+
+#### Fixed Effects vs. First Differencing and Unbalanced Panels
+
+-   **T=2:** When exactly two time periods exist, the FE and First-Differencing (FD) estimates and all test statistics are mathematically identical. For $T \ge 3$, they produce different estimators.
+-   **Unbalanced Panels:** FE applies directly to unbalanced panels. The time averages are strictly computed using $T_i$, the actual number of time periods observed for unit $i$. The total observations are $\sum_{i=1}^N T_i$, and $df = \sum_{i=1}^N T_i - N - k$. Units where $T_i = 1$ are mathematically eliminated because their demeaned values are strictly zero.
+
+### Random Effects Models
+
+If we assume that the unobserved effect $a_i$ is completely uncorrelated with all explanatory variables—$Cov(x_{itj}, a_i) = 0$—using FE wastes mathematical efficiency.
+We formulate the Random Effects (RE) model: $y_{it} = \beta_0 + \beta_1 x_{it1} + \dots + \beta_k x_{itk} + a_i + u_{it} = \beta_0 + \beta_1 x_{it1} + \dots + \beta_k x_{itk} + v_{it}$ where $v_{it} = a_i + u_{it}$ is the composite error term.
+
+-   **Serial Correlation in RE:** Because $a_i$ appears in every time period, the composite error is intrinsically serially correlated. Assuming $Var(a_i) = \sigma_a^2$ and $Var(u_{it}) = \sigma_u^2$, the covariance between errors in different time periods is $Cov(v_{it}, v_{is}) = \sigma_a^2$, yielding a constant positive serial correlation: $Corr(v_{it}, v_{is}) = \frac{\sigma_a^2}{\sigma_a^2 + \sigma_u^2}$, for $t \neq s$.
+-   **GLS Quasi-Demeaning Transformation:** To eliminate this specific serial correlation, RE uses Generalized Least Squares (GLS). We define a transformation weight $\theta$: $\theta = 1 - \left[ \frac{\sigma_u^2}{\sigma_u^2 + T\sigma_a^2} \right]^{1/2}$ The transformed equation subtracts a *fraction* of the time average: $y_{it} - \theta \bar{y}_i = \beta_0(1 - \theta) + \beta_1(x_{it1} - \theta \bar{x}_{i1}) + \dots + \beta_k(x_{itk} - \theta \bar{x}_{ik}) + (v_{it} - \theta \bar{v}_i)$ The RE estimator is pooled OLS applied to these quasi-demeaned variables.
+-   **Mathematical Limits of** $\theta$:
+    -   If $\sigma_a^2 = 0$, then $\theta = 0$, and the RE estimator is exactly the pooled OLS estimator.
+    -   As $T \to \infty$ or if $\sigma_a^2$ is massive relative to $\sigma_u^2$, $\theta \to 1$, making the RE estimator mathematically converge to the FE (within) estimator.
+    -   If $Cov(x_{itj}, a_i) \neq 0$, the RE estimator is biased, but the bias is attenuated by the algebraic factor $(1 - \theta)$ compared to pooled OLS.
+
+### The Correlated Random Effects (CRE) Approach
+
+The CRE approach provides a mathematical synthesis between RE and FE.
+Rather than assuming $Cov(x_{itj}, a_i) = 0$ (RE) or differencing $a_i$ away (FE), CRE directly models the correlation by projecting $a_i$ on the time averages of all time-varying explanatory variables: $a_i = \alpha + \gamma_1 \bar{x}_{i1} + \dots + \gamma_k \bar{x}_{ik} + r_i$ where $r_i$ is uncorrelated with all $x_{itj}$.
+Substituting this back into the population model yields: $y_{it} = (\beta_0 + \alpha) + \beta_1 x_{it1} + \dots + \beta_k x_{itk} + \gamma_1 \bar{x}_{i1} + \dots + \gamma_k \bar{x}_{ik} + r_i + u_{it}$
+
+-   **Equivalence to FE:** If this expanded equation is estimated by Random Effects, the resulting estimators for the time-varying parameters strictly equal the Fixed Effects estimators: $\hat{\beta}_{CRE} = \hat{\beta}_{FE}$.
+-   **Testing RE vs FE:** The CRE framework allows a direct Wald or F test of the strict RE assumption. The null hypothesis that RE is valid is strictly equivalent to testing joint significance of the time averages: $H_0: \gamma_1 = \gamma_2 = \dots = \gamma_k = 0$.
+-   **Time-Constant Variables:** The CRE approach allows time-constant variables ($z_i$) to be explicitly included and estimated alongside the FE-equivalent $\beta_j$ parameters.
+
+### General Policy Analysis with Panel Data
+
+In a general setting with $T$ periods and staggered policy interventions, the model is: $y_{it} = \eta_1 + \alpha_2 d2_t + \dots + \alpha_T dT_t + \beta w_{it} + x_{it}c + a_i + u_{it}$ where $w_{it}$ is a binary policy indicator.
+To allow $w_{it}$ to be correlated with $a_i$, it is estimated by FE or FD.
+
+-   **Testing for Dynamic Feedback:** To test if the policy assignment responds to past idiosyncratic shocks (violating strict exogeneity), we mathematically insert the *future* policy indicator $w_{i, t+1}$ into the equation: $y_{it} = \eta_1 + \dots + \alpha_{T-1} d(T-1)_t + \beta w_{it} + \delta w_{i, t+1} + x_{it}c + a_i + u_{it}, \quad t = 1, \dots, T-1$. A statistically significant $\hat{\delta}$ via FE estimation implies feedback.
+-   **Heterogeneous Trend Models:** If unobserved trends differ by unit, $y_{it} = \alpha_t + \beta w_{it} + x_{it}c + a_i + g_i t + u_{it}$. First-differencing eliminates $a_i$ but leaves the unit-specific trend $g_i$: $\Delta y_{it} = \Delta \alpha_t + \beta \Delta w_{it} + \Delta x_{it}c + g_i + \Delta u_{it}$. Applying FE to this differenced equation algebraically eliminates $g_i$.
+
+### Applying Panel Data Methods to Other Data Structures
+
+Panel data math applies strictly to cluster samples, such as sibling or twins data, where the shared unobserved effect is family-specific ($a_f$).
+The model is $y_{fs} = \beta_0 + \delta_0 sister2_s + \beta_1 x_{fs} + a_f + u_{fs}$.
+Differencing across siblings exactly eliminates $a_f$: $\Delta y_f = \delta_0 + \beta_1 \Delta x_f + \Delta u_f$.
+Family-constant variables (e.g., parents' race) mathematically drop out, isolating the within-family partial effects.
+
+### Assumptions and Inference
+
+-   **FE Assumptions:** Requires $E(u_{it} | X_i, a_i) = 0$ (strict exogeneity conditional on $a_i$). Does *not* require $E(a_i|X_i)=0$.
+-   **RE Assumptions:** Adds the stringent condition $E(a_i | X_i) = \beta_0$, meaning the unobserved effect is strictly independent of all explanatory variables across all time periods.
+-   **Robust Inference (Clustering):** Both FE and RE conditionally assume $Var(u_{it} | X_i, a_i) = \sigma_u^2$ and $Cov(u_{it}, u_{is} | X_i, a_i) = 0$. Because serial correlation is virtually guaranteed to be present in actual data (especially for $T \ge 3$), the asymptotic variance-covariance matrix must be adjusted. **Cluster-robust standard errors** are computed on the time-demeaned equation (for FE) or the quasi-demeaned equation (for RE) to correct for arbitrary serial correlation and heteroskedasticity within clusters.
+
+## Instrumental Variables Estimation and Two-Stage Least Squares
+
+### Motivation: Omitted Variables in a Simple Regression Model
+
+When dealing with an omitted variable or unobserved heterogeneity hidden in the error term, simple OLS becomes biased and inconsistent because the endogenous explanatory variable $x$ is correlated with the error: $Cov(x,u) \neq 0$.
+
+To obtain a consistent estimator, we can rely on an **instrumental variable (IV)**, $z$, which must mathematically satisfy two rigid population assumptions:
+
+1\.
+**Instrument Exogeneity:** $z$ must be strictly uncorrelated with the unobserved error: $Cov(z, u) = 0$.
+
+2\.
+**Instrument Relevance:** $z$ must be correlated with the endogenous variable $x$: $Cov(z, x) \neq 0$.
+
+The relevance condition can be explicitly tested using the population reduced form regression $x = \pi_0 + \pi_1 z + v$.
+The condition $Cov(z, x) \neq 0$ algebraically holds if and only if $\pi_1 \neq 0$.
+
+By writing the population covariance of the structural equation $y = \beta_0 + \beta_1 x + u$, we find $Cov(z, y) = \beta_1 Cov(z, x) + Cov(z, u)$.
+Applying the exogeneity assumption ($Cov(z, u) = 0$) algebraically identifies the parameter: $\beta_1 = \frac{Cov(z, y)}{Cov(z, x)}$.
+Using the sample analogs of these population covariances yields the **IV Estimator**: $\hat{\beta}_1 = \frac{\sum_{i=1}^n (z_i - \bar{z})(y_i - \bar{y})}{\sum_{i=1}^n (z_i - \bar{z})(x_i - \bar{x})}$.
+The intercept is strictly estimated as $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$.
+
+#### Statistical Inference with the IV Estimator
+
+To perform exact statistical inference, we add a homoskedasticity assumption conditional on the instrument: $E(u^2 | z) = \sigma^2 = Var(u)$.
+Under these conditions, the large-sample asymptotic variance of the IV estimator is: $Var(\hat{\beta}_1) \approx \frac{\sigma^2}{n\sigma_x^2 \rho_{x,z}^2}$.
+The sample standard error replaces the population terms: $se(\hat{\beta}_1) = \frac{\hat{\sigma}}{\sqrt{SST_x \cdot R^2_{x,z}}}$.
+*Mathematical Consequence:* Because $R^2_{x,z} < 1$, the IV variance is mathematically guaranteed to be strictly larger than the OLS variance (which is simply $\sigma^2 / SST_x$).
+The weaker the correlation between $x$ and $z$, the more massive the variance inflation.
+
+#### Properties of IV with a Poor Instrumental Variable
+
+If the instrumental variable is not perfectly exogenous ($Cov(z, u) \neq 0$), the asymptotic limit (inconsistency) of the IV estimator evaluates to: $plim(\hat{\beta}_{1,IV}) = \beta_1 + \frac{Corr(z, u)}{Corr(z, x)} \cdot \frac{\sigma_u}{\sigma_x}$.
+This mathematical relationship demonstrates the severe danger of a "weak instrument" (where $Corr(z, x)$ is near zero): even a tiny correlation between the instrument and the error will be explosively magnified by the small denominator, causing the asymptotic bias of IV to potentially exceed the asymptotic bias of simple OLS.
+
+#### Computing R-Squared after IV Estimation
+
+The $R^2$ computed after IV estimation ($1 - SSR/SST$) has no structural meaning and can algebraically be negative.
+This happens because the $SSR$ from IV can strictly exceed the total sum of squares ($SST$).
+
+### IV Estimation of the Multiple Regression Model
+
+In a structural equation with one endogenous variable ($y_2$) and one exogenous variable ($z_1$): $y_1 = \beta_0 + \beta_1 y_2 + \beta_2 z_1 + u_1$, we require an excluded instrumental variable, $z_2$, such that $E(u_1)=0$, $Cov(z_1, u_1)=0$, and $Cov(z_2, u_1)=0$.
+The reduced form equation for the endogenous variable evaluates the partial correlation: $y_2 = \pi_0 + \pi_1 z_1 + \pi_2 z_2 + v_2$.
+The necessary identification condition is $\pi_2 \neq 0$.
+
+The method of moments mathematically sets the sample covariances to zero to solve for the estimates: 1.
+$\sum (y_{i1} - \hat{\beta}_0 - \hat{\beta}_1 y_{i2} - \hat{\beta}_2 z_{i1}) = 0$ 2.
+$\sum z_{i1} (y_{i1} - \hat{\beta}_0 - \hat{\beta}_1 y_{i2} - \hat{\beta}_2 z_{i1}) = 0$ 3.
+$\sum z_{i2} (y_{i1} - \hat{\beta}_0 - \hat{\beta}_1 y_{i2} - \hat{\beta}_2 z_{i1}) = 0$.
+
+*Intention-to-Treat:* When estimating the reduced form equation for $y_1$ ($y_1 = \gamma_0 + \gamma_1 z_1 + \gamma_2 z_2 + e_1$), the parameter $\gamma_2$ is algebraically equivalent to $\beta_1 \pi_2$, isolating the effect of offering a program ($z_2$) independently of actual participation ($y_2$).
+
+### Two Stage Least Squares
+
+#### A Single Endogenous Explanatory Variable
+
+When multiple instruments (e.g., $z_2$ and $z_3$) are excluded from the structural equation, we form the Two Stage Least Squares (2SLS) estimator.
+
+**First Stage:** Regress the endogenous $y_2$ on *all* exogenous variables ($z_1, z_2, z_3$) to obtain the fitted values: $\hat{y}_2 = \hat{\pi}_0 + \hat{\pi}_1 z_1 + \hat{\pi}_2 z_2 + \hat{\pi}_3 z_3$.
+Identification requires testing $H_0: \pi_2 = 0, \pi_3 = 0$ via an $F$ statistic.
+
+**Second Stage:** Run the OLS regression of $y_1$ on the exogenous variable $z_1$ and the fitted value $\hat{y}_2$: $y_1$ on $\hat{y}_2, z_1$.
+
+#### Multicollinearity and 2SLS
+
+The asymptotic variance of the 2SLS estimator expands upon the single IV case: $Var(\hat{\beta}_1) = \frac{\sigma^2}{SST_2 (1 - \hat{R}^2_2)}$, where $SST_2$ is the total variation in $\hat{y}_2$, and $\hat{R}^2_2$ is the $R$-squared from regressing $\hat{y}_2$ on all other included exogenous variables.
+High collinearity between $\hat{y}_2$ and the included exogenous controls strictly inflates the standard error.
+
+#### Detecting Weak Instruments
+
+To safely apply standard asymptotic normal distributions for 2SLS inference, the Stock-Yogo rule of thumb strictly requires that the first-stage $F$ statistic for the excluded instruments must be greater than 10 ($F > 10$).
+If $F < 10$, the instruments are mathematically weak.
+
+#### Multiple Endogenous Explanatory Variables
+
+With multiple endogenous variables, the **Order Condition for Identification** dictates that we mathematically need at least as many excluded exogenous instrumental variables as there are endogenous right-hand-side variables.
+
+#### Testing Multiple Hypotheses after 2SLS Estimation
+
+Because the $R$-squared in 2SLS can be negative, $F$ statistics based on the standard $(SSR_r - SSR_{ur})/SSR_{ur}$ form are invalid (they can be negative).
+Joint restrictions must be evaluated using robust tests that algebraically rely on the 2SLS residuals directly.
+
+### IV Solutions to Errors-in-Variables Problems
+
+IV estimation mathematically resolves the classical errors-in-variables (CEV) problem.
+If the true model is $y = \beta_0 + \beta_1 x_1^* + \beta_2 x_2 + u$, but we observe $x_1 = x_1^* + e_1$, substituting yields $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + (u - \beta_1 e_1)$.
+If we possess a second independent measurement, $z_1 = x_1^* + a_1$, where the measurement errors $e_1$ and $a_1$ are strictly uncorrelated, then $z_1$ is uncorrelated with the composite error $(u - \beta_1 e_1)$ but correlated with $x_1$, mathematically satisfying the requirements of an instrumental variable.
+
+### Testing for Endogeneity and Testing Overidentifying Restrictions
+
+#### Testing for Endogeneity
+
+To test if 2SLS is necessary, we algebraically test if $y_2$ is endogenous.
+1.
+Regress $y_2$ on all exogenous variables (included and excluded) and save the residuals $\hat{v}_2$.
+2.
+Add $\hat{v}_2$ to the structural equation: $y_1 = \beta_0 + \beta_1 y_2 + \beta_2 z_1 + \beta_3 z_2 + \delta_1 \hat{v}_2 + error$.
+3.
+Estimate via OLS.
+A significant $t$-statistic on $\delta_1$ strictly proves $y_2$ is endogenous.
+(Note: The coefficient estimates on all other variables in this regression perfectly map to the 2SLS estimates.)
+
+#### Testing Overidentification Restrictions
+
+If the model is overidentified (more instruments than endogenous variables), we can test the exogeneity of the extra instruments.
+1.
+Estimate the structural equation using 2SLS and obtain the residuals $\hat{u}_1$.
+2.
+Regress $\hat{u}_1$ on *all* exogenous variables (both included and excluded) and find the $R_1^2$.
+3.
+Compute the LM test statistic: $nR_1^2 \sim^a \chi^2_q$, where $q$ is the number of overidentifying restrictions (total instruments minus endogenous variables).
+If the statistic exceeds the critical value, we mathematically reject the null hypothesis that all instruments are exogenous.
+
+### 2SLS with Heteroskedasticity
+
+Standard errors robust to arbitrary heteroskedasticity are available for 2SLS.
+A Breusch-Pagan style test evaluates $H_0$ by regressing the squared 2SLS residuals, $\hat{u}^2$, on all exogenous variables.
+If the functional form of variance is known ($\hat{h}_i$), Weighted 2SLS applies the exact same scalar division transformation ($\sqrt{\hat{h}_i}$) to the dependent variable, all explanatory variables, *and* all instrumental variables prior to performing 2SLS.
+
+### Applying 2SLS to Time Series Equations
+
+The strict identification rules map directly to time series $y_t = \beta_0 + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + u_t$ with exogenous variables $z_{tj}$ where $E(u_t) = 0$ and $Cov(z_{tj}, u_t) = 0$.
+
+**Testing and Correcting AR(1) Serial Correlation:** If $u_t = \rho u_{t-1} + e_t$, we test $H_0: \rho = 0$ by regressing $y_t$ on $x_{t1}, \dots, x_{tk}$ and the lagged 2SLS residual $\hat{u}_{t-1}$ (which serves as its own instrument).
+If serial correlation is present, we algebraically quasi-difference all variables (including instruments): $y_t^* = y_t - \hat{\rho} y_{t-1}$ and $z_{tj}^* = z_{tj} - \hat{\rho} z_{t-1,j}$.
+Then, 2SLS is strictly applied to the transformed variables.
+This mathematical transformation requires the instruments to be *strictly exogenous* (uncorrelated with past, current, and future errors), definitively ruling out lagged dependent variables as instruments.
+
+### Applying 2SLS to Pooled Cross Sections and Panel Data
+
+With unobserved effects panel data models, 2SLS can be mathematically combined with first-differencing.
+
+1\.
+The structural model $y_{it} = \beta_0 + \delta_0 d88_t + \beta_1 x_{it} + a_i + u_{it}$ is first-differenced to strictly eliminate the time-constant unobserved effect $a_i$: $\Delta y_i = \delta_0 + \beta_1 \Delta x_i + \Delta u_i$.
+
+2\.
+If the differenced term $\Delta x_i$ is endogenous (correlated with $\Delta u_i$), an instrumental variable for the *change* $\Delta x_i$ is used.
+For example, a randomly assigned program grant dummy acts as an exogenous IV for the change in job training hours.
+
+### Assumptions for Two Stage Least Squares
+
+The mathematical properties of 2SLS map directly to the Classical Linear Model framework.
+\* **2SLS.1 (Linear in Parameters):** $y = \beta_0 + \beta_1 x_1 + \dots + \beta_k x_k + u$.
+
+**2SLS.2 (Random Sampling):** Data are drawn randomly.
+
+**2SLS.3 (Rank Condition):** No perfect multicollinearity among IVs, and at least one excluded exogenous variable has a strictly nonzero population coefficient in the reduced form equation.
+
+**2SLS.4 (Exogenous IVs):** $E(u) = 0$, and $Cov(z_j, u) = 0$.
+
+**2SLS.5 (Homoskedasticity):** $E(u^2|z) = \sigma^2$.
+
+**2SLS.6 (No Serial Correlation):** For time series applications, errors are uncorrelated across time.
+
+## Simultaneous Equations Models
+
+### The Nature of Simultaneous Equations Models
+
+A simultaneous equations model (SEM) is required when one or more of the explanatory variables are jointly determined with the dependent variable, typically through an equilibrium mechanism.
+Every equation in an SEM must stand on its own and have a strict *ceteris paribus* causal interpretation.
+For example, an equilibrium model of labor supply and demand in different counties ($i$) consists of:
+
+**Labor Supply:** $h_i = \alpha_1 w_i + \beta_1 z_{i1} + u_{i1}$
+
+**Labor Demand:** $h_i = \alpha_2 w_i + \beta_2 z_{i2} + u_{i2}$ Because observed hours ($h_i$) and wages ($w_i$) are determined simultaneously by the intersection of supply and demand, both $h_i$ and $w_i$ are **endogenous variables**.
+The variables $z_{i1}$ (e.g., manufacturing wage, shifting supply) and $z_{i2}$ (e.g., agricultural land area, shifting demand) are determined outside the system, making them **exogenous variables**.
+The statistical requirement is that exogenous variables must be entirely uncorrelated with the structural errors, $u_{i1}$ and $u_{i2}$.
+
+### Simultaneity Bias in OLS
+
+When an explanatory variable is determined simultaneously with the dependent variable, it is mathematically correlated with the error term, causing simple OLS estimation to be biased and inconsistent.
+Consider a two-equation structural model without intercepts: 1.
+$y_1 = \alpha_1 y_2 + \beta_1 z_1 + u_1$ 2.
+$y_2 = \alpha_2 y_1 + \beta_2 z_2 + u_2$
+
+To prove $y_2$ is correlated with $u_1$, we substitute the first equation into the second to solve algebraically for $y_2$ (assuming $\alpha_2\alpha_1 \neq 1$): $y_2 = \alpha_2(\alpha_1 y_2 + \beta_1 z_1 + u_1) + \beta_2 z_2 + u_2$ $(1 - \alpha_2\alpha_1)y_2 = \alpha_2\beta_1 z_1 + \beta_2 z_2 + \alpha_2 u_1 + u_2$
+
+Dividing by $(1 - \alpha_2\alpha_1)$ yields the **reduced form equation** for $y_2$: $y_2 = \pi_{21}z_1 + \pi_{22}z_2 + v_2$ where the reduced form parameters are $\pi_{21} = \frac{\alpha_2\beta_1}{1 - \alpha_2\alpha_1}$ and $\pi_{22} = \frac{\beta_2}{1 - \alpha_2\alpha_1}$, and the reduced form error is $v_2 = \frac{\alpha_2 u_1 + u_2}{1 - \alpha_2\alpha_1}$.
+
+Because $v_2$ is a linear combination containing $u_1$, $y_2$ is mathematically correlated with $u_1$ as long as $\alpha_2 \neq 0$.
+If we assume $u_1$ and $u_2$ are independent, the exact asymptotic simultaneity bias (plim) for OLS estimation of $y_1$ on $y_2$ (ignoring $z_1$) is derived via the covariance: $Cov(y_2, u_1) = Cov(v_2, u_1) = \frac{\alpha_2}{1 - \alpha_2\alpha_1}\sigma_{u_1}^2$.
+Because this covariance is strictly non-zero, OLS suffers from inherent simultaneity bias.
+
+### Identifying and Estimating a Structural Equation
+
+#### Identification in a Two-Equation System
+
+To consistently estimate a structural equation, the parameters must be identified.
+Consider the general system:
+
+$y_1 = \beta_{10} + \alpha_1 y_2 + z_1\beta_1 + u_1$
+
+$y_2 = \beta_{20} + \alpha_2 y_1 + z_2\beta_2 + u_2$
+
+Here, $z_1$ and $z_2$ represent sets of exogenous variables.
+
+-   **Order Condition:** For an equation to be identified, the number of exogenous variables excluded from the equation must be at least as large as the number of endogenous explanatory variables included.
+-   **Rank Condition:** The first equation is mathematically identified if and only if the second equation contains at least one exogenous variable (with a strictly non-zero population coefficient) that is excluded from the first equation. This excluded variable mathematically shifts the second equation, allowing the first equation's curve to be traced out.
+
+#### Estimation by 2SLS
+
+Once a structural equation is identified via exclusion restrictions, it can be estimated using Two Stage Least Squares (2SLS).
+The instrumental variables used in the first stage mathematically consist of *all* the exogenous variables appearing anywhere in the entire system.
+
+### Systems with More Than Two Equations
+
+#### Identification in Systems with Three or More Equations
+
+Let $y_g$ be endogenous variables and $z_j$ be exogenous variables: 1.
+$y_1 = \alpha_{12} y_2 + \alpha_{13} y_3 + \beta_{11} z_1 + u_1$ 2.
+$y_2 = \alpha_{21} y_1 + \beta_{21} z_1 + \beta_{22} z_2 + \beta_{23} z_3 + u_2$ 3.
+$y_3 = \alpha_{32} y_2 + \beta_{31} z_1 + \beta_{32} z_2 + \beta_{33} z_3 + \beta_{34} z_4 + u_3$
+
+-   Equation 3 is **unidentified** because all exogenous variables in the system ($z_1, \dots, z_4$) appear in it; there are no excluded exogenous variables to serve as instruments for $y_2$.
+-   Equation 1 is **overidentified**: it requires two instruments (for $y_2, y_3$) and has three excluded exogenous variables available ($z_2, z_3, z_4$).
+-   Equation 2 is **just identified**: it requires one instrument (for $y_1$) and has exactly one excluded exogenous variable available ($z_4$).
+
+#### Estimation
+
+Each identified equation in the system can be evaluated individually by 2SLS, using all exogenous variables in the entire system as instruments.
+If the system is overidentified and strictly well-specified, more advanced system estimation tools like Three Stage Least Squares (3SLS) provide mathematically greater asymptotic efficiency than equation-by-equation 2SLS.
+
+### Simultaneous Equations Models with Time Series
+
+SEMs are widely used for aggregate macroeconomic time series.
+Consider a Keynesian aggregate demand model:
+
+$C_t = \beta_0 + \beta_1(Y_t - T_t) + \beta_2 r_t + u_{t1}$
+
+$I_t = \gamma_0 + \gamma_1 r_t + u_{t2}$ \* $Y_t \equiv C_t + I_t + G_t$ (Accounting identity) Because $Y_t$ is determined by $C_t$ and $I_t$, it is structurally endogenous.
+We estimate the $C_t$ equation via 2SLS using the exogenous variables $(T_t, G_t, r_t)$ as instruments.
+
+-   **Predetermined Variables:** In dynamic time series SEMs, lagged endogenous variables (e.g., $Y_{t-1}$) can act as exogenous instruments. If we assume the structural error $u_{t2}$ is completely uncorrelated with all past endogenous and exogenous variables ($E(u_{t2}|I_{t-1}) = 0$), $Y_{t-1}$ is defined as a predetermined variable and serves as a valid instrument for current-period endogenous variables.
+-   **Time Trends:** If a structural time series model includes a deterministic time trend ($t$), the time trend acts algebraically as its own instrumental variable.
+
+### Simultaneous Equations Models with Panel Data
+
+SEMs can be applied to panel data to mathematically eliminate unobserved heterogeneity ($a_i$) while simultaneously addressing endogeneity.
+A standard two-equation panel SEM is: 1.
+$y_{it1} = \alpha_1 y_{it2} + z_{it1}\beta_1 + a_{i1} + u_{it1}$ 2.
+$y_{it2} = \alpha_2 y_{it1} + z_{it2}\beta_2 + a_{i2} + u_{it2}$
+
+-   **Step 1 (First-Differencing):** Subtract the previous time period to algebraically remove the time-constant unobserved effect $a_{i1}$: $\Delta y_{it1} = \alpha_1 \Delta y_{it2} + \Delta z_{it1}\beta_1 + \Delta u_{it1}$
+-   **Step 2 (2SLS):** The differenced variable $\Delta y_{it2}$ is still endogenous because $y_{it2}$ is correlated with $u_{it1}$. We must use 2SLS. The valid instrumental variables are the strictly exogenous, *time-varying* variables mathematically present in $z_{it2}$ that are strictly excluded from $z_{it1}$.
+-   **Serial Correlation Testing:** First-differencing inherently induces serial correlation in the errors if the original errors were uncorrelated. To test for AR(1) serial correlation in $r_{it1} = \Delta u_{it1}$, obtain the pooled 2SLS residuals $\hat{r}_{it1}$. Add the lagged residual $\hat{r}_{i, t-1, 1}$ to the main equation and re-estimate by 2SLS (where the lag acts as its own instrument). A significant $t$ statistic on the lagged residual mathematically confirms serial correlation.
+
+## Limited Dependent Variable Models and Sample Selection Corrections
+
+### Logit and Probit Models for Binary Response
+
+When the dependent variable $y$ is binary ($y \in \{0, 1\}$), the linear probability model assumes the response probability is linear.
+To ensure probabilities strictly bounded between zero and one, we use a nonlinear function $G$: $P(y=1|x) = G(\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k) = G(\beta_0 + x\beta)$
+
+#### Specifying Logit and Probit Models
+
+-   **Logit Model:** $G$ is the logistic cumulative distribution function (cdf): $G(z) = \frac{\exp(z)}{1 + \exp(z)} = \Lambda(z)$.
+-   **Probit Model:** $G$ is the standard normal cdf, expressed as an integral: $G(z) = \Phi(z) \equiv \int_{-\infty}^z \phi(v) dv$, where $\phi(z) = (2\pi)^{-1/2}\exp(-z^2/2)$.
+-   **Latent Variable Formulation:** $y^* = \beta_0 + x\beta + e$, where $y = 1[y^* > 0]$. The error $e$ is independent of $x$ and follows either a standard normal (probit) or standard logistic (logit) distribution.
+-   **Partial Effects (Continuous Variables):** The marginal effect relies on calculus: $\frac{\partial P(y=1|x)}{\partial x_j} = g(\beta_0 + x\beta)\beta_j$, where $g(z) = \frac{dG}{dz}(z)$. Because $g(z) > 0$, the partial effect always has the same exact sign as $\beta_j$.
+-   **Partial Effects (Discrete Variables):** Evaluated strictly via the difference in probabilities: $G[\beta_0 + \beta_1 x_1 + \dots + \beta_k (c_k + 1)] - G[\beta_0 + \beta_1 x_1 + \dots + \beta_k c_k]$.
+
+#### Maximum Likelihood Estimation of Logit and Probit Models
+
+Estimation relies on Maximum Likelihood Estimation (MLE) because of the intrinsic nonlinearity and heteroskedasticity.
+
+**Density:** $f(y|x_i; \beta) = [G(x_i\beta)]^y [1 - G(x_i\beta)]^{1-y}$.
+
+**Log-Likelihood Function:** For observation $i$: $\ell_i(\beta) = y_i \log[G(x_i\beta)] + (1 - y_i)\log[1 - G(x_i\beta)]$.
+The MLE $\hat{\beta}$ maximizes the sum of these logs across all $n$ observations.
+
+#### Testing Multiple Hypotheses
+
+Exclusion restrictions are tested using the **Likelihood Ratio (LR) statistic**: $LR = 2(\mathcal{L}_{ur} - \mathcal{L}_r)$.
+where $\mathcal{L}_{ur}$ and $\mathcal{L}_r$ are the strictly negative log-likelihood values for the unrestricted and restricted models, respectively.
+Under the null hypothesis of $q$ restrictions, $LR \sim^a \chi^2_q$.
+
+#### Interpreting the Logit and Probit Estimates
+
+To summarize partial effects across the sample, we compute scale factors:
+
+**Partial Effect at the Average (PEA):** Evaluates $g(\hat{\beta}_0 + x\hat{\beta})$ strictly at the sample averages of all explanatory variables.
+
+**Average Partial Effect (APE):** Averages the individual partial effects across all sample observations: $n^{-1} \sum_{i=1}^n g(\hat{\beta}_0 + x_i\hat{\beta})\hat{\beta}_j$.
+The discrete analog evaluates the probability difference for every individual $i$ and averages those differences across the sample.
+
+### The Tobit Model for Corner Solution Responses
+
+The Tobit model applies to variables that take on the value zero for a nontrivial fraction of the population but are roughly continuously distributed over strictly positive values.
+
+**Latent Model:** $y^* = \beta_0 + x\beta + u$, where $u|x \sim \text{Normal}(0, \sigma^2)$.
+
+**Observability:** $y = \max(0, y^*)$.
+
+**Probabilities:** $P(y=0|x) = 1 - \Phi(x\beta/\sigma)$.
+
+#### Interpreting the Tobit Estimates
+
+The expected values are mathematically nonlinear:
+
+**Conditional on strictly positive outcomes:** $E(y | y>0, x) = x\beta + \sigma\lambda(x\beta/\sigma)$.
+Here, $\lambda(c) = \phi(c)/\Phi(c)$ is the **inverse Mills ratio**.
+
+**Unconditional Expectation:** $E(y|x) = \Phi(x\beta/\sigma)x\beta + \sigma\phi(x\beta/\sigma)$.
+
+**Partial Effects:** The partial effect of $x_j$ on the unconditional expectation algebraically collapses to: $\frac{\partial E(y|x)}{\partial x_j} = \beta_j \Phi(x\beta/\sigma)$.
+This shows the Tobit coefficient $\beta_j$ must be scaled by $\Phi(x\beta/\sigma)$ to be mathematically comparable to an OLS estimate.
+
+#### Specification Issues in Tobit Models
+
+Unlike OLS, the Tobit model mathematically requires the structural assumptions of homoskedasticity and normality in the latent error $u$.
+If either fails, the Tobit MLE estimators are inconsistent.
+
+### The Poisson Regression Model
+
+Designed for count variables (nonnegative integers).
+
+**Exponential Mean Function:** To guarantee strictly positive predictions, the expected value is modeled as: $E(y | x_1, \dots, x_k) = \exp(\beta_0 + \beta_1 x_1 + \dots + \beta_k x_k)$.
+
+**Logarithmic interpretation:** $\log[E(y|x)] = \beta_0 + x\beta$.
+Thus, the coefficients $\beta_j$ act as semi-elasticities (or exact elasticities if $x_j$ is in log form).
+
+**Log-Likelihood Function:** Based on the Poisson distribution: $\ell_i(\beta) = y_i x_i\beta - \exp(x_i\beta)$.
+
+**Quasi-Maximum Likelihood (QMLE) & Overdispersion:** If the strict Poisson variance assumption $Var(y|x) = E(y|x)$ fails, we assume $Var(y|x) = \sigma^2 E(y|x)$.
+The standard errors are mathematically adjusted by multiplying the usual Poisson MLE standard errors by $\hat{\sigma}$, where $\hat{\sigma}^2 = (n - k - 1)^{-1} \sum_{i=1}^n \hat{u}_i^2 / \hat{y}_i$.
+
+### Censored and Truncated Regression Models
+
+These address nonrandom missing data resulting from data collection constraints, not underlying economic corner solutions.
+
+#### Censored Regression Models
+
+Occurs when the true variable $y_i$ is top-coded or bottom-coded at a threshold $c_i$.
+
+**Model:** $y_i = \beta_0 + x_i\beta + u_i$, where $u_i \sim \text{Normal}(0, \sigma^2)$.
+We observe $w_i = \min(y_i, c_i)$.
+
+**Density:** For uncensored data ($w < c_i$), the density is $(1/\sigma)\phi[(w - x_i\beta)/\sigma]$.
+For censored data ($w = c_i$), the discrete probability is $1 - \Phi[(c_i - x_i\beta)/\sigma]$.
+
+Unlike Tobit, the coefficients $\beta_j$ are interpreted exactly as in a standard linear regression because they directly model $E(y_i|x_i)$ for the uncensored population.
+
+#### Truncated Regression Models
+
+Occurs when we completely exclude a subset of the population from the sample based strictly on the condition $y_i \le c_i$.
+
+**Conditional Density:** The normal density must be mathematically renormalized by the probability of being in the sample: $g(y|x_i, c_i) = \frac{f(y|x_i\beta, \sigma^2)}{\Phi(c_i|x_i\beta, \sigma^2)}$ for $y \le c_i$.
+\* OLS on a truncated sample is mathematically biased toward zero.
+
+### Sample Selection Corrections
+
+#### When Is OLS on the Selected Sample Consistent?
+
+Define selection indicator $s_i = 1$ if observed, $0$ otherwise.
+We effectively estimate $s_i y_i = s_i x_i\beta + s_i u_i$.
+If selection is purely exogenous (based only on independent variables), OLS is consistent because the zero correlation assumption $E(s x_j u) = 0$ holds.
+Endogenous selection (where selection depends on $u$) causes inconsistency.
+
+#### Incidental Truncation
+
+We observe $x$ for the whole population, but observe $y$ only if another variable dictates it.
+
+**Structural Equation:** $y = x\beta + u$, $E(u|x)=0$.
+
+**Selection Equation:** $s = 1[z\gamma + v \ge 0]$.
+Assuming $u, v$ are jointly normal and independent of $z$, the expected value of $y$ conditional on being observed ($s=1$) is: $E(y|z, s=1) = x\beta + \rho\lambda(z\gamma)$.
+where $\lambda(z\gamma)$ is the inverse Mills ratio and $\rho = E(u|v)$.
+
+**The Heckit Method:**
+
+1\.
+Using all $n$ observations, estimate a probit model of $s_i$ on $z_i$ to obtain $\hat{\gamma}$ and compute the inverse Mills ratio $\hat{\lambda}_i = \lambda(z_i\hat{\gamma})$ for all observed units.
+
+2\.
+Using only the selected sample ($s_i = 1$), run the OLS regression of $y_i$ on $x_i, \hat{\lambda}_i$.
+The standard $t$ statistic on $\hat{\lambda}_i$ serves as a direct mathematical test for sample selection bias ($H_0: \rho = 0$).
+For identification purposes, the vector $z$ must strictly contain at least one exogenous variable not present in $x$.
+
+## Advanced Time Series Topic
+
+### Infinite Distributed Lag Models
+
+An infinite distributed lag (IDL) model relates $y_t$ to current and all past values of $z$: $y_t = \alpha + \delta_0 z_t + \delta_1 z_{t-1} + \delta_2 z_{t-2} + \dots + u_t$.
+In order for the model to be mathematically stable, the lag coefficients must converge to zero: $\delta_j \to 0$ as $j \to \infty$.
+
+**Impact Propensity:** Evaluated directly as $\delta_0$.
+
+**Long-Run Propensity (LRP):** Evaluated algebraically as the infinite sum of the lag coefficients: $LRP = \delta_0 + \delta_1 + \delta_2 + \dots$.
+
+**Strict Exogeneity:** The strongest assumption required for consistent estimation is that the expected value of $u_t$ does not depend on $z$ in any time period: $E(u_t | \dots, z_{t-1}, z_t, z_{t+1}, \dots) = 0$.
+A weaker, sequentially exogenous assumption only requires zero correlation with past and current values: $E(u_t | z_t, z_{t-1}, \dots) = 0$.
+
+#### The Geometric (or Koyck) Distributed Lag Model
+
+The geometric distributed lag (GDL) model restricts the infinite parameters to depend entirely on two parameters, $\gamma$ and $\rho$: $\delta_j = \gamma \rho^j, \quad |\rho| < 1, \quad j = 0, 1, 2, \dots$.
+
+The impact propensity is $\delta_0 = \gamma$.
+
+By the geometric series sum formula, the long-run propensity is $LRP = \frac{\gamma}{1 - \rho}$.
+
+**Koyck Transformation:** By writing the IDL at time $t$ and $t-1$, multiplying the second by $\rho$, and subtracting it from the first, the infinite lags are algebraically eliminated to yield: $y_t = \alpha_0 + \gamma z_t + \rho y_{t-1} + v_t$, where $\alpha_0 = (1 - \rho)\alpha$ and $v_t = u_t - \rho u_{t-1}$.
+
+Because $v_t$ is mathematically correlated with $y_{t-1}$, OLS is inconsistent.
+If we assume $u_t$ follows an AR(1) process $u_t = \rho u_{t-1} + e_t$ (with the exact same $\rho$), then the model strictly simplifies to $y_t = \alpha_0 + \gamma z_t + \rho y_{t-1} + e_t$, which is dynamically complete and can be estimated consistently by OLS.
+
+#### Rational Distributed Lag Models
+
+The rational distributed lag (RDL) model adds a lag of the explanatory variable to provide a more flexible lag distribution: $y_t = \alpha_0 + \gamma_0 z_t + \rho y_{t-1} + \gamma_1 z_{t-1} + v_t$.
+The impact propensity evaluates to $\gamma_0$, the subsequent lag coefficients are calculated as $\rho^{h-1}(\rho \gamma_0 + \gamma_1)$, and the long-run propensity evaluates strictly to $LRP = \frac{\gamma_0 + \gamma_1}{1 - \rho}$.
+
+### Testing for Unit Roots
+
+To test whether a time series $\{y_t\}$ has a unit root, we evaluate an AR(1) model: $y_t = \alpha + \rho y_{t-1} + e_t$, testing the null hypothesis $H_0: \rho = 1$ against the one-sided alternative $H_1: \rho < 1$.
+Subtracting $y_{t-1}$ from both sides yields the testing equation: $\Delta y_t = \alpha + \theta y_{t-1} + e_t$, where $\theta = \rho - 1$.
+The null hypothesis maps strictly to $H_0: \theta = 0$.
+Because $y_{t-1}$ is an I(1) process under the null, the standard central limit theorem fails, and the $t$ statistic on $\hat{\theta}$ strictly follows the **Dickey-Fuller (DF) distribution**, which requires specific negative critical values.
+
+-   **Augmented Dickey-Fuller (ADF) Test:** To clean up serial correlation in $\Delta y_t$, $p$ lags of the first difference are algebraically added to the regression: $\Delta y_t = \alpha + \theta y_{t-1} + \gamma_1 \Delta y_{t-1} + \dots + \gamma_p \Delta y_{t-p} + e_t$. The test on $\hat{\theta}$ proceeds using the exact same DF critical values.
+-   **Time Trend:** If the series has a clear linear trend, a deterministic trend $t$ must be added to the regression: $\Delta y_t = \alpha + \delta t + \theta y_{t-1} + e_t$. Because detrending alters the asymptotic properties, a different set of critical values (Table 18.3) must be strictly used.
+
+### Spurious Regression
+
+If $y_t$ and $x_t$ are mathematically generated as completely independent random walks ($x_t = x_{t-1} + a_t$ and $y_t = y_{t-1} + e_t$), regressing $y_t$ on $x_t$ ($y_t = \beta_0 + \beta_1 x_t + u_t$) produces a spurious regression.
+Under $H_0: \beta_1 = 0$, the error term $u_t$ evaluates strictly to $y_t$, meaning the error itself is a random walk.
+Consequently, the $t$ statistic for $\hat{\beta}_1$ does not converge to a standard normal distribution (it diverges to infinity as $n \to \infty$), and the $R^2$ does not converge to a population value but to a random variable, artificially resulting in high statistical significance.
+
+### Cointegration and Error Correction Models
+
+#### Cointegration
+
+If $y_t$ and $x_t$ are both I(1) processes, but there exists a parameter $\beta$ such that the linear combination $s_t = y_t - \beta x_t$ is stationary (I(0)), the two series are said to be cointegrated.
+
+**Testing with unknown** $\beta$ (Engle-Granger Test): First, estimate the cointegrating parameter via the static OLS regression: $y_t = \hat{\alpha} + \hat{\beta}x_t$.
+Second, apply the Dickey-Fuller test to the residuals $\hat{u}_t = y_t - \hat{\alpha} - \hat{\beta}x_t$: test $\Delta \hat{u}_t$ on $\hat{u}_{t-1}$.
+This strictly requires different asymptotic critical values (Table 18.4) because $\beta$ was estimated.
+
+**Leads and Lags Estimator:** Because $x_t$ and the cointegrating error $u_t$ can be contemporaneously correlated, OLS on the cointegrating equation yields a $t$ statistic that is not approximately normally distributed.
+Adding leads and lags of $\Delta x_t$ renders $x_t$ strictly exogenous: $y_t = \alpha_0 + \beta x_t + \phi_0 \Delta x_t + \phi_1 \Delta x_{t-1} + \phi_2 \Delta x_{t-2} + \gamma_1 \Delta x_{t+1} + \gamma_2 \Delta x_{t+2} + e_t$.
+The resulting $t$ statistic for $\hat{\beta}$ follows a standard normal distribution asymptotically.
+
+#### Error Correction Models
+
+If $y_t$ and $x_t$ are cointegrated, their short-run dynamics can be strictly modeled using an Error Correction Model (ECM): $\Delta y_t = \alpha_0 + \gamma_0 \Delta x_t + \delta(y_{t-1} - \beta x_{t-1}) + u_t$.
+The term $\delta(y_{t-1} - \beta x_{t-1})$ is the error correction term.
+For stability, we require $\delta < 0$ to mathematically push the system back toward the equilibrium.
+Estimation proceeds via the Engle-Granger two-step procedure: replace the unknown $\beta$ with $\hat{\beta}$ from the static regression, defining $\hat{s}_{t-1} = y_{t-1} - \hat{\beta}x_{t-1}$, and estimate the ECM strictly by OLS.
+
+### Forecasting
+
+To minimize the expected squared forecast error $E[(y_{t+1} - f_t)^2 | I_t]$, the best predictor is mathematically defined as the conditional expectation: $f_t = E(y_{t+1} | I_t)$.
+
+#### Types of Regression Models Used for Forecasting
+
+-   **Unconditional Forecasts:** Predicting $y_{t+1}$ using an explanatory variable $z_{t+1}$ requires an explicit forecast of $z_{t+1}$: $E(y_{t+1} | I_t) = \beta_0 + \beta_1 E(z_{t+1} | I_t)$.
+-   **Dynamic / VAR Models:** By strictly using lagged variables, we avoid needing future values of regressors: $y_t = \delta_0 + \alpha_1 y_{t-1} + \gamma_1 z_{t-1} + u_t$.
+
+#### One-Step-Ahead Forecasting
+
+At the end of sample $n$, the point forecast is computed strictly as: $\hat{f}_n = \hat{\delta}_0 + \hat{\alpha}_1 y_n + \hat{\gamma}_1 z_n$.
+\* **Forecast Error Variance:** The true error is $\hat{e}_{n+1} = y_{n+1} - \hat{f}_n$.
+The variance of the forecast error is strictly the sum of the estimation variance and the unobserved population error variance: $se(\hat{e}_{n+1}) = \{ [se(\hat{f}_n)]^2 + \hat{\sigma}^2 \}^{1/2}$.
+
+**95% Forecast Interval:** Algebraically defined as $\hat{f}_n \pm 1.96 \cdot se(\hat{e}_{n+1})$.
+
+**Granger Causality:** In a Vector Autoregressive (VAR) framework, $z$ Granger causes $y$ if past $z$ is statistically useful for predicting $y$: $E(y_t | I_{t-1}) \neq E(y_t | J_{t-1})$, where $J_{t-1}$ strictly drops all past values of $z$.
+This is evaluated via standard $F$ or $t$ tests on the added lags of $z$.
+
+#### Comparing One-Step-Ahead Forecasts
+
+Models are evaluated out-of-sample using performance metrics such as the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE), aggregating the actual forecast errors $e_{t+1}$ across multiple periods past the estimation window.
+
+#### Multiple-Step-Ahead Forecasts
+
+The forecast error variance increases strictly with the horizon $h$.
+For an AR(1) model, $y_t = \alpha + \rho y_{t-1} + u_t$, the $h$-step-ahead conditional expectation evaluates to $E(y_{t+h} | I_t) = (1 + \rho + \dots + \rho^{h-1})\alpha + \rho^h y_t$.
+\* The actual forecast is generated by: $\hat{f}_{n,h} = (1 + \hat{\rho} + \dots + \hat{\rho}^{h-1})\hat{\alpha} + \hat{\rho}^h y_n$.
+\* For models with multiple lags (e.g., AR(2) or VAR), predictions are built recursively: $\hat{f}_{n,2} = \hat{\alpha} + \hat{\rho}_1 \hat{f}_{n,1} + \hat{\rho}_2 y_n$.
+
+#### Forecasting Trending, Seasonal, and Integrated Processes
+
+-   **Linear Trends:** Forecasted simply by plugging the future time index into the estimated equation: $\hat{f}_{n,h} = \hat{\alpha} + \hat{\beta}(n + h)$.
+-   **Log-Linear Trends:** $\log(y_t) = \alpha + \beta t$. To properly recover the level prediction without underestimation bias, calculate $\hat{\gamma}$ from the regression of $y_t$ on $\exp(\widehat{\log y_t})$ without an intercept. The exact forecast is: $\hat{f}_{n,h} = \hat{\gamma} \exp[\hat{\alpha} + \hat{\beta}(n + h)]$.
+-   **Integrated Processes:** For a random walk, the best predictor is simply the last observed value (plus $h$ times the drift, if applicable). Alternatively, forecast the stationary first-differences ($\Delta y$) and recursively sum them: $\hat{f}_{n,h} = \hat{g}_{n,h} + \hat{g}_{n,h-1} + \dots + \hat{g}_{n,1} + y_n$, where $\hat{g}$ represents the forecasted differences. If two I(1) variables are cointegrated, incorporating the error correction term into the forecast model for $\Delta y$ generally improves predictive precision.
+
+## Summary of Matrix Algebra
+
+### Basic Definitions
+
+-   **Matrix:** A rectangular array of numbers. An $m \times n$ matrix $\mathbf{A}$ has $m$ rows and $n$ columns, generically written as $\mathbf{A} = [a_{ij}]$, where $a_{ij}$ is the element in the $i^{th}$ row and $j^{th}$ column.
+-   **Square Matrix:** A matrix with the exact same number of rows and columns ($n \times n$).
+-   **Vectors:** A $1 \times m$ matrix is a row vector, $\mathbf{x} = (x_1, x_2, \dots, x_m)$. An $n \times 1$ matrix is a column vector, $\mathbf{y}$.
+-   **Diagonal Matrix:** A square matrix where all off-diagonal elements are zero ($a_{ij} = 0$ for all $i \neq j$).
+-   **Identity Matrix (**$\mathbf{I}_n$): An $n \times n$ diagonal matrix with ones (unity) on the main diagonal and zeros elsewhere.
+-   **Zero Matrix (**$\mathbf{0}$): An $m \times n$ matrix with zero for all entries.
+
+### Matrix Operations
+
+#### Matrix Addition and Scalar Multiplication
+
+-   **Addition:** Two matrices of the exact same dimension ($m \times n$) are added element by element: $\mathbf{A} + \mathbf{B} = [a_{ij} + b_{ij}]$.
+-   **Scalar Multiplication:** Multiplying a matrix by a real number $\gamma$ scales every element: $\gamma\mathbf{A} = [\gamma a_{ij}]$.
+
+#### Matrix Multiplication
+
+To form the product $\mathbf{AB}$, the column dimension of $\mathbf{A}$ must strictly equal the row dimension of $\mathbf{B}$.
+
+If $\mathbf{A}$ is $m \times n$ and $\mathbf{B}$ is $n \times p$, the $(i, j)^{th}$ element of $\mathbf{AB}$ is mathematically defined as $\sum_{k=1}^n a_{ik}b_{kj}$.
+\* Matrix multiplication is generally not commutative: $\mathbf{AB} \neq \mathbf{BA}$.
+
+#### Transpose
+
+The transpose of an $m \times n$ matrix $\mathbf{A}$, denoted $\mathbf{A}'$, is the $n \times m$ matrix obtained by interchanging rows and columns: $\mathbf{A}' = [a_{ji}]$.
+
+**Properties:** $(\mathbf{A}')' = \mathbf{A}$; $(\mathbf{A} + \mathbf{B})' = \mathbf{A}' + \mathbf{B}'$; and strictly $(\mathbf{AB})' = \mathbf{B}'\mathbf{A}'$.
+
+**Symmetric Matrix:** A square matrix is symmetric if it strictly equals its transpose: $\mathbf{A}' = \mathbf{A}$.
+For any $n \times k$ matrix $\mathbf{X}$, the product $\mathbf{X}'\mathbf{X}$ is always a symmetric matrix.
+
+#### Partitioned Matrix Multiplication
+
+Matrices can be partitioned into submatrices and multiplied block by block.
+If $\mathbf{A}$ has rows $\mathbf{a}_1, \dots, \mathbf{a}_n$ and $\mathbf{B}$ has rows $\mathbf{b}_1, \dots, \mathbf{b}_n$, then $\mathbf{A}'\mathbf{B} = \sum_{i=1}^n \mathbf{a}_i' \mathbf{b}_i$.
+
+#### Trace
+
+The trace is defined strictly for square matrices as the sum of the diagonal elements: $tr(\mathbf{A}) = \sum_{i=1}^n a_{ii}$.
+
+**Properties:** $tr(\mathbf{A}') = tr(\mathbf{A})$, $tr(\mathbf{A} + \mathbf{B}) = tr(\mathbf{A}) + tr(\mathbf{B})$, and algebraically $tr(\mathbf{AB}) = tr(\mathbf{BA})$.
+
+#### Inverse
+
+An $n \times n$ matrix $\mathbf{A}$ has an inverse $\mathbf{A}^{-1}$ (is invertible or nonsingular) if $\mathbf{A}^{-1}\mathbf{A} = \mathbf{I}_n$ and $\mathbf{AA}^{-1} = \mathbf{I}_n$.
+\* **Properties:** $(\mathbf{AB})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$, and $(\mathbf{A}')^{-1} = (\mathbf{A}^{-1})'$.
+
+### Linear Independence and Rank of a Matrix
+
+-   **Linear Independence:** A set of $n \times 1$ vectors $\{\mathbf{x}_1, \dots, \mathbf{x}_r\}$ is linearly independent if $a_1\mathbf{x}_1 + \dots + a_r\mathbf{x}_r = \mathbf{0}$ strictly implies $a_1 = a_2 = \dots = a_r = 0$.
+-   **Rank:** The rank of $\mathbf{A}$, denoted $rank(\mathbf{A})$, is the maximum number of linearly independent columns. For an $n \times k$ matrix, $rank(\mathbf{A}) \le \min(n, k)$. An $n \times k$ matrix has full column rank if its rank is $k$. A $k \times k$ matrix is invertible if and only if it has full rank $k$.
+
+### Quadratic Forms and Positive Definite Matrices
+
+-   **Quadratic Form:** For an $n \times n$ symmetric matrix $\mathbf{A}$, the quadratic form is a scalar defined as $f(\mathbf{x}) = \mathbf{x}'\mathbf{A}\mathbf{x} = \sum_{i=1}^n a_{ii}x_i^2 + 2\sum_{i=1}^{n-1} \sum_{j>i} a_{ij}x_ix_j$.
+-   **Positive Definite (p.d.):** $\mathbf{A}$ is p.d. if $\mathbf{x}'\mathbf{A}\mathbf{x} > 0$ for all $\mathbf{x} \neq \mathbf{0}$.
+-   **Positive Semi-Definite (p.s.d.):** $\mathbf{A}$ is p.s.d. if $\mathbf{x}'\mathbf{A}\mathbf{x} \ge 0$ for all $\mathbf{x}$. If $\mathbf{X}$ is an $n \times k$ matrix with rank $k$, then $\mathbf{X}'\mathbf{X}$ is strictly positive definite and invertible.
+
+### Idempotent Matrices
+
+An $n \times n$ symmetric matrix $\mathbf{A}$ is idempotent if it strictly equals its own square: $\mathbf{AA} = \mathbf{A}$.
+\* **Properties:** $rank(\mathbf{A}) = tr(\mathbf{A})$, and $\mathbf{A}$ is positive semi-definite.
+In regression, $\mathbf{P} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$ and $\mathbf{M} = \mathbf{I}_n - \mathbf{P}$ are fundamental symmetric, idempotent matrices.
+
+### Differentiation of Linear and Quadratic Forms
+
+Using vector calculus notation, the derivative of a linear function $f(\mathbf{x}) = \mathbf{a}'\mathbf{x}$ with respect to $\mathbf{x}$ is the $1 \times n$ vector $\partial f(\mathbf{x}) / \partial \mathbf{x} = \mathbf{a}'$.
+For a quadratic form $g(\mathbf{x}) = \mathbf{x}'\mathbf{A}\mathbf{x}$ (where $\mathbf{A}$ is symmetric), the exact derivative is $\partial g(\mathbf{x}) / \partial \mathbf{x} = 2\mathbf{x}'\mathbf{A}$.
+
+### Moments and Distributions of Random Vectors
+
+-   **Expected Value:** For an $n \times 1$ random vector $\mathbf{y}$, $E(\mathbf{y})$ is the vector of individual expected values. Mathematically, $E(\mathbf{A}\mathbf{y} + \mathbf{b}) = \mathbf{A}E(\mathbf{y}) + \mathbf{b}$.
+-   **Variance-Covariance Matrix:** Defined as $Var(\mathbf{y}) = E[(\mathbf{y} - \boldsymbol{\mu})(\mathbf{y} - \boldsymbol{\mu})']$, where $\boldsymbol{\mu} = E(\mathbf{y})$. It is a symmetric matrix with variances $\sigma_j^2$ on the diagonal and covariances $\sigma_{ij}$ on the off-diagonals. If $\mathbf{y}$ is multiplied by a matrix, $Var(\mathbf{A}\mathbf{y} + \mathbf{b}) = \mathbf{A} Var(\mathbf{y}) \mathbf{A}'$. If elements of $\mathbf{y}$ are mutually uncorrelated with constant variance, $Var(\mathbf{y}) = \sigma^2\mathbf{I}_n$.
+-   **Multivariate Normal Distribution:** Denoted $\mathbf{y} \sim \text{Normal}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. Linear combinations remain strictly normal: $\mathbf{A}\mathbf{y} + \mathbf{b} \sim \text{Normal}(\mathbf{A}\boldsymbol{\mu} + \mathbf{b}, \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}')$. Under normality, zero covariance ($\sigma_{ij} = 0$) mathematically guarantees strict independence.
+-   **Chi-Square Distribution:** If $\mathbf{u} \sim \text{Normal}(\mathbf{0}, \mathbf{I}_n)$ and $\mathbf{A}$ is a symmetric, idempotent matrix with rank $q$, the quadratic form follows a chi-square distribution: $\mathbf{u}'\mathbf{A}\mathbf{u} \sim \chi^2_q$.
+-   **t and F Distributions:** Formed via exact algebraic relationships between standard normal vectors and chi-square quadratic forms utilizing idempotent matrices, forming the mathematical foundation for OLS statistical inference.
+
+## The Linear Regression Model in Matrix Form
+
+### The Model and Ordinary Least Squares Estimation
+
+The multiple linear regression model for $n$ observations and $k$ independent variables can be written algebraically for each observation $t$ as: $y_t = \beta_0 + \beta_1 x_{t1} + \dots + \beta_k x_{tk} + u_t, \quad t = 1, 2, \dots, n$.
+By defining the $1 \times (k+1)$ row vector $\mathbf{x}_t = (1, x_{t1}, \dots, x_{tk})$ and the $(k+1) \times 1$ column parameter vector $\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_k)'$, the equation becomes: $y_t = \mathbf{x}_t \boldsymbol{\beta} + u_t$.
+
+Stacking these $n$ equations yields the full matrix notation: $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{u}$, where $\mathbf{y}$ is an $n \times 1$ vector, $\mathbf{X}$ is an $n \times (k+1)$ matrix with rows $\mathbf{x}_t$, and $\mathbf{u}$ is an $n \times 1$ vector of errors.
+
+The ordinary least squares (OLS) estimator $\hat{\boldsymbol{\beta}}$ minimizes the sum of squared residuals: $SSR(\boldsymbol{\beta}) = \sum_{t=1}^n (y_t - \mathbf{x}_t \boldsymbol{\beta})^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$.
+The multivariable calculus first order condition requires the derivative with respect to $\boldsymbol{\beta}$ to be zero: $\mathbf{X}'(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}$, which simplifies to $(\mathbf{X}'\mathbf{X})\hat{\boldsymbol{\beta}} = \mathbf{X}'\mathbf{y}$.
+Assuming $\mathbf{X}'\mathbf{X}$ is nonsingular, the OLS estimator is derived as: $\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}$.
+
+The vectors of OLS fitted values and residuals are defined as: $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$ and $\hat{\mathbf{u}} = \mathbf{y} - \hat{\mathbf{y}} = \mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}$.
+The first order conditions algebraically enforce that $\mathbf{X}'\hat{\mathbf{u}} = \mathbf{0}$, meaning the residuals are strictly orthogonal to the columns of $\mathbf{X}$.
+The minimized SSR is $SSR = \hat{\mathbf{u}}'\hat{\mathbf{u}}$.
+
+#### The Frisch-Waugh Theorem
+
+Partition the matrix $\mathbf{X}$ as $\mathbf{X} = (\mathbf{X}_1 \quad \mathbf{X}_2)$.
+The OLS coefficients $\hat{\boldsymbol{\beta}}_2$ from the full regression of $\mathbf{y}$ on $\mathbf{X}_1, \mathbf{X}_2$ can be algebraically isolated via a two-step "partialling out" process: 1.
+Regress $\mathbf{X}_2$ on $\mathbf{X}_1$ to obtain the matrix of residuals $\ddot{\mathbf{X}}_2 = \mathbf{M}_1 \mathbf{X}_2$, where $\mathbf{M}_1 = \mathbf{I}_n - \mathbf{X}_1(\mathbf{X}_1'\mathbf{X}_1)^{-1}\mathbf{X}_1'$ is a symmetric, idempotent matrix.
+2.
+Regress $\mathbf{y}$ on $\ddot{\mathbf{X}}_2$.
+The resulting coefficients $\ddot{\boldsymbol{\beta}}_2$ are mathematically identical to the full multiple regression estimates: $\ddot{\boldsymbol{\beta}}_2 = \hat{\boldsymbol{\beta}}_2$.
+
+### Finite Sample Properties of OLS
+
+To formally establish the properties of OLS in matrix form, we map the Gauss-Markov assumptions to vectors and matrices:
+
+**Assumption E.1 (Linear in Parameters):** $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{u}$.
+
+**Assumption E.2 (No Perfect Collinearity):** $rank(\mathbf{X}) = k + 1$, guaranteeing that $\mathbf{X}'\mathbf{X}$ is invertible.
+
+**Assumption E.3 (Zero Conditional Mean):** $E(\mathbf{u}|\mathbf{X}) = \mathbf{0}$.
+
+**Assumption E.4 (Homoskedasticity):** $Var(u_t|\mathbf{X}) = \sigma^2$.
+
+**Assumption E.5 (No Serial Correlation):** $Cov(u_t, u_s|\mathbf{X}) = 0$ for all $t \neq s$.
+
+Assumptions E.4 and E.5 combine to define the scalar variance-covariance matrix of the errors: $Var(\mathbf{u}|\mathbf{X}) = \sigma^2 \mathbf{I}_n$.
+
+**Theorem E.1 (Unbiasedness):** Under E.1 through E.3, $E(\hat{\boldsymbol{\beta}}|\mathbf{X}) = \boldsymbol{\beta}$.
+*(Proof:* $\hat{\boldsymbol{\beta}} = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{u}$.
+Taking the conditional expectation yields $\boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'E(\mathbf{u}|\mathbf{X}) = \boldsymbol{\beta}$.)
+
+**Theorem E.2 (Variance-Covariance Matrix of OLS Estimator):** Under E.1 through E.5, $Var(\hat{\boldsymbol{\beta}}|\mathbf{X}) = \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}$.
+*(Proof:* $Var(\hat{\boldsymbol{\beta}}|\mathbf{X}) = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}' [\sigma^2 \mathbf{I}_n] \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} = \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}$.)
+
+**Theorem E.3 (Gauss-Markov Theorem):** Under E.1 through E.5, $\hat{\boldsymbol{\beta}}$ is the Best Linear Unbiased Estimator (BLUE).
+For any other linear unbiased estimator $\tilde{\boldsymbol{\beta}} = \mathbf{A}'\mathbf{y}$, the difference $Var(\tilde{\boldsymbol{\beta}}|\mathbf{X}) - Var(\hat{\boldsymbol{\beta}}|\mathbf{X})$ is guaranteed to be a positive semi-definite matrix.
+
+**Theorem E.4 (Unbiased Estimator of** $\sigma^2$): Using the symmetric idempotent matrix $\mathbf{M} = \mathbf{I}_n - \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$, the residuals are $\hat{\mathbf{u}} = \mathbf{M}\mathbf{u}$.
+The unbiased estimator of the error variance is: $\hat{\sigma}^2 = \frac{\hat{\mathbf{u}}'\hat{\mathbf{u}}}{n - k - 1} = \frac{\mathbf{u}'\mathbf{M}\mathbf{u}}{n - k - 1}$, where $E(\hat{\sigma}^2|\mathbf{X}) = \sigma^2$.
+
+### Statistical Inference
+
+**Assumption E.6 (Normality of Errors):** Conditional on $\mathbf{X}$, the errors follow a multivariate normal distribution: $\mathbf{u}|\mathbf{X} \sim \text{Normal}(\mathbf{0}, \sigma^2 \mathbf{I}_n)$.
+
+**Theorem E.5 (Normality of** $\hat{\boldsymbol{\beta}}$): Under E.1 through E.6, the OLS estimator is distributed exactly as: $\hat{\boldsymbol{\beta}}|\mathbf{X} \sim \text{Normal}(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}'\mathbf{X})^{-1})$.
+
+**Theorem E.6 (Distribution of** $t$ Statistic): The standardized estimator combined with the estimated standard error strictly follows a $t$ distribution with $n-k-1$ degrees of freedom: $\frac{\hat{\beta}_j - \beta_j}{se(\hat{\beta}_j)} \sim t_{n-k-1}$.
+This relies on the fact that $(n-k-1)\hat{\sigma}^2/\sigma^2 \sim \chi^2_{n-k-1}$ and that $\hat{\boldsymbol{\beta}}$ and $\hat{\sigma}^2$ are statistically independent.
+
+### Some Asymptotic Analysis
+
+**Consistency (Theorem 11.1 proof):** The OLS estimator can be written as $\hat{\boldsymbol{\beta}} = \boldsymbol{\beta} + (n^{-1}\sum_{t=1}^n \mathbf{x}_t' \mathbf{x}_t)^{-1} (n^{-1}\sum_{t=1}^n \mathbf{x}_t' u_t)$.
+By the Law of Large Numbers, $n^{-1}\sum \mathbf{x}_t' \mathbf{x}_t \xrightarrow{p} \mathbf{A}$ and $n^{-1}\sum \mathbf{x}_t' u_t \xrightarrow{p} \mathbf{0}$.
+Therefore: $plim(\hat{\boldsymbol{\beta}}) = \boldsymbol{\beta} + \mathbf{A}^{-1} \cdot \mathbf{0} = \boldsymbol{\beta}$.
+
+**Asymptotic Normality (Theorem 11.2 proof):** Standardizing the estimator yields $\sqrt{n}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) = \mathbf{A}^{-1}(n^{-1/2}\sum_{t=1}^n \mathbf{x}_t' u_t) + o_p(1)$.
+By the Central Limit Theorem, the sum term is asymptotically Normal$(\mathbf{0}, \sigma^2\mathbf{A})$.
+Passing this through the linear transformation $\mathbf{A}^{-1}$ dictates that: $\sqrt{n}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) \sim^a \text{Normal}(\mathbf{0}, \sigma^2 \mathbf{A}^{-1})$.
+
+**Heteroskedasticity-Robust Variance:** If homoskedasticity fails, the valid asymptotic variance-covariance matrix of $\hat{\boldsymbol{\beta}}$ is estimated as: $Avar(\hat{\boldsymbol{\beta}}) = \left(\frac{n}{n - k - 1}\right) (\mathbf{X}'\mathbf{X})^{-1} \left( \sum_{t=1}^n \hat{u}_t^2 \mathbf{x}_t' \mathbf{x}_t \right) (\mathbf{X}'\mathbf{X})^{-1}$.
+
+#### Wald Statistics for Testing Multiple Hypotheses
+
+To test $q$ linear restrictions defined by $H_0: \mathbf{R}\boldsymbol{\beta} = \mathbf{r}$ (where $\mathbf{R}$ is a $q \times (k+1)$ matrix of constants), the Wald statistic evaluates the difference between $\mathbf{R}\hat{\boldsymbol{\beta}}$ and $\mathbf{r}$: $W = (\mathbf{R}\hat{\boldsymbol{\beta}} - \mathbf{r})' [\mathbf{R}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{R}']^{-1} (\mathbf{R}\hat{\boldsymbol{\beta}} - \mathbf{r}) / \hat{\sigma}^2$.
+Under the null hypothesis, $W \sim^a \chi^2_q$.
+Mathematically, dividing the Wald statistic by the number of restrictions yields the exact $F$ statistic: $W / q = F$.

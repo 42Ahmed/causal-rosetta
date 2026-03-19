@@ -1,0 +1,2270 @@
+---
+title: "Advanced Topics in Econometrics"
+format: html
+number-sections: false
+---
+
+
+### 199. Mean and median lag
+
+If we have a model of sales regressed on ads where $t$ is weeks
+
+$$
+S_e = 10 + 3A_t + 2A_{t-1} + A_{t-2}+ \varepsilon_t
+$$
+
+We know that long run change is
+
+$$
+\Delta s_{LR} = 3+2+1=6
+$$
+
+We want to know what happens if ads increase by one temporary unit
+
+from lag distribution, instantaneous effect is 3, then it drops to 2 and 1 then vanishes
+
+We can use **mean lag**
+
+$$
+\boxed{\text{Mean Lag} = \frac{\sum_{i=0}^{2} i \beta_i}{\sum_{i=0}^{2} \beta_i}} 
+$$
+
+which is calculated here as
+
+$$
+= \frac{2 \times 1 + 1 \times 2}{6} = \frac{2}{3}
+$$
+
+Interpretation: time it takes for model to adjust for ads change is between zero lag and first lag and is more towards first lag
+
+We also have a **median lag** which represents adjustment in sales by 50% of the effect
+
+$$
+\boxed{\text{Median lag C} = \dfrac{\sum_{i=0}^c \beta_i}{\sum_{i=0}^2 \beta_i} = 0.5}
+$$
+
+Result must be 0.5, and we know $\sum^2_{i=0}$, then the value is 3 <coefficient of zero lag> hence median lag is 0.
+
+
+
+### 200. Part 2
+
+Starting from here is part 2, pooled and panel data and some theory
+
+### 201. Lagged dependent variable ARMA
+
+What if we have a lagged dependent variable, like how sales today depend on sales of yesterday
+
+$$
+s_t = \alpha + \beta_1 A_t + \beta_2 A_{t-1}+ \gamma s_{t-1}+ \varepsilon_t
+$$
+
+why add a lagged dependent variable
+
+1. for theory
+2. to control for omitted variables
+3. practical reason: addictive factor <like cigarettes>
+
+If advertisement increases by one unit change, what happens to sales?
+
+$$
+\bar A = \bar A +1
+$$
+
+just use the original model with $\bar s$ instead and remember error term disappears
+
+$$
+\overline{S} = \alpha + \beta_1 \overline{A} + \beta_2 \overline{A} + \gamma \overline{S}
+$$
+
+Then isolate $\bar s$
+
+$$
+\overline{S} (1-\gamma) = \alpha + (\beta_1 + \beta_2) \overline{A}
+$$
+
+Divide to get
+
+$$
+\bar{S} = \frac{\alpha}{1-\gamma} + \frac{\beta_1 + \beta_2}{1 - \gamma} \bar{A}
+$$
+
+The coefficient of $\bar A$ represents long run effect. The denominator shows the addictive effect
+
+What is the effect of a temporary effect of ads?
+
+$$
+A_t \to A_t +1
+$$
+
+In period it occurred: $\beta_1$
+
+In first period: $\beta_2 + \gamma \beta_1$
+
+In second period: $(\beta_2 + \gamma \beta)\gamma$
+
+In third period: $(\beta_2 + \gamma \beta)\gamma^2$
+
+Notice that $\gamma$  must be $<1$ so effect doesn’t explode
+
+If you plot the effects: it increases at first period then decreases exponentially
+
+If you split the graph at first period, the decaying side is a process of$AR$ and right side is $MA$
+
+This is referred to as $ARMA$
+
+
+### 202. Koyck transformation
+
+If we have an AR process
+
+$$
+x_t = \rho x_{t-1}+ \varepsilon_t
+$$
+
+then take difference
+
+$$
+x_t - \rho x_{t-1} = \varepsilon_t
+$$
+
+We can write it in another way using **lag operator**
+
+$$
+\boxed{(1-\rho L)x_t = \varepsilon_t}
+$$
+
+where $Lx_t = x_{t-1}$ and $L^2 x_t = x_{t-2}$ <it gives us the lag>
+
+We then isolate for $x_t$ to get
+
+$$
+x_t = \dfrac{\varepsilon_t}{1-\rho L}
+$$
+
+This should remind you of geometric series
+
+$$
+S_\infty = a+ar+ar^2+\dots = \dfrac{a}{1-r}\quad |r|<1
+$$
+
+To make use of geometric series, rewrite $x_t$
+
+$$
+x_t = \dfrac{\varepsilon_t}{1-\rho L}= \varepsilon_t + \rho L \varepsilon_t+ \rho^2  L^2  \varepsilon_t+\dots
+$$
+
+where $a=\varepsilon_t$, $ra= \rho L \varepsilon_t$
+
+Since that $L$ is a function that gets lags, we can say
+
+$$
+x_t = \dfrac{\varepsilon_t}{1-\rho L} = \varepsilon_t + \rho \varepsilon_{t-1}+\rho \varepsilon_{t-2} +\dots = \sum \rho^i \varepsilon_{t-i}
+$$
+
+Notice what we did
+
+$$
+\boxed{AR(1) \iff MA(\infty)}
+$$
+
+But how?
+
+if $x_t$ is sales, and $\varepsilon_t$ is ads. if ads go up, it will have an effect of sales, and sales in the future, meaning it will have an infinite effect
+
+Of think that ads have direct effect of sales and indirect from yesterday and before
+
+
+
+### 203. Invertibility - converting an MA(1) to an AR(infinite) process
+
+We can turn  $AR(1) \iff MA(1)$ via Koyck. and we can turn $MA(1)\iff AR(\infty)$ via **invertibility**
+
+Here is our $MA$
+
+$$
+x_t = \varepsilon_t + \theta \varepsilon_{t-1}
+$$
+
+write it using lag operator
+
+$$
+x_t = (1-\theta L)\varepsilon_t
+$$
+
+Isolate
+
+$$
+\varepsilon_t = \frac{x_t}{1 - \theta L} \quad
+$$
+
+Using geometric series again given $|\theta|<1$ and $a=x_t, r = \theta L$, we get
+
+$$
+ \varepsilon_t= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \cdots
+$$
+
+Isolate for $x_t$ to get
+
+$$
+x_t = -\theta x_{t-1} - \theta^2 x_{t-2} - \theta^3 x_{t-3} - \cdots + \varepsilon_t
+$$
+
+which is $AR(\infty)$
+
+But how?
+
+We know from correlogram of $MA$ that first interval is $>0$ then its zero. in the $AR(\infty)$, when we take covairnace between $x$ terms, they cancel each other
+
+
+
+### 204. ARMA(1,1) process - introduction and examples
+
+### 205. The partial adjustment model
+
+### 206. Error correction model part 1
+
+### 207. Error correction model part 2
+
+### 208. Pooled cross sectional models introduction
+
+New data type $:)$
+
+The idea here is that we have population at time $1$, take a sample from it called $s_1$. 
+
+Then that same population, at another time $2$, we take another sample $s_2$ <not same individuals in $s_1$> and so on
+
+Although the samples are independent,  they are not identically distributed. 
+
+A typical model will be
+
+$$
+\boxed{y_i = \alpha + \beta_1 \delta_{2i} + \beta_2 x_i+ \beta_3 \delta_{2i}x_i + \varepsilon_i}
+
+$$
+
+where 
+
+$$
+i = 1,2,\dots,N,N+1,\dots,2N
+$$
+
+from $1\to N$ are individuals from first sample, $N+1 \to 2N$ are individuals from second sample
+
+and $\delta_2$ is a dummy variable indicating the time period
+
+$$
+\delta_2 = \begin{cases}
+1, &t=2\\
+0, &t=1
+\end{cases} 
+$$
+
+$x_i$ is our independent variable. $\beta_3$ represents the interaction term between the independent variable and the time
+
+
+
+### 209. Pooled cross sectional data benefits part 1 DD
+
+If we want to know if a new police policy decreases crime rate or not
+
+$$
+crime = \alpha + \beta \, police + \varepsilon
+$$
+
+where police is a dummy variable, 1 if new policy, 0 otherwise
+
+If time did not affect the population, we will take a sample and find the problem
+
+The estimates is
+
+$$
+\widehat {crime} =35 + 5 police
+$$
+
+while he hypothesis are:
+
+$$
+H_0: \beta=0 \quad H_1: \beta<0
+$$
+
+How did we get a positive coefficient?
+
+**Selection bias**
+
+Cities that have  many crimes, chose the new policy, while cities with low crimes decided they don’t need a change
+
+The coefficient of $5$ shows that cities that made the policy have higher crime rate
+
+Solution:
+
+look at same population at time period $1$ before the policy, get the sample and regress
+
+$$
+\widehat{crime} = 40 + 10 \, police
+$$
+
+Before the policy, coefficient was even higher than after the policy, showing its effectiveness
+
+How to quantify the effect? check  past average crime rate for cities that implemented policy now  and those who didn’t, aka at time 1 <before policy>
+
+$$
+\overline{crime_{p_1}} = 50 \qquad \overline{crime_{np_1}} = 40
+$$
+
+Then calculate the average now <time 2>
+
+$$
+\overline{crime_{p_2}} = 40 \qquad \overline{crime_{np_2}} = 35
+$$
+
+The gap between policy implementers and those who are not, was 10, became 5
+
+So the **Difference in difference is**
+
+$$
+\hat d = 5-10=-5
+$$
+
+policy decreased crime rate by 5
+
+### Big Note
+
+The DiD is just the equation we used in the last section but in means form
+
+$$
+y_i = \alpha + \beta_1 \delta_{2i} + \beta_2 x_i+ \beta_3 \delta_{2i}x_i + \varepsilon_i
+$$
+
+check next section
+
+
+
+### 210. Pooled cross sectional data benefits part 2
+
+Continuing with the last example. The ols we did for time period after the policy implementation was not causal cuz cities with high crime rate already chose it
+
+And solution was to calculate differences in differences DD
+
+in which we calculate the difference bet policy vs no policy in time 1 <50-40=10> then in time 2 <40-35=5> then take difference of differences <5-10=-5>
+
+Problem with the estimate $\hat d = -5$ is that no easy way to do inference
+
+Solution: do a pooled cross sectional model 
+
+$$
+\widehat{crime} = \beta_0 + \beta_1 \delta_{2i}+ \beta_2 \, police + \beta_3 \delta_{2i} \,police 
+$$
+
+And the fun part?
+
+$$
+\boxed{\hat \beta_3 = \hat d}
+$$
+
+With the advantage that we can do inference on $\hat \beta_3$
+
+
+
+### 211. Panel vs pooled data
+
+Pooled cross sectional:
+
+If we have a population at time 1, take a sample $S_1$
+
+Then after some time 2, take a sample $S_2$ 
+
+where individuals in $S_1$  are not the same in $S_2$.
+
+we do $OLS$ with dummy variable and take interaction into account
+
+Panel data:
+
+If we have individuals at time 1, and same individuals at time 2.
+
+Meaning: samples are **not independent**
+
+How to solve this problem?
+
+we can’t count on $OLS$, so we develop new tools
+
+Benefits of panel data:
+
+in pooled cross sectional, if unemployment rate in sample at time 1 was 50% and in the sample at time 2 is still 50%, we have no idea if they are the same people or maybe fresh graduates
+
+while in panel data, we can tell for how long are people unemployed
+
+
+
+### 212. Panel data econometrics - an introduction
+
+New data type. 
+
+If we want to know what influences 
+
+1. house prices at different times based on 
+2. crime rates
+3. factors that depend on time
+4. factors that depend on cities
+5. idiosyncratic errors
+
+$$
+\boxed{HP_{it} = \beta_0+\beta_1 \, crime_{it} + v_t + \alpha_i + u_{it}}
+$$
+
+We have three error terms
+
+1. $v_t$ is time dependent that does not depend on cities, like upward house prices in the population cuz people got richer across time
+2. $\alpha_i$ is city dependent and doesn’t depend on time, like geography, demographics, race, education <they change on very long period of time, doesn’t count>
+
+Panel data are written in different way
+
+Knowing that $t = 1,\dots, T$ and $i = 1,\dots N$
+
+$$
+HP_{it} = \beta_0+\beta_1 \, crime_{it} + \gamma_1 \delta_{2t} + \gamma_2 \delta_{3t}+ \dots + \gamma_{T-1}\delta_{Tt} + \alpha_i + u_{it}
+$$
+
+we add $\delta$ which is a dummy variable for each time period < subtracted by one to avoid dummy variable trap>
+
+We don’t do the same for $\alpha_i$ cuz $N$ is so large so we add $\alpha_i$ in the model.
+
+Let 
+
+$$
+\boxed{\eta_{it} = \alpha_i + u_{it}}
+$$
+
+We can’t use OLS cuz from OLS assumptions to be consistent is
+
+$$
+cov(\eta_{it}, \, crime_{it}) = 0 \qquad \forall i, \forall_t
+$$
+
+which is not the case here cuz
+
+$$
+cov(\alpha_i + u_{it}, \, crime_{it})= cov(\alpha_i ,\, crime_{it}) \neq 0
+$$
+
+remember that demographics <age> is correlated with crime and depends on cities 
+
+Hence: OLS is both biased and inconsistent
+
+because $\alpha_i$ is so important, we call it **unobserved heterogeneity** <unobserved cuz we don’t observe them, and hetero cuz they vary between cities>
+
+
+
+### 213. First difference estimator
+
+Back to our example
+
+$$
+HP_{it} = \beta_0+\beta_1 \, crime_{it} + \gamma_1 \delta_{2t} + \gamma_2 \delta_{3t}+ \dots + \gamma_{T-1}\delta_{Tt} + \alpha_i + u_{it}
+$$
+
+where $\delta$ show the overall trends, $u_{it}$ is idiosyncratic error that is uncorrelated with crime rate but varies across city and time
+
+Our problem mainly lies within the unobserved heterogeneity  which caused **problem of endogeneity**
+
+Solution: First differences
+
+$$
+HP_{it} - HP_{it-1} = \Delta HP_{it}= \beta_1 \Delta \, crime_{it} + \gamma_1 \Delta_{2t}+ \dots + \cancel{\alpha_i - \alpha_i}+ \Delta u_{it}
+$$
+
+Now the covariance is zero, so we have consistent estimators
+
+$$
+cov(\Delta crime_{it}, \Delta u_{it})= 0
+$$
+
+But there is an assumption that we made
+
+- variance in $\Delta crime$ across time and across city
+
+Cost of first difference:
+
+- if there are significant deviation in crime across time and city, the significance can be small in the difference meaning higher standard error meaning harder inference
+- No time independent factors <called **time invariant factors** meaning they don’t change over time> <we took difference to remove  time independent factors>
+    
+
+    
+
+### 214. Fixed effects estimators: an introduction
+
+This new estimator can also remove unobserved heterogeneity
+
+Recall the example: house price as a function of crime rate and unemployment rate
+
+$$
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+$$
+
+where $\alpha_i$ is the unobserved heterogeneity, which has the problem that
+
+$$
+cov(\alpha_i, x_{it}) \neq 0
+$$
+
+Here is what we do:
+
+calculate average house prices across time
+
+$$
+\overline{HP}_i = \dfrac 1 T\sum_{t=1}^T HP_{it}
+$$
+
+expand $HP$ to get
+
+$$
+\overline{HP}_i = \beta_1 \, \overline{crime}_i + \beta_2 \, \overline{unem}_i + \alpha_i + \overline{u}_i
+$$
+
+Notice: $\alpha_i$ doesn’t depend on time
+
+$$
+\overline \alpha_i = \dfrac 1 T \sum \alpha _i = \dfrac 1 T T \alpha_i = \alpha_i
+$$
+
+We call the new equation **time averaged equation**
+
+To get **fixed effect estimator**, we subtract
+
+$$
+HP_{it} - \overline{HP}_i = \beta_1(crime_{it} - \overline {crime}_i)+ \beta_2 \, (unem_{it} - \overline{unem}_i)+ \alpha_i - \alpha_i + (u_{it} - \overline{u}_i)
+$$
+
+The $\alpha_i - \alpha_i =0$, so we removed the unobserved heterogeneity, so our estimates are **consistent** if
+
+$$
+cov(x_{it}, u_{it}) = 0
+$$
+
+aka **weak exogeneity**
+
+to be unbiased, we should check covariance with $u_{is}$, but consistency is enough
+
+We can rewrite the transformed model as
+
+$$
+\widetilde{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  - \text{time constant}
+$$
+
+But why prefer fixed effect estimator over first difference?
+
+
+
+### 215. Least squares dummy variables estimators
+
+This is the third estimator, back to our example of house prices again
+
+$$
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+$$
+
+where $i=1,2,3$
+
+we can’t use $OLS$ due to the unobserved heterogeneity
+
+Solution: Dummy variables for cities $i=2,3$ but not $1$ to avoid dummy variable trap <like splitting $\alpha_i$>
+
+$$
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + u_1d_2+ u_2d_3 + u_{it}
+$$
+
+by including dummy variables, each city has a different intercept which fixes problem of unobserved heterogeneity, no need to implicitly add $\beta_0$
+
+so model is  consistent
+
+$$
+\hat \beta_{dv} \to \beta
+$$
+
+If we have
+
+1. $cov(x_{it}, u_{it}) = 0$
+2. No SC
+3. Homoscedasticity
+
+ALSO
+
+$$
+\hat \beta_{dv}^* = \hat \beta_{FE}^*
+$$
+
+with the pros of ability to estimate $\alpha_i$
+
+But has cons of having to add many dummy variables if $i$ is large
+
+
+
+### 216. Estimating unobserved heterogeneity
+
+Same example
+
+$$
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + \alpha_i + u_{it}
+$$
+
+How to estimate $\alpha_i$, the unobserved heterogeneity?
+
+Use $LSDV$ <what we took last time>
+
+$$
+HP_{it} = \beta_1 \, crime_{it} + \beta_2 \, unem_{it} + u_1d_2+ u_2d_3 + u_{it}
+$$
+
+The estimates $u_1, u_2$ will be unbiased estimates
+
+The other way is to use $FE$ <fixed effect estimator>
+
+$$
+\widetilde{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  + \widetilde{u}_{it}
+$$
+
+although we lost unobserved heterogeneity, we can still estimate it using estimates of $\beta_1, \beta_2$
+
+$$
+\hat \alpha_i = \overline{HP}_i - \hat \beta_1 \overline{crime}_i - \hat \beta_2 \overline{unem}_i
+$$
+
+In both cases, our estimates are unbiased
+
+$$
+E[\hat \alpha_i] = \alpha_i
+$$
+
+But it can still be inconsistent
+
+when $T$ is fixed and $N \to \infty$, sample size increase, dummy variables increase in $LSDV$ or $\hat \beta$ in $FE$, problem gets harder, so its asymptotically unbiased, **but still inconsistent** cuz variance doesn’t approach zero
+
+Why estimate unobserved heterogeneity? to know the effect of all time constant variables like demographics and education   
+
+
+
+### 217. The concept of R squared in fixed effects and LSDV estimators
+
+Fixed Effects Model (Time-Demeaned Form)
+
+We estimate:
+
+$$
+{HP}_{it} = \beta_1 \, \widetilde{crime}_{it} +  \beta_2 \, \widetilde{unem}_{it}  + \widetilde{u}_{it}
+$$
+
+$R^2 = 0.65$ → this refers to ability to explain **variation in house prices *within each city over time*** (not across cities).
+
+---
+
+What is **within** vs **across** variation?
+
+Say we have 2 cities: Cairo and Alexandria
+
+We observe house prices for 3 years (2019, 2020, 2021)
+
+| City | Year | HP (House Price) |
+| --- | --- | --- |
+| Cairo | 2019 | 300 |
+| Cairo | 2020 | 310 |
+| Cairo | 2021 | 305 |
+| Alexandria | 2019 | 250 |
+| Alexandria | 2020 | 255 |
+| Alexandria | 2021 | 245 |
+- **Within variation** = changes *inside each city*
+    
+    Ex: Cairo: 300 → 310 → 305
+    
+    We're explaining how house prices **change over time in Cairo**
+    
+    Same for Alexandria: 250 → 255 → 245
+    
+- **Across variation** = comparing *between cities*
+    
+    Ex: Cairo’s average = 305
+    
+    Alexandria’s average = 250
+    
+    → Difference in **levels between cities**
+    
+
+**FE only looks at variation inside each city over time**
+
+→ So $R^2 = 0.65$ means our model explains 65% of the changes in HP **within each city over time**
+
+---
+
+What software shows
+
+When you run FE in software:
+
+- You don’t see variation in $\overline{HP}_i$ (the city means)
+- You see how much variation is explained in $\widetilde{HP}_{it}$ (demeaned values)
+
+Some software shows:
+
+- **Within $R^2$** (main one in FE model)
+- **Between $R^2$** (variation in $\overline{HP}_i$)
+- **Overall $R^2$** (uses total variation)
+
+---
+
+LSDV Model
+
+Instead of demeaning, we add dummy variables for each city:
+
+$$
+HP_{it} = \alpha_1 D_{\text{Cairo}} +   \beta_1 crime_{it} + \beta_2 unem_{it} + u_{it}
+$$
+
+- Each city gets its own intercept
+- $R^2$ is usually high → dummies absorb big part of the variation **between cities**
+- Dummies explain **why Cairo has higher HP than Alexandria** (across variation)
+
+---
+
+F-test (optional)
+
+We can compare:
+
+- Restricted model: no dummies
+- Unrestricted (LSDV): with dummies
+
+→ Use F-test to see if dummies are **jointly significant**
+
+→ Usually they are → fixed effects matter
+
+
+
+### 218. Fixed effects, first difference and pooled OLS  - intuition
+
+Why is $FE$ or $FD$ <first difference> better than pooled $OLS$? 
+
+$$
+crime_{it} = \alpha_i + \beta \, unem_{it} + u_{it}
+$$
+
+we expect $\beta>0$
+
+what pooled data does?
+
+add all sample together like its one big cross sectional, plot crime vs unemployment, fit a line
+
+We get $\beta<0$ which doesn’t make sense
+
+$FE/FD$ assume cities are different and try to remove unobserved heterogeneity $\alpha_i$ then compare cities at different time 
+
+For $FD$
+
+They assume that we disregard the difference in crime rate between the three cities <ex: London, Alex, Cairo> and assume the difference is due to city characteristic traits that don’t change across time
+
+Then they fit a regression line for each city, and get that $\beta>0$ indicating increase of unemployment is associated with increase in crime rate
+
+For $FE$
+
+regress time demeaned crime rate on time demeaned unemployment. This will get us the middle point for each city <intersection of pooled and $FD$>
+
+Then fit a line for each city that passes through the midpoint <will be equal to $FD$ here>
+
+
+
+### 219. Fixed effects and first difference comparisons part 1
+
+### 220. Fixed effects and first difference comparisons part 2
+
+### 221. Fixed effects and first difference comparisons part 3
+
+### 222. Random effects estimator - an introduction
+
+### 223. How does random effects work
+
+### 224. Random effects estimators as FGLS
+
+### 225. Random effects estimators - time invariant variable effects benefit
+
+### 226. Random effects vs fixed effects estimators
+
+### 227. Hausman test for random effects vs fixed effects
+
+### 228. Panel data conditions for consistency and unbiasedness of estimators
+
+### 229. Panel data conditions for BLUE estimation and inference
+
+### 230. The linear probability model - an introduction
+
+If we have a dependent variable $y$
+
+$$
+y = \beta_0 + \beta_1 x + \varepsilon \qquad \varepsilon \sim iid(0, \sigma^2)
+$$
+
+But $y$ is a binary variable
+
+$$
+y = \begin{cases}0 &, Not\\
+1 &, college \end{cases}
+$$
+
+The conditional expectation will be a weighted sum
+
+$$
+E[y|x] = \sum_i p(y=y_i)y_i
+$$
+
+where $y_i=0,1$ so it becomes
+
+$$
+p(y=0|x)\cdot0 + p(y=1|x)\cdot 1 = p(y=1|x)
+$$
+
+first term disappeared cuz its multiplied by zero, so
+
+$$
+E[y|x] = \beta_0 + \beta_1 x = p(y=1|x)
+$$
+
+what does $\beta_1$ mean?
+
+change of probability of y given x if x increases by one
+
+$$
+\Delta p(y=1|x)|_{x\to x+1} = \beta_1
+$$
+
+and $\beta_0$ means probability of y given $x=0$
+
+$$
+p(y=1|0)= \beta_0
+$$
+
+### 231. The linear probability model - example
+
+Here is an example, does an individual go to college or not?
+
+$$
+college = \begin{cases}0 &, Not\\
+1 &, college \end{cases}
+$$
+
+The regression equation is
+
+$$
+college = \alpha + \beta_1 \, Pwage + \beta_2 \, CS + \varepsilon
+$$
+
+The conditional expectation is
+
+$$
+E[college|Pwage, CS] = P(college=1|Pwage, CS)
+$$
+
+cuz college = 0 will disappear, so we end up with
+
+$$
+E[college|Pwage, CS] = \alpha + \beta_1 \, Pwage + \beta_2 \, CS
+$$
+
+$\beta_1$ here is the increment of probability of attending school given one extra unit change in pwage
+
+$CS$ is ‘complete school’, a dummy variable
+
+so $\beta_2$ is the increment of probability of attending college if individual completes school
+
+
+
+### 232. The problems with the linear probability model part 1
+
+There are several problems with linear probability model
+
+1. Probabilities of dependent variable can pass the $[0,1]$ range
+
+Example:
+
+$$
+college = 0.3 + 0.21 \, \log Pwage + \varepsilon 
+$$
+
+Hence the probability of attending college is
+
+$$
+P(college=1| \log \, Pwage) = 0.3 + 0.21 \, \log Pwage
+$$
+
+If $\log Pwage =-5$, then the ptobability of attending college is
+
+$$
+P(college=1| \log \, Pwage = -5) = 0.3 + 0.21 \times -5 = -0.7
+$$
+
+But probability can’t be a negative value, and can’t be higher than 1 <ig $\log Pwage = 10$, we get probability of $2.3$>
+
+The main problem: the dependent variable is bounded by the range $0,1$ aka **limited dependent variable** while the independent variable is not limited
+
+$$
+- \infty < \log Pwage < + \infty 
+$$
+
+
+
+### 233. The problems with the linear probability model part 2
+
+Another problem is
+
+1. Heteroscedasticity
+
+If we have the equation <we can add $\alpha$>
+
+$$
+y_i = \beta X_i + \varepsilon
+$$
+
+and we are concerned with $\varepsilon_i$
+
+$$
+\varepsilon_i = \begin{cases}
+- \beta x_i , &y_i=0\\
+1- \beta x_i, &y_i=1
+\end{cases}
+$$
+
+How did we get them?
+
+ substitute in $y$ by 0 or 1 and solve for $\varepsilon$
+
+The conditional variance will be
+
+$$
+Var(\varepsilon_i|x_i) = E[\varepsilon_i^2|x_i] = \sum_j P(y_i = y_j)\cdot \varepsilon_j^2
+$$
+
+Remember that that $E[\varepsilon_i]=0$, this is why we wrote the variance in that form
+
+expand the summation to get
+
+$$
+Var(\varepsilon_i|x_i) = P(y_i =0|x_i)(- \beta x_i)^2 + P(y_i=1|x_i)(1- \beta x_i)^2
+$$
+
+remember that 
+
+$$
+P(y_i =0|x_i) + P(y_i =1|x_i) =1
+$$
+
+so we can simplify by writing
+
+$$
+P(y_i =0|x_i) = 1 - p_i = 1 \beta x_i\\
+P(y_i =1|x_i) = p_i = \beta x_i
+$$
+
+<check the regression model when $y_i=1$>
+
+Using this notation, we get
+
+$$
+Var(\varepsilon_i|x_i) = (1-p_i)(- \beta x_i)^2 + p_i (1- \beta x_i)^2
+$$
+
+replace $p_i$ to get
+
+$$
+Var(\varepsilon_i|x_i) = (1-\beta x_i)(- \beta x_i)^2 + \beta x_i (1- \beta x_i)^2
+$$
+
+Factorize to get
+
+$$
+(1 - \beta x_i) \beta x_i \cdot[\beta x_i + 1 - \beta x_i]
+$$
+
+Second term vanishes so we get
+
+$$
+Var(\varepsilon_i|x_i) = (1 - \beta x_i) \beta x_i = f(x_i)
+$$
+
+variance is a function of $x_i$ so we have heteroscedasticity, the estimators are not blue and should use $WLS$
+
+
+
+### 234. The problems with the linear probability model part 3
+
+The last problem is 
+
+1. Non normality
+
+We know that the error term has the values
+
+$$
+\varepsilon_i = \begin{cases}
+- \beta x_i , &y_i=0\\
+1- \beta x_i, &y_i=1
+\end{cases}
+$$
+
+So the distribution is discrete <just two bars>, so its not normal, we will have to do **non normal inference**
+
+
+
+### 235. Nonlinear discrete choice models - an introduction
+
+We said that the linear model
+
+$$
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+$$
+
+has a problem that the right side can result in values $[-\infty, \infty]$  while dependent variable is $[0,1]$
+
+We can plot it to see the areas where value passes 0 and 1. We need a **nonlinear** transformation that will bound the values between 0 and 1
+
+Or to be more clearer, $f(- \infty)=0, f(\infty)=1$
+
+two candidates are **logit**, **probit** models
+
+
+
+### 236. Discrete choice models - introduction to logit and Probit
+
+We made the equation
+
+$$
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+$$
+
+But this resulted in nonsensical results, so we decided to do a transformation using a function $f$ that has properties of $f(- \infty) = 0, f(\infty)=1$ so result be in the interval $[0,1]$
+
+First candidate is the **logit model**
+
+$$
+\boxed{F(z) = \dfrac{\exp (z)}{1 + \exp (z)} = L(z)}
+$$
+
+if $z \to -\infty$, numerator will be $e^{- \infty}$  so numerator $N \to 0$ and denominator tends to $D \to 1$, then the ratio $F \to 0$
+
+If $z \to \infty$, 1 in the denominator becomes unimportant, so 
+
+$$
+F \to \dfrac{e^z}{e^z}=1
+$$
+
+conditions satisfied
+
+The second candidate is the **probit model**
+
+$$
+\boxed{F(z)= \int^z_{-\infty} \phi(u)du}
+$$
+
+where $\phi$ is the normal pdf, to visualize, plot the pdf of the normal distribution, $F(z)$ will be summation from negative infinity to $z$
+
+If $z  \to - \infty$, it will be on the left tail at its end, $F(z)\to 0$ cuz there are no data under its tail
+
+if $z \to \infty$, it will be on the right tail at its end, $F(z)\to 1$ cuz its property of pdf
+
+Notice that integral of pdf is the $CDF$
+
+The difference
+
+in logit, we can write the exact function while in probit, we have to integrate the $pdf$
+
+Notice that both the probit and the logit result in a $\dfrac 1 2$ if $z=0$ 
+
+Dealing with logit is easier, but we use probit sometimes if the error term behaves as a normally distributed
+
+
+
+### 237. Discrete choice models - partial effect part 1
+
+Same example
+
+$$
+P(college=1| \log \, pwage) = \alpha+ \beta \, \log pwage
+$$
+
+We discussed the CDF of probit $\Phi$ and the logit function $L$
+
+Now we interpret what happens if $\log pwage$ increases by 1
+
+$$
+\Delta P = F(\alpha + \beta \log Pwage + 1) -  F(\alpha + \beta \log Pwage) \neq \beta
+$$
+
+Cuz $F$ is non linear, the difference will not be equal to $\beta$
+
+Solution:
+
+check how slope changes 
+
+$$
+\dfrac{\delta P}{\delta \log Pwage} = \beta F'(\alpha + \beta \, \log Pwage) = \beta f(\alpha + \beta \, \log Pwage)
+$$
+
+where $f$ is the differential <think of $pdf$ incase of probit> . Notice that the change is $\beta$ multiplied by other stuff
+
+why? draw a graph, we know the graph looks like a sleeping s. when wage is small, a one unit change in it will not affect the probability <almost zero>. Same for high wages <1 million is like 1 billion here u must have attended college>
+
+But at maximum slope around the middle, a small shift on right or left will cause a high change in probability
+
+
+
+### 238. Discrete choice models - partial effect part 2
+
+Here is another example: probability of having civil war
+
+$$
+P(CW_i=1|landlocked_i + GDP_i) = F(\alpha + \beta_1 \, landlocked + \beta_2 GDP_i)
+$$
+
+And we want to estimate the partial effect of GDP, so we take partial derivative
+
+$$
+\dfrac{\delta P_i}{\delta GDP_i} = \beta_2f(\alpha + \beta_1 \, landlocked_i + \beta_2 GDP_i)
+$$
+
+so the effect changes based on value of the independent variables, but what if we want just one answer?
+one solution is to take the average
+
+$$
+\dfrac{\delta P_i}{\delta GDP_i} = \beta_2f(\alpha + \beta_1 \, \overline{landlocked_i} + \beta_2 \overline{ GDP_i})
+$$
+
+
+
+### 239. Non linear discrete choice model estimation
+
+We have the function
+
+$$
+y = F(\alpha+ \beta_1 x_1 + \beta_2x_2 + \dots + \beta_px_p)+ \varepsilon
+$$
+
+we have error term, so we try to minimize it
+
+$$
+\sum \varepsilon_i^2 = \sum[y_i - F(\alpha + \beta_1 x_{1i}+ \beta_2 x-{2i}+ \dots+ \beta_p x_{pi})]^2
+$$
+
+which is like in $OLS$, but with the addition of $F$
+
+To estimate effect of $\beta$, we differentiate with respect to it
+
+$$
+\dfrac{\delta s}{\delta \hat \beta_1} = -2 \sum_i x_{1i}f(\hat \alpha + \hat \beta_1 x_{1i}+ \dots + \hat \beta_p x_{pi})[y_i - F()]
+$$
+
+where $f$ is the differential, then we set the differential to zero
+
+unlike OLS, we don’t get a closed form solution for $\hat \beta$ cuz its more complicated. SO we do **numeric search** to get a number as close as possible. This is called **Nonlinear LS**
+
+**Nonlinear LS** is messy. we use instead **maximum likelihood**
+
+General idea of maximum likelihood:
+
+we have a population, get a sample from it and estimate the probability that our dependent sample we estimate is equal to the true dependent variable
+
+$$
+p_i(y_i=y_j)
+$$
+
+That was for one individual, for multiple individuals we make
+
+$$
+p = p_1 \times p_2 \times \dots \times p_n
+$$
+
+The idea with maximum likelihood is we choose the estimates $\hat \beta$ that maximize the probability <likelihood>
+
+
+
+### 240. Maximum likelihood estimation - an introduction part 1
+
+UK has a population of 70 million, we can’t access them all, so we get a sample of size $N=10$
+
+We want to model the probability that a randomly chosen individual is male. Let $\theta$ be the proportion of males in the population, and let each observation $x_i$ indicate whether the $ith$ individual is male
+
+think of the **probability mass function** $f(x_i \mid \theta)$ where $\theta$ is the unknown proportion of males, and $x_i$ is a dummy variable indicating if the individual is male.
+
+$$
+x_i = \begin{cases}
+1, &male\\
+0, &female
+\end{cases}
+$$
+
+and the function has a value of 
+
+$$
+f(x_i|\theta) = \theta^x_i(1-\theta)^{1-x_i}
+$$
+
+For example, if $x=1$
+
+$$
+f(1|\theta) = \theta^1(1-\theta)^0= \theta
+$$
+
+<If I know coin is biased with heads 70%, probability of heads is 0.7>
+
+and $x=0$
+
+$$
+f(0|\theta) = \theta^0(1-\theta)^1= 1-\theta
+$$
+
+What if we have many individuals?
+
+$$
+f(x_1,x_2,\dots,x_N|\theta) = \theta^{x_1}(1-\theta)^{1-x_1}\theta^{x_2}(1-\theta)^{1-x_2}\dots
+$$
+
+We can clean up
+
+$$
+f(x_1,x_2.\dots,x_N|\theta) =\prod^n_{i=1} \theta^{x_i}(1-\theta)^{1-x_i}
+$$
+
+This is equivalent to asking if first individual was male, second was male and so on
+
+$$
+\begin{align*}
+&f(x_1,x_2,\dots,x_N|\theta) \\ &=
+\prod^n_{i=1} \theta^{x_i}(1-\theta)^{1-x_i}
+\\
+&=P(X_1=x_1,X_2=x_2,\dots,X_n=x_n)
+\end{align*}
+$$
+
+This joint probability $f(x_1, \dots,x_n​∣\theta)$ or equivalently  $P(X_1 = x_1, \dots, X_n = x_n \mid \theta)$, when viewed as a function of $\theta$ given fixed data, is called the likelihood function.
+
+<if i saw 7 heads and 3 tails, what bias makes this data more likely>
+
+But the idea is that we don’t know the $\theta$, 
+
+we maximize the likelihood function with respect to $\theta$ to find the value of $\theta$ that best explains the observed sample.
+
+But because differentiation $\prod \theta^{x_i}(1-\theta)^{1-x_i}$ is hard, we use log to turn product into summations
+
+### Extra example:
+
+You flipped a coin three times: got heads, heads, tails
+
+If I assume $\theta = 0.6$ what's the probability of observing this exact outcome?
+
+$$
+P(x∣θ=0.6)=(0.6)^2⋅(1−0.6)^1=0.6^2-0.4=0.144
+$$
+
+If the coin is 60% biased toward heads, this sample has a 14.4% chance
+
+What $\theta$ makes this data most likely?
+
+$$
+\begin{align*}
+ℓ(θ)&=logL(θ∣x)=2logθ+log(1−θ)\\
+
+\frac{d\ell}{d\theta} &= \frac{2}{\theta} - \frac{1}{1 - \theta}
+\\
+\dfrac2\theta &= \dfrac1{1−θ}\\
+⇒\hat θ &= \dfrac23
+
+\end{align*}
+$$
+
+
+
+### 241. Maximum likelihood estimation - an introduction part 2
+
+Continuing with our example, we have a population of 70 million in UK population, and there is $\theta$ that indicates probability of being a male
+
+We only have a sample and we try to get $\hat \theta$  to estimate $\theta$, to do so, we use likelihood
+
+$$
+L = \prod\theta^{x_i}(1-\theta)^{1-x_i}
+$$
+
+likelihood represents probability of getting the data given the $\theta$
+
+To get $\theta$, we differentiate
+
+$$
+\dfrac{\delta L}{\delta \theta} = 0 \to \hat \theta_{ML}
+$$
+
+But differentiation products is so hard, but we can turn it into sums if we take the log
+
+$$
+l = \log L = \log(\prod\theta^{x_i}(1-\theta)^{1-x_i})
+$$
+
+Then differentiate and we will get the $\hat \theta_{ML}$
+
+$$
+\dfrac{\delta L}{\delta \theta} = 0 \to \hat \theta_{ML} \leftarrow \dfrac{\delta l}{\delta \theta} =0 
+$$
+
+when we take the log, the product will turn into summation
+
+$$
+l = \sum \log[\theta^{x_i}(1-\theta)^{1-x_i}]
+$$
+
+Remember the two log rules
+
+1. $\log(ab ) = \log a + \log b$
+2. $\log a^b = b \log a$
+
+Using these properties we can get
+
+$$
+l = \sum x_i \log \theta + (1-x_i) \log(1-\theta)
+$$
+
+we know that $\theta$ is constant, so get it out of the sum
+
+$$
+l = \log \theta \sum x_i + \log (1- \theta)\sum (1-x_i)
+$$
+
+Remember that $\sum x_i = N \bar x$ to get
+
+$$
+l = \log \theta N\bar x + \log(1 - \theta) N \bar x
+$$
+
+
+
+### 242. Maximum likelihood estimation - an introduction part 3
+
+Continuing with our example
+
+$$
+l = \log \theta N\bar x + \log(1 - \theta) N \bar x
+$$
+
+To maximize, we need to differentiate
+
+$$
+\dfrac{\delta l}{\delta \theta} = \dfrac{N \bar x}{\hat \theta} - \dfrac{N(1 - \bar x)}{1 - \hat \theta} = 0
+$$
+
+The second fraction is negative due to **chain rule**
+
+We get
+
+$$
+\dfrac{N \bar x}{\hat \theta} = \dfrac{N(1 - \bar x)}{1 - \hat \theta} 
+$$
+
+Cancel $N$ from both sides then multiply denominator by nominarator
+
+$$
+\dfrac{\bar x}{\hat \theta} = \dfrac{(1 - \bar x)}{1 - \hat \theta} 
+$$
+
+$$
+\begin{align*}\bar x (1 - \hat \theta) &= \hat \theta(1 - \bar x)\\
+\bar x - \hat \theta \bar x &= \hat \theta - \hat \theta \bar x
+\end{align*}
+$$
+
+cancel $\hat \theta$ from both sides to get
+
+$$
+\hat \theta_{ML} = \bar x = \dfrac{\sum x_i}{N}
+$$
+
+What does that mean?
+
+the $\theta$ value which will maximize the likelihood of the data <individuals being males>, is the sample mean <fraction of individuals in sample being males>
+
+
+
+### 243. Why maximize log likelihood?
+
+Why is it ok to use ‘$\log$’?
+
+Here is the setting: we have a population with a defined probability density function $f(x_i|\theta)$ but we don’t have access to the population, so we take sample and estimate it
+
+Cuz we don’t know $\theta$, the sample probability density function is different from the population $f(x_i| \hat \theta)$
+
+If we have a random sample, we  can get $\hat \theta$ by multiplying product of individual probabilities
+
+$$
+L = \prod f(x_i| \theta)
+$$
+
+we don’t know $\theta$, so we differentiate and send it to zero to get $\hat \theta$
+
+$$
+\dfrac{\delta L}{\delta \theta} \to \hat \theta_{ML}
+$$
+
+But differentiating product is so hard so we take $\log$, both will give the same $\hat \theta$
+
+But why?
+
+if we plot $l \, vs \, L$ where $L$ on x axis, the curve will be **increasing**
+
+so if $L$ increases, $l$ increases <monotonic property>
+
+If we plot $\theta$ on x axis and $L, l$ on y axis, we will get the exact downward parabola
+
+Is this true for all transformations not just $\log$?
+
+no, the another transformation when plotted against $L$ can give us a **wiggly** line which we can’t count on 
+
+
+
+### 244. The Cramer Rao lower Bound: inference in maximum likelihood
+
+We covered the estimation, but how to make inference?
+
+If we the estimator is unbiased then the variance is greater than CRLB
+
+$$
+\boxed{E[\hat \theta] = \theta \to Var(\hat \theta)\ge CRLB}
+$$
+
+But maximum likelihood estimator  is biased sometimes so
+
+$$
+E[\hat \theta_{ML}] \neq 0 \to Var(\hat \theta_{ML})> CRLB
+$$
+
+So what is Cramer Rao Lower Bound?
+
+$$
+\boxed{CRLB = [I(\theta)]^{-1}}
+$$
+
+Its the inverse information matrix. Information matrix is
+
+$$
+I(\theta) = - E[\dfrac{\delta^2 \log L}{\delta \theta \delta \theta'}]
+$$
+
+Its the negative expectation of the second derivative with respect to $\theta$ and its transpose, where $\theta$ is a vector
+
+Cuz $\hat \theta_{ML}$ are consistent, they approach $\theta$, using CLT
+
+$$
+N^{\frac 1 2}(\hat \theta_{ML} - \theta) \to N(0,H(\theta))
+$$
+
+It approaches normal distribution with mean $0$  and variance of $H(\theta)$
+
+We use this to derive asymptotic distribution <approximate>
+
+$$
+\hat \theta_{ML} \to N(\theta, I(\theta)^{-1})
+$$
+
+
+
+### 245. Maximum likelihood - Cramer Rao lower bound intuition
+
+What are we doing??
+
+Imagine that we have data that defines Likelihood
+
+we plot $\theta$ on x axis and $L$ on y axis
+
+If we get  a bell shaped curve, The peak will be our estimator $\hat \theta_{ML}$
+
+The variance of the estimator will be asymptotically
+
+$$
+\boxed{Var(\hat \theta_{ML}) = I^{-1}(\theta) = \left[- E \left( \dfrac{\delta^2 L}{\delta \theta^2}\right)\right]^{-1}}
+$$
+
+But what is that and why??
+
+The derivative can be considered as the derivative of the gradient <think of gradient as slope>
+
+Since that we are dealing with a downward parabola, the gradient will be positive and decrease till its zero then becomes negative, so the second derivative is negative
+
+We put $-$ sign before the expectation so the variance becomes positive
+
+But why the relationship?
+
+On the same graph from above, if we plot a new function <more efficient, imagine the bell shape is pulled up>
+
+The two functions are centered around $\hat \theta$, but the pulled curve is better <more efficient>
+
+Remember that any point on x axis under the curve is a possible estimator, in the pulled up curve case, we have fewer options hence more confidence
+
+Or in other words
+
+$$
+Var(\hat \theta_{ML}[new])< Var(\hat \theta_{ML}[old])
+$$
+
+why inverse relationship between variance and second derivative? cuz in the formula we take inverse $-1$
+
+If we zoom on the peak of the pulled curve, we will find the second derivative is changing very rapidly <high curvature>and bigger than the previous curve
+
+The high curvature, shows how confident we are in the estimator, hence the relation with the variance
+
+In other words, the formula just states that
+
+$$
+Var(\hat \theta_{ML}) \sim \dfrac 1 {curvature}
+$$
+
+**Big Note**
+
+**The information matrix** is just the **Curvature**
+
+
+
+### 246. Likelihood ratio test - introduction
+
+Likelihood ratio statistic is calculated using
+
+$$
+\boxed{LR = 2\left((\log L|\hat \theta_{ML})- \log L(\theta_{H_0})\right)\sim \chi^2_q}
+$$
+
+Why though?
+
+back to our plot y axis has likelihood of $y|\theta$ and $\theta$ on x axis
+
+our null hypothesis is 
+
+$$
+H_0: \theta = \theta_{H_0} \qquad H_1: \theta > \theta_{H_0}
+$$
+
+In practice, $H_0$ is usually zero to measure the effect.
+
+Imagine the bell shaped curve, $\hat \theta_{ML}$ is under its peak while $\theta_{H_0}$ is on the side 
+
+we measure the distance on the y axis corresponding to the two $\theta's$. Then we check if this distance is significant or not
+
+If the distance is large, $LR \uparrow$ reject $H_0$
+
+However, if another curve is wide, the peak will be low, so the distance will be small $LR \downarrow$ fail to reject $H_0$ cuz the small distance may be due to sampling error
+
+Remember that $\chi^2$ probability is around zero, so any high value is usually rejected  
+
+
+
+### 247. Wald test - introduction
+
+Wald test has the following form
+
+$$
+\boxed{w = (\hat\theta - \theta_0)'\left[Var(\hat \theta) \right]^{-1}(\hat \theta - \theta_0) \sim \chi^2_q}
+$$
+
+In the univariate case
+
+$$
+\boxed{w = \dfrac{(\hat \theta - \theta_0)^2}{Var(\hat \theta) } \sim \chi^2_1}
+$$
+
+Intuition:
+
+Plot $L(y| \theta)$ on y axis against $\theta$ on x axis
+
+Note that $\theta_0  == \theta_{H_0}$ just easier notation
+
+add the bell shaped curve, $\hat \theta$ is under the peak while $\theta_0$ is at the sides
+
+we measure the distance between the two $\theta's$ on the x axis, if its big, we reject $H_0$
+
+But what does the variance mean here?
+
+Add another likelihood <another curve> witch has peak under the previous peak aka same $\hat \theta$, but this time its so wide <inefficient>
+
+In the first curve, peak was high, variance is smaller than distance between $\theta's$ squared, so ratio is large, and we reject
+
+while in the inefficient curve, the variance is so big, we are not confident, even distance squared is near the variance resulting in small  ratio aka failing to reject
+
+
+
+### 248. Score test (Lagrange Multiplier test) - introduction
+
+Last test is the score test
+
+**Score** is a vector that contains derivative of log likelihood with respect to the $\theta's$ and each derivative is considered a function of the parameter $\theta$
+
+$$
+\begin{align*}S &= \begin{bmatrix}\dfrac{\partial}{\partial \theta_1} \\\dfrac{\partial}{\partial \theta_2} \\\vdots\end{bmatrix}=\begin{bmatrix}f_1(\theta) \\f_2(\theta) \\\vdots\end{bmatrix}\end{align*}
+$$
+
+The test is called $LM$
+
+$$
+\boxed{LM = S(\theta_0)'[Var(\theta_0)]^{-1}S(\theta_0) \sim \chi^2_q}
+$$
+
+Notice that all the $\theta's$ are under the null hypothesis, we don’t even estimate $\hat \theta$
+
+In the univariate case,
+
+$$
+\boxed{LM = \dfrac{S(\theta_0)^2}{Var(\theta_0)}} 
+$$
+
+Intuition:
+
+Under the maximum likelihood, $S(\hat \theta) = 0$ <remember that S is just some derivatives, and $\hat \theta$ is the result when derivative is zero> 
+
+But here, we evaluate score at $\theta_0$ which is not zero $S(\theta_0) \neq 0$
+
+plot $L$ on y axis, $\theta$ at x axis.
+
+ we know that $\theta_0$ will be near the side, not under the peak. Score is the gradient <think slope>, the score <slope> is positive, would be zero at the peak, so the numerator is positive and large, hence reject $H_0$
+
+But if $\theta_0$ is close towards the peak, score <slope> will be around zero, so we fail to reject $H_0$. We use this $\theta_0$  
+
+
+
+### 249. Maximum likelihood estimators of population mean and variance part 1
+
+Population has a process
+
+$$
+x_i = \mu +\varepsilon_i \qquad \varepsilon_i \sim N(0, \sigma^2)
+$$
+
+we don’t have the full population, so we take a sample and estimate
+
+We will estimate using $ML$. First we need is the probability distribution for $x_i$
+
+$$
+f(x_i| \mu, \sigma^2)
+$$
+
+To find it, check the process
+
+$$
+\varepsilon_i = x_i - \mu
+$$
+
+and $\varepsilon_i$ is normal with mean zero and variance $\sigma^2$, so will be the probability distribution <normal>
+
+$$
+\boxed{f(x_i|\mu, \sigma^2) = \dfrac{1}{\sqrt{2 \pi \sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}}
+$$
+
+But that was for one variable, cuz they are independent, all the individuals probability distribution will be the product <and consider it log likelihood due to equivalence principle>
+
+$$
+L = \prod \dfrac{1}{\sqrt{2 \pi \sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+$$
+
+the 2$\pi$ is a constant, get it out of the product
+
+$$
+L = \left( \dfrac{1}{\sqrt{2 \pi \sigma^2}} \right)^N \prod e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+$$
+
+Good luck differentiating that, take log
+
+Remember these log rules
+
+1. $\log e^x =x$
+2. $\log ab = \log a +\log b$
+3. $\log a^b = b \log a$
+
+Using these rules, we get
+
+$$
+\log L = N \log \left(\dfrac{1}{\sqrt{2 \pi \sigma^2}} \right) - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+$$
+
+easier, but we can further simplify on the fraction
+
+$$
+\log L = \cancel{N \log 1} - N \log \sqrt{2 \pi \sigma^2} - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+$$
+
+
+
+### 250. Maximum likelihood estimators of population mean and variance part 2
+
+we reached
+
+$$
+\log L = \cancel{N \log 1} - N \log \sqrt{2 \pi \sigma^2} - \dfrac{1}{2\sigma^2}\sum(x_i - \mu)^2
+$$
+
+we can simplify even more by turning sqrt into fraction $\dfrac 1 2$ then using log rule
+
+$$
+\log L = - \dfrac{N}{2} \log 2 \pi - \dfrac{N}{2} \log \sigma^2 - \dfrac{1}{2\sigma^2} \sum(x_i - \mu)^2
+$$
+
+Note: we wrote $\sigma^2$ and didn’t apply log rule on it, cuz we are trying to estimate it
+
+To estimate $\mu$, differentiate with respect to it
+
+$$
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu) 
+$$
+
+set it equal to zero and  use $\hat \mu$
+
+$$
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \hat \mu)  = 0
+$$
+
+multiply both sides by the constant $\sigma^2$ to get
+
+$$
+\sum(x_i - \mu) = 0
+$$
+
+which means
+
+$$
+\begin{align*}  N\hat \mu &= \sum x_i\\
+\hat \mu  &= \dfrac 1 N \sum x_i \\
+\hat \mu &= \bar x
+\end{align*}
+$$
+
+
+
+### 251. Maximum likelihood estimators of population mean and variance part 3
+
+This time, we differentiate with respect to variance, here is the log likelihood
+
+$$
+\log L = - \dfrac{N}{2} \log 2 \pi - \dfrac{N}{2} \log \sigma^2 - \dfrac{1}{2\sigma^2} \sum(x_i - \mu)^2
+$$
+
+Differentiate with respect to $\sigma^2$
+
+$$
+\dfrac{\delta l}{\delta \sigma^2} = -\dfrac{N}{2 \sigma^2} + \dfrac{1}{2 \sigma^4} \sum(x_i - \mu)^2
+$$
+
+Note:
+
+why $\sigma^4?$ think of $\sigma^2 ==x$ so after differentiation it will be $x^2 == \sigma^4$
+
+Now make it equal to zero
+
+$$
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+$$
+
+After some arrangements we get
+
+$$
+\hat \sigma^2_{ML} = \dfrac{1}{N} \sum(x_i - \hat \mu)^2
+$$
+
+which is biased but consistent
+
+
+
+### 252. Maximum likelihood: Normal error distribution - estimator variance part 1
+
+How to get the variance of maximum likelihood estimators?
+
+we get the estimators for $\mu, \sigma^2$ using these functions
+
+$$
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+$$
+
+$$
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu) 
+$$
+
+To get the variance, check information matrix <which will be matrix cuz we have two estimators>
+
+$$
+I = (\mu, \sigma^2) = -E\left[ \dfrac{\delta^2 l}{\delta \theta \delta \theta'} \right] \qquad \theta = \begin{bmatrix} 
+\mu\\
+\sigma^2
+\end{bmatrix}
+$$
+
+So the information matrix here will be
+
+$$
+\mathcal{I}(\theta) = - E 
+
+\begin{bmatrix}\dfrac{\partial^2 \ell}{\partial \mu^2} & \dfrac{\partial^2 \ell}{\partial \mu \, \partial \sigma^2} \\\dfrac{\partial^2 \ell}{\partial \sigma^2 \, \partial \mu} & \dfrac{\partial^2 \ell}{\partial (\sigma^2)^2}\end{bmatrix}
+$$
+
+But we don’t know the parameters $\mu, \sigma^2$, luckily, 
+
+$$
+I(\hat \mu, \hat \sigma^2) \to I(\mu,  \sigma^2)
+$$
+
+why? cuz our estimators are themselves consistent
+
+
+
+### 253. Maximum likelihood: Normal error distribution - estimator variance part 2
+
+$$
+\mathcal{I}(\theta) = - E 
+
+\begin{bmatrix}\dfrac{\partial^2 \ell}{\partial \mu^2} & \dfrac{\partial^2 \ell}{\partial \mu \, \partial \sigma^2} \\\dfrac{\partial^2 \ell}{\partial \sigma^2 \, \partial \mu} & \dfrac{\partial^2 \ell}{\partial (\sigma^2)^2}\end{bmatrix}
+$$
+
+we start by getting the off diagonal values
+
+knowing that 
+
+$$
+\dfrac{\delta l}{\delta \hat \sigma^2} = -\dfrac{N}{2 \hat \sigma^2} + \dfrac{1}{2 \hat \sigma^4} \sum(x_i -\hat \mu)^2 = 0
+$$
+
+and
+
+$$
+\dfrac{\delta l}{\delta \mu} = \dfrac{1}{\sigma^2}\sum(x_i - \mu) 
+$$
+
+we calculate
+
+$$
+\dfrac{\delta^2l}{\delta \mu \delta \sigma^2} = - \dfrac{1}{(\hat \sigma^2)^2} \sum(x_i - \hat \mu) = 0
+$$
+
+Remember that first differential was zero, so the bracket $\sum(x_i - \hat u )$ = 0, hence second differential  is also zero
+
+For the diagonal elements
+
+$$
+\dfrac{\delta^2 l}{\delta \mu ^2} = \dfrac{-N}{\hat\sigma^2}
+$$
+
+$$
+\dfrac{\delta^2 l}{\delta (\sigma^2)^2} = \dfrac{N}{2 \sigma^4} - \dfrac{2}{2\sigma^6}\sum(x_i - \hat \mu)^2
+$$
+
+substitute the summation with $N\sigma^2$ to get
+
+$$
+\dfrac{\delta^2 l}{\delta (\sigma^2)^2} = \dfrac{N}{2 \sigma^4} - \dfrac{2N\hat \sigma^2 }{2 \hat \sigma^6} = - \dfrac{N}{2 \hat \sigma^4}
+$$
+
+
+
+### 254. Maximum likelihood: Normal error distribution - estimator variance part 3
+
+Finally, substitute in the information matrix
+
+$$
+I(\hat \mu, \hat \sigma^2) = - \begin{bmatrix}
+\dfrac{-n}{\hat \sigma^2}& 0\\
+0 & \dfrac{-n}{2\hat \sigma^4}
+\end{bmatrix}
+$$
+
+Getting inverse is easy cuz its diagonal
+
+$$
+I(\hat \mu, \hat \sigma^2)^{-1} = - \begin{bmatrix}
+\dfrac{\hat \sigma^2}{n}& 0\\
+0 & \dfrac{2\hat \sigma^4}{n}
+\end{bmatrix} = CRLB
+$$
+
+If we let maximum likelihood estimator 
+
+$$
+\hat \theta = \begin{bmatrix}\hat \mu \\
+\hat \sigma^2
+\end{bmatrix}
+$$
+
+Then by CLT, 
+
+$$
+\hat \theta \to N(\theta, I(\hat \mu, \hat \sigma^2)^{-1})
+$$
+
+cuz the diagonals are zero, its means we have no covariance so we can consider each estimator in isolation
+
+$$
+\hat \mu \to N(\mu, \dfrac{\hat \sigma^2}{n}) \qquad \hat \sigma^2 \to(\sigma^2, \dfrac{2 \hat \sigma^4}{n})
+$$
+
+so we can use inference like $t$ tests
+
+
+
+### 255.  Maximum likelihood: Bernoulli random variable estimator variance part 1
+
+### 256. Maximum likelihood: Bernoulli random variable estimator variance part 2
+
+### 257. Least squares as a maximum likelihood estimator
+
+### 258. Least squares comparison with maximum likelihood - proof that OLS is BUE
+
+### 259. Maximum likelihood estimation of Logit and Probit
+
+### 260. Log odds interpretation of logistic regression
+
+### 261. Probit model as a result of a latent variable model
+
+### 262. Simultaneous equation models - an introduction
+
+If status and policy determine the wage
+
+$$
+wage = \beta_0 + \beta_1 \, status + \beta_2 \, policy + \varepsilon_1
+$$
+
+and status is a function of wage
+
+$$
+status = \gamma_0 + \gamma_1\, wage + \gamma_2 \, marriage + \varepsilon_2
+$$
+
+notice that wage, the dependent became independent, same for status
+
+SO we have **simultaneality bias,** meaning we have bias due to endogeneity, these equations are called $SEM$
+
+Solution: substitute in one equation 
+
+$$
+wage  = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_1 \, wage + \beta_1 \gamma_2 \, Marrianfe + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+$$
+
+then isolate for wage
+
+$$
+(1-\beta_1\gamma_1)wage = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_2 \, marriage + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+$$
+
+Notice that $\beta_0 + \beta_1 \gamma_0$ is just a constant
+
+Notice the problem: wage is a function of status which itself is a function of wage and $\varepsilon_2$, hence wage is correlated with $\varepsilon_2$ so we have **endogeneity** 
+
+OLS is biased and inconsistent
+
+If we do the same equation for status, we will get that its correlated with $\varepsilon_1$. OLS fails
+
+
+
+### 263. Simultaneous equation models - reduced form and structural equations
+
+Continuing with last example
+
+$$
+\begin{align*}
+wage &= \beta_0 + \beta_1 \, status + \beta_2 \, policy + \varepsilon_1
+\\
+status &= \gamma_0 + \gamma_1\, wage + \gamma_2 \, marriage + \varepsilon_2\end{align*}
+$$
+
+These two equations are called structural equations cuz they represent the structure in the economy
+
+This mess
+
+$$
+wage  = \beta_0 + \beta_1 \gamma_0 + \beta_1 \gamma_1 \, wage + \beta_1 \gamma_2 \, Marriage + \beta_1 \varepsilon_2 + \beta_2 \, policy + \varepsilon_1
+$$
+
+That we derived, can be written as
+
+$$
+wage = \delta_0 + \delta_1 policy +\delta_2 \, Marriage + v_1
+$$
+
+and status will be
+
+$$
+status = \eta_0 + \eta_1 \, policy + \eta_2 \, Marriage + v_2
+$$
+
+these two forms are called **reduced form** cuz its just rewriting equations and we lost the theoretical meaning
+
+But now we can use OLS and it will be unbiased and consistent, but there is no way to know $\beta$ from estimating $\delta$
+
+
+
+### 264. Simultaneous equation models - parameter identification
+
+**Identification** means ability of estimating parameters
+
+Famous example:
+
+quantity supplied is a function of price and weather
+
+quantity demanded is a function of price 
+
+$$
+\begin{align*}
+q &= \beta_0 + \beta_1 P + \beta_2 Z + \varepsilon_1\\
+q &= \gamma_0 + \gamma_1 P + \varepsilon_2
+\end{align*}
+$$
+
+we expect $\beta_1 >0, \gamma_1 <0$
+
+OLS fails, so we use $Z$ as an instrument  for $P$ in the demand equation
+
+Because $Z$ is contained in the supply equation so its correlated with $P$ but its not contained in the demand so its not correlated with $\varepsilon_2$ hence a good instrument for estimating $\gamma_1$
+
+But we can’t use $Z$ to estimate $\beta_1$
+
+ Why?
+
+graph it, $P$ on y axis, $Q$ on x axis, if $Z$ changes, supply curve shifts right or left, but demand stays the same. we get a new $Q$
+
+ If we keep changing $Z$, and draw a line of the shifts of supply, we can deduce the demand curve, other way is not true
+
+What we need is something to shift demand and keep supply constant, so we can deduce the supply curve too
+
+
+
+### 265. Simultaneous equation models: order conditions for parameter identification
+
+$$
+\begin{align*}
+q &= \beta_0 + \beta_1 P + \beta_2 Z_1 + \varepsilon_1\\
+q &= \gamma_0 + \gamma_1 P + \gamma_2 Z_2 +\varepsilon_2
+\end{align*}
+$$
+
+Now we have two exogenous variables $Z_1, Z_2$ so we can identify $\beta, \gamma$
+
+But to do so, we need to meet the **rank condition** which states
+
+> for each equation, there must be at least as many exogenous variables which aren’t included in that equation which can act as IV for each endogenous variable in that equation
+> 
+
+Example
+
+$$
+\begin{align*}
+y_1 &= \beta_0 + \beta_1 y_2 + \delta_2 Z_1  + \delta_2 Z_2 + \delta_3 Z_3 + \varepsilon_1\\
+y_2 &= \alpha_0 + \alpha_1 y_1 + \alpha_2 y_3 + \gamma_1Z_1 + \gamma_2 Z_4 + \varepsilon_2\\
+y_3 &= \eta_0 + \eta_1 y_1 + \eta_2 Z_3 + \varepsilon_3 
+\end{align*}
+$$
+
+to estimate $y_2$ in first equation, we need exogenous variable not included in the equation, like $Z_4$, so its full identified
+
+For $y_1, y_3$ in the second equation, we can use $Z_1, Z_3$ cuz they are not included, fully identified
+
+for $y_1$ in third equation, we can use $Z_1, Z_2,Z_3$, we have **overidentification**
+
+Anyway, we can estimate the full system, this was the **order condition**
+
+
+
+### 266. Monte Carlo simulation for estimators: an introduction
+
+We assume a population process like
+
+$$
+y_i = \alpha + \beta x_i + \varepsilon_i
+$$
+
+we take sample to estimate the parameters. If we take $N$ samples, each sample will get us a slightly different $\hat \beta$ but it satisfies some properties like unbiasedness, consistent and efficiency
+
+Problem: we don’t know the population parameter
+
+Solution: use Monte Carlo simulation
+
+1. specify population process with known parameters and distribution for error term  $y_i = \alpha + \beta x_i + \varepsilon_i \quad \varepsilon_i \sim N(0, \sigma^2)$
+2. Generate multiple samples using the process
+3. get estimator for the parameters in each sample
+4. plot the estimators in a histogram <sampling distribution>
+5. If its centered around $\beta$, its unbiased, 
+6. can check its variance compared to other estimators <like GLS>
+7. can check for consistency <increase sample size from 100 to 10,000 and check if it gets closer>
+
+Benefits of simulation:
+
+1. examine properties of new estimators <LS are boring and known>
+
+
+
+### 267. Monte Carlo simulation for ordinary least squares
+
+To do the simulation
+
+1. generate random normal data for $x$ multiplied by 4 <to have higher variance than error term>
+2. generate random normal data for the error term
+3. calculate $y$ where $y_i = \alpha + \beta x_i + \varepsilon_i$ <$\alpha=1, \beta=1$>
+4. generate 1000 samples
+5. apply $OLS$ on each sample
+6. draw histogram for the estimator
+7. check for unbiasedness
+8. increase sample size and check for consistency
+
+
+
+### 268. Monte Carlo simulation of  omitted variable bias in least squares
+
+To check for omitted variable bias
+
+1. generate random normal data for $x_1$ multiplied by 4 <to have higher variance than error term>
+    
+    $$
+    x_1 \sim 4 \cdot randn()
+    $$
+    
+2. generate another variable $x_2$ which is correlated with $x_1$
+    
+    $$
+    x_2 = x_1 \cdot 0.35 + randn()
+    $$
+    
+3. Let $y$ be a function of $x_1, x_2$
+    
+    $$
+    y = \alpha + \beta_1 x_1 + \beta_2 x_2 + randn()
+    $$
+    
+4. generate 100 samples
+5. Use OLS using $x_1$ only
+    
+    $$
+    y = \alpha + \beta_1 x_1 + \varepsilon
+    $$
+    
+6. plot histogram <we expect bias cuz of endogeneity>
+7. Increase sample size <inconsistent>
+
+
+
+### 269. Testing for significance on correlation
+
+The formula of  Pearson correlation $r$ is covariance over variance
+
+$$
+r = \dfrac{\sum(x_i - \bar x)(y_i - \bar y)}{\sum(x_i - \bar x)^2\sum(y_i - \bar y)^2}
+$$
+
+correlation is bounded between -1 to 0 <perpendicular>and 1 <form a straight line> 
+
+From the graph, find $\bar x, \bar y$ and check if $x$ is above or below it, same for $y$ and their product is positive or negative
+
+How to test for correlation?
+
+$$
+H_0: \rho=0 \quad H_1: \rho\neq 0
+$$
+
+we can test it with the statistic
+
+$$
+\boxed{t = r \sqrt{\dfrac{N-2}{1-r^2}} \sim t_{N-2}}
+$$
+
+How does it work?
+
+If $r \to 1$, denominator approaches zero, $t \to \infty$, 
+
+same for $r \to -1$, but the $r$ outside the square root will make $t \to - \infty$
+
+Both cases will result in rejecting $H_0$
+
+if  $r=0, t=0$, we will not reject $H_0$
+
+
+
+### 270. One sample t test on mean
+
+If population has a parameter $\mu$, we need a sample estimator like $\bar x$
+
+But we still need to infer on $\mu$
+
+$$
+H_0: \mu = \mu_0 \qquad u \neq u_0
+$$
+
+Here is the test
+
+$$
+\boxed{t = \dfrac{\bar x - \mu}{\dfrac{S}{\sqrt N}} \sim t_{N-1}}
+$$
+
+Where $S$ is the corrected standard error
+
+$$
+\boxed{S = \sqrt{\dfrac 1 {N-1} \sum(x_i - \bar x)^2}}
+$$
+
+$t$ is wider than $z$, the idea is if the nominator is so big, $t$ will be really big or really small resulting in us rejecting $H_0$
+
+
+
+### 271. Independent two sample t test for populations with equal variances
+
+If we have population 1 with parameter $\mu_1$ and population with parameter $\mu_2$
+
+we want to test
+
+$$
+H_0: \mu_1 = \mu_2 \qquad H_1: \mu_1 \neq \mu_2
+$$
+
+But we don’t know either $\mu$ so we get estimates for them and calculate 
+
+$$
+\boxed{t = \dfrac{\bar x_1 - \bar x_2}{s_{12} \sqrt{\frac 2 N}}\sim t_{2N-2}}
+$$
+
+What is the $S$?
+
+$$
+\boxed{S^2_{12} = \dfrac{s_1^2+s_2^2}{2}}
+$$
+
+Its like average variance of the two variances
+
+Intuition:
+
+plot the $t$ distribution centered around zero, if there is a big difference, numerator is big and so is $t$ so we reject
+
+But we need some assumptions to do this test
+
+1. the samples are independent <no correlation bet. $\bar x_1, \bar x_2$>
+2. the two variances are equal
+
+
+
+### 272. Variance inflation factors: testing for multicollinearity
+
+If we have the regression equation
+
+$$
+y_i = \alpha + \beta_1x_{1i}+ \beta_2x_{2i}+ \dots + \beta_px_p + \varepsilon_i
+$$
+
+We may have multicollinearity <the $X's$ are correlated>, to check
+
+1. correlation matrix
+2. scatterplot
+
+But these two methods are bivariate, what if we want to check for a linear combination
+
+Hence: check variance inflation factor
+
+1. regress $x_{1i}$ on the remaining variables
+
+$$
+x_{1i} = \delta_0 + \delta_1x_{2i}+ \delta_2x_{3i}+\dots +\delta_{p-1}x_{p-1}+v_i
+$$
+
+1. get $R^2$ <high r squared indicates the chance of multicollinearity>
+2. get $R^2$ for the remaining variables too $R^2_1 \to R^2_p$
+3. calculate $VIF$
+    
+    $$
+    \boxed{VIF= \dfrac{1}{1- R^2_j}}
+    $$
+    
+    If $R^2$ is close to 1, denominator is small, VIF is large.
+    
+    IF $VIF \ge 5$, don’t include he variable
+    

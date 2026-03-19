@@ -1,0 +1,2267 @@
+---
+title: "Causal Inference & Matrix Approach"
+format: html
+number-sections: false
+---
+
+
+### 298. Part 4: Graduate course
+
+Almost there
+
+### 299. A graduate course in econometrics
+
+into the graduate world
+
+### 300. You are finally learning graduate level
+
+Its ok to cry
+
+### 301. Introduction to the matrix formulation of econometrics
+
+We have a model
+
+$$
+y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}+\dots + \beta_{p}x_{pi} + \varepsilon_i
+$$
+
+If I have $p$ independent variables, I need to write them all in a super long equation and $i= 1,\dots,N$
+
+To keep things compact, we write them in a matrix
+
+$$
+\begin{bmatrix}y_1\\y_2\\\vdots\\y_N\end{bmatrix} = 
+
+\begin{bmatrix}
+1 &x_{11} &x_{21} &\dots &x_{p1}\\
+1 &x_{12} &x_{22} &\dots &x_{p2}\\
+\vdots\\
+1 & x_{1N} & x_{2n} &\dots &x_{pN}
+\end{bmatrix}
+ \begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_{P}\end{bmatrix} + \begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_N\end{bmatrix}
+$$
+
+which is produced as a dot product <result of the first row will get the equation at the top>
+
+The dimensions are
+
+$$
+(N \times 1) = (N \times P)(P \times 1) + (N\times 1) 
+$$
+
+The above model can be written as
+
+$$
+\boxed{Y = X \beta+ \varepsilon}
+$$
+
+This will allow us to deal with more complicated models
+
+
+
+### 302. The matrix formulation of econometrics - example
+
+We reached the formula
+
+$$
+Y = X\beta + u
+$$
+
+Here is an example
+
+$$
+wage_i = \alpha + \beta_1 \, educ_i + \beta_2 \, age_i + u_i
+$$
+
+This is the equation for individual $i$ where $i \in [1,N]$ so in matrix form it will be
+
+$$
+\begin{bmatrix}wage_1\\wage_2\\\vdots\\wage_N\end{bmatrix} = 
+
+\begin{bmatrix}
+1 &educ_1 &age_1\\
+1 &educ_1 &age_2\\\vdots\\ 
+1 & educ_{N} & educ_{N} \end{bmatrix}
+ \begin{bmatrix}\alpha\\\beta_1\\\beta_2\\\end{bmatrix} 
++ \begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}
+$$
+
+where the dimensions are
+
+$$
+(N \times 1) = (N \times 3)(3 \times 1) + (N \times 1)
+$$
+
+Notice that the dimensions really depend on the dot product
+
+
+
+### 303. How to differentiate with respect to a vector part 1
+
+We can differentiate a scalar, and a vector too
+
+If I have the vector $X$ and a and both have dimension $P \times 1$
+
+$$
+X=\begin{bmatrix}x_1\\\vdots\\x_p
+\end{bmatrix} \qquad a=\begin{bmatrix}a_1\\\vdots\\a_p
+\end{bmatrix}
+$$
+
+Then I take transpose of $X$ so dimension become $1 \times P$ and multiply by $a$ I get
+
+$$
+y = X'a
+$$
+
+where $y$ is a scalar cuz $[1 \times P][P \times 1] = [1 \times 1]$
+
+We can differentiate $y$ cuz its a scalar
+
+$$
+\dfrac{dy}{dx} = \begin{bmatrix}
+\dfrac{dy}{dx_1}\\\vdots \\ \dfrac{dy}{dx_p}
+\end{bmatrix}
+$$
+
+We can write $y$ implicitly as
+
+$$
+y = a_1x_1 + a_2x_2+\dots + a_px_p
+$$
+
+Then
+
+$$
+\dfrac{dy}{dx_1} = a_1 \qquad \dfrac{dy}{dx_p}= a_p
+$$
+
+SO
+
+$$
+\dfrac{dy}{dx} = \begin{bmatrix}
+\dfrac{dy}{dx_1}\\\vdots \\ \dfrac{dy}{dx_p} 
+\end{bmatrix}
+= \begin{bmatrix}
+a_1\\
+\vdots\\
+a_p
+\end{bmatrix}
+$$
+
+Think of $ax$ as a scalar, if you differentiate, you will get $a$
+
+Notice that the differentiation must have sane dimensions as the variable being differentiated
+
+SO
+
+$$
+\dfrac{dy}{dx'} = \begin{bmatrix}
+\dfrac{dy}{dx_1}&\dots & \dfrac{dy}{dx_p} 
+\end{bmatrix}
+= \begin{bmatrix}
+a_1 &
+\dots &
+a_p
+\end{bmatrix} = a'
+$$
+
+Always double check the dimensions 
+
+
+
+### 304. How to differentiate with respect to a vector part 2
+
+If $X$ is a $[2\times 1]$ vector, and $A$ is a $[2 \times 2]$ matrices
+
+If we multiply them, we get a quadratic form
+
+$$
+X = \begin{bmatrix}x_1\\
+x_2\end{bmatrix}
+\qquad
+A = \begin{bmatrix}a_{11} &a_{12}\\
+a_{21} &a_{22}\end{bmatrix}
+$$
+
+The quadratic form is 
+
+$$
+Q = X'AX
+$$
+
+which is equal to
+
+$$
+Q = \begin{bmatrix}x_1&
+x_2\end{bmatrix}
+
+\begin{bmatrix}a_{11} &a_{12}\\
+a_{21} &a_{22}\end{bmatrix}
+
+\begin{bmatrix}x_1\\
+x_2\end{bmatrix}
+$$
+
+dimensions
+
+$$
+[1 \times 2][2 \times 2][2 \times 1]
+$$
+
+the two matrices at the right get $[2 \times 1]$, when multiplied by the left we get $[1 \times 2][2 \times 1] = [1\times 1]$ = a **scalar**
+
+$$
+\begin{bmatrix}
+x_1 & x_2
+\end{bmatrix}
+\begin{bmatrix}
+a_{11}x_1+a_{12}x_2 \\ a_{21}x_1+a_{22}x_2
+\end{bmatrix}
+
+= a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2
+$$
+
+The creepy right side is just a scalar.
+
+If we differentiate with respect to $X$, the derivative vector will have same dimensions of $X$
+
+$$
+\dfrac{d Q}{dX} =
+
+\begin{bmatrix}
+\dfrac{dQ}{d{x_1}}\\\dfrac{dQ}{dx_2}
+\end{bmatrix}
+
+= \begin{bmatrix}
+2a_{11}x_1 + 2a_{12}x_2\\
+2a_{21}x_1 + 2a_{22}x_2
+\end{bmatrix}
+
+= 2 AX
+$$
+
+This is why its called the quadratic formula, its like differentiating
+
+$$
+y = x^2\to 2x
+$$
+
+
+
+### 305. How to differentiate with respect to a vector part 3
+
+How to differentiate $Q$ with respect to a transpose $X'$?
+
+$$
+\dfrac{d Q}{d X'} = \begin{bmatrix}\dfrac{dQ}{dx_1} &\dfrac{dQ}{dx_2}\end{bmatrix} = 2 X'A' = 2X'A
+$$
+
+when we transpose, we reverse the order of the multiplication
+
+$$
+[AB]' = B'A'
+$$
+
+
+
+### 306. Ordinary least squares estimation - derivation in matrix form part 1
+
+Back to our $OLS$, we have a scatter plot, $x$ on x axis, $y$ on y axis, and we want to fit a line to minimize **sum of squared vertical distances**
+
+Not horizontal distance cuz we deal with prediction error
+
+$$
+S = \sum \hat u_i^2
+$$
+
+we put a hat cuz we estimate the error and don’t know the error term in the population
+
+If the model is
+
+$$
+y_i = \alpha + \beta \,x_i + u_i
+$$
+
+then
+
+$$
+S = \sum \hat u_i^2 = \sum(y_i - \hat \alpha - \hat \beta \, x_i)^2
+$$
+
+To differentiate, we differentiate with respect to $\alpha, \beta$ and let the derivative $=0$
+
+This form does not generalize to the multivariate case though so we make a matrix
+
+$$
+y = X \hat \beta + \hat u
+$$
+
+hats cause we don’t know the parameters
+
+To replicate $S = \sum \hat u^2$ we write it as
+
+$$
+S = \hat u ' \hat u = \hat u_1^2 + \hat u_2^2 +\dots + \hat u_N^2
+$$
+
+Remember that the original is a column vector and that $[1 \times N][N \times 1] = [1 \times 1]$ so $S$ is a scalar
+
+To get $\hat u$ <we did not fit the model yet> we use the fact that
+
+$$
+\hat u = y - X \hat \beta
+$$
+
+Then
+
+$$
+S = (y - X \hat \beta)'(y - X \hat \beta)
+$$
+
+
+
+### 307. Ordinary least squares estimation - derivation in matrix form part 2
+
+We reached the equation
+
+$$
+S = (y - X \hat \beta)'(y - X \hat \beta)
+$$
+
+which can be written as
+
+$$
+S = (y' -\hat \beta' X ' )(y - X \hat \beta)
+$$
+
+expand to get
+
+$$
+S = y'y - y' X \hat \beta - \hat \beta'X'y - \hat \beta'X'X \hat \beta
+$$
+
+we are differentiating with respect to the vector $\hat \beta$ <remember that the vector $\hat \beta$  has dimensions $[1\times P]$>
+
+Lets differentiate, but we will start with third term in $S$ cuz its easier
+
+$$
+\hat \beta'X'y = [1 \times P][P \times N][N \times 1] = [1\times 1]
+$$
+
+ a scalar, its like differentiating $ax \to a$ and will be $X'y$
+
+second term in $S$ is just the transpose of the third term and are equivalent cuz its a scalar, so it will be $X'y$
+
+The first term doesn’t have $\beta$ so it disappears, last term is just the quadratic matrix, so it will be $2 X'X \hat \beta$
+
+Summing up
+
+$$
+\dfrac{\partial S}{\partial \hat \beta} = - X'y - X'y + 2 X'X \hat \beta = 0
+$$
+
+where $0$ is a column vector
+
+
+
+### 308. Ordinary least squares estimation - derivation in matrix form part 3
+
+We reached this formula
+
+$$
+\dfrac{\partial S}{\partial \hat \beta} = - X'y - X'y + 2 X'X \hat \beta = 0
+$$
+
+Isolate for $\hat \beta$
+
+$$
+2 X'X \hat \beta = 2X'y
+$$
+
+We divide by 2, then multiply both sides by $(X'X)^{-1}$ to get
+
+$$
+(X'X)^{-1}X'X \hat \beta = (X'X)^{-1}X'y
+$$
+
+Matrices have the property that $A^{-1}A = I$ then left term will be the identity matrix and $\hat \beta$
+
+$$
+\boxed{\hat \beta = (X'X)^{-1}X'y} 
+$$
+
+If $X'X$ is singular, I can’t estimate $\hat \beta$, like in **perfect collinearity**
+
+
+
+### 309. Expectation and variance of a random vector part 1
+
+How to get an expectation of a vector?
+
+If we have the vector $X$
+
+$$
+X= \begin{bmatrix}x_1\\x_2\\\vdots\\x_N\end{bmatrix}
+$$
+
+Then the expectation of the vector works on the elements
+
+$$
+E[X] = \begin{bmatrix}E[x_1]\\E[x_2]\\\vdots\\E[x_N]\end{bmatrix} 
+$$
+
+Here are the properties of expectation on random vector
+
+$$
+E[X_1+X_2] = E\begin{bmatrix}x_{11}+x_{21}\\x_{12}+x_{22}\\\vdots\\x_{1N}+x_{2N}\end{bmatrix} 
+$$
+
+We know that expectation is a linear operator so
+
+$$
+E[X_1+X_2] = \begin{bmatrix}E[x_{11}]\\E[x_{12}]\\\vdots\\E[x_{1N}]\end{bmatrix} + \begin{bmatrix}E[x_{21}]\\E[x_{22}]\\\vdots\\E[x_{2N}]\end{bmatrix} = E[X_1]+ E[X_2] 
+$$
+
+so
+
+$$
+\boxed{E[X_1+X_2] = E[X_1]+E[X_2]}
+$$
+
+
+
+### 310. Expectation and variance of a random vector part 2
+
+The second property of expectation also holds
+
+$$
+\boxed{E[AX] = AE[X]}
+$$
+
+But the variance properties are different
+
+Given our vector
+
+$$
+X= \begin{bmatrix}x_1\\x_2\\\vdots\\x_N\end{bmatrix}
+$$
+
+we have a surprise
+
+$$
+Var[X] \neq\begin{bmatrix}Var[x_1]\\Var[x_2]\\\vdots\\Var[x_N]\end{bmatrix} 
+$$
+
+cuz this form misses the covariance between the elements <each element has its own variance and varies with other elements>
+
+SO we represent it as a **variance covariance matrix**
+
+$$
+\mathrm{Var}(X) =\begin{bmatrix}\mathrm{Var}(x_1) & \mathrm{Cov}(x_1, x_2) & \cdots & \mathrm{Cov}(x_1, x_N) \\\mathrm{Cov}(x_2, x_1) & \mathrm{Var}(x_2) & \cdots & \mathrm{Cov}(x_2, x_N) \\\vdots & \vdots & \ddots & \vdots \\\mathrm{Cov}(x_N, x_1) & \mathrm{Cov}(x_N, x_2) & \cdots & \mathrm{Var}(x_N)\end{bmatrix}
+$$
+
+Notice that $cov(x_1,x_2)$ and $cov(x_2,x_1)$ are the same, order doesn’t matter, so this matrix is **symmetric**
+
+
+
+### 311. Expectation and variance of a random vector part 3
+
+The formula of variance in terms of expectation is
+
+$$
+\boxed{Var(X) = E[(X-\mu)(X-\mu)^T]}
+$$
+
+why transpose? cuz $X-\mu$ has dimensions $N\times 1$ so i need to multiply it by $1 \times N$ which will get me an $N \times N$ matrix
+
+Think of it element wise
+
+$$
+Var(X)= E\left[
+
+\begin{bmatrix}x_1 - \mu_1\\x_2 - \mu_2\\\vdots\\x_N - \mu_N\end{bmatrix}
+
+\begin{bmatrix}x_1 - \mu_1&x_2 - \mu_2&\dots &x_N - \mu_N\end{bmatrix}
+
+\right]
+$$
+
+which results in the variance covariance matrix
+
+$$
+E \begin{bmatrix}(x_1 - \mu_1)^2&(x_1 - \mu_1)(x_2-\mu_2)& \dots
+\\\vdots \end{bmatrix}
+$$
+
+
+
+### 312. Expectation and variance of a random vector part 4
+
+in the scalar case we have
+
+$$
+Var(ax) = a^2var(x)
+$$
+
+In the matrix case, using the fact that $E[AX]= AE[X]$ we have
+
+$$
+Var(AX)= E\left[(AX-Au)(AX-Au)^T \right]
+$$
+
+Get $A$ out
+
+$$
+Var(AX)= E\left[A(X-u)(X-u)^T A^T\right]
+$$
+
+we put $A^T$ at the end cuz remember, transpose switches the order of multiplication
+
+$A$ is a constant, so can be written outside the expectation
+
+$$
+Var(AX)= AE\left[(X-u)(X-u)^T \right]A^T
+$$
+
+And the creepy mess in the middle is just the equation for variance so we get
+
+$$
+\boxed{Var(AX) = A Var(X)A^T}
+$$
+
+
+
+### 313. Least squares as an unbiased estimator matrix formulation
+
+We reached that
+
+$$
+\hat \beta = (X'X)^{-1}X'y
+$$
+
+where $y = x\beta + u$ so we subtitute to get
+
+$$
+\boxed{\hat \beta = (X'X)^{-1}X'X\beta+(X'X)^{-1}X'u}
+$$
+
+Notice that left side, inverted matrix times itself is just the identity matrix so we get
+
+$$
+\boxed{\hat \beta = \beta + (X'X)^{-1}X'u}
+$$
+
+This is the final form, now we can take our first assumption: **zero conditional mean**
+
+$$
+E[\hat \beta] = \beta + (X'X)^{-1}E[u]
+$$
+
+zero conditional mean allows the expectation to pass through the $X's$ due to independence, second term vanishes cuz $E[u] = 0$
+
+$$
+E[\hat \beta] = \beta
+$$
+
+Unbiased
+
+
+
+### 314. Variance of least squares estimators matrix form
+
+Knowing that
+
+$$
+\hat \beta = (X'X)^{-1}X'y
+$$
+
+and the property of variance with respect to random vectors
+
+$$
+Var(Ay) = AVar(y)A'
+$$
+
+Then we can write the variance of $\hat \beta$ as
+
+$$
+Var(\hat \beta) = (X'X)^{-1}X'var(y) \times Transpose
+$$
+
+To get the transpose of the matrix, remember that
+
+$$
+(AB)' = B'A' \qquad (A^{-1})' = (A')^{-1}
+$$
+
+SO in $(X'X)^{-1}X'$, the $X'$ at the end will be at the beginning, and transposed aka first term is $X$
+
+For the brackets, forget about the inverse for now, think of it as $(X'X)'$ then switch the orders to get $X'X$ then add the inverse again
+
+final result is 
+
+$$
+Var(\hat \beta) = (X'X)^{-1}X'var(y)X(X'X)^{-1}
+$$
+
+Using the assumption of **homoscedasticity** and no **serial correlation**. we get that
+
+$$
+Var(y) = \sigma^2 I
+$$
+
+Substituting, we get
+
+$$
+Var(\hat \beta) = \sigma^2(X'X)^{-1}X'X(X'X)^{-1}
+$$
+
+Notice that its a matrix times its inverse so they will be cancelled, so we get
+
+$$
+\boxed{Var(\hat \beta) = \sigma^2(X'X)^{-1}}
+$$
+
+
+
+### 315. Gauss-Markov theorem proof - matrix form part 1
+
+We have the equation
+
+$$
+y = XB + u \\ \hat \beta = (X'X)^{-1}X'y
+$$
+
+We will come up with another estimator $\tilde \beta$ and prove its unbiased then find its variance to prove $\hat \beta$ has lower variance
+
+To get $\tilde \beta$, lets say its equal to $\hat \beta$ + an extra bit $Dy$ where $D$ is a matrix
+
+$$
+\tilde\beta = (X'X)^{-1}X'y + Dy
+$$
+
+to prove its unbiased, substitute with $y$
+
+$$
+\tilde \beta = (X'X)^{-1}X'X\beta+ (X'X)^{-1}X'u + DX\beta + Du
+$$
+
+first part is a matrix and its inverse so its cancelled, and using zero conditional mean of errors, second part disappears and $Du$ vanishes too 
+
+$$
+\boxed{E[\tilde \beta] = \beta + DX \beta}
+$$
+
+
+### 316. Gauss-Markov theorem proof - matrix form part 2
+
+we created a new estimator
+
+$$
+\tilde\beta = (X'X)^{-1}X'y + Dy = Cy
+$$
+
+where $C$ is a big matrix multiplied by $y$
+
+and its expectation is
+
+$$
+E[\tilde \beta] = \beta + DX \beta
+$$
+
+$\tilde \beta$ will be unbiased if
+
+$$
+\boxed{DX = 0}
+$$
+
+To get the variance remember the properties:
+
+1. $Var(AX) = AVar(x)A'$
+2. $(AB)' = B'A'$
+3. $(A^{-1})' = (A')^{-1}$
+
+Making use of the simplified matrix $C$
+
+$$
+Var(\tilde \beta) = C Var(y)C'
+$$
+
+assuming homoscedasticity and no serial correlation
+
+$$
+Var(\tilde \beta) = \sigma^2 CC'
+$$
+
+where 
+
+$$
+C = \begin{bmatrix}(X'X)^{-1}X'+D \end{bmatrix} \\ C' = X(X'X)^{-1}+D'
+$$
+
+
+
+### 317. Gauss-Markov theorem proof - matrix form part 3
+
+we reached
+
+$$
+Var(\tilde \beta) = \sigma^2[(X'X)^{-1}X'+D][X(X'X)^{-1}+D']
+$$
+
+if we multiply the two brackets, we get
+
+$$
+Var(\tilde \beta) = \sigma^2[(X'X)^{-1}X'X(X'X)^{-1} + (X'X)^{-1}X'D'+DX(X'X)^{-1}+DD']
+$$
+
+first bracket cancels cuz its a matrix times its inverse
+Then notice in the second term that $X'D'=(DX)'=0$ which we assumed for it to be unbiased, so it and third terms disappear
+
+So what remains is
+
+$$
+Var(\tilde \beta) = \sigma^2(X'X)^{-1}+ \sigma^2DD'
+$$
+
+In other words
+
+$$
+Var(\tilde \beta) = Var(\hat\beta) + \sigma^2DD'
+$$
+
+Any matrix times its transpose results in a **positive semi definite matrix** 
+
+so we get that 
+
+$$
+Var(\tilde \beta) \ge Var(\hat\beta)
+$$
+
+
+
+### 318. Geometric interpretation of ordinary least squares: an introduction
+
+If I have vector $y$ that has three individuals
+
+$$
+\begin{bmatrix} y_1 \\ y_2 \\ y_3\end{bmatrix}
+$$
+
+we can visualize it as an arrow in 3D space (like an arrow from the origin to the point $(y_1, y_2, y_3)$). So $y$ is a vector in $\mathbb{R}^3$.
+
+Even when $y$ is $100 \times 1$, we keep this geometric idea: $y$ is still just an arrow, but in a 100-dimensional space (we can’t draw it, but the concept remains the same).
+
+Now consider $X$, the matrix of independent variables. Each **column** of $X$ is a vector (arrow) in the same space as $y$:
+
+Each column in $X$ (e.g., the first, second, and third) spans a direction in space. All **linear combinations** of these columns form a **plane (or hyperplane)** — called the **column space of $X$**.
+
+$$
+\begin{bmatrix}
+1 &x_{11} &x_{21}\\
+1 &x_{12} &x_{22}\\\vdots\\ 
+1 & x_{14} & x_{24} \end{bmatrix}
+
+$$
+
+OLS tries to find the vector $\hat y = X\hat\beta$ that:
+
+- **lies on this plane** (i.e., in the column space of $X$),
+- and is **as close as possible to $y$**.
+
+Think of it as casting a **shadow** from the tip of $y$ down to the plane: that shadow is $\hat y$.
+
+The difference between the tip of $y$ and the tip of its shadow is the **residual vector**:
+
+$$
+\hat u = y - \hat y = y - X\hat\beta
+$$
+
+This vector is **orthogonal** (perpendicular) to the plane. OLS finds the $\hat y$ that **minimizes the length of this vector** — i.e., it minimizes $|\hat u|^2$.
+
+Note: the picture is correct, but the vector naming is wrong, should be $\hat y$ not $\hat u$
+
+
+
+### 319. Geometric interpretation of ordinary least squares: an example
+
+If we have the equation y = constant and error
+
+$$
+y_i = \beta_0 + u_i
+$$
+
+$y$ is a vector of two individuals
+
+$$
+y = \begin{bmatrix}y_1 \\ y_2 \end{bmatrix}
+$$
+
+we can write it in matrix form as
+
+$$
+y = X \beta_0 + u
+$$
+
+Where $X$ is a vector
+
+$$
+X = \begin{bmatrix}1 \\ 1 \end{bmatrix}
+$$
+
+Cuz we have two individuals only, we are dealing with a 2D plane
+
+Lets say the individuals have values of
+
+$$
+y = \begin{bmatrix}y_1 \\ y_2 \end{bmatrix} = \begin{bmatrix}2 \\ -1 \end{bmatrix}
+$$
+
+We can draw a vector $y$ starting from $0,0$ and ends at $2,-1$
+
+The column space is just a line that passes through $0,0$ and $1,1$ <cuz $\beta$ stretches it>
+
+$OLS$ tries to find the shortest distance between the line and the vector $y$
+
+The shadow of the vector $y$ will be the points $\beta_0,\beta_0$ so we minimize
+
+$$
+S = (y_1- \beta_0)^2 + (y_2 - \beta_0)^2
+$$
+
+How to minimize? by differentiating
+
+$$
+\dfrac{\delta S}{\delta \beta_0} = -2(y_1 - \beta-0) - 2(y_2 - \beta_0)=0
+$$
+
+By simplification, we get that
+
+$$
+\beta_0 = \dfrac{y_1+y_2}{2}
+$$
+
+which is intuitive, our best guess is the sample mean
+
+$$
+\hat \beta = \dfrac{2+(-1)}{2}= \dfrac {1}{ 2}
+$$
+
+as before, $\hat y$ lies on the plane, the orthogonal vector connecting the two is $\hat u = y - \hat y$
+
+$$
+\hat u = y - \hat y = \begin{bmatrix}2 \\-1 \end{bmatrix} - \begin{bmatrix}0.5 \\0.5 \end{bmatrix} = \begin{bmatrix}1.5 \\-1.5 \end{bmatrix}
+$$
+
+Proof that residual vector is orthogonal to column space
+
+$$
+\begin{bmatrix}1 \\1 \end{bmatrix}' \cdot \begin{bmatrix}1,5 \\-1.5 \end{bmatrix} = 1.5-1.5=0
+$$
+
+<picture has $\hat u$ in the wrong place again>
+
+
+
+### 320. Geometric least squares column space intuition
+
+If we have the equation
+
+$$
+\begin{bmatrix}y_1\\y_2\\\vdots\\y_N\end{bmatrix} = 
+
+\begin{bmatrix}
+1 &x_{11} &x_{12}\\
+1 &x_{21} &x_{22}\\\vdots\\ 
+1 & x_{N1} & x_{N2} \end{bmatrix}
+ \begin{bmatrix}\beta_0\\\beta_1\\\beta_2\\\end{bmatrix} 
++ \begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}
+$$
+
+to understand column space, think of the $X$ matrix as a matrix of vectors
+
+$$
+\begin{bmatrix}
+v_0 &v_1 &v_2\\
+ \end{bmatrix}
+ \begin{bmatrix}\beta_0\\\beta_1\\\beta_2\\\end{bmatrix} 
++ \begin{bmatrix}u_1\\u_2\\\vdots\\u_N\end{bmatrix}
+$$
+
+If we multiply, we get
+
+$$
+y = \beta_0 v_0 + \beta_1 v_1 + \beta_2v_2 +u
+$$
+
+The parameters tell us how much of each vector we need to get as close as possible to $y$
+
+So imagine that if we have a vector $y$, we reach it we say for example:
+
+1. go right by $\beta_0 v_0$
+2. go up by $\beta_1v_1$
+3. go left by $\beta_2v_2$
+
+where all the above vectors lie on a plane <column vector>
+
+then the remaining distance between $y$ and last element in our pirate map <$\beta_2v_2$> should be orthogonal vector $u$ <image here is not exact>
+
+
+
+### 321. Geometric interpretation of least squares - orthogonal projection
+
+We reached that column vector is a plane, and we have an arrow $y$
+
+OLS first step is getting $\hat y$ which is the projection of the vector $y$ on the space <think of shadow of the vector> <more on that later>
+
+second step is writing $\hat y$  in terms of $X$ <will be explained now>
+
+If $X$ has two independent variables, then $x_1,x_2$ are the two vectors in the matrix that can be visualized as arrows
+
+from first step, we already have $\hat y$ and we write in terms of $X$ using projections which results in 
+
+$$
+\hat y = \hat \beta_1x_1 + \hat \beta_2x_2
+$$
+
+or in matrix way
+
+$$
+\hat y = X \hat \beta
+$$
+
+Notice that to get $\hat y$, we assumed that we don’t have **perfect collinearity**
+
+
+
+### 322. Geometric interpretation of least squares - geometrical derivation of estimator
+
+Column space results in a plane that is at the base of the arrow $y$, we get $\hat y$ that is the orthogonal projection of $y$ on the column space
+
+$$
+\hat y = \argmin ||y-\mu||^2 \qquad \mu \in Col(x)
+$$
+
+we know that $\hat y= X \hat \beta$ and that $(y - \hat y)$ is orthogonal to the plane or mathematically
+
+$$
+X'(y - \hat y) = 0
+$$
+
+expand
+
+$$
+X'(y - X \hat \beta)= 0
+$$
+
+expand again to get
+
+$$
+X'y = X'X\hat \beta
+$$
+
+isolate $\hat \beta$ to get
+
+$$
+\boxed{\hat \beta = (X'X)^{-1}X'y}
+$$
+
+we got the formula without any derivatives lol
+
+
+
+### 323. Orthogonal projection operator in least squares - part 1
+
+back to our picture, column space of $X$ forms a plane, $y$ is the arrow
+
+$\hat y$ is the projection of $y$ on the column space but what does that mean?
+
+$$
+\hat y = X \hat \beta
+$$
+
+expand the $\hat \beta$ to get
+
+$$
+\hat y = X(X'X)^{-1}X'y
+$$
+
+The weird stuff on the right is what projects $y$ on the column space, let it be $P_x$
+
+$$
+P_x = X(X'X)^{-1}X'
+$$
+
+What are the properties of this projection matrix?
+
+1. if $w$ is in column space, then $P_x w =w$
+2. If $w$ is $\perp$ to column space, then $P_x w = 0$ <shadow is a point not a vector>
+
+
+
+### 324. Orthogonal projection operator in least squares - part 2
+
+We learnt about the projection matrix $P_x$
+
+Then cuz $\hat y$ already lies on the column space then
+
+$$
+P_x \hat y = \hat y
+$$
+
+Lets verify, first recall the formula for $P_x$
+
+$$
+P_x = X(X'X)^{-1}X'
+$$
+
+and $\hat y = X \hat \beta$, then
+
+$$
+P_x \hat y = X(X'X)^{-1}X'X \hat \beta
+$$
+
+matrix and its inverse cancel, what remains is
+
+$$
+P_x \hat y = X \hat \beta = \hat y
+$$
+
+worked correctly, it will also work with $X$, it will be $P_x X =X$
+
+Now remember our residual vector $\hat u = y - \hat y$, its orthogonal to the column space so should result in $P_x \hat u = 0$
+
+To verify
+
+$$
+P_x(y-\hat y )= X(X'X)^{-1}X'y-X(X'X)^{-1}X'\hat y
+$$
+
+first term is just $\hat y$ and second term is $\hat y$ cuz its in column space then
+
+$$
+P_x(y- \hat y) = \hat y - \hat y = 0
+$$
+
+
+
+### 325. Orthogonal projection operator in least squares - part 3
+
+### 326. Estimating the error variance in matrix form part 1
+
+### 327. Estimating the error variance in matrix form part 2
+
+### 328. Estimating the error variance in matrix form part 3
+
+### 329. Estimating the error variance in matrix form part 4
+
+### 330. Estimating the error variance in matrix form part 5
+
+### 331. Estimating the error variance in matrix form part 6
+
+### 332. Proof that the trace of MX is p
+
+### 333. Representing homoscedasticity and no autocorrelation in matrix form part 1
+
+### 334. Representing homoscedasticity and no autocorrelation in matrix form part 2
+
+### 335. Representing homoscedasticity in matrix form
+
+### 336. BLUE estimators in presence of heteroscedasticity GLS part 1
+
+### 337. BLUE estimators in presence of heteroscedasticity GLS part 2
+
+### 338. GLS estimators in matrix form part 1
+
+### 339. GLS estimators in matrix form part 2
+
+### 340. GLS estimators in matrix form part 3
+
+### 341. Variance of GLS estimators
+
+### 342. GLS example in matrix form
+
+### 343. GLS estimators in presence of autocorrelation and heteroscedasticity in matrix form
+
+### 344. The Kronecker product of two matrices - an introduction
+
+### 345. SURE estimation an introduction part 1
+
+### 346. SURE estimation an introduction part 2
+
+### 357. SURE estimation - autocorrelation and heteroscedasticity
+
+### 348. SURE estimator derivation part 1
+
+### 349. SURE estimator derivation part 2
+
+### 350. Kronecker matrix product properties
+
+### 351. SURE estimator same independent variables part 1
+
+### 352. SURE estimator same independent variables part 2
+
+### 353. SURE estimator same independent variables part 3
+
+### 354. Causality an introduction
+
+In econometrics, some studies are **descriptive** like if inflation increases is **associated** GDP decreases
+
+$$
+\pi \uparrow \sim GDP \downarrow 
+$$
+
+notice that we are not stating causality, inflation did not cause fall of GDP
+
+Another example is how well correlated is forecasted weather with respect to actual temperature
+
+This is a useful association, but not causal
+
+SO what questions are **causal**?
+
+do increases in number of years of education cause an increase in wage?
+
+$$
+educ \uparrow \to wage \uparrow
+$$
+
+Imagine alternative reality in which a person spends an extra year of education
+
+Causality is useful cuz it allows us to determine effects of many stuff like
+
+1. effect of Democracy on GDP
+2. effect of decline in university costs on years of education 
+
+
+
+### 355. The Rubin causal model - an introduction
+
+By **Professor Donald Rubin** https://statistics.fas.harvard.edu/people/donald-b-rubin
+
+We want to know if $x$ **causes $y$**
+
+$$
+x \to y
+$$
+
+Does investment in infrastructure decrease violence?
+
+we can’t just compare average violence in states that received and did not receive infrastructure. If we did we will get
+
+$$
+D_i=0: 100 \qquad D_i=1:150
+$$
+
+where $D_i=0$ means no infrastructure and $D_i=1$ means infrastructure
+
+How violence in states with more infrastructure is higher? We were expecting the opposite
+
+The culprit here is reverse causality, states with higher violence are more likely to be selected to have better infrastructure aka **selection bias**
+
+We need to define potential violence for each state
+
+where $v_{1i}$ if it did receive infrastructure, $v_{0i}$ if it did not receive infrastructure
+
+$$
+potential = \begin{cases}v_{1i},&if\, D_i=1\\
+v_{0i}, &if \, D_i=0
+\end{cases}
+$$
+
+Sadly, for each state, we can observe only one potential violence, but if we did see both then $\delta = v_{1i} - v_{0i}$ is the causal effect we want
+
+This was for individual state, we care about average of all states
+
+$$
+\boxed{\text{ACE} = E[\delta] = E[v_{1i}] - E[v_{0i}]}
+$$
+
+But what do we mean by potential level of violence?
+
+If the government makes a decision to spend on states, it allocates its resources in non random fashion resulting in $D_i=1, D_i=0$
+
+in the $D_i=1$, we observe violence for those who got the infrastructure $v_{1i}$, but can’t observe what would have happened if they didn’t receive it $v_{0i}$ which is called **counterfactual**  
+
+For $D_i=0$, we observe violence for those with no infrastructure $v_{0i}$ but can’t observe the counterfactual $v_{1i}$
+
+The average causal effect $ACE$ $E[\delta]$ is the average difference between $v_{1i}$ and $v_{0i}$ in both states of $D_i$ but we care more about the difference in the state where $D_i=1$ only <cuz we applied our treatment> so we use average causal effect of treated $ACT$ 
+
+$$
+\boxed{\text{ACT}= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=1]}
+$$
+
+Next: how in the world will we calculate something that we can’t observe
+
+
+
+### 356. Causation in econometrics - a simple comparison of group means
+
+Continuing with our example, we have the problem of selection bias. To solve it, we defined average causal effect and average causal effect of treated
+
+A good recap will help
+
+1. Potential level of violence: each city is in one of the potentials based on infrastructure <causal effect we want>
+
+$$
+potential = \begin{cases}v_{1i}, &D_i=1\\
+v_{0i}, &D_i =0
+\end{cases}
+$$
+
+1. Government decides to spend on infrastructure or not which results in counterfactuals: what happened vs what could have happened
+    
+    $$
+    D_i=1, \quad \delta_i = v_{1i} - v_{0i}\\
+    D_i=0, \quad \delta_i = v_{1i} - v_{0i}
+    $$
+    
+    Here is the new
+    
+    1. actual observed violence
+    
+    $$
+    v_i= \begin{cases}v_{1i}, &if\, D_i=1\\
+    v_{0i}, &if \, D_i =0
+    \end{cases}
+    $$
+    
+    when we write it like this, we can use $D_i$ as a dummy variable and write
+    
+    $$
+    \boxed{v_i = v_{0i}+ (v_{1i} - v_{0i})D_i}
+    $$
+    
+    Notice that what’s inside the bracket is the causal effect we want
+    
+    1. comparing means of the two groups <rewrite based on step 3>
+    
+    $$
+    E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+    $$
+    
+    average violence in cities with infrastructure - average violence in cities without = observed violence in cities with infrastructure - observed violence in cities without
+    
+    Next: further interpret the last formula
+    
+
+    
+
+### 357. Causation in econometrics - selection bias and average causal effect
+
+we derived the formula for difference in means
+
+$$
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+$$
+
+we can add a term and subtract it again to be easier
+
+$$
+\Delta \mu = E[v_i|D_i=1] - E[v_{0i}|D_i=1]+\\ E[v_{0i}|D_i=1] - E[v_{oi}|D_i=0]
+$$
+
+Where the the first two expectations are the causal effect and the other two are **selection bias**
+
+First two expressions are when $D_i=1$, so we can combine them into one
+
+$$
+ACE = E[v_{1i}- v_{0i}|D_i=1] <0
+$$
+
+where $v_{1i}- v_{0i} = \delta_i$ and $v_{0i}$ is the counterfactual, we expect it to be less than zero <violence decreased in presence of infrastructure>
+
+as for the selection bias
+
+$$
+SB = E[v_{0i}|D_i=1] - E[v_{0i}|D_i=0] >0
+$$
+
+This is the selection effect, cities that did receive infrastructure would have had more violence $v_{0i}$ than those who did not receive the treatment $v_{0i}|D_i=0$
+
+so we expect the difference to be higher than zero
+
+Notice that $ACE, SB$ have opposite signs, and usually $SB$ is greater in magnitude, this is why change in mean had the opposite effect at the beginning
+
+$$
+\Delta \mu = ACE + SB
+$$
+
+
+
+### 358.  Random assignment  removes selection bias
+
+Continuing with the formula
+
+$$
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0] 
+$$
+
+We had a problem of reverse causality, we are trying to see the difference in potential level of violence $\delta = v_{1i}- v_{0i}$. This on city level, the average is
+
+$$
+ACE = E[\delta_i] = E[v_{1i}] - E[v_{0i}]
+$$
+
+If we have random assignment, we can evaluate the difference in means
+
+$$
+\Delta \mu = E[v_i|D_i=1] - E[v_i|D_i=0] \\= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]
+$$
+
+If we have random assignment then $D_i$ is independent <statistically> of the violence outcomes
+
+$$
+D_i \perp\!\!\!\perp {v_{1i}, v_{0i}}
+$$
+
+so we can further simplify
+
+$$
+\begin{align*}
+\Delta \mu &= E[v_i|D_i=1] - E[v_i|D_i=0] \\
+&= E[v_{1i}|D_i=1] - E[v_{0i}|D_i=0]\\
+&= E[v_{1i} - v_{0i}|D_i=1] \\
+&= E[v_{1i} - v_{0i}]\\
+&= ACE
+\end{align*}
+$$
+
+The independence means that difference in violence level in the $D_i=1$ group, is equal to the difference in both groups
+
+which practically means:
+
+if we randomly assign infrastructure to some cities and some not, then whatever difference in violence we see, is the causal effect
+
+> **“When you have eliminated the impossible, then whatever remains, however improbable, must be the truth.” - A Fallacy of Sherlock Holmes**
+> 
+
+
+
+### 359. How to check if treatment is randomly assigned
+
+If we have random assignment, our problems are solved, but how to know if we have random assignment?
+
+One of the methods is to check mean levels of variables affecting  violence between $D_i=0, D_i=1$. Variables like
+
+1. income
+2. unemployment
+3. Ethnic fractionalization
+
+|  | $D_i=0$ | $D_i=1$ |
+| --- | --- | --- |
+| Income | 80 | 100 |
+
+Do a simple $t$ test, if its significant, then we have difference in means between groups so don’t have random assignment
+
+If income is not randomly assigned, but unemployment is randomly assigned, we still can’t assume random assignment for infrastructure
+
+Another way is to regress violence on these variables and $D_i$  
+
+If we don’t have random assignment then
+
+$$
+\Delta \mu \to bias
+$$
+
+
+
+### 360. The conditional independence assumption: introduction
+
+What to do if we don’t have random assignment?
+
+Check the **conditional independence assumption $CIA$**
+
+$$
+CIA: v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i
+$$
+
+meaning levels of violence in cities conditional on level of income in the cities is independent of infrastructure
+
+We can evaluate causal effect conditional on income
+
+$$
+ACE|income_i = E[v_i|income, D_i=1]- E[v_i|income_i, D_i=0]
+$$
+
+If the $CIA$ assumption is met, then if we condition on income, choice of infrastructure is irrelevant
+
+$$
+ACE|income_i = E[v_{1i} - v_{0i}|income_i]
+$$
+
+
+
+### 361. The conditional independence assumption: intuition
+
+We reached that 
+
+$$
+E[\delta_i |income_i] = E[v_{1i}- v_{0i}|income_i]
+$$
+
+if we assumed that
+
+$$
+CIA: v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i
+$$
+
+But what does it mean?
+
+Think of $D_i$ - whether city gets infrastructure or not-  as a box consisting of two components
+
+1. choice based on level of income <not random selection> - poorer cities will be selected to take infrastructure
+2. random - variance of $D_i$ not related to income
+
+If we remove the part related to income, what remains is the random part meaning, if we remove the effect of income on infrastructure, then both groups are similar and comparable
+
+Another way to think about it is to consider the regression
+
+$$
+D_i = \delta \, income_i + \varepsilon_i
+$$
+
+here its clear, $D_i$ consists of two parts, income and random error, if we remove the income we get the random error
+
+$$
+D_i - \delta \, income_i = \varepsilon_i
+$$
+
+The CIA assumption tries to make levels of violence independent on error term only
+
+$$
+v_{1i}, v_{0i} \perp\!\!\!\perp D_i |income_i \equiv v_{1i}, v_{0i} \perp\!\!\!\perp \varepsilon_i
+$$
+
+and when we remove the part of non random choice <income> we get
+
+$$
+SB = 0|income_i
+$$
+
+
+
+### 362. The average causal effect - an example
+
+If we own a firm and want to know causal effect of job training on sales
+
+$$
+J_i = \begin{cases}1\\0\end{cases}
+$$
+
+1 means took the job training
+
+we can see $E[s_i]$ in thr group $J_i=1$ and $E[s_i]$ for $J_i=0$. the difference in mean is
+
+$$
+\Delta \mu = E[s_i|J_i=1] - E[s_i|J_i=0]
+$$
+
+as before, the  potential outcomes for sales is
+
+$$
+potential = \begin{cases}s_{1i}, &J_i=1
+\\s_{0i}, &J_i=0
+\end{cases}
+$$
+
+the causal effect we want is
+
+$$
+\delta_i = s_{1i} - s_{0i}
+$$
+
+but for each case, we only observe one potential sales based on job training
+
+Solution: modify $\Delta \mu$ formula
+
+$$
+\begin{align*}\\
+\Delta \mu &=  E[s_i|J_i=1] - E[s_i|J_i=0]\\
+&=  E[s_{1i}|J_i=1] - E[s_{0i}|J_i=0]\\
+&=  E[s_{1i}|J_i=1] -E[s_{0i}|J_i=1] +E[s_{0i}|J_i=1]- E[s_{0i}|J_i=0]\\
+&= ACE + SB
+\end{align*}
+$$
+
+where 
+
+$$
+ACE =  E[s_{1i}|J_i=1] -E[s_{0i}|J_i=1]
+$$
+
+which can be rewritten as 
+
+$$
+\begin{align*}
+ACE &= E[s_{1i} - s_{0i}|J_i=1]\\
+&= E[\delta_i|J_i=1]
+\end{align*}
+$$
+
+we expect that $ACE>0$ in this example
+
+and
+
+$$
+SB = E[s_{0i}|J_i=1]- E[s_{0i}|J_i=0]
+$$
+
+which means levels of sales they would have without training given that they participated - level of sales they would have got without training given that they did not train
+
+We expect that better sellers will want the training so they get even more so effect is $>0$
+
+Hence, $\Delta \mu$ is biased due to the selection bias and overestimated
+
+Solution: assume random assignment hence sales and job training are independent so SB becomes conditioned on either $J_i=1$ or $J_{i}=0$ does not matter, since we subtract either way, we get zero
+
+$$
+SB = E[s_{0i}|J_i=1]- E[s_{0i}|J_i=1] = 0
+$$
+
+
+
+### 363. The average causal effect with continuous treatment variables
+
+Something new: treatment effect is continuous
+
+If we want to study effect of study exercise on resting heart rate
+
+$$
+exercise \to HR
+$$
+
+But we have reverse causality, healthy people tend to exercise more
+
+Exercise is not really continuous but we can consider it though, so potential heart rate for each individual can be considered as function of Exercise
+
+$$
+Potential = f_i(E) = HR_{iE}
+$$
+
+The actual outcome we observe is
+
+$$
+Outcome = f_i(E_i) = HR_{iE_i}
+$$
+
+For each individual, we observe his exercise $E_i$ <he has potential for any level of $E$ but we observe $E_i$ only>
+
+The individual causal effect $ICE$ is
+
+$$
+ICE = f_i(E+1)-f_i(E)
+$$
+
+what would happen if he exercises one more time which can be written as
+
+$$
+ICE = \delta_i = HR_{i(E+1)} - HR_{iE}
+$$
+
+But we don’t care about an individual, want individuals instead, we take the average
+
+$$
+ACE = E[\delta_i]
+$$
+
+we can see difference in means
+
+$$
+\Delta \mu = E[HR_i | E_i = E+1]- E[HR_i|E_i = E] 
+$$
+
+the difference if individuals added one year vs their current heart rate based on their current exercise
+
+since that $HR_i$ in the first bracket depends on $E+1$, we can rewrite it as, same applies for second bracket 
+
+$$
+\Delta \mu = E[HR_{i(E+1)} | E_i = E+1]- E[HR_{iE}|E_i = E] 
+$$
+
+Like before, we write the formula by adding and subtracting a term
+
+$$
+\Delta \mu = E[HR_{i(E+1)} | E_i = E+1]- E[HR_{iE}|E_i = E+1] + E[HR_{iE}|E_i = E+1] - E[HR_{iE}|E_i = E] 
+$$
+
+we added the counter factual $E[HR_{iE}|E_i = E+1]$. And we got average causal effect and selection bias.
+
+$$
+\Delta \mu = ACE + SB
+$$
+
+we expect that $SB < 0, ACE < 0$ hence 
+
+$$
+|\Delta \mu| > |ACE|
+$$
+
+If we have random assignment, $HR_i$ and $E_i$ are independent, we can rewrite the conditional part in the selection bias from $E_i = E+1$ to $E_i = E$ for it to disappear 
+
+
+
+### 364. Conditional independence assumption for continuous variables
+
+Conditional independence will help us with continuous variables too
+
+If we had random assignment, then $HR_i$ and $E_i$ are independent, and selection bias becomes zero. But it is hard to assume.
+
+Instead, we do conditional independence assumption $CIA$
+
+$$
+HR_{iE} \perp\!\!\perp E_i|X_i
+$$
+
+where $X_i$ is a vector for past measures of health
+
+How to think about it? 
+
+$E_i$ is a block <square>, length of square is based on the variance. part of the variance is coming from past level of health $X_i$, the other part is random
+
+If we condition on $X_i$, we get a random sample
+
+$$
+SB = E[HR_{iE}|E_i = E+1, X_i] - E[HR_{iE}|E_i = E,X_1]
+$$
+
+which reads, what individuals health would be if they did not train an extra one and isolating effect of $X_i$ <counterfactual> minus what their health would be if they did not exercise the extra one and isolating effect of $X_i$   
+
+Due to the $CIA$ assumption, we cance; the $E_i$ part from both terms to get
+
+$$
+SB = 0
+$$
+
+SO difference in means becomes
+
+$$
+\Delta \mu = E[HR_{i(E+1)}|E_i = E+1, X_i] - E[HR_{iE}|E_i = E+1, X_i]
+$$
+
+using $CIA$ assumption again, we cancel the $E_i$ part to get
+
+$$
+\Delta \mu = E[HR_{i(E+1)} - HR_{iE}|X_i]
+$$
+
+
+
+### 365. Linear regression and causality
+
+1. **Potential Outcomes Framework**
+
+Assume the potential outcome (heart rate under level $E$ of exercise) is linear:
+
+$$
+HR_{iE} = \alpha + \beta E + \varepsilon_i
+$$
+
+- Note: We write $E$, not $E_i$, because this **function holds for any value of exercise**, not just what person *i* actually did.
+- Assumptions:
+    1. **Linearity**: Effect of exercise is linear.
+    2. **Homogeneity**: The same linear function applies to **all individuals** (i.e. same $\alpha$, $\beta$ for everyone).
+
+Then, the **individual causal effect** of increasing exercise by 1 unit is:
+
+$$
+\delta_i = HR_{i(E+1)} - HR_{iE} = \beta
+$$
+
+So $\beta$ itself is the individual-level effect — not just average.
+
+---
+
+2. **Observed Regression Model**
+
+In practice, we observe each person’s actual exercise level $E_i$ and heart rate $HR_i$:
+
+$$
+HR_i = \alpha + \beta E_i + \varepsilon_i
+$$
+
+However, this **model is not necessarily causal**. Why?
+
+- If $E_i$ is **correlated with** the error term $\varepsilon_i$, then the OLS estimator of $\beta$ is **biased**.
+- Example: If healthier people choose to exercise more **and** naturally have lower heart rates, then $\varepsilon_i$ is related to $E_i$.
+
+---
+
+3. **Solution: Conditional Independence Assumption (CIA)**
+
+To address this, we assume:
+
+$$
+HR_{iE} \perp\!\!\!\perp E_i \mid X_i
+$$
+
+> Given covariates $X_i$ (like age, gender, health), the level of exercise is as good as randomly assigned.
+> 
+
+This assumption implies:
+
+$$
+E[HR_{iE} \mid X_i, E_i] = E[HR_{iE} \mid X_i]
+$$
+
+Meaning: once we condition on $X_i$, the observed exercise level gives us **no extra info** about potential outcomes.
+
+---
+
+4. **Estimation under CIA**
+
+So we now estimate a regression **adjusting for $X_i$**:
+
+$$
+HR_i = \alpha + \beta E_i + X_i'\delta + v_i
+$$
+
+By construction:
+
+$$
+E[v_i \mid X_i, E_i] = 0
+$$
+
+So the **OLS estimator of $\beta$ is unbiased**, and it now **recovers the causal effect** of exercise on heart rate, **under the CIA**.
+
+---
+
+5. **Expected Potential Outcome Function**
+
+From our potential outcomes model:
+
+$$
+HR_{iE} = \alpha + \beta E + \varepsilon_i
+$$
+
+We can take the conditional expectation given $X_i$:
+
+$$
+E[HR_{iE} \mid X_i] = \alpha + \beta E + X_i'\delta
+$$
+
+This gives us the **expected heart rate** under level $E$ of exercise **for someone with covariates  $X_i$**.
+
+Because this model does **not include** the error $v_i$, it’s not biased by omitted variable bias
+
+
+
+### 366. Selection bias as viewed as a problem with samples
+
+As last section, we want to measure the effect of one extra unit
+
+$$
+E[\delta_i] = E[y_{i(w+1)} - y_{iw}]
+$$
+
+but we don’t see the potential levels of outcomes, what we have are people who chose $w$ and individuals who chose $w+1$
+
+They chose their level, hence **selection bias**
+
+$$
+\Delta \mu \neq ACE
+$$
+
+Or in another way, there is an $X_i$ that determines the choice of level , so if we condition on $X_i$, we can get the causal effect using regression
+
+But there are better ways than just a regression, the other ways view the problem of having different $X_i$ as a sampling problem
+
+Back to our training example
+
+$$
+J_i = \begin{cases}1\\0
+\end{cases}
+$$
+
+and we want the causal effect on level of sales <different in potential outcome>
+
+$$
+E[\delta_i] = E[sales_{i1} - sales_{i0}]
+$$
+
+and we don’t have this data, instead we have 
+
+$$
+\neq E[sales_i|J_i=1] - E[sales_i|J_i=0]
+$$
+
+sales for those who took the training vs those who did not.
+
+Why some took the training and some didn’t? Perhaps different levels
+
+We will consider $X_i$ as a **covariate** of past years’ sales, this is an indicator for motivation and other stuff
+
+Think of $J_i=1$ as a box, break it into 4 subgroups, each subgroup has  an average past sales <average $X_i$>
+
+$$
+10,15,20,25
+$$
+
+Then think of $J_i=0$ and make subgroups with same averages of past sales $10,15,20,25$ then we can compare and get causal effect. <cause we controlled for $X_i$>
+
+We compare subgroups with equal average of $X_i$ then get weighted mean representing $ACE$
+
+Why just 4 subgroups? it can be any subgroup or even individual level
+
+
+
+### 367. Sample balancing via stratification and matching
+
+When we divided $J_i=1$ into subgroup, this is called **stratification**
+
+We had the covariate $X_i = PLS_i$ past sales, but how to choose the right number of stratus?
+
+If $X_i$  was binary, life would be easy, but $X_i$ is **highly dimensional** 
+
+Imagine past year level of sales have different levels for each individual , and motivation has different levels, we plot them as a square, then stratify <draw grids>
+
+SO $J_i=1$ has $4\times4$ subsamples
+
+Then we do the same for $J_i=0$, then we can compare subsamples and get average causal effect
+
+$$
+ACE \sim \dfrac 1 p \sum \Delta \mu_{(p)}
+$$
+
+$ACE$ is the weighted average of subgroups
+
+What if we have more covariates? stratification will be not feasible <think of how many subsamples we need for $4 \times 4 \times 4$>
+
+so its not feasible cuz **common support** <values of covariate in treatment group> may not overlap with values in control group
+
+Another problem is that its **computationally expensive**
+
+Another solution is to to aggregate the subgroups, but this will cause **heterogeneity**
+
+Instead, we match on propensity scores
+
+
+
+### 368. Propensity score - introduction and theorem
+
+We have two groups of people: treatment $J_i=1$ and control $J_i=0$. There is a probability of an individual to choose the treatment or not
+
+$$
+P(X_i) = P(J_i=1|X_i)
+$$
+
+This probability of choosing the treatment given the covariates is called **propensity**
+
+To visualize, $X_i$ on x axis, probability (0 to 1) on y axis <see how its similar to logistic regression>. We fit the logit model to estimate the probability
+
+$$
+P(J_i =1|X_i) = \Phi(X_i', \delta)
+$$
+
+as $X_i' \to \infty, \Phi \to 1$ and $X_i' \to 0, \Phi \to 0$
+
+Why bother about propensity score?
+
+Cuz it resembles $CIA$ which stated
+
+$$
+CIA: y_{0i}, y_{1i} \perp\!\perp J_i|X_i 
+$$
+
+a corollary from this is
+
+$$
+y_{0i}, y_{1i} \perp\!\perp J_i|P(X_i) 
+$$
+
+the difference is dealing with covariate $X_i$ <highly dimensional> or a function $P(X_i)$ which is scalar. Recall that we couldn’t deal with $X_i$ when we had many stratums
+
+Solution: stratify on one dimensional <the probability from 0 to 1>Then compare subgroups with equal probabilities. This is called **Propensity Score Matching**
+
+
+
+### 369. The law of iterated expectations: an introduction
+
+Law of iterated expectation states
+
+$$
+E(y) = E(E(y|x))
+$$
+
+but what does it mean?
+
+Best explained with example: average IQ is
+
+$$
+E(IQ) = \sum_{IQ_i}IQ_iP(IQ=IQ_i)
+$$
+
+where $P(IQ = IQ_i)$ is proportion of population with that $IQ_i$. so the expectation is a weighted average
+
+But we can split the population into males and females and get conditional mean for both then the $IQ$ is
+
+$$
+E(IQ) = E(E(IQ|sex)) = \sum_{sex_i} P(sex =sex_i )\cdot E(IQ|sex_i)
+$$
+
+Meaning to get IQ for entire population, get weighted average of conditional mean of both males and females
+
+If we expand the summation we get
+
+$$
+E(IQ) = P(sex = Male) \cdot E(IQ|Male)+P(sex= F) \cdot E(IQ|F)
+$$
+
+
+
+### 370. The law of iterated expectations: introduction to nested form
+
+Suppose we're studying IQ and want to understand it **within the female population**. We write:
+
+$$
+E(\text{IQ} \mid F) = \sum_{iq} iq \cdot P(\text{IQ} = iq \mid F)
+$$
+
+But why stop there?
+
+Among females, we might suspect that **smoking status** also affects IQ. So we can **break the female population into smokers and non-smokers**:
+
+$$
+E(\text{IQ} \mid F) = \sum_{s \in \{\text{S, NS}\}} P(\text{Smoke} = s \mid F) \cdot E(\text{IQ} \mid \text{Smoke} = s, F)
+$$
+
+Expanding this:
+
+$$
+E(\text{IQ} \mid F) = P(\text{Smoke} = \text{S} \mid F) \cdot E(\text{IQ} \mid \text{S}, F) + P(\text{Smoke} = \text{NS} \mid F) \cdot E(\text{IQ} \mid \text{NS}, F)
+$$
+
+This is a **weighted average**: you're averaging the **conditional expectations within each smoking group**, weighted by how common each group is among females.
+
+What we did above was **nest the conditioning**: first on gender, then on smoking within gender.
+
+This is the idea behind the **law of iterated expectations**:
+
+$$
+\boxed{E(Y \mid X) = E\big(E(Y \mid Z, X) \mid X\big)}
+$$
+
+In words:
+
+> If you already know X, then learning Z might give you more info. But once you average that back over all possible values of Z (holding X fixed), you return to your original E(Y∣X).
+> 
+
+
+
+### 371. Propensity score theorem proof part 1
+
+CIA states that
+
+$$
+CIA: y_{0i}, y_{1i} \perp\!\perp D_i|X_i 
+$$
+
+while $PST$ states that
+
+$$
+PST: y_{0i}, y_{1i} \perp\!\perp D_i|P(X_i) 
+$$
+
+But how?
+
+Based on **Mostly Harmless Econometrics**
+
+we need to show that
+
+$$
+P(D_i=1|y_{ji},P(X_i)) \neq f(y_{ji})
+$$
+
+probability of taking the treatment given potential level of outcome and their propensity score is not a function of potential level of outcome
+
+We can write the probability as expectation
+
+$$
+P(D_i=1|y_{ji},P(X_i)) =E (D_i=1|y_{ji},P(X_i)) 
+$$
+
+cuz $i=0,1$ and the zero term will disappear 
+
+
+
+### 372. Propensity score theorem proof part 2
+
+Now using law of iterated expectation, we can get
+
+$$
+E (D_i=1|y_{ji},P(X_i))  = E[E[D_i|y_{ji}P(X_i),X_i]|y_{ji},P(X_i)]
+$$
+
+If we have $X_i$, we have $P(X_i)$ so we can simplify the inner expectation
+
+$$
+E[E[D_i|y_{ji},X_i]|y_{ji},P(X_i)]
+$$
+
+and by $CIA$, $X_i, y_{ji}$ are independent, so further simplify
+
+$$
+E[E[D_i|X_i]|y_{ji},P(X_i)]
+$$
+
+The inner expectation is just propensity score
+
+$$
+E[P(X_i)|y_{ji},P(X_i)]
+$$
+
+propensity given propensity is just propensity
+
+$$
+= P(X_i)
+$$
+
+which is not a function of $y_{ji}$
+
+
+
+### 373. Propensity score matching: an introduction
+
+How to deal with selection bias? We have two samples $D_i=1$ where people chose to be treated and $D_i=0$ where people chose not to be treated.
+
+They are different due to difference in covariate $X_i$
+
+$$
+\Delta \mu = ACE + SB
+$$
+
+We can’t stratify because $X_i$ is highly dimensional, so we use $PST$ which is just a probability <scalar> and compare individuals with similar probability
+
+So here are the steps
+
+1. estimate  $PS$ using logit or generalized boosted modeling  $GBM$<recommended by recent papers>
+2. Matching using greedy matching or optimal matching <this will remove individuals that are not comparable>
+3. create stratum in treated group and untreated with similar PS
+4. compare mean level of outcome in each strata <difference in means> 
+5. Take weighted average to get $ACE$ for the whole stratum
+
+$$
+\widehat{ACE} \approx \sum_S (\bar y_{1s} - \bar y_{0s})
+$$
+
+
+### 374. Propensity score matching - mathematics behind estimation
+
+We know that individual causal effect $ICE$ is
+
+$$
+\delta_i = y_{1i} - y_{0i}
+$$
+
+But we want the average causal effect $ACE$
+
+$$
+E[\delta_i|D_i=1] = E[y_{1i}-y_{0i}|D_i=1]
+$$
+
+using law of iterated expectation we get
+
+$$
+E[E[y_{1i}- y_{0i}|D_i=1,P(X_i)]|D_i=1]
+$$
+
+then separate the inner expectation
+
+$$
+\mathbb{E}[\mathbb{E}[y_{1i} \mid D_i = 1, P(X_i)] - \mathbb{E}[y_{0i} \mid D_i = 1, P(X_i)] \mid D_i = 1]
+$$
+
+The first term is observed, but the second is counterfactual, but by $PST$, we can say in the inner condition of the second term that $D_i=0$  so we have two observed data and can rewrite $y_{1i} \to y_i$
+
+so we are just comparing means in between different strata
+
+$$
+\mathbb{E}[\Delta \mu(P(X_i)) \mid D_i = 1] \approx \sum_{s} \Delta \mu(P(X_i)) \omega_s
+$$
+
+
+
+### 375. Method of moments and generalized method of moments - basic introduction
+
+If we have a population with a condition like $E[X]=\mu$, Method of Moments $MM$ and Generalized method of moments $GMM$ work based on **analogy principle**
+
+Analogy principle: if we come up with a similar quantity in our sample to that in the population, we can use the sample equivalent condition to estimate the parameter
+
+Note,  $E[X]=\mu$ is first moment condition for a distribution, we don’t have enough conditions to specify the distribution
+
+Based on weak law of large numbers, we can state that
+
+$$
+E[X] = \lim_{N \to \infty} \dfrac{X_1+X_2+\dots}{N}
+$$
+
+where the right side is sample equivalent to the left side, so we can use it to replace the population condition
+
+$$
+E[X] \to \dfrac 1 N \sum X_i
+$$
+
+Using it, we get the estimated $\mu$
+
+$$
+\hat \mu = \dfrac 1 N \sum X_i
+$$
+
+Now what happens if we have another population condition like $E[X^2]= \sigma^2 + \mu^2$
+
+its simple: replace $E[X^2]$ with $\dfrac 1 N \sum X_i^2$
+
+$$
+\hat \sigma^2 + \hat \mu^2 = \dfrac 1 N \sum X_i^2
+$$
+
+why?
+
+remember that
+
+$$
+Var(X) = E[X^2]-E[X]^2
+$$
+
+the second part is where $\mu^2$ came from
+
+Key takeaway, in $MM, GMM$ we always replace
+
+$$
+\boxed{E[f(X)] \to \dfrac 1 N \sum f(x)}
+$$
+
+Till now we had 2 parameters $\mu, \sigma^2$ and  2 population conditions, we were able to get solutions
+
+If we have the a third population condition $E[x^4] = 3 \sigma^4$, using analogy principle
+
+$$
+3\hat \sigma^4 = \dfrac 1 N \sum X_i^4
+$$
+
+Now we have 3 equations and 2 parameters, so we are stuck.
+
+Hence: we use $GMM$ <more on that later on>
+
+Benefits of $MM$:
+
+1. didn’t need likelihood or know the distribution
+2. Robust to distributional assumptions like heteroscedasticity
+3. Deals with non linearities in moment conditions
+4. consistent
+
+
+
+### 376. Method of moments and generalized method of moments estimation part 1
+
+If we have a population in which data $X$ follows normal distribution
+
+$$
+X \sim N(\mu, \sigma^2)
+$$
+
+Since that we are dealing with normal, we automatically know some conditions
+
+$$
+E[X]=\mu, Var(X)= \sigma^2
+$$
+
+We will use $MM$ to get sample analogue
+
+For$E[X]$, we use
+
+$$
+\dfrac 1 N \sum X_i = \hat \mu
+$$
+
+For $Var(X)$ which is $E[X-\mu]^2$ we get
+
+$$
+\dfrac 1 N \sum(X_i - \hat \mu)^2 = \hat \sigma^2
+$$
+
+Notice that we have 2 equations and 2 unknowns so we used method of moments
+
+We also know that skewness of normal is
+
+$$
+E[(X-\mu)^3]=0
+$$
+
+with sample analogue
+
+$$
+\dfrac 1 N \sum(X_i - \hat \mu)^3 =0
+$$
+
+and kurtosis $E[(X-\mu)^4]= 3 \sigma^4$ with sample analogue
+
+$$
+\dfrac 1 N \sum(X_i - \hat \mu)^4 = 3 \hat \sigma^4
+$$
+
+Now we have 4 equations and 2 unknown parameters, so we use $GMM$, no exact solutions
+
+To use $GMM$, we use cost function
+
+$$
+g_1 = \dfrac 1 N\sum X_i - \hat \mu
+$$
+
+$$
+g_2 = \dfrac 1 N\sum(X_i - \hat \mu)^2 - \hat \sigma^2
+$$
+
+$$
+g_3 = \dfrac 1 N \sum(X_i - \hat \mu)^3
+$$
+
+$$
+g_4 = \dfrac 1 N \sum(X_i - \hat \mu)^4 - 3 \hat \sigma^4
+$$
+
+then we choose the parameters that decrease cost function
+
+**Note:**
+
+picture has a typo <forgot $\dfrac 1 N$>
+
+
+
+### 377. Method of moments and generalized method of moments estimation part 2
+
+Back to our cost function, in am optimal world, they should all be equal to zero
+
+We need to find $\hat \mu, \hat \sigma$ that minimize the cost function, absolute value is hard to calculate so we use sum of squares
+
+$$
+\boxed{S = \sum g_i^2}
+$$
+
+Is there a better way?
+
+yes, some cost functions tend to deviate more than others, we need **weights**
+
+The bigger the power, the greater the deviation, so we need weights to be proportional to inverse of variance of each cost function
+
+$$
+\boxed{S = \sum w_j g_j^2 \qquad w_j \propto \dfrac 1 {Var(g_j)}}
+$$
+
+Is this the best solution?
+
+no, some of the conditions are correlated with each other, we need to account for that
+
+$$
+\boxed{S= \hat g' \hat w \hat g \qquad \hat g= \begin{bmatrix}
+\hat g_1 \\
+\hat g_2 \\
+\hat g_3\\
+\hat g_4
+\end{bmatrix}}
+$$
+
+where $\hat w$ is the weighting matrix which contains off diagonal terms, we don’t know the covariance so $GMM$ has two steps
+
+1. we estimate each cost function using the $\sum g_i^2$
+2. formulate $\hat w$ then calculate $\sum \hat g' \hat w \hat g$
+

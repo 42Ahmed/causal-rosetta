@@ -1,0 +1,768 @@
+---
+title: "Asymptotic Behavior of Estimators"
+format: html
+number-sections: false
+---
+
+### 273. Part 3: Asymptotic Behavior of estimators
+
+Starting from here is part 3
+
+### 274. Asymptotic Behavior of estimators
+
+Its time for some theory :)
+
+### 275. An introduction to asymptotic behavior of estimators
+
+We are going to prove some important theorems like **CLT, WLLN.** To do so, we will use some advanced math like **matrices, moment generating function, characteristic functions**
+
+This will allow us to have better understanding, but hang on cuz its hard
+
+Asymptotic behavior is how estimator behaves as sample size tends to infinity $N \to \infty$
+
+Remember the **sampling distribution.** we take N samples from a population (repeated samples) and estimate $\hat \beta$ from each sample and tabulate it, we get something that looks like normal distribution
+
+Our goal: know what happens to the sampling distribution when $N \to \infty$, is it biased? consistent? exact distribution or its approximately normal?
+
+### 276. Markov’s inequality
+
+$$
+\boxed{P(X\ge a) \le \dfrac{E[X]}{a}}
+$$
+
+we need **Markov inequality** to prove C**hebyshev inequality** that we will use it to prove **law of large numbers**
+
+It states that probability of random variable bigger than a constant is less than or equal its expected value over a.
+
+**Proof**
+
+Use indicator function
+
+$$
+\begin{cases}
+0 & \text{if } X<a\\
+1 & \text{if } X\ge a
+\end{cases}
+$$
+
+and draw it. Now multiply the function by $a$
+
+$$
+\begin{cases}
+0 & \text{if } X<a\\
+a & \text{if } X\ge a
+\end{cases}
+$$
+
+Graphically, we have two regions $X<a, X\ge a$
+
+In region one: which is $a*$ indicator function $1_{X\ge a}$ (Note: we wrote indicator function this way cuz $X\ge a$ is the condition )
+
+$$
+a1_{X\ge a} = 0 < X
+$$
+
+In region two:
+
+$$
+a1_{X\ge a} = a \le X
+$$
+
+So X is bigger than $a*$ indicator function in both regions
+
+$$
+a 1_{X\ge a} \le X
+$$
+
+Take expectation
+
+$$
+a E[1_{X\ge a}] \le E[X]
+$$
+
+expectation of indicator function is same as probability, and divide by a
+
+$$
+P(X\ge a) \le \dfrac{E[X]}{a}
+$$
+
+### 277. The link between expectations and probability of an indicator function
+
+How is expectation related to probability?
+
+let X be a fair die, so each value takes probability $1/6$. Expectation (mean value) is 3.5
+
+meaning if I throw a die many times), I will get mean of 3.5
+
+To prove this mathematically
+
+$$
+\boxed{E[X] = \sum_xxp(X=x)}
+$$
+
+$$
+1(1/6) + 2(1/6)+ \dots + 6(1/6)= 3.5
+$$
+
+Now draw an indicator function $1_{x\ge a}$,
+
+Meaning it has value of $0$ when when $x<a$ and 1 when $x \ge a$
+
+what is the expectation of it?
+
+$$
+E[1_{x\ge a}] = 0p(X<0)+ 1P(X\ge a)
+$$
+
+Meaning
+
+$$
+\boxed{E[1_{x\ge a}] =1P(X\ge a)}
+$$
+
+This is the fundamental bridge between expectation and probability
+
+### 278. Markov’s inequality intuition
+
+$$
+P(X\ge a) \le \dfrac{E[X]}{a}
+$$
+
+Back to our die example
+
+its value is a random variable $X$ that takes 1 to 6. We will not assume its fair, but assume $E[x] = 3.5$. There are many ways to get this expectation
+
+What is the probability that $P(X\ge6)$? Based on Markov inequality
+
+$$
+P(X\ge6) \le \dfrac{3.5}{6}
+$$
+
+and X can’t be larger than 6 so we replace $\ge$ with $=$, and we will use proof by **contradiction** so assume the **opposite sign**
+
+$$
+P(X=6) > \dfrac{3.5}{6}
+$$
+
+Get expected value of X
+
+$$
+E[X] = \sum_xxp(X=x)\\
+=1P(X=1) + 2P(X=2)+ \dots + 6P(X=6)= 3.5
+$$
+
+we know that probability can’t be negative, So expectation must be bigger than the las term
+
+$$
+E[X] \ge 6P(x=6)
+$$
+
+and we assumed this probability is greater than 3.5
+
+$$
+E[X] > 3.5
+$$
+
+But $E[X] = 3.5$ we got a **contradiction**
+
+Then Markov inequality is actually true
+
+### 279. Chebyshev’s inequality
+
+$$
+\boxed{P(|X-\mu| \ge a) \le \dfrac{Var(x)}{a^2}}
+$$
+
+Incase you find the below confusing here is are the steps
+
+1.  start with Markov
+2.  adjust it by subtracting $\mu$ from both sides
+3.  square the left side
+4.  use the squared left side to get the squared right side
+5.  original left side $\le$ squared right side
+6.  Notice that squared right side is definition of variance
+7.  done!
+
+How to prove it? start with Markov inequality
+
+$$
+P(X\ge a) \le \dfrac{E[X]}{a}
+$$
+
+replace X with $|X-\mu|$
+
+$$
+P(|X-\mu|\ge a) \le \dfrac{E[|X-\mu|]}{a}
+$$
+
+The probability of the modulus part is identical to its square so we use its square instead of taking the modulus (think about it)
+
+$$
+P(|X-\mu|\ge a) = P((X-\mu)^2\ge a^2)
+$$
+
+Now replace the right part using Markov inequality <using the square not the modules>
+
+$$
+P(|X-\mu| \ge a) \le \dfrac{E(X- \mu)^2}{a^2}
+$$
+
+which is Chebyshev’s inequality
+
+$$
+P(|X-\mu| \ge a) \le \dfrac{Var(x)}{a^2}
+$$
+
+### 280. Chebyshev’s inequality intuition part 1
+
+Back to our die (not fair but has 6 faces.) We know that
+
+$$
+Var(X) = E[(X-\mu)^2]
+$$
+
+We will assume $\mu = 3.5$ and $Var(X)= 25/8$
+
+Lets enumerate all possible values
+
+| $X$ | $|X-\mu|$ |
+|-----|-----------|
+| 1   | 2.5       |
+| 2   | 1.5       |
+| 3   | 0.5       |
+| 4   | 0.5       |
+| 5   | 1.5       |
+| 6   | 2.5       |
+
+From Chebyshev inequality
+
+$$
+P(|X-3.5|\ge2.5) \le \left[\dfrac{(25/8)}{(5/2)^2} = \dfrac{1}{2}\right]
+$$
+
+We will use contradiction again and assume the opposite sign
+
+$$
+P(|X-3.5|\ge2.5) >1/2
+$$
+
+From the table, to get $x-3.5=2.5$, there are only two possible values for $X$: $X=1,X=6$
+
+$$
+P(X=1)+P(X=6)>1/2
+$$
+
+Now expand the variance
+
+$$
+Var(X) = E[(X-\mu)^2] = \sum(X-\mu)^2P(X=x)
+$$
+
+We will continue the proof in the next section
+
+### 281. Chebyshev’s inequality intuition part 2
+
+we reached this inequality last time
+
+$$
+Var(X) = E[(X-\mu)^2] = \sum(X-\mu)^2P(X=x)
+$$
+
+where $\mu = 3.5$ and $Var(X) = \dfrac{25}{8}$ and
+
+$$
+P(X=1)+P(X=6)>1/2
+$$
+
+These are our assumptions
+
+If we calculate the variance we get
+
+$$
+var(x) = (1-3.5)^2P(X=1)+ (2-3.5)^2P(X=2)+\dots +(6-3.5)^2P(X=6)
+$$
+
+we don’t have individual probabilities but we know probability is constrained between 0 and 1
+
+$$
+var(x)\ge 2.5^2P(X=1) + 2.5^2P(X=6)
+$$
+
+collect common terms
+
+$$
+var(x) = 2.5^2(P(X=1)+P(X=6))> \dfrac{25}{4}\cdot \dfrac{1}{2}= \dfrac{25}{8}
+$$
+
+But we assumed the variance to be $= \dfrac {25}{8}$ which is a contradiction
+
+### 282. A proof of the weak law of large numbers
+
+Weak law of large number states that
+
+$$
+\boxed{\lim_{n \to \infty} P(|\bar X_N - \mu|>\varepsilon)=0}
+$$
+
+Meaning:
+
+if I have a sample from a population, and calculate $\bar x$ then as sample size increases $N \to \infty$, $\bar x_N \to \mu$
+
+To prove this, we use Chebyshev’s inequality but replace $x$ with $\bar x$
+
+$$
+\boxed{P(|\bar x_N-\mu| \ge \varepsilon) \le \dfrac{Var(\bar x_N)}{\varepsilon^2}}
+$$
+
+To get a formula for $var(\bar x)$:
+
+Remember that $\bar x_N = \dfrac 1 N \sum x_i$ then the variance is
+
+$$
+Var(\bar x_N) = \dfrac 1 {N}^2 \sum var(x_i) = \dfrac{N \sigma^2}{N^2} = \dfrac{\sigma^2}{N}
+$$
+
+No covariance terms cuz all observations $x_i$ are $iid$
+
+In the Chebyshev's inequality, as sample size increases, right side will approach zero
+
+$$
+P(|\bar x_N-\mu| \ge \varepsilon) \le \dfrac{\sigma^2}{N\varepsilon^2} \to 0
+$$
+
+Hence, we just proved weak law of large numbers
+
+### 283. Convergence in probability of a random variable 1
+
+What happens to a random variable as sample size increases? <convergence>
+
+$$
+X_N\to c
+$$
+
+a random variable $X$ converges to a constant $c$ if
+
+$$
+\boxed{\lim_{n \to \infty} P(| X_N - c|>\varepsilon)=0}
+$$
+
+Notice how this is similar to weak law of large number which stated
+
+$$
+\lim_{n \to \infty} P(|\bar X_N - \mu|>\varepsilon)=0
+$$
+
+Which can be interpreted as
+
+$$
+\bar X_N \to \mu
+$$
+
+We want an estimator to **converge in** **probability** to a parameter
+
+There is **mean square convergence** which is more strict than probability and if it exists, it applies convergence in probability.
+
+To mean square converge:
+
+$$
+\boxed{\lim_{N\to \infty}E[X_N] = c}
+$$
+
+$$
+\boxed{\lim_{N\to \infty}Var(X_N) = 0}
+$$
+
+Example on $\bar x$
+
+$$
+E[\bar X_N]= \mu\\ \lim_{N \to \infty}Var(\bar X_N) = \lim \dfrac{\sigma^2}{N}=0
+$$
+
+Hence, $\bar X_N \to \mu$
+
+We can also have random variable converge in probability to another random variable like
+
+$$
+(1+\dfrac 1 N)X \to X
+$$
+
+### 284. Convergence in probability of a random variable 2
+
+Here is an example
+
+$$
+X= \begin{cases}
+0, &P=\frac 1 2\\
+1, &P=\frac 1 2
+\end{cases}
+$$
+
+Think of $X$ as heads or tails, then let
+
+$$
+X_N = (1 +\dfrac 1 N)X
+$$
+
+how to prove the convergence?
+
+we need to calculate
+
+$$
+|X_N-X| = \dfrac 1 N X
+$$
+
+When $X=0$
+
+$$
+|X_N-X| = 0 \to P(|X_N-X|>\varepsilon)=0
+$$
+
+When $X=1$
+
+$$
+|X_N-X| = \dfrac 1 N\to P(|X_N-X|>\varepsilon)\\= P(\dfrac 1 N > \varepsilon)
+$$
+
+we can write the final probability as
+
+$$
+P(N < \dfrac 1 \varepsilon)
+$$
+
+Cuz $N$ is infinite, the probability is $0$
+
+Both outcomes converge in probability so we can say
+
+$$
+X_N \to X
+$$
+
+### 285. Convergence in probability of a random variable to a constant
+
+What does it mean to converge to a constant?
+
+We know that
+
+$$
+\bar X = \dfrac 1 N \sum X_i\\
+E[\bar X] = \mu\\
+\lim var(\bar X) = \lim var \dfrac {\sigma^2} N = 0
+$$
+
+Which proves **mean square convergence** which implies **convergence in probability**
+
+Graphically, imagine the sampling distribution of $\bar X$. from the expectation, even at small sample sizes, distribution is centered at $\mu$
+
+But as sample size increases, distribution gets narrower until it becomes a line <constant>
+
+Example 2:
+
+$$
+\tilde X = \dfrac 1 {N+1} \sum X_i\\
+E[\bar X] = \dfrac{N}{N+1}\mu\\
+\lim E[\tilde X] = \mu\\
+\lim var(\bar X) = 0
+$$
+
+If we draw it, it won’t be centered around $\mu$ <biased> but approaches $\mu$ as sample size increases \<consistent\| asymptotically unbiased\>
+
+### 286. Convergence in distribution of a random variable
+
+We can also have convergence in distribution
+
+$$
+\boxed{X_N \to X}
+$$
+
+when
+
+$$
+\boxed{\lim_{N \to \infty} |F_N(X_n)-F(X)|=0}
+$$
+
+where $F$ is the cdf
+
+Graphically, it means cdf of $X_N$ approaches cdf of $X$ as sample size $N \to \infty$
+
+If a random variable converges in probability, it must converge in distribution, reverse is not true
+
+Example: Bernoulli random variable
+
+$$
+X = \begin{cases}
+0, &p=\frac 1 2\\
+1 &p= \frac 1 2
+\end{cases}
+$$
+
+and we let $X_n = X$, of course they converge in distribution cuz they are the same thing
+
+Now let $Y= 1-X$.
+
+$X_N$ converges in distribution to $Y$, but doesn’t converge in probability, cuz
+
+$$
+|X_N-y|= |X-X+X|= |2X-1|
+$$
+
+when $X=0, ||=1$ and when $X=1, ||=1$, not zero either case
+
+### 287. Central limit theorems: an introduction
+
+Think of a sequence of random variables $X_1,\dots X_n$, then we take their sample mean $\bar X_n = \dfrac 1 n (X_1 + X_2 +\dots,X_n)$
+
+From WLLN we know that
+
+$$
+\bar X_n \to \mu
+$$
+
+converge in probability and distribution
+
+But what do we mean?
+
+If we have a population and we calculate many samples
+
+<p times>
+
+from each sample we get $\bar X_n^i$ then we plot its sampling distribution
+
+We know the $\bar X_n$ will be centered around $\mu$ and becomes constant \<straight line above $\mu$\> <consistent> as sample size approaches $\infty$
+
+But we have a question, how fast will the $\bar X$ approach $\mu$ in distribution. Its easier to ask the question
+
+$$
+\bar X_n - \mu \to 0
+$$
+
+Solution: plot a graph, n on x axis and $|\bar X_n - \mu|$, the curve falls with a slope of $\dfrac 1 {n^\frac 1 2}$
+
+if sample size increases by 100, the difference falls by 10
+
+so what happens if multiply both? n approaches infinity while the bracket approaches zero
+
+$$
+\boxed{n^{\frac 1 2}(\bar X_N - \mu)\to N(0, \sigma^2)}
+$$
+
+According to **Linderberg-Levy CLT** states that if $X_i$ are $iid$, then the equation will converge in distribution to normal with mean $0$ and variance of $\sigma^2$ no matter the actual distribution of $X_i$
+
+The pdf will be bell shaped curve centered around 0 and variance $\sigma^2$
+
+Remember the consistent straight line? super magnify it, and you will find the normal distribution
+
+**Common misuse:**
+
+its not ok to divide both size in the equation by $n^\frac 1 2$ to get
+
+$$
+(\bar X_N - \mu)\to N(0, \dfrac{\sigma^2}n)
+$$
+
+cuz we know the left side approaches zero and don’t have a distribution. So the above equation is wrong
+
+But we can divide both side by a constant like $\sigma$
+
+$$
+\boxed{\sigma n^\frac 1 2(\bar X_N - \mu)\to N(0, 1)}
+$$
+
+### 288. Characteristic functions introduction
+
+If we want to prove something regarding a random variable, we consider their probability distributions. But sometimes this is not possible,
+
+but we can transform random variable to a **characteristic function FC** or **moment generating function MGF**
+
+Cuz each random variable has its own characteristic function so its 1 to 1 mapping.
+
+If we prove a property on CF, then its like we proved it on the original random variable $X$
+
+CF formula
+
+$$
+\boxed{\varphi_x(t) = E[e^{itx}]}
+$$
+
+using law of unconscious statistician we get
+
+$$
+\boxed{\varphi_x(t) = \int^\infty_{- \infty} e^{itx}p(x)dx}
+$$
+
+integration is hard cuz it includes complex numbers, so we need **complex analysis**
+
+Properties of CF:
+
+1.  if we have random variables $X_1,\dots X_p$, I can get their group cf as product of individual cd
+
+    $$
+     \boxed{\varphi_{x_1\dots x_p}(t) = \varphi_{x_1}(t)\varphi_{x_2}(t)\dots\varphi_{x_p}(t)}
+     $$
+
+2.  If the CF is multiplied by a constant
+
+$$
+\boxed{\varphi_{ax}(t) = \varphi_x(at)}
+$$
+
+### 289. The weak law of large numbers proof using characteristic functions part 1
+
+We stated the characteristic function and its two properties
+
+$$
+\varphi_X(t) = \mathbb{E}\left[ e^{itX} \right]
+$$
+
+$$
+\varphi_{\frac x N}(t) = \varphi_{x}(\frac t N)
+$$
+
+We can also expand it using Taylor series
+
+$$
+e^{itx} = 1+itx + \dfrac{(itx)^2}{2!}+ \dots
+$$
+
+or more compactly
+
+$$
+e^{itx} = 1+itx + o(t)
+$$
+
+If we take expectation we get
+
+$$
+E[e^{itx}] = 1 + it\mu+o(t)
+$$
+
+we have a sample mean $\bar X_N = \dfrac 1 N \sum X_i$, and which that characteristic function approaches a constant as $N \to 0$
+
+To do so, we write it in another way
+
+$$
+\bar X_N = \sum \dfrac{X_i} N
+$$
+
+In terms of characteristic function and using property of summations
+
+$$
+\varphi_{\bar X_N}(t) = \prod \varphi_{ \frac XN}(t)
+$$
+
+Then using the property of the division we get
+
+$$
+\varphi_{\bar X_N}(t) = \prod \varphi_{ X}(\dfrac t N)
+$$
+
+Because $X$ is iid
+
+$$
+\varphi_{\bar X_N}(t) =  \varphi_{ X}(\dfrac t N)^N
+$$
+
+Then using Taylor series, we get
+
+$$
+[1 + it \dfrac  \mu N +o( \dfrac t N)]^N
+$$
+
+If we let $N \to \infty$
+
+$$
+[1 + it \dfrac  \mu N +o( \dfrac t N)]^N \to e^{itu}
+$$
+
+The characteristic function of $\bar x$ approaches $e^{itu}$ which is constant at $\mu$
+
+### 290. The weak law of large numbers proof using characteristic functions part 2
+
+we reached that
+
+$$
+\varphi_{\bar X_N}(t)\to e^{itu}
+$$
+
+and we know that there is a one to one mapping between RV and CF, and the CF $e^{itu}$ represent the random variable $y=\mu$
+
+why?
+
+$$
+\varphi_y(t) = E[e^{itu}] = \int^\infty_{- \infty}e^{itu}P(y)dy
+$$
+
+the exponential doesn’t have y so get it out
+
+$$
+e^{itu}\int^\infty_{- \infty}P(y)dy = e^{itu}
+$$
+
+cuz the pdf has to be equal to 1
+
+Conclusion
+
+$$
+\bar X_N \to \mu
+$$
+
+### 291. Central limit theorem proof part 1
+
+The simplest way to prove CLT is using characteristic function
+
+Assume $Y \sim (0, 1)$
+
+with the characteristic function
+
+$$
+\varphi_Y(t) = \mathbb{E}\left[ e^{itY} \right] = \int_{-\infty}^{\infty} e^{ity} f_Y(y) \, dy
+$$
+
+If we expand the $e$ using Taylor or McLaren, we get
+
+$$
+e^{ity} = 1 + ity + \frac{(ity)^2}{2!} + o(t^2)
+$$
+
+Get the $y$ alone
+
+$$
+e^{ity}= 1 + ity - \frac{t^2}{2} y^2 + o(t^2)
+$$
+
+Then substitute the exponential in the integral with the expansion to get
+
+$$
+\varphi_Y(t) = \mathbb{E}\left[ 1 + ity - \frac{t^2}{2} y^2 + o(t^2) \right]
+$$
+
+distribute:
+
+$$
+\varphi_Y(t)= 1 + it \mathbb{E}[Y] - \frac{t^2}{2} \mathbb{E}[Y^2] + o(t^2)
+$$
+
+This is why its moment generating function
+
+cuz $Y \sim(0,1)$
+
+$$
+\mathbb{E}[Y] = 0 \quad \mathbb{E}[Y^2] = 1
+$$
+
+which gives us
+
+$$
+\boxed{\varphi_Y(t) = 1 - \frac{t^2}{2} + o(t^2)}
+$$
+
+### 292. Central limit theorem proof part 2
+
+### 293. Central limit theorem proof part 3
+
+### 294. Central limit theorem proof part 4
+
+### 295. The characteristic function of a normal random variable part 1
+
+### 296. The characteristic function of a normal random variable part 2
+
+### 297. The characteristic function of a normal random variable part 3

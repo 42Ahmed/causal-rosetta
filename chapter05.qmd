@@ -1,0 +1,1511 @@
+---
+title: "Time Series"
+format: html
+number-sections: false
+---
+
+### 160. Time series vs cross sectional data
+
+In cross sectional, we have a population that we take a random sample from. So each observation is $iid$ making
+
+$$
+\boxed{E[u_i|x_i] =0}
+$$
+
+meaning error term is not related to independent variables.
+
+If they were dependent, we need to strengthen the assumption
+
+$$
+E[u_i|x_j] =0
+$$
+
+Meaning: error term of an individual is not related to independent variables of any other individual
+
+In Time Series, we have a **process** that we sample from at different times, we can’t capture all the time possible so we have **no population,** and the data is **not iid**
+
+A key difference is that data are dependent, so we have to make a more strict assumption
+
+$$
+\boxed{E[u_t|x_j] =0}
+$$
+
+meaning error term is not related to independent variables in the past, present, future
+
+### 161. Time series Gauss Markov conditions
+
+For time series data, we modify the assumptions a little bit
+
+1.  **Linear**
+
+$$
+y_t = \alpha + \beta_1 x_{1t} +\beta_2 x_{2t} + u_t
+$$
+
+1.  **Zero conditional mean of error**
+
+$$
+E[u_t|x_{jk}] =0
+$$
+
+Meaning error term at time $t$ is not related to values of independent variables at any time (past, present, future)
+
+which is different that in cross sectional where $E[u_i|x_{ji}]=0$ meaning error term for individual $i$ is unrelated to to the independent variables for that individual
+
+1.  **No perfect collinearity**
+
+If these three are met, they are **unbiased**
+
+1.  **Homoscedasticity**
+
+$$
+var(u_t|x_{jk}) = \sigma^2
+$$
+
+The variance of the error term is constant over time and does not depend on the independent variables
+
+1.  **No serial correlation**
+
+which disappears with random sampling
+
+$$
+cov(u_t,u_s|x_{jk}) =0
+$$
+
+meaning error terms are not correlated across time
+
+If these five are met, its BLUE
+
+### 162. Strict exogeneity
+
+If we have the model
+
+$$
+y_t = \alpha + \beta x_{t} + u_t
+$$
+
+**Strict exogeneity** assumption means that
+
+$$
+\boxed{E[u_t|x_s] = 0 \quad \forall s}
+$$
+
+meaning error term is not related to independent variables in all periods
+
+which is different than weak exogeneity in cross sectional
+
+$$
+E[u_i |x_i] = 0
+$$
+
+aka error term of an individual is not related to the individual
+
+Strict exogeneity fails if we have lagged effect
+
+$$
+GDP_{t} = \alpha + \delta MP_t + u_t
+$$
+
+If $u_t$ includes $\beta MP_{t-2}$ then we have lagged effect
+
+Plot $u_t$ against $MP_{t-2}$, if there is a relation, $\hat \delta$ is biased
+
+**Solution:** include l**agged effect**
+
+$$
+GDP_{t} = \alpha + \delta_1 MP_t + \delta_2 MP_{t-2}+u_t
+$$
+
+We can also have strict exogeneity violated if \<like reverse causality but called here **feed forward effect**\>
+
+$$
+sales_t = \alpha + \beta A_t + u_t\\
+A_{t+1} = f(sales_t) = g(u_t)
+$$
+
+Advertisement in the future depends on present sales, which is some function of the present error term
+
+So $A_{t+1}, u_t$ are correlated. And it can’t be solved by just adding lagged variable. This is hard to solve
+
+However, large sample properties depend on **weak exogeneity** so we forget about **strict exogeneity**
+
+### 163. Strict exogeneity intuition
+
+We have strict exogeneity when we have
+
+1.  **lagged independent variables**
+
+    independent variable in past affects error term in present, so strict exogeneity is violated and we have bias but why?
+
+    In the example of GDP affected by military policy
+
+    $$
+     GDP_t = \alpha + \beta MP_t + u_t
+     $$
+
+    with the assumption that <not met here>
+
+    $$
+     E[u_t|MP_s]= 0
+     $$
+
+    The military policy in the present is correlated with itself in the past, so we have **omitted variable bias** cuz military policy in the past is found in the current error term
+
+2.  **Feed forward**
+
+    Like in the sales and advertisement example
+
+    $$
+     sales_t = \alpha + \beta A_t + u_t\\
+     A_t = f(sales_{t-1}) = f(u_{t-1})
+     $$
+
+    advertisement in present depends on sales on past aka depends on error in past , so strict exogeneity is violated. why bias?
+
+    1.  sales now is function of ads now
+    2.  ads now is function of sales in past
+    3.  sales in past includes advertisement in past and error in past
+    4.  sales now is correlated with errors in past
+
+**Key difference**
+
+| Scenario | Violation |
+|------------------------------------|------------------------------------|
+| lagged independent variable | lagged $X_{t-1}$ is correlated with current error $\varepsilon_t$ |
+| Feed-Forward | current $X_t$ is correlated with past error $\varepsilon_{t-1}$ |
+
+### 164. Lagged dependent variable model - strict exogeneity
+
+If we have the model
+
+$$
+Sales_t = \alpha + \beta ~Sales_{t-1} + u_t
+$$
+
+The strict exogeneity is \<remember $sales_s$ is the $x$ here\>
+
+$$
+E[u_t|sales_s] = 0 \quad \forall s, <even \,s=t>
+$$
+
+we can see that covariance has to be zero for all time periods
+
+$$
+cov(u_t, sales_{t-s})=0
+$$
+
+In our example, error term should not be correlated with independent variable in the present too, which is not the case
+
+$$
+\begin{align*}
+cov(u_t, sales_t)&= cov(u_t, \alpha + \beta sales_{t-1}+ u_t)\\
+&= var(u_t) = \sigma^2 \neq 0
+\end{align*}
+$$
+
+So strict exogeneity fails and $\hat \beta_{OLS}$ is biased. But it is consistent after other assumptions
+
+### 165. Asymptotic assumptions for time series least squares
+
+We need new assumptions to ensure that least square is asymptotically unbiased aka **consistent** which allows us to do normal inference.
+
+These assumptions are
+
+1.  **linear**
+
+$$
+y_t = \alpha + \beta_1x_{1t}+\beta_2x_{2t} + u_t
+$$
+
+1.  **stationary + weakly dependent**
+
+    more on this later on
+
+2.  **weak exogeneity**
+
+    $$
+     \boxed{E[u_t|x_{it}] = 0}
+     $$
+
+    error is not related to independent variable at a particular time <not all times>
+
+    which is way easier than **strict exogeneity** which says
+
+    $$
+     E[u_t|x_{is}] = 0 \quad \forall s
+     $$
+
+    meaning error is not related to independent variable in the past, present or future
+
+    1.  **No perfect collinearity**
+
+    If these 4 assumptions are met, then $\hat\beta_{ls}$ is **consistent**
+
+    1.  **Homoskedasticity**
+
+        $$
+         \boxed{var(u_t|x_{it}) = \sigma^2}
+         $$
+
+    which means constant variance at a particular time
+
+    which is less restrictive than Gauss Markov condition that states
+
+    $$
+     Var(u_t|x_{is}) = \sigma^2 \quad \forall s
+     $$
+
+    for all $s$ including $s=t$
+
+    1.  **No serial correlation**
+
+    $$
+     \boxed{Cov(u_t, u_s|x_t,x_s)= 0}
+     $$
+
+    which is less restrictive than Gauss Markov condition that said
+
+    $$
+     cov(u_t,u_s|x_{ik}) = 0 \quad\forall k
+     $$
+
+    If all the six are met, $\hat \beta_{ls}$ behaves **normally** too
+
+### 166. Conditions for stationary and weakly dependent series
+
+If $x_t$ is a **process** that we can’t even see all its outputs, instead we see its **realizations,** think of it as the value you see at a specific time. We say $x_t$ is **stochastic process** meaning, before we see the realization, we are not sure what value $x_t$ will take in the future.
+
+If $x_t$ is stationary and weakly dependent then $\hat \beta_{ls} \to \beta$
+
+To be **stationary** it has to meet these conditions
+
+$$
+\begin{align*}
+E[x_t] &= \mu \\
+Var(x_t) &= \sigma^2\\
+cov(x_t,x_{t+h}) &= f(h)
+\end{align*}
+$$
+
+And to be **weakly dependen**t it must satisfy
+
+$$
+corr(x_t,x_{t+h}) \to 0 \quad h \to \infty
+$$
+
+Meaning The value of $x_t$ depend more on $x_{t-1}$ and less on $x_1$. It will be better if correlation goes to zero fast
+
+### 167. Stationary in mean
+
+**Stationary in mean** is written as
+
+$$
+\boxed{E[x_t] = \mu}
+$$
+
+If we plot $t$ on x axis and $x_t$ on y axis as line plot, if its staying around $\mu$ then its stationary in mean. If its going up with respect to time or down, its not stationary.
+
+\<is it like a heart rate? or like a ladder\>
+
+Why bother?
+
+If we plot $x_t,y_t$ on y axis, and try to predict
+
+$$
+y_t = \alpha + \beta x_t + \varepsilon _t
+$$
+
+and $x_t$ is not stationary, its increasing, it will meet $y_t$ in a point, be smaller than it before the point where the relation is $y_t \sim 2x_t$ then $x_t$ becomes bigger than $y_t$ so relation becomes $y_t \sim 0.5 x_t$
+
+Meaning I can’t have stationary $y$ and one non stationary $x$
+
+So make $x_t, y_t$ both non stationary?
+
+again, the non stationarity will change with respect to time, so one can increase way faster than the other preventing linear relationship between both (same explanation as above).
+
+Solution is to have two stationary processes, and have a constant gap between them, the slope $\beta$ represents this gap
+
+### 168. Spurious regression
+
+**Hendry (1980)**
+
+He was trying to explain changes of price level with respect to time and money supply. They were both non stationary but have strong correlation and got $R^2 \sim 0.99$
+
+Then he did the same between price and $x_t$ and got $R^2 \sim 0.998$ so its better. This $x_t$ is actually rainfall!
+
+Cuz both of them were increasing with respect to time, it appeared that there is a correlation where there is not.
+
+**Rule of thumb for diagnosing spurious regression by Grenger & newbold (1974)**
+
+$$
+\boxed{R^2>DW \to spurious}
+$$
+
+Remember that Durbin Watson will be low if we have runs of positive and negative
+
+### 169. Spurious regression 2
+
+If we have the process
+
+$$
+x_t = x_{t-1} + \varepsilon_t\\
+\varepsilon \sim iid(0, \sigma^2)
+$$
+
+and we have another process (both are named random walk)
+
+$$
+y_t = y_{t-1} + \varepsilon_t\\
+\varepsilon \sim iid(0, \sigma^2)
+$$
+
+One can go upwards, one can go downwards, but there will seem that there is a correlation between them. They are just random walks
+
+Note:
+
+if we do the simulation we will get **duck scatter plot**
+
+### 170. Variance stationary process
+
+Draw constant mean line, if the deviation from it increase with time, its variance is related to time. We want it to be stationary in variance aka can be drawn between two parallel lines
+
+$$
+\boxed{Var(x_t) = \sigma^2}
+$$
+
+why?
+
+if $y_t$ is variance stationary, and $x_t$ is not variance stationary. we can’t fit it using linear regression cuz there is no constant relationship between them
+
+Remember that in time series, relation between $x,y$ is a **constant magnification.** \<$y$ looks like $x$ shifted up\>
+
+If both of them are non stationary in variance, we can get spurious regression
+
+### 171. Covariance stationary processes
+
+This is the last condition for a process to be stationary: constant covariance
+
+Mathematically:
+
+$$
+\boxed{cov(X_t, x_{t+h}) = f(h) \neq g(t)}
+$$
+
+what does that mean?
+
+1.  constant mean means the mean line is in the middle of the graph
+2.  constant variance means we can draw it between two parallel lines
+3.  constant covariance means the waves are similar (like same frequency)
+
+If the waves change after some point, maybe we have two functions for $x_t$ like
+
+$$
+x_t = 0.5 x_{t-1}+ \epsilon_t \qquad x_t = -0.5x_t + \epsilon_t
+$$
+
+That point splits the two functions, so the covariance depends on time
+
+$$
+cov(x_t, x_{t-1}) = f(t)
+$$
+
+Why bother?
+
+If we have stationary $y_t$ and $x_t$ does not have constant covariance. we cant regress $y$ on $x$ in a linear manner \<if x changes at some point, y should change too\>. SO to regress, we need both $y_t$ and $x_t$ to be stationary
+
+### 172. Stationary series summary
+
+We have three conditions for stationary
+
+$$
+\boxed{E[x_t] = u}
+$$
+
+$$
+\boxed{var(x_t) = \sigma^2}
+$$
+
+$$
+\boxed{cov(x_t,x_{t+h}) = f(h) \neq g(t)}
+$$
+
+If the three conditions are met, we can say that $x_t$ has one data generating process for all time <does not have two DGP>
+
+Why we need stationary data?
+
+1.  If we have the model <practical>
+
+    $$
+     y_t  = \alpha + \beta x_t + \varepsilon_t
+     $$
+
+    if $y, x$ are non stationary, we can’t have a relationship $\beta$ that holds for all time
+
+    and we don’t allow for different $\beta_t$ cuz this allows us to connect any two processes and get confused with spurious regression
+
+2.  If the processes are stationary, we can use $LLN+CLT$ and make inference easily. <theory>
+
+### 173. Weakly dependent time series
+
+Weakly dependence means the independent variable is less correlated with previous values as time passes
+
+$$
+corr(x_t, x_{t+h})\to 0 \qquad h \to \infty
+$$
+
+Example 1: **Moving average process**
+
+$$
+\boxed{x_t = \varepsilon_t + \theta \varepsilon_{t-1}}
+$$
+
+This model has $\epsilon_t \sim iid(0, \sigma^2)$ so the correlation is
+
+$$
+corr(x_t,x_{t-1}) \neq 0 \qquad corr(x_t. x_{t-\tau})= 0 ,J>1
+$$
+
+Example 2: **Autoregressive process**
+
+$$
+\boxed{x_t = \rho x_{t-1}+ \epsilon_t}
+$$
+
+if $|\rho|<1$, the process is weakly dependent
+
+$$
+corr(x_t, x_{t-1})\sim \rho \qquad 
+$$
+
+but to find correlation for $x_{t-2}$ we need to **back substitute** for $x_{t-1}$
+
+$$
+x_{t-1} = \rho x_{t-2} + \epsilon_{t-1}
+$$
+
+$$
+\boxed{x_t = \rho^2x_{t-2}+ \rho \epsilon_{t-1}+ \epsilon_t}
+$$
+
+Then the correlation will be
+
+$$
+corr(x_t, x_{t-2}) \sim \rho^2
+$$
+
+if $|\rho|<1$ the power will make it even smaller
+
+What if the series is not weakly dependent?
+
+Example: **Random walk**
+
+$$
+\boxed{x_t = x_{t-1}+ \epsilon_t}
+$$
+
+A function like this will have equal correlation for all intervals
+
+$$
+corr(x_t, x_{t-1}) = corr(x_t, x_{t-2})
+$$
+
+Why do we need weakly dependence?
+
+-   in cross sectional, we needed random sample to use $CLT$
+-   in time series, we need weakly dependence to use $CLT$, cuz if $x_t$ is not really related with lagged variables, we can treat them as random sample
+
+### 174. Moving average O(1) process
+
+A moving average process
+
+$$
+x_t = \varepsilon_t + \theta \varepsilon_{t-1}, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+$$
+
+Is called $MA(1)$ \<moving average of order 1\> cuz we have one lagged error only
+
+**Example of MA(1):**
+
+Change in demand of lemonade
+
+$$
+\Delta \text{lemonade}_t = \varepsilon_t - 0.5 \varepsilon_{t-1}
+$$
+
+where epsilon represent change in temperature $\varepsilon_t = \Delta \text{temp}_t$
+
+If change in temperature is greater than zero, we have
+
+$$
+\varepsilon_t > 0 \Rightarrow \Delta \text{lemonade}_t > 0
+$$
+
+But what does the $\varepsilon_{t-1}$?
+
+If the future temperature does not change, $\varepsilon_{t+1}=0$
+
+$$
+\varepsilon_{t+1} = 0 \Rightarrow \Delta \text{lemonade}_{t+1} = -0.5 \varepsilon_t
+$$
+
+Lemonade demand will decrease, cuz people bought it yesterday and there are still leftovers. SO although temp is still high, demand of lemonade will decrease
+
+If lemonade bottle stays for two days, we will have in the model $\varepsilon_{t-2}$
+
+**Example 2:** change in oil price
+
+$$
+\Delta \text{OilP}_{t} =  \varepsilon_t + 0.5\varepsilon_{t-1}
+$$
+
+Where $\varepsilon_t$ represent a catastrophe like a typhoon or hurricane so if it occurs, price increase
+
+$$
+\varepsilon_t > 0 \Rightarrow \Delta \text{OilP}_t > 0
+$$
+
+What about after a week with no hurricanes $\varepsilon_{t+1} = 0$, supply is still recovering from the catastrophe so oil price increases
+
+After 2 weeks, it recovers finally
+
+$$
+\Delta \text{OilP}_{t+2} = 0 
+$$
+
+Notice that in MA(1) models, error effect appears in two periods: when it happened, and afterwards.
+
+### 175. Moving average process, stationary and weakly dependent
+
+We said that an MA(1) has the form
+
+$$
+X_t = \varepsilon_t + \theta \varepsilon_{t-1}, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+$$
+
+For a process to be stationary it should has
+
+1.  constant mean
+
+$$
+\mathbb{E}[X_t] = \mathbb{E}[\varepsilon_t + \theta \varepsilon_{t-1}] = \mathbb{E}[\varepsilon_t] + \theta \mathbb{E}[\varepsilon_{t-1}] = 0
+$$
+
+$\theta$ is constant, and since that $\varepsilon_t \sim iid(0,\sigma^2)$. expectation is $0$
+
+1.  constant variance
+
+$$
+\text{Var}(X_t) = \text{Var}(\varepsilon_t + \theta \varepsilon_{t-1}) = \text{Var}(\varepsilon_t) + \theta^2 \text{Var}(\varepsilon_{t-1}) = \sigma^2 + \theta^2 \sigma^2 = \sigma^2(1 + \theta^2)
+$$
+
+we have no covariance terms cuz $\varepsilon_t \sim iid(0,\sigma^2)$
+
+1.  covariance does not depend on time
+
+$$
+\text{Cov}(X_t, X_{t+h}) = f(h) \not= f(t+h)
+$$
+
+To prove it, we check it with 1 lag
+
+$$
+\text{Cov}(X_t, X_{t-1}) = \text{Cov}(\varepsilon_t + \theta \varepsilon_{t-1}, \varepsilon_{t-1} + \theta \varepsilon_{t-2})= \theta \cdot \text{Cov}(\varepsilon_{t-1}, \varepsilon_{t-1}) = \theta \sigma^2
+$$
+
+Remember that expanding covariance is like expanding a bracket. the only common term is $\varepsilon_{t-1}$
+
+for $j>1$
+
+$$
+\text{Cov}(X_t, X_{t-j}) = \text{Cov}(\varepsilon_t + \theta \varepsilon_{t-1}, \varepsilon_{t-j} + \theta \varepsilon_{t-1-j}) = 0
+$$
+
+from 3. we know that its also weakly dependent
+
+### 176. Autoregressive O(1) introduction and example
+
+An auto regressive model assumption is
+
+$$
+x_t = \rho x_{t-1}+ \epsilon_t \qquad \varepsilon_t \sim iid(0,\sigma^2)
+$$
+
+Why is it called auto regressive?
+
+because $x$ is regressed on previous value of itself.
+
+Example: changes in oil prices
+
+$$
+\Delta \text{OilP}_{t} =  0.5 \Delta \text{OilP}_{t-1} + \varepsilon_t 
+$$
+
+If $\varepsilon$ is constant <zero> then a pipe excluded and resulted in a **shock** with a value of \$10 then returned to zero again.
+
+The price of the oil will take time to return to its original price
+
+For example
+
+$$
+\Delta \text{OilP}_{t+1} = 0.5 \cdot 10 = \$5
+$$
+
+Why oil follows AR?
+
+Due to **inertia**, investor may think its a terrorist attack and supply decreases
+
+AR vs MA:
+
+MA effect lasts for two time periods while AR effect stays for infinite time <in theory>
+
+$$
+MA \to 2\\
+AR \to \infty
+$$
+
+### 177. Autoregressive order (1) conditions for stationary in mean
+
+For an autoregression model to be stationary in mean, we need to back substitute first
+
+$$
+\begin{align*}x_t &= \rho x_{t-1} + \varepsilon_t \qquad   \varepsilon_t \sim \text{iid}~(0, \sigma^2) \\&= \rho \left[\rho x_{t-2} + \varepsilon_{t-1} \right] + \varepsilon_t \\&= \rho^2 x_{t-2} + \rho \varepsilon_{t-1} + \varepsilon_t \\&= \cdots \\&= \rho^t x_0 + \sum_{i=0}^{t-1} \rho^i \varepsilon_{t-i} \end{align*}
+$$
+
+We better add it in a box
+
+$$
+\boxed{x_t =\rho^t x_0 + \sum_{i=0}^{t-1} \rho^i \varepsilon_{t-i} }
+$$
+
+Now we can check if the expectation is constant or not
+
+$$
+\text{(i)}\quad \mathbb{E}[X_t] = \rho^t \mathbb{E}[X_0] + \sum_{i=0}^{t-1} \rho^i \mathbb{E}[\varepsilon_{t-i}] \\
+= \rho^t \mathbb{E}[X_0]\\
+$$
+
+Since that $\varepsilon$ has mean of zero, it disappears
+
+For the expectation to be constant, it must be that
+
+$$
+\Rightarrow \mathbb{E}[x_0] = 0 \\\Rightarrow \mathbb{E}[x_t] = 0
+$$
+
+### 178. Autoregressive order (1) conditions for stationary in variance
+
+Back to our Auto regressive model
+
+$$
+x_t = \rho x_{t-1} + \varepsilon_t ;  \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+$$
+
+To check if its stationary in variance
+
+$$
+\text{Var}(x_t) = \rho^2 \text{Var}(x_{t-1}) + \text{Var}(\varepsilon_t)
+$$
+
+We need $\text{Var}(x_t) = \text{Var}(x_{t-1})$
+
+SO we substitute in the original model
+
+$$
+\text{Var}(x_t) = {\rho^2 \text{Var}(x_t)} + \sigma^2
+$$
+
+Solving it gets
+
+$$
+(1 - \rho^2) \text{Var}(x_t) = \sigma^2
+$$
+
+Hence
+
+$$
+\boxed{\text{Var}(x_t) = \dfrac{\sigma^2}{1 - \rho^2}}
+$$
+
+If $|\rho|$ = 1, variance is infinite <non stationary>
+
+if $|\rho|>1$, variance is negative <not possible>
+
+so
+
+$$
+\boxed{|\rho|<1}
+$$
+
+### 179. Autoregressive order (1) conditions for stationary covariance and weak dependence
+
+To check for stationary covariance and weak dependence, we need back substitution
+
+$$
+\begin{align*}\\
+x_t &= \rho x_{t-1} + \varepsilon_t ;  \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)\\
+&= \rho[\rho x_{t-2} + \varepsilon_{t-1}]+ \varepsilon_t\\
+&= \rho^2x_{t-2}+ \rho \varepsilon_{t-1}+ \varepsilon_t\\
+&= \vdots\\
+x_{t+h} &= \rho^h x_t + \sum \rho^i \varepsilon_{t+h}
+\end{align*}
+$$
+
+Last term is important so lets put it in a box
+
+$$
+\boxed{x_{t+h} = \rho^h x_t + \sum \rho^i \varepsilon_{t+h}}
+$$
+
+To take the covariance, we expand
+
+$$
+\text{Cov}(x_t, x_{t+h}) = \text{Cov}(x_t, \rho^h x_t + \cancel{\sum_{i=0}^{h-1} \rho^i \varepsilon_{t+h-i}})
+$$
+
+we cancelled the last part cuz there is no relation between $x, \varepsilon$. So we get
+
+$$
+\text{Cov}(x_t, x_{t+h}) = \rho^h cov(x_t,x_t) = \rho^h var(x_t)
+$$
+
+which we derived from last section to get
+
+$$
+\boxed{\text{Cov}(x_t, x_{t+h}) = \dfrac{\rho^h \sigma^2}{1-\rho^2} \qquad |\rho|<1}
+$$
+
+To be weakly dependent, we check the correlation, remember that its covariance/ variance and we assume equal variance
+
+$$
+corr(x_t, x_{t+h}) = \dfrac{\text{Cov}(x_t, x_{t+h}) }{var(x_t)} = \rho^h
+$$
+
+so $|\rho|$ has to be $<1$ in order to correlation to reach zero
+
+So final conditions for AR(1) to be stationary:
+
+1.  $|\rho| <1$
+2.  $E[x_0] = 0$
+
+### 180. Autoregressive vs moving average order 1 part 1
+
+How to know if my data follows MA or AR?
+
+1.  Plot the data and it must have
+    1.  constant mean
+    2.  constant variance
+2.  check covariance
+    1.  For MA(1):
+
+        $$
+         cov(x_t,x_{t+h})\begin{cases}
+         = \theta \sigma^2, &h=1\\
+         =0, &h >1
+         \end{cases}
+         $$
+
+        and variance is $var(x_t)= \sigma^2 (1+\theta^2)$
+
+        combining both, we get
+
+        $$
+         corr(x_t,x_{t+h})\begin{cases}
+         = \dfrac{\theta}{(1+\theta^2)}, &h=1\\
+         =0, &h >1
+         \end{cases}
+         $$
+
+        b.  For AR(1):
+
+        $$
+         corr(x_t.x_{t+h}) = \rho^h
+         $$
+
+        Since both MA and AR have same mean and variance, we use correlation to differentiate
+
+### 181. Autoregressive vs moving average order 1 part 2
+
+To represent the correlation, we write $\Gamma$ instead of $corr$
+
+So for AR(1)
+
+$$
+\Gamma^h = \rho^h
+$$
+
+For MA(1)
+
+$$
+\Gamma^h\begin{cases}
+= \dfrac{\theta}{(1+\theta^2)}, &h=1\\
+=0, &h >1
+\end{cases}
+$$
+
+Continuing with the previous steps
+
+1.  Plot a correlogram \<h on x axis, $\Gamma$ on y axis\>
+    1.  at lag $0$, correlation = 1
+    2.  For MA(1): it will have corr at lag 1, then other lags will have corr near zero <not exactly zero due to random error>
+    3.  For AR(1): corr will decrease gradually as lags increase
+
+Note: For MA(1): correlogram allows us to estimate $\theta$ using method of moments, we need to know correlation of first period $r(1)$
+
+$$
+\dfrac{\hat \theta}{1 + \hat \theta^2} = r
+$$
+
+Using method of moments
+
+$$
+\boxed{\hat \theta} = \dfrac{1 \pm \sqrt{1-4r^2}}{2r}
+$$
+
+For $\theta$ to be **invertible**, we take the negative equation only <more on this later>
+
+### 182. Partial vs total autocorrelation
+
+We learnt about Total correlogram
+
+For recap: Total correlogram
+
+1.  AR(1) decreases gradually
+2.  MA(1) will vanish after first lag <not really vanish but real zero due to sampling error>
+
+why AR(1) doesn’t vanish?
+
+cuz we can write it in back substitution as
+
+$$
+x_t = \rho^2x_{t-2}+ \rho \varepsilon_{t-1}+ \varepsilon_t
+$$
+
+Here is the problem
+
+AR(2), AR(3) will also have total correlogram that decays gradually, so how to differentiate?
+
+Use **PACF:** partial correlogram
+
+1.  find correlation of a variable with itself lagged
+2.  subtract that effect from the variable
+3.  check what residual correlation is left over between the variable and itself lagged
+
+For AR(1):
+
+PACF: will have strong correlation at lag(1), then correlation vanishes <not really vanish due to sampling error>
+
+For AR(2):
+
+PACF: will have strong correlation at lag(1) and lag(2) cuz the function is
+
+$$
+x_t = \rho_1 x_{t-1} + \rho_2 x_{t-2} + \varepsilon_t
+$$
+
+see how $x_{t-2}$ affects $x_t$?
+
+SO: use PACF to know type of AR
+
+### 183. A random walk - introduction and properties
+
+A random walk is just AR(1) with $\rho = 1$
+
+$$
+x_t = x_{t-1} + \varepsilon_t, \quad \varepsilon_t \sim \text{iid}(0, \sigma^2), \quad |\rho| < 1
+$$
+
+We know that its non stationary, but why? back substitute
+
+$$
+x_t = x_{t-2} + \varepsilon_{t-1} + \varepsilon_t
+$$
+
+If we continue expanding to time zero we get
+
+\$\$ \boxed{x_{t} = x_0 + \sum_{i=0}^{t-1} \varepsilon_{t-i}}
+
+\$\$
+
+Now if we take the expectation, the $\varepsilon$ term disappears
+
+$$
+E[x_t]= E[x_0]
+$$
+
+To be constant mean, we need to force $E[x_0] =0$
+
+As for the variance
+
+$$
+\text{Var}(x_t) = \sum_{i=0}^{t-1} \text{Var}(\varepsilon_{t-i}) = t\sigma^2 = f(t)
+$$
+
+remember that $\varepsilon$ is $iid$, hence no covariance terms. since it depends on time, its not stationary
+
+For the covariance we need form of future terms first
+
+$$
+x_{t+h} = x_t + \sum_{i=0}^{h-1} \varepsilon_{t+h-i}
+$$
+
+Then the covariance is
+
+$$
+ \text{Cov}(x_t, x_{t+h}) = \text{Var}(x_t)
+$$
+
+cuz from $x_{t+h}$, only $x_t$ is useful in the covariance. Since variance has $t$, covariance is also violated
+
+### 184. Qualitative difference between stationary and non stationary AR(1)
+
+We compare two series: AR(1) and a random walk
+
+Draw a line representing zero. In the AR process, it will look like a **random noise.** runs of ups and downs return to zero quickly $|\rho|=0.7$
+
+as $\rho$ increases, runs take longer time to return to zero until we get $|\rho| = 1$ where its behavior changes
+
+At $|\rho|
+ = 1$ series can keep having a down run. or 1 up run. It will take very long runs to return to zero
+
+Both the series have unconditional mean of zero but the difference is in the conditional mean
+
+For AR(1)
+
+$$
+E[x_t|x_{t-1}] = \rho x_{t-1}
+$$
+
+as $|\rho| <1$, if x is high, $\rho$ will make it downward, and vice versa
+
+For random walk
+
+$$
+E[x_t|x_{t-1}] = x_{t-1}
+$$
+
+There is no $\rho$ so nothing forcing the series to return to zero
+
+Here is simulation of 10,000 steps at $\rho=0.8, 0.99,1$
+
+### 185. Random walk not weakly dependent
+
+Now we will prove that a random walk is not weakly dependent
+
+We already proves that the covariance is
+
+$$
+\begin{align*}\text{Cov}(x_t, x_{t+h}) &= \text{Var}(x_t) = t \sigma^2
+\end{align*}
+$$
+
+Then the correlation is
+
+$$
+\text{Corr}(x_t, x_{t+h}) = \frac{\text{Cov}(x_t, x_{t+h})}{\sqrt{\text{Var}(x_t) \text{Var}(x_{t+h})}} = \frac{t \alpha^2}{\sqrt{t \sigma^2(t+h) \alpha^2}}
+$$
+
+Note that
+
+$$
+{Var}(x_{t+h}) = (t+h) \sigma^2
+$$
+
+We can clean the correlation by canceling terms to get
+
+$$
+\text{Corr}(x_t, x_{t+h}) = \frac{t}{\sqrt{t(t+h)}} = \sqrt{\frac{t}{t+h}} 
+$$
+
+We require the correlation $\Gamma^h \to 0$ as $h \to \infty$ to be weakly dependent, which is not the case here
+
+### 186. Random walk with drift
+
+A random walk with a drift is a regular random walk with a kickstart $\alpha$
+
+$$
+\boxed{x_t = \alpha + x_{t-1} + \varepsilon_t} \quad \varepsilon_t \sim \text{iid}(0, \sigma^2)
+$$
+
+To know its properties, back substitute
+
+\$\$ \begin{align*}
+x_t &=  \alpha + \alpha + x_{t-2} + \varepsilon_{t-1} + \varepsilon_t\\
+&= \alpha + \alpha + \alpha + x_{t-3} + \varepsilon_{t-2} + \varepsilon_{t-1} + \varepsilon_t\\
+&= \alpha t + x_0 + \sum_{i=0}^{t-1} \varepsilon_{t-i}
+
+\end{align*} \$\$
+
+Lets put it in a box cuz its important
+
+$$
+\boxed{x_t = \alpha t + x_0 + \sum_{i=0}^{t-1} \varepsilon_{t-i}}
+$$
+
+If we take the expectation
+
+$$
+\mathbb{E}[x_t] = \alpha t
+$$
+
+Depends on time, not constant, so not stationary \<assuming $x_0$ has mean of $0$\>
+
+as for the variance
+
+$$
+\text{Var}(x_t) = \sum_{i=0}^{t-1} \text{Var}(\varepsilon_{t-i}) = t\sigma^2
+$$
+
+The only term that varies is the $\varepsilon$, variance depends on time so not stationary
+
+If we draw it, the runs of ups and downs will be centered around $x = \alpha t$ which is an increasing line
+
+### 187. Deterministic vs stochastic trends
+
+A deterministic trend is a model like
+
+$$
+x_t = \alpha t + \varepsilon_t \qquad\varepsilon_t \sim \text{iid}(0, \sigma^2)
+$$
+
+If we take its expectation we get
+
+$$
+E[x_t] = \alpha t
+$$
+
+Since $\alpha$ is a constant, the only term that varies is $\varepsilon$
+
+$$
+\text{Var}(x_t) = \sigma^2
+$$
+
+The variance is constant, we can consider this model **stationary with a linear trend**
+
+As for a stochastic trend
+
+$$
+x_t = \alpha + x_{t-1} + \varepsilon_t
+$$
+
+with an expectation of
+
+$$
+E[x_t] = \alpha t
+$$
+
+and variance of
+
+$$
+\text{Var}(x_t) = t\sigma^2
+$$
+
+Both the mean and variance are not constant here
+
+To visualize the difference:
+
+Draw the line $x= \alpha t$, the deterministic model looks like a random noise above the line
+
+The stochastic trend may have massive runs of ups and downs, or keep going up or down
+
+Here is a simulation of the two models
+
+### 188. Dickey fuller test for unit root
+
+Dicky fuller test checks if the model is non stationary
+
+$$
+x_t = \alpha + \rho x_{t-1} + \varepsilon_t
+$$
+
+we add $\alpha$ by default. It doesn’t matter if we have a random walk or a random walk with a drift
+
+the null hypothesis is
+
+$$
+H_0: \rho=1 \qquad H_1: \rho<1
+$$
+
+Under null hypothesis, $x_t, x_{t-1}$ are non stationery, so we can’t depend on CLT and just test $\rho$
+
+Solution: subtract
+
+$$
+x_t - x_{t-1} = \alpha + (\rho-1) x_{t-1} + \varepsilon_t
+$$
+
+which can be written more neatly to
+
+$$
+\boxed{\Delta x_t  = \alpha + \delta x_{t-1} + \varepsilon_t}
+$$
+
+Under the null hypothesis $\rho =1$, the $\delta=0$ and $x_{t-1}$ vanishes
+
+but if $\rho<1$, $x_{t-1}$ is stationary
+
+So this is better scenario than the original model
+
+Now we test for the **unit root** aka $\rho=1$ using $t$ statistic \<apply it on $\hat \delta$\>
+
+One problem remains
+
+under null hypothesis, $x_{t-1}$ is non stationary, so we still can’t count on **CLT**
+
+But **Dickey Fuller** tabulated the values of $\delta$ under the $H_0$ so we can compare $t$ with **Dickey fuller DF**
+
+$$
+\boxed{t < DF} \to \text{reject null}
+$$
+
+### 189. Augmented dickey fuller tests
+
+Last section dealt with AR(1) models, but what if we have more complicated models?
+
+ADF extends DF test to AR(p) models
+
+For example, an AR(2) model would be written in the difference form
+
+$$
+\Delta y_t = \alpha + \delta y_{t-1}+ \beta \Delta y_{t-1}+ \varepsilon_t
+$$
+
+and test for $\delta$
+
+For any AR order process
+
+$$
+\Delta y_t = \alpha + \delta y_{t-1}+\sum^h_{i=1}\beta_i \Delta y_{t-i}+ \varepsilon_t
+$$
+
+Again, we just test for $H_o: \delta = 0 <NS>$
+
+Each $\beta_i$ has $t$ distribution so we can test them all using $F$ test
+
+Another way is adding lagged variables until we have no serial correlation in the error term. Just compare t test with DF
+
+$$
+t < DF
+$$
+
+### 190. Dickey fuller test with time trend
+
+We can also expand dickey fuller to deal with time trends
+
+For example a random walk with drift
+
+$$
+y_t = \alpha + y_{t-1}+ \varepsilon_t
+$$
+
+and <trend stationary>
+
+$$
+y_t = \alpha t + \varepsilon_t
+$$
+
+Remember that its trend stationary cuz
+
+$$
+y_t - \alpha t = \varepsilon_t
+$$
+
+Meaning its stationary once the trend is removed
+
+To test if we have deterministic or stochastic trend we do auxiliary regression of the change in $y_t$
+
+$$
+\boxed{\Delta y_t = \alpha + \delta y_{t-1}+ \gamma t + \varepsilon_t}
+$$
+
+$\gamma$ checks if the relation is linear or quadratic or higher order
+
+$$
+H_0: \delta = 0, \gamma=0
+$$
+
+But we don’t need to worry about the $\gamma$, just add it to the auxiliary regression and check the hypothesis of $\delta$
+
+$$
+H_0: \delta = 0 \quad \text{unit root|NS}
+$$
+
+$$
+H_1: \delta < 0  \quad \text{Stationary}
+$$
+
+and test $\hat \delta$ using
+
+$$
+t < DF
+$$
+
+including time trend would make it more likely to incorrectly reject the null hypothesis of a unit process (i.e., falsely conclude trend stationarity)
+
+Solution: DF critical values are adjusted <even more negative>
+
+How to decide whether to include time trend?
+
+plot it, if it increases over time, include trend
+
+If it fluctuates around mean, don’t include it
+
+But there is **no rule of thumb**
+
+### 191. Highly persistent time series
+
+A random walk is highly persistent
+
+$$
+x_t = x_{t-1}+ \varepsilon_t
+$$
+
+If i am at time $t$ and want to predict value at time $h$, we back substitute
+
+$$
+x_{t+h} = x_t + \varepsilon_{t+1}+\varepsilon_{t+2}+\dots + \varepsilon_{t+h}
+$$
+
+To predict the value, just take expectation
+
+$$
+E[x_{t+h}|x_t]= x_t
+$$
+
+which shows that no matter how far in the future $h$ is, my best prediction is $x_t$. This is **high persistence**
+
+Another way to show it is that correlation between $x_t, x_{t+h}$ is high. SO its not weakly dependent, we can’t use CLT
+
+To deal with it, take **first difference**
+
+$$
+\Delta x_t  = \varepsilon_t
+$$
+
+When we take a difference to fix it, its called **Integrated process of order 1 I(1)**
+
+We can also take difference of differences for I(2)
+
+$$
+\Delta(\Delta x_t) = \varepsilon_t
+$$
+
+Examples of I(1):
+
+-   interest
+-   GDP
+
+Examples of I(2):
+
+-   price level
+
+### 192. Integrated order of processes
+
+If we plot $x_t$ and find it highly persistent, we guess its an integrated process. so check ADF
+
+-   if we reject null (meaning its stationary) then its I(0) <not likely>
+-   if we don’t reject (its non stationary). its a process of order $I(k)$
+    -   take first difference and plot to see if it became stationary <and do ADF on it too>
+        -   if first difference is not stationary, take another difference $I(2)$ <very rare>
+
+### 193. Cointegration - an introduction
+
+If we have a non stationary time series, its a bad idea to use it in regression
+
+any two non stationary processes are mostly correlates just cuz both of them increase with time. So $\beta$ will appear significant although its not
+
+This is why we take differences like I(1), but its not enough sometimes
+
+$y_t$ and $x_t$ can both be non stationary, both increase with time and are I(1). There may be a $\beta$ that makes $x_t$ rotate and looks so similar to $y_t$
+
+and the distance between $y_t, \text{rotated } x_t$ is constant
+
+$$
+\boxed{y_t - \beta x_t = I(0)}
+$$
+
+If this happens, then they are **cointegrated** meaning there is a true relationship between them
+
+In the top picture, we can’t have cointegration cuz $y_t$ has a drop at some interval while $x_t$ doesn’t
+
+### 194. Cointegration tests
+
+If distance between two non stationary processes is constant, then we have cointegration with $I(0)$
+
+$$
+y_t - \beta x_t = \varepsilon_t
+$$
+
+But this depends on $\beta$ which we don’t know, so we estimate it
+
+$$
+y_t = \hat \alpha + \hat \beta x_t + \hat u_t
+$$
+
+Then isolate the residuals
+
+$$
+\hat u_t = y_t - \hat \alpha - \hat \beta x_t
+$$
+
+If distance is constant, $\hat u_t$ will be $I(0)$, we use $DF$ test
+
+$$
+\Delta \hat u_t = \delta_0 + \delta_1 \hat u_{t-1}+\dots + v_t
+$$
+
+and do $t$ test on $\delta_1$ using $t < DF$
+
+if we reject the null, then error is $I(0)$ and there is cointegration
+
+But there is a problem, we used DF test on estimates so its not accurate. It needs some tweaks
+
+$$
+t < DF_{\text{new}}< DF_{\text{original}}
+$$
+
+cuz the $H_0: \beta = 0 \text{ spurious regression}$
+
+And chance of running spurious regression is actually big
+
+### 195. levels vs difference regression - motivation for cointegrated regression
+
+A level regression uses levels of $y$ and $x$
+
+$$
+y_t = \alpha + \beta x_t + \varepsilon_t
+$$
+
+A regression with first differences will use differences of $y,x$
+
+$$
+\Delta y_t = \delta \Delta x_t + u_t
+$$
+
+A common mistake is assuming these two regression are actually the same and $\delta = \beta$
+
+If we have relationship in levels → there is relationship in differences. Opposite is not true
+
+Proof: take the difference
+
+$$
+y_t - y_{t-1} = \alpha + \beta x_t + \varepsilon_t - \alpha - \beta x_{t-1} + \varepsilon_{t-1}
+$$
+
+writing it as a change:
+
+$$
+\Delta y_t = \beta \Delta x_t + \Delta \varepsilon_t
+$$
+
+This process is the same as the difference regression
+
+The converse is not true, due to the error term $u_t$. after some time, $u_t$ builds up and makes $\Delta y_t$ different than $\Delta x_t$
+
+To simulate it, let $x(1)=0, y(1)=0$
+
+green line represents $x$, blue line represents $y$
+
+Although $x,y$ in levels show no relationship and diverge. The difference show a stable relationship between them
+
+But this is the idea of cointegration.
+
+### 196. Leads and lags estimator for inference in cointegrated models
+
+If we are interested in long run cointegration
+
+$$
+y_t = \alpha + \beta x_t + \varepsilon_t
+$$
+
+OLS is consistent
+
+$$
+\hat \beta_{LS}\to \beta
+$$
+
+But cause both $x,y$ are both $I(1)$, we can’t depend on asymptotic theory
+
+If we make the assumptions of
+
+1.  $E[\varepsilon_t|x_s]=0$
+2.  Homoscedastic
+3.  No SC
+4.  Normal errors
+
+Then we can say that ols $\hat\beta$ is normally distributed around $\beta$
+
+$$
+\hat \beta \sim N(\beta)
+$$
+
+But strict exogeneity is hard to achieve, until we write it in this form
+
+$$
+E[\varepsilon_t|x_s]= E[\varepsilon_t|\Delta x_s]=0
+$$
+
+This form helps cuz we can write the error as a function of $\Delta x$ cuz strict exogeneity is not satisfied
+
+$$
+\varepsilon_t = \gamma_k \Delta x_{t+k} + \gamma_{k-1}\Delta_{t+k-1}+\dots+ \gamma_0 \Delta x_t + \dots + \gamma_{-k}\Delta x_{t-k}+ v_t
+$$
+
+Since we extracted all $x_t$ <leads and lags>, $v_t$ actually satisfies strict exogeneity
+
+If we add it to the original model, we have all assumptions met
+
+$$
+y_t = \alpha + \beta x_t + \dots \text{leads and lags} + v_t
+$$
+
+How many leads and lags?
+
+depends on data
+
+Now that all assumptions are met, we can make inference.
+
+### 197. Lagged independent variables
+
+If we have a model in which sales depend on advertisement and advertisement at previous day and two days
+
+$$
+s_t = \alpha + \beta_0 A_t + \beta_1 A_{t-1}+ \beta_2 A_{t-2}+ \varepsilon_t
+$$
+
+$\beta_0$ tells us instantaneous effect of a change in ads and called **impact parameter**
+
+$\beta_1$ tells us how sales tomorrow are affected by ads today
+
+$\beta_2$ tells how sales after two days are affected by ads today
+
+Its common to graph strength of $\beta$ with respect to lags. If we connect the dots, its called **lag distribution**
+
+We can also get the long run impact if we make ads constant
+
+$$
+A_t = \bar A\\
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)\bar A
+$$
+
+What if ads increase by one?
+
+$$
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)(\bar A+1)
+$$
+
+when multiplied we get
+
+$$
+\bar s = \alpha (\beta_0 +\beta_1 + \beta_2)\bar A + (\beta_0 +\beta_1 + \beta_2)
+$$
+
+so an increase in ads by 1 results in
+
+$$
+\bar A \to \bar A +1\\
+\Delta \bar s = \beta_0 + \beta_1 + \beta_2 = \beta_{LR}
+$$
+
+### ***198. Problem set 5***
+
+Practical: Non stationary, Cointegration, spurious regression, AR(1),MA(1)

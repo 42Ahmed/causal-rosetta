@@ -1,0 +1,2243 @@
+---
+title: "R & Tidyverse"
+format: html
+---
+Source: CS50 R
+
+# Representing Data
+
+## What is R
+
+R is built to deal with data, Used in data science, statistics and research
+
+Tip: install package `styler`
+
+## R studio
+
+To use R, we download R and R studio, in the console we write
+
+``` r
+file.create('hello.R')
+# TRUE
+```
+
+Notice that our program must end with R
+
+Our file is created, in our folder aka **working directory**
+
+to open our file, double click **hello.R** from the file explorer
+
+``` r
+print("hello, world")
+```
+
+To save our file
+
+`ctrl s`
+
+To run our code (turn our code to 1 and 0 so computer can understand it)
+
+To clear our console
+
+`ctrl l`
+
+to run our code
+
+1.  click on the run button
+
+## Functions in R
+
+R is full of functions, a command with () that takes inputs aka **arguments**
+
+Like in `print("**hello world**")` hello world here is the argument
+
+Printing is called **side effect** cuz I see something on the screen
+
+### vscode vs Rstudio
+
+Rstudio is built for R and really makes the code easier
+
+### Python vs R
+
+py can do many stuff, R is more precise though
+
+But in the end of the day, we can do everything to both
+
+### to change working directory
+
+``` r
+setwd("")
+```
+
+**Debug** is the process of fixing our code
+
+## Readline
+
+to take input in R
+
+``` r
+readline("what's your name? ")
+print("Hello, Ahmed")
+```
+
+Notice run button runs one line, source runs the whole code
+
+Our code is not making use of the `readline` yet, we can make use of
+
+**return value**
+
+Print vs return value:
+
+in an exam: you hand a paper to your friend to write down the answer
+
+print: screams out the result
+
+return: writes down the answer in the paper silently
+
+To make use of the readline, we use a **variable**
+
+``` r
+name <- readline('What is your name? ')
+```
+
+`<-` is called **assignment, name** will be found in the environment vars.
+
+## Paste
+
+``` r
+name <- readline('What is your name? ')
+print("Hello name")
+#Hello name
+```
+
+It literally prints hello name, we want to add the text aka **String** **and variable**
+
+the process of adding texts is called **string concatenation, to do so**
+
+we use `paste`
+
+``` r
+name <- readline('What is your name? ')
+greeting <- paste("Hello ", name)
+print(greeting)
+#Hello  ahmed
+```
+
+we split arguments using `,` This program has a **bug** though, we have two spaces between hello and ahmed
+
+Why? we need to read the documentation
+
+``` r
+paste(...,sep=' ')
+```
+
+`...` means we can enter as many arguments as we want
+
+`sep` means it will add a white space
+
+``` r
+name <- readline('What is your name? ')
+greeting <- paste("Hello ", name, sep='')
+print(greeting)
+#Hello, ahmed
+```
+
+Its tiring to use the sep every time so we have another function
+
+``` r
+name <- readline('What is your name? ')
+greeting <- paste0("Hello ", name)
+print(greeting)
+#Hello ahmed
+```
+
+### Paste vs Cat
+
+cat has side effect, paste not
+
+## Function Composition
+
+Notice we can make our code shorter
+
+``` r
+name <- readline('What is your name? ')
+print(paste0("Hello ", name))
+```
+
+function that takes function, it will run the function inside first, then do the outer function
+
+we can go super crazy and do
+
+``` r
+print(paste0("Hello ", readline('What is your name? ')))
+```
+
+This is shorter, but hard to read
+
+Note: we can also have comments aka notes for myself
+
+``` r
+#Asks user for name
+name <- readline('What is your name? ')
+
+#says hello to user
+print(paste0("Hello ", name))
+```
+
+Comments by conviction are above the code
+
+## Count.R
+
+``` r
+file.create("count.R")
+```
+
+to clear the terminal `ctrl l`
+
+``` r
+mario <- readline("Enter votes for Mario: ")
+peach <- readline("Enter votes for Peach: ")
+bowser <- readline("Enter votes for Bowser: ")
+
+total <- mario + peach + bowser
+# weird error
+```
+
+Notice how we can add using `+`
+
+the error tells us they are not numbers, in the environment you will find them stored as `'100'` not `100`
+
+## Storage Mode
+
+R deals with
+
+1.  character
+2.  Double
+3.  integer
+
+we can convert storage mode aka **coercion**
+
+``` r
+mario <- readline("Enter votes for Mario: ")
+peach <- readline("Enter votes for Peach: ")
+bowser <- readline("Enter votes for Bowser: ")
+
+mario <- as.integer(mario)
+peach <- as.integer(peach)
+bowser <- as.integer(bowser)
+
+total <- mario + peach + bowser
+```
+
+we can clean it up
+
+``` r
+mario <- as.integer(readline("Enter votes for Mario: "))
+peach <- as.integer(readline("Enter votes for Peach: "))
+bowser <- as.integer(readline("Enter votes for Bowser: "))
+
+total <- mario + peach + bowser
+```
+
+Since R deals alot with data, we can add using another way
+
+``` r
+mario <- as.integer(readline("Enter votes for Mario: "))
+peach <- as.integer(readline("Enter votes for Peach: "))
+bowser <- as.integer(readline("Enter votes for Bowser: "))
+
+total <- sum(mario,peach,bowser)
+
+print(paste('Total Votes:',total))
+```
+
+## Tables
+
+we learnt how to enter data, but we want to use a better way
+
+data are usually read in tables that consist of rows and columns
+
+
+
+we can do operations on row, and column
+
+But first, to access, this data, it will be saved in CSV aka **comma separated**
+
+
+
+To list what is in the env. and clear it
+
+``` r
+ls
+rm(list = ls())
+ls
+```
+
+## tabulate.R
+
+to read the data
+
+``` r
+votes <- read.table("votes.csv")
+```
+
+To view the data
+
+``` r
+View(votes)
+```
+
+looks like the data is read wrongly. after reading the doc
+
+``` r
+votes <- read.table("votes.csv", sep = ',')
+```
+
+we are getting closer but not there yet
+
+``` r
+votes <- read.table("votes.csv",
+    sep = ',',
+    header = TRUE
+    )
+```
+
+Since life is short, we have another function
+
+``` r
+votes <- read.csv('votes.csv')
+```
+
+Votes is stored as Data frame, we can access rows and columns using \[\]
+
+remember your linear algebra class
+
+Note: if you omit row number, it means you want all the rows
+
+``` r
+votes[,2]
+# all rows of second column
+```
+
+But a better way is to use names
+
+to access column by name
+
+``` r
+votes$poll
+```
+
+### access mario number of polls
+
+``` r
+votes[1,2] #37
+```
+
+## Vectors
+
+when we select column from a dataframe
+
+like array, list of values, all have the same storage mode
+
+we can access elements in array using \[\]
+
+``` r
+votes$poll[1] #37
+```
+
+Instead of using total we can
+
+``` r
+sum(votes$poll)
+```
+
+sum is vectorized aka can deal with vectors
+
+we want to know how many votes each candidate did
+
+``` r
+votes$poll[1] + votes$mail[1]
+votes$poll[2] + votes$mail[2]
+votes$poll[3] + votes$mail[3]
+```
+
+Which works but its a bad idea
+
+again, remembering your linear algebra course, we can do **vector arithmetic**
+
+``` r
+votes$poll + votes$mail
+votes[,2] + votes[,3]
+# returns element wise sum
+```
+
+notice: rstudio helps me get the result without actually printing
+
+Note
+
+``` r
+votes[1] # returns a data frame not a vector
+```
+
+we can add a column
+
+``` r
+votes$total <- votes$poll + votes$mail
+```
+
+## write.csv
+
+to save our data
+
+``` r
+write.csv(votes,'totals.csv')
+```
+
+this adds row names, its better to keep them but if you want, add `row.names= TRUE`
+
+to access column names
+
+``` r
+colnames(votes)
+rownames(votes)
+```
+
+## voters.R
+
+we can access data from the internet using read.csv
+
+``` r
+url <- "https://github.com/fivethirtyeight/data/raw/master/non-voters/nonvoters_data.csv"
+voters <- read.csv(url)
+```
+
+the data is big, we need to know how many rows are there
+
+``` r
+nrow(voters)
+ncol(voters)
+```
+
+to understand what the column names mean, check the **code block**
+
+we want to check a column
+
+``` r
+voters$voter_category
+```
+
+they are massive, to get the unique values
+
+``` r
+unique(voters$voter_category)
+```
+
+## Special values
+
+we are interested in q22
+
+``` r
+voters$Q22
+```
+
+It is full of NA, which refers to **not available**
+
+we also have `Inf` , `-Inf`
+
+`NAN` not a number like infinity / infinity
+
+`NULL` means there is nothing.
+
+Another interesting column is q21
+
+``` r
+unique(voters$Q21)
+```
+
+I get 1,2, 3. its hard to remember what number represents what, so we use `factors`
+
+its like dummy variables, we can give them `labels`
+
+``` r
+factor(
+    voters$Q21,
+    labels = c('?','Yes','No','Unsure'),
+)
+```
+
+now we get names instead of numbers
+
+we can remove a number too
+
+``` r
+factor(
+    voters$Q21,
+    labels = c('Yes','No','Unsure'),
+    exclude = c(-1)
+)
+```
+
+### factor vs as.factor
+
+check the doc, they are kind a the same
+
+Next time, we will learn how to transform data
+
+# Transforming Data
+
+## Outliers
+
+Outliers are data that are super away from the range. We remove them (lol)
+
+## temps.R
+
+r can read r files, like csv, but specific to R
+
+``` r
+load("temps.RData")
+```
+
+to find mean aka sum over length
+
+``` r
+mean(temps)
+```
+
+To peak at the vector, just write its name
+
+``` r
+temps
+```
+
+Here is a visual of the data
+
+
+
+second day seems an outlier, lets select it, and select days 4 & 7 too.
+
+``` r
+temps[2]
+temps[4]
+temps[7]
+```
+
+## Transforming Vector
+
+Instead of selecting individual elements, we can select them all in one shot using vector
+
+``` r
+temps[c(2,4,7)]
+```
+
+To remove them from temps. just add a minus sign
+
+``` r
+temps[-c(2,4,7)]
+```
+
+## Logical expressions
+
+I want to get a yes or no question, is this value an outlier or not
+
+we do so using `> < >= <= == !=` this return **logical** aka true or false
+
+``` r
+# is first element less than 0?
+temps[1] < 0
+```
+
+Now to do this for the whole vector
+
+``` r
+temps < 0
+```
+
+This returns true or false for every element
+
+### to remove outlier once and for all
+
+``` r
+temps <- temps[-c(2,4,7)]
+```
+
+To know `which` **indexes** are true
+
+``` r
+which(temps < 0)
+```
+
+## Logical operators
+
+and or not `& |`
+
+remember outliers can be small or massive values
+
+``` r
+temps < 0 | temps > 60
+```
+
+Note: if dealing with single values, use && and \|\|
+
+``` r
+any(temps < 0 | temps > 60)
+```
+
+returns if any of the values is true
+
+``` r
+all(temps < 0 | temps > 60)
+```
+
+returns if all values are true
+
+lets select the outliers
+
+``` r
+temps[which(temps < 0 | temps > 60)]
+temps[(temps < 0 | temps > 60)]
+```
+
+these two are the same
+
+now lets use not
+
+``` r
+filter <- (temps < 0 | temps > 60)
+outliers <- temps[filter]
+no_outliers <- temps[!filter]
+```
+
+To save out data as `RData`
+
+``` r
+save(no_outliers, file = 'no_outliers.RData')
+```
+
+## Chicks.R
+
+our data consists of three columns: chick, feed, weight
+
+they can eat either casein or fava
+
+
+
+goal: get weight relative to what they ate
+
+``` r
+chicks <- read.csv('chicks.csv')
+View(chicks)
+```
+
+Our data has na values
+
+``` r
+mean(chicks$weight) #na
+```
+
+can’t use mean cuz I have `na` values.
+
+lets remove them temporarily using na.rm
+
+``` r
+mean(chicks$weight. na.rm = FALSE)
+```
+
+to get weight for those who ate casein only, we can subset by selecting rows
+
+``` r
+casein_chicks <- chicks[c(1,2,3),]
+mean(casein_chicks$weight)
+```
+
+reached our goal , but we can be more efficient by using range `:`
+
+``` r
+casein_chicks <- chicks[1:3,]
+mean(casein_chicks$weight)
+```
+
+even better, filtering by name
+
+``` r
+filter <- chicks$feed == 'casein'
+casein_chicks <- chicks[filter, ]
+mean(casein_chicks$weight)
+```
+
+Note, we can move the `na` values from the beginning
+
+``` r
+chicks$weight == NA #does not work
+```
+
+## Logical functions
+
+To see if we have na values
+
+``` r
+is.na(chicks$weight) 
+```
+
+now to get the values that are not na
+
+``` r
+chicks <- chicks[!is.na(chicks$weight), ]
+```
+
+There is another way, by using `subset` instead of filtering by rows and columns
+
+``` r
+chicks <- subset(chicks, !is.na(weight))
+```
+
+this filters based on a condition
+
+we can get row names
+
+``` r
+rownames(chicks)
+```
+
+Notice that rownames are not continuous cuz I removed na names
+
+to reset rownaemes
+
+``` r
+rownames(chicks) <- NULL
+rownames(chicks)
+```
+
+To get the count of na
+
+``` r
+sum(is.na(chicks#weight))
+```
+
+why? cuz True is represented as 1, false is 0
+
+## Menus
+
+Now we have new data in which, we have six kinds of `feed` option
+
+we can make a program in which the user, decides what to see
+
+first, we load the data and remove na values
+
+``` r
+chicks <- read.csv("chicks.csv")
+chicks <- subset(chicks, !is.na(weight))
+
+feed_options <- unique(chicks$feed)
+
+cat("1. ", feed_options[1], "\n")
+cat("2. ", feed_options[2], "\n")
+cat("3. ", feed_options[3], "\n")
+cat("4. ", feed_options[4], "\n")
+cat("5. ", feed_options[5], "\n")
+cat("6. ", feed_options[6], "\n")
+feed_choice <- as.integer(readline("feed type: "))
+```
+
+to start a new line, use `\n`
+
+This works, but looks horrible
+
+in r, always think as vectors, we can concatenate vectors
+
+R **recycles** single elements with vectors
+
+``` r
+chicks <- read.csv("chicks.csv")
+chicks <- subset(chicks, !is.na(weight))
+
+feed_options <- unique(chicks$feed)
+**formatted_options <- paste0(1:6,'.',feed_options)**
+
+cat(formatted_options, sep = '\n')
+feed_choice <- as.integer(readline("Feed type: "))
+
+selected_feed <- feed_options[feed_choice]
+print(subset(chicks, feed == selected_feed))
+```
+
+This is recycling in action.
+
+
+
+## Conditionals
+
+what if our user chooses 0 or 7, we need to handle it
+
+``` r
+chicks <- read.csv("chicks.csv")
+chicks <- subset(chicks, !is.na(weight))
+
+feed_options <- unique(chicks$feed)
+formatted_options <- paste0(1:6,'.',feed_options)
+
+cat(formatted_options, sep = '\n')
+feed_choice <- as.integer(readline("Feed type: "))
+
+**if (feed_choice < 1 || feed_choice > 6){
+    cat("Invalid choice")
+} else{
+    selected_feed <- feed_options[feed_choice]
+    print(subset(chicks, feed == selected_feed))
+}**
+```
+
+we also have `else if` yuck
+
+## sales.R
+
+what if we have many datasets, same column names, how to merge them?
+
+``` r
+Q1 <- read.csv("Q1.csv")
+Q2 <- read.csv("Q2.csv")
+Q3 <- read.csv("Q3.csv")
+Q4 <- read.csv("Q4.csv")
+
+sales <- rbind(Q1, Q2, Q3, Q4)
+head(sales)
+```
+
+I don’t know which data came from which csv, we can add another column
+
+Notice: we do this before binding
+
+``` r
+Q1 <- read.csv("Q1.csv")
+Q1.quarter <- 'Q1'
+
+Q2 <- read.csv("Q2.csv")
+Q2.quarter <- 'Q2'
+
+Q3 <- read.csv("Q3.csv")
+Q3.quarter <- 'Q3'
+
+Q4 <- read.csv("Q4.csv")
+Q4.quarter <- 'Q4'
+
+sales <- rbind(Q1, Q2, Q3, Q4)
+head(sales)
+
+sales$value <- ifelse(sales$sale_amount >100,
+                                'high value', 'regular')
+```
+
+# Applying Functions
+
+Into functional programming
+
+remember our code to get votes
+
+when something is repeated, its an indicator to do our own functions
+
+``` r
+get_votes <- function() {
+    votes <- as.integer(readline("Enter Votes: "))
+    return(votes)
+}
+```
+
+Remember the difference between return and print, lets use our function
+
+``` r
+mario <- get_votes()
+peach <- get_votes()
+bowser <- get_votes()
+
+total <- sum(mario, peach, bowser)
+cat("total votes:", total)
+```
+
+Yay, we did our first function, lets make it fancier by prompting the user
+
+``` r
+get_votes <- function(prompt) {
+    votes <- as.integer(readline(prompt))
+    return(votes) #optional
+}
+
+mario <- get_votes("Mario votes: ")
+peach <- get_votes("peach votes: ")
+bowser <- get_votes("bowser votes: ")
+
+total <- sum(mario, peach, bowser)
+cat("total votes:", total)
+```
+
+***Note:*** in R, by default, functions return last computed value so no need to explicitly say return(votes)
+
+Now, lets make a default value
+
+``` r
+get_votes <- function(prompt = "Enter votes") {
+    votes <- as.integer(readline(prompt))
+}
+
+mario <- get_votes("Mario votes: ")
+peach <- get_votes(prompt = "peach votes: ")
+bowser <- get_votes()
+
+total <- sum(mario, peach, bowser)
+cat("total votes:", total)
+```
+
+If i don’t specify the prompt, it will use the default, I can also specify the **keyword prompt or not**
+
+## Scope
+
+Notice: votes does not appear in the environment variables cuz it exists in the function scope only. Same for prompt
+
+Lets think defensively, what if we enter a name instead of number?
+
+it will break our code, we can deal with it using if statement???
+
+``` r
+get_votes <- function(prompt = "Enter votes") {
+    votes <- suppressWarnings(as.integer(readline(prompt)))
+    if (is.na(votes)) {
+        return(0)
+    } else {
+        return(votes)
+    }
+}
+
+# entering duck, duck, duck will return 0
+mario <- get_votes("Mario votes: ")
+peach <- get_votes(prompt = "peach votes: ")
+bowser <- get_votes()
+
+total <- sum(mario, peach, bowser)
+cat("total votes:", total)
+```
+
+suppress warning, means don’t scream out the warning, I will manage it myself
+
+remember this is r, we can use the function ifelse
+
+``` r
+get_votes <- function(prompt = "Enter votes") {
+    votes <- suppressWarnings(as.integer(readline(prompt)))
+    ifelse(is.na(votes), 0, votes)
+}
+
+mario <- get_votes("Mario votes: ")
+peach <- get_votes(prompt = "peach votes: ")
+bowser <- get_votes()
+
+total <- sum(mario, peach, bowser)
+cat("total votes:", total)
+```
+
+## Loops
+
+If we want to repeat something multiple times, this is looping
+
+Remember the whole point is not repeating the code.
+
+## repeat
+
+``` r
+i <- 3
+repeat {
+    cat("quack\n")
+    i <- i - 1
+    if (i == 0) {
+        break
+    }
+}
+```
+
+each loop is called iteration. repeat can easily do infinite loops
+
+we have the keywords `break` `next`
+
+we can also use next like this (redundant tho)
+
+``` r
+i <- 3
+repeat {
+    cat("quack\n")
+    i <- i - 1
+    if (i == 0) {
+        break
+    } else{
+        next
+       }
+}
+```
+
+## while
+
+our while loop finally
+
+``` r
+i <- 3
+while (i != 0) {
+    cat("quack\n")
+    i <- i - 1
+}
+```
+
+The main difference is that while checks the condition.
+
+repeat goes indefinitely so I have to use break.
+
+## for
+
+iterate a certain number of times
+
+``` r
+for (i in c(1, 2, 3)) {
+    cat("quack\n")
+}
+```
+
+remember we can use range using `:`
+
+``` r
+for (i in 1:3) {
+    cat("quack\n")
+}
+```
+
+## count.R
+
+lets make our votes program better
+
+``` r
+get_votes <- function(prompt = "Enter votes: ") {
+    repeat {
+      votes <- suppressWarnings(as.integer(readline(prompt)))
+
+       if (!is.na(votes)) {
+          return(votes)
+        }
+    }
+}
+
+mario <- get_votes("Mario: ")
+peach <- get_votes("Peach: ")
+bowser <- get_votes("Bowser: ")
+total <- sum(mario, peach, bowser)
+cat("Total votes:", total)
+```
+
+Notice: return breaks the loop like break
+
+Notice 2: we can loop over characters
+
+``` r
+get_votes <- function(prompt = "Enter votes: ") {
+    repeat {
+        votes <- suppressWarnings(as.integer(readline(prompt)))
+
+     if (!is.na(votes)) {
+        return(votes)
+        }
+    }
+}
+
+total <- 0
+for (i in c("Mario", "Peach", "Bowser")) {
+    votes <- get_votes(paste0(i, ":"))
+    total <- total + votes
+}
+print(total)
+```
+
+to sum over a loop, notice how we made use of total
+
+## tabulate.r
+
+we can sum over rows or columns using loops
+
+``` r
+votes <- read.csv("votes.csv")
+votes
+```
+
+we can loop over rows like this
+
+``` r
+total_votes <- c()
+for (candidate in rownames(votes)) {
+    total_votes[candidate] <- sum(votes[candidate, ])
+}
+total_votes
+```
+
+Notice how we are initializing a vector and populating it
+
+## apply
+
+like map in py, loops and **applies** a function at the same time
+
+margin = 1: row
+
+margin =2: column
+
+``` r
+apply(votes, MARGIN = 1, FUN = sum)
+apply(votes, MARGIN = 2, FUN = sum)
+```
+
+# Tidying Data
+
+## Tidyverse and dplyr
+
+data are messy, they already made packages to clean it
+
+``` r
+library("tidyverse")
+```
+
+dplyr has some useful functions
+
+1.  select
+2.  filter
+3.  arange
+4.  distinct
+5.  group_by
+6.  summarize
+
+## storms.py
+
+storms is a dataset in r, it is stored as tibble
+
+``` r
+storms
+```
+
+tibble is a better version of data frame
+
+``` r
+head(storms)
+```
+
+shows me the first 5 rows
+
+anyway, we want to remove some columns from the dataset
+
+``` r
+head(dplyr::select(
+    storms,
+    !c(lat, long, pressure)
+))
+```
+
+select comes with useful helper functions
+
+1.  contains
+2.  ends_with
+3.  starts_with
+
+``` r
+head(dplyr::select(
+    storms,
+    !c(lat, long, pressure, ends_with("diameter"))
+))
+```
+
+filter removes **rows**
+
+``` r
+head(filter(
+    select(
+        storms,
+        !c(lat, long, pressure, ends_with("diameter"))
+    ),
+    status == "hurricane"
+))
+```
+
+Notice that dplyr:: is kinda optional
+
+## Pipe operator
+
+instead of nesting, we can use piping
+
+1.  \|\>
+2.  %\>%
+
+first one is better
+
+``` r
+storms |>
+    select(!c(lat, long, pressure, ends_with("diameter"))) |>
+    filter(status == "hurricane") |>
+    head()
+```
+
+## arrange
+
+we can sort our data ascending or descending, if there are ties we can sort them with a second column
+
+``` r
+storms |>
+    select(!c(lat, long, pressure, ends_with("diameter"))) |>
+    filter(status == "hurricane") |>
+    arrange(desc(wind), name) |>
+    head()
+```
+
+## distinct
+
+if we want to remove duplicate rows
+
+``` r
+storms |>
+    select(!c(lat, long, pressure, ends_with("diameter"))) |>
+    filter(status == "hurricane") |>
+    arrange(desc(wind), name) |>
+    distinct(name,year .keep_all TRUE) |>
+    head()
+```
+
+## group_by
+
+lets save our data first before exploring grouping
+
+``` r
+hurricanes <- storms |>
+    select(!c(lat, long, pressure, ends_with("diameter"))) |>
+    filter(status == "hurricane") |>
+    arrange(desc(wind), name) |>
+    distinct(name, year, .keep_all = TRUE)
+
+hurricanes |>
+    select(c(year, name, wind)) |>
+    write.csv("hurricanes.csv", row.names = FALSE)
+```
+
+lets group data, grouping is usually done at the top of the code
+
+``` r
+data <- read.csv("hurricanes.csv")
+
+data |>
+    group_by(year) |>
+    arrange(desc(wind)) |>
+    slice_head()
+```
+
+slice head returns first row, we have
+
+1.  slice_head
+2.  slice_tail
+3.  slice_max
+4.  slice_min
+
+slice_max looks for max row, so no need to arrange
+
+to use it, I need to specify `order_by`
+
+``` r
+data |>
+    group_by(year) |>
+    slice_max(order_by = wind)
+```
+
+## summarize
+
+to get number of hurricanes per year, we use summarize
+
+``` r
+data |>
+    group_by(year) |>
+    summarize(n())
+```
+
+But the column header will be n()
+
+we can rename the column
+
+``` r
+data |>
+    group_by(year) |>
+    summarize(hurricanes = n())
+```
+
+notice, the data will stay grouped, which may be a bad idea if I want to reuse the data later
+
+So: `ungroup` when done
+
+``` r
+data |>
+    group_by(year) |>
+    slice_max(order_by = wind) |>
+    ungroup()
+```
+
+## Tidy data
+
+tidy data follow 3 rules only
+
+1.  each observation is a row; each row is an observation
+2.  each variable is a column; each column is a variable
+3.  each value is a cell; each cell is a single value
+
+
+
+when data is not tidy, we **normalize it**
+
+The following dataset is untidy, attribute column should be 2 columns
+
+
+
+after some magic its clean
+
+
+
+## tidyr pivot_wider
+
+to turn attribute to columns, data become wider, aka pivot_wider
+
+``` r
+students <- pivot_wider(
+    students,
+    id_cols = student,
+    names_from = attribute,
+    values_from = value
+)
+```
+
+Notice how I use student as id column
+
+Now that data is clean, we can easily work on the data
+
+but notice, we need to fix the types first
+
+``` r
+students$GPA <- as.numeric(students$GPA)
+
+students |>
+    group_by(major) |>
+    summarise(GPA = mean(GPA))
+```
+
+If a value is missing, it will be transformed as NA
+
+there is also `pivot_longer`
+
+## stringr
+
+we can clean strings aka words
+
+``` r
+show <- read.csv("../shows.csv")
+head(show)
+
+show |>
+    group_by(show) |>
+    summarise(votes = n()) |>
+    ungroup() |>
+    arrange(desc(votes))
+```
+
+if we have white space
+
+1.  str_trim
+2.  str_squish
+
+``` r
+show$show <- shows$show |>
+    str_trim() |>
+    str_squish() |>
+    str_to_title()
+
+shoes$show[str_detect(shows$show, "Avatar")] <- 'Avatar: the last airbender'
+
+show |>
+    group_by(show) |>
+    summarise(votes = n()) |>
+    ungroup() |>
+    arrange(desc(votes))
+```
+
+trim deals with white space at the beginning and end
+
+squish deals with white space between text
+
+to deal with capitalization
+
+1.  str_to_lower
+2.  str_to_upper
+3.  str_to_title
+
+if we have avatar, avatar the last air bender, we use
+
+str_detect
+
+# Visualizing Data
+
+## Grammar of graphics
+
+ggplot aka grammar of graphics help us visualize data
+
+remember from our first week,
+
+**data** is the poll
+
+then we have **geometry**
+
+\*\*\*\* like column, points, lines
+
+aka bar chart, scatterplot, line charts
+
+`column` is good with the poll data
+
+and for **aesthetic mappings:**
+
+what goes on x axis, y axis?
+
+candidates on x axis, poll on y axis
+
+## votes.R
+
+``` r
+votes <- read.csv('votes.csv')
+library('tidyverse')
+ggplot()
+```
+
+this creates an empty paper
+
+``` r
+ggplot(votes)
+```
+
+still empty page
+
+``` r
+ggplot(votes) +
+    geom_col()
+```
+
+imagine this as adding a layer on the empty page, we need to specify x axis and y axis
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col()
+```
+
+finally, our code is complete. Notice the order is different
+
+Ggplot orders the columns alphabetically, this can be changed
+
+## Scales
+
+what if I want to change the height of the y axis? aka the range
+
+we have two types of scale, continuous and discrete
+
+continuous scales have limits.
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col() +
+    scale_y_continuous(limits = c(0,250))
+```
+
+## Labs
+
+we can add titles, change labels, etc..
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col() +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    )
+```
+
+## Color filling and themes
+
+we can do cool colors
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col(aes(fill = candidate)) +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    )
+```
+
+But some people have color bindless
+
+so we adjust our code
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col(aes(fill = candidate)) +
+    scale_fill_viridis_d("Candidate") +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    )
+```
+
+we can also use themes
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col(aes(fill = candidate)) +
+    scale_fill_viridis_d("Candidate") +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    ) +
+    theme_classic()
+```
+
+Notice: order of layers is not important but please don’t change it
+
+To remove legend
+
+``` r
+ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col(aes(fill = candidate), show.legend = FALSE) +
+    scale_fill_viridis_d("Candidate") +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    ) +
+    theme_classic()
+```
+
+lets save this awesome plot
+
+Notice: its a good bar chart template
+
+``` r
+p <- ggplot(votes, aes(x = candidate, y = votes)) +
+    geom_col(aes(fill = candidate), show.legend = FALSE) +
+    scale_fill_viridis_d("Candidate") +
+    scale_y_continuous(limits = c(0,250)) +
+    labs(
+        x = 'Candidate',
+        y = 'Votes',
+        title = 'Election Results'
+    ) +
+    theme_classic()
+
+ggsave(
+    'votes.png',
+    plot = p,
+    width = 1200,
+    height = 900,
+    units = 'px'
+)
+```
+
+## Candy.R
+
+we have columns, we can also have scatterplot
+
+we have chocos, first choco is more expensive than 92% and has more sugar than 43% of other chocos
+
+we can add points on graph as scatter plot
+
+Note: if two data lie on the same point, what to do?
+
+1.  jitter aka add small error
+2.  use alpha
+
+Here is our data
+
+``` r
+Name <- c(
+    "Harshey's Milk Chocolate", "Resse's Peanut Butter Cup",
+    "Sour Patch Kids","Swedish Fish","Harshey's Special Dark"
+)
+price_percentile <- c(92, 65, 12, 76, 92)
+sugar_percentile <- c(43, 72, 7, 60, 43)
+candy <- data.frame(Name, price_percentile, sugar_percentile)
+candy
+```
+
+``` r
+ggplot(candy,
+ aes(x = price_percentile,y = sugar_percentile)
+ )
+```
+
+Still no plot
+
+``` r
+ggplot(candy, aes(
+    x = price_percentile,
+    y = sugar_percentile
+)) +
+    geom_point()
+```
+
+Here is our picture, but we did not account for points with equal data
+
+``` r
+ggplot(candy, aes(
+    x = price_percentile,
+    y = sugar_percentile
+)) +
+    geom_jitter()
+# notice the points here dont overlap
+```
+
+Problem solves
+
+lets get fancy
+
+``` r
+ggplot(candy, aes(
+    x = price_percentile,
+    y = sugar_percentile
+)) +
+    geom_jitter(
+        color = "darkorchid",
+        fill = "orchid",
+        shape = 21,
+        size = 3,
+    ) +
+    labs(
+        x = "Price",
+        y = "Sugar",
+        title = "price and sugar"
+    ) +
+    theme_classic()
+```
+
+Notice that we did not use color in aes, cuz the color will apply to all the points.
+
+Shape takes numbers (sadly) but 21 is goof with scatterplot
+
+## anita.R
+
+Now, lets deal with data that changes with time, aka time series.
+
+Since date is ordered, we plot the dots and connect them with a line
+
+``` r
+timestamps <- seq(as.POSIXct("2024-03-22 00:00:00"), by = "hour", length.out = 10)
+
+wind_speed <- runif(10, min = 3, max = 10)
+
+data <- data.frame(Timestamp = timestamps, Wind_Speed = wind_speed)
+
+data
+```
+
+Here is our code
+
+``` r
+ggplot(data, aes(x = Timestamp, y = Wind_Speed)) +
+    geom_line(
+        linetype = 2,
+        linewidth = 0.5
+    ) +
+    geom_point(
+        color = "deepskyblue4",
+        size = 2
+    ) +
+    labs(
+        x = "Date",
+        y = "Wind Speed",
+        title = "time series "
+    ) +
+    theme_classic()
+```
+
+Notice that we are using two geoms. Order of geoms matter.
+
+Here points will be above lines
+
+When height becomes more than 6, it is considered a hurricane. we can add a horizontal line
+
+``` r
+ggplot(data, aes(x = Timestamp, y = Wind_Speed)) +
+    geom_line(
+        linetype = 1,
+        linewidth = 0.5
+    ) +
+    geom_point(
+        color = "deepskyblue4",
+        size = 2
+    ) +
+    geom_hline(
+        linetype = 3,
+        yintercept = 6
+    ) +
+    labs(
+        x = "Date",
+        y = "Wind Speed",
+        title = "time series "
+    ) +
+    theme_classic()
+```
+
+# Testing Programs
+
+## Exceptions
+
+Here is our function, we want to see how stuff can do wrong
+
+``` r
+average <- function(x) {
+    sum(x) / length(x)
+}
+```
+
+if we write characters instead of numbers, we get errors aka **exceptions**
+
+we need to handle it, lets test if the data is numeric or not
+
+``` r
+average <- function(x) {
+    if (!is.numeric(x)) {
+        return(NA)
+    }
+    sum(x) / length(x)
+}
+```
+
+The user has no idea what is happening tho, so we tell the useage `message`
+
+``` r
+average <- function(x) {
+    if (!is.numeric(x)) {
+        message("'x', must be a numeric vector :>{")
+        return(NA)
+    }
+    sum(x) / length(x)
+}
+```
+
+## warning
+
+warning indicates a potential issue
+
+``` r
+average <- function(x) {
+    if (!is.numeric(x)) {
+        warning("'x', must be a numeric vector :>{")
+        return(NA)
+    }
+    sum(x) / length(x)
+}
+```
+
+## stop
+
+stop totally stops the code
+
+``` r
+average <- function(x) {
+    if (!is.numeric(x)) {
+        stop("'x', must be a numeric vector :>{")
+    }
+    sum(x) / length(x)
+}
+```
+
+Now lets handle not available too
+
+``` r
+average <- function(x) {
+    if (!is.numeric(x)) {
+        stop("'x', must be a numeric vector :>{")
+    }
+    if (any(is.na(x))) {
+        warning("'x' contains one or more NA values")
+        return(NA)
+    }
+    sum(x) / length(x)
+}
+
+average(c(1, 2, NA))
+```
+
+## Unit tests
+
+we can create a new file `test-average.R` to test our function
+
+``` r
+source('average.R')
+
+test_average <- function() {
+    if (average(c(1, 2, 3)) == 2) {
+        cat("avergae passed test\n")
+    } else {
+        cat("average failed\n")
+    }
+
+    if (average(c(-1, 0, 1)) == 0) {
+        cat("avergae passed test\n")
+    } else {
+        cat("average failed\n")
+    }
+
+    if (average(c(-1, -2, -3)) == -2) {
+        cat("avergae passed test\n")
+    } else {
+        cat("average failed\n")
+    }
+}
+```
+
+to import our function, we `source` the file that it was defined in.
+
+## testthat
+
+what if we want to test many stuff, using if is really tedious.
+
+Instead, we use testthat
+
+``` r
+library(testthat)
+```
+
+``` r
+source('average.R')
+test_that("'average' calculates mean", {
+    expect_equal(average(c(1, 2, 3)), 2)
+    expect_equal(average(c(-1, -2, -3)), -2)
+    expect_equal(average(c(-1, 0, 1)), 0)
+})
+```
+
+To run the test, ctl enter or two other ways
+
+``` r
+source('test-average.R')
+test_file('test-average.R')
+```
+
+some people believe to write test first before function, others disagree
+
+We can divide our test into chunks, each chunk tests something specific
+
+``` r
+test_that("'average' calculates mean", {
+    expect_equal(average(c(1, 2, 3)), 2)
+    expect_equal(average(c(-1, -2, -3)), -2)
+    expect_equal(average(c(-1, 0, 1)), 0)
+})
+
+test_that("'average' warns about NA in input", {
+    expect_warning(average(c(1, NA, 3)))
+    expect_warning(average(c(NA, NA, NA)))
+})
+```
+
+running this code shows that we need to change our order of code in average
+
+``` r
+average <- function(x) {
+    if (any(is.na(x))) {
+        warning("'x' contains one or more NA values")
+        return(NA)
+    }
+    if (!is.numeric(x)) {
+        stop("'x', must be a numeric vector :>{")
+    }
+
+    sum(x) / length(x)
+}
+```
+
+Now lets test that our function returns NA
+
+``` r
+test_that("'average' calculates mean", {
+    expect_equal(average(c(1, 2, 3)), 2)
+    expect_equal(average(c(-1, -2, -3)), -2)
+    expect_equal(average(c(-1, 0, 1)), 0)
+})
+
+test_that("'average' warns about NA in input", {
+    expect_warning(average(c(1, NA, 3)))
+    expect_warning(average(c(NA, NA, NA)))
+})
+
+test_that("'average returns NA with NA value", {
+    expect_equal(suppressWarnings(average(c(1, NA, 3))), NA)
+})
+```
+
+we need to add suppress warnings cuz our actual function throws an error
+
+we can also use `expect_error`
+
+``` r
+test_that("'average' calculates mean", {
+    expect_equal(average(c(1, 2, 3)), 2)
+    expect_equal(average(c(-1, -2, -3)), -2)
+    expect_equal(average(c(-1, 0, 1)), 0)
+})
+
+test_that("'average' warns about NA in input", {
+    expect_warning(average(c(1, NA, 3)))
+    expect_warning(average(c(NA, NA, NA)))
+})
+
+test_that("'average returns NA with NA value", {
+    expect_equal(suppressWarnings(average(c(1, NA, 3))), NA)
+})
+
+test_that("'average stops if x is non numeric", {
+    expect_error(average("quack"))
+})
+```
+
+## Floating point imprecision
+
+Remember that
+
+$$
+\dfrac{0.1+0.5}{0.2} = 0.299999
+$$
+
+``` r
+print(0,3, digitis = 17)
+```
+
+## tolerance
+
+we allow error aka tolerance
+
+0.3 +- 10\^-0.8
+
+``` r
+test_that("average calculates mean", {
+    expect_equal(average(c(0.1, 0.5)), 0.3, tolerance = 1e-8)
+})
+```
+
+## test driven development
+
+people believe to write the test before writing the code, wow
+
+`test_greet.R`
+
+we write the test first to see what we **expect** our code to be
+
+``` r
+# source("greet.R")
+test_that("'greet says hello to a user", {
+    expect_equal(greet("Carter"), "hello, Carter")
+    expect_equal(greet("Mario"), "hello, Mario")
+})
+```
+
+Now lets write greet
+
+``` r
+greet <- function(to) {
+    return(paste("hello,", to))
+}
+```
+
+Remember that this is iterative process
+
+## Behavior-Driven Development
+
+`desctibe` `it`
+
+``` r
+describe("greet()", {
+    it("can say hello to a user", {
+        name <- "Carter"
+        expect_equal(greet(name), "hello, Carter")
+    })
+})
+```
+
+its like using English to explain the behavior of the function
+
+# Packaging Programs
+
+## ducksay
+
+let’s do our package, cowsay in py, lets make ducksay in R
+
+``` bash
+dir.create("ducksay")
+setwd("ducksay/")
+```
+
+## package structure
+
+1.  description
+2.  namespace
+3.  man
+4.  R
+5.  tests
+
+## description
+
+should have:
+
+1.  package
+2.  title
+3.  description
+4.  version
+5.  authors\@R
+6.  license
+
+``` bash
+file.create("DESCRIPTION")
+```
+
+``` r
+Package: ducksay
+Title: Duck Say
+Description: Say hello with a ducksay
+Version: 1.0
+Authors@R:person("Ahmed",
+    "Darwish",
+    email = "ahmedh457@gmail.com",
+    role = c("aut", "cre", "cph")
+)
+License: MIT + file LICENSE
+```
+
+author created the package
+
+creator maintains the package
+
+for license, MIT is good.
+
+use file license to add my own license
+
+## license
+
+``` r
+file.create("LICENSE")
+```
+
+``` r
+YEAR: ...
+COPYRIGHT HOLDER: ducksay authors
+```
+
+## test
+
+we will create tests before having the function
+
+we can’t run the tests yet
+
+``` r
+library(devtools)
+use_testthat()
+```
+
+this will add suggest in the description and create test folders
+
+``` r
+use_test('ducksay')
+```
+
+this will create the file `test-ducksay.R`
+
+``` r
+describe("ducksay()", {
+ it("can print to console with 'cat'", {
+    expect_output(cat(ducksay()))
+  })
+  it("can say hello to the world", {
+    expect_match(ducksay(), "hello, world")
+  })
+  it("can say hello with a duck", {
+    duck <- paste(
+      "hello, world",
+     ">(. )--",
+      "(____/",
+      sep = "\n"
+    )
+    expect_match(ducksay(), duck, fixed = TRUE )
+  })
+ })
+```
+
+expect_match searches for the words in the output
+
+we add fixed = true so its not treated as regular expression
+
+## ducksay.R
+
+To create the function `ducksay.R`
+
+``` r
+use_r('ducksay')
+```
+
+we still can’t test it until we export
+
+``` r
+ducksay <- function() {
+    paste(
+        "hello, world",
+        ">(. )--",
+        "(____/",
+        sep = "\n"
+    )
+}
+```
+
+we still can’t use it. until we define namespace
+
+## NAMESPACE
+
+``` r
+file.create("NAMESPACE")
+```
+
+in namespace, write out functions
+
+``` r
+export(ducksay)
+```
+
+Now its available for the end user
+
+in the console, to use our function
+
+``` r
+load_all()
+cat(ducksay())
+test()
+```
+
+## man
+
+to add our own documentation `.Rd` we write our own manual
+
+``` r
+dir.create("man")
+file.create("man/ducksay.Rd")
+```
+
+``` r
+\name{ducksay}
+\alias{ducksay}
+\title{ Duck Say}
+\descriptions{A duck that says hello. }
+\usage{
+ducksay()
+}
+\value{
+string representation of a duck saying hello to the world.
+}
+\examples{
+cat(ducksay())
+}
+```
+
+alias: what the user writes to get the manual
+
+lets use our manual
+
+``` r
+?ducksay
+```
+
+## build
+
+to build the package, we use `build`
+
+``` r
+build()
+```
+
+it will create `tar.gz` file
+
+## update package
+
+lets add more code
+
+``` r
+ describe("ducksay()", {
+  it("can print to console with 'cat'", {
+    expect_output(cat(ducksay()))
+  })
+  it("can say hello to the world", {
+    expect_match(ducksay(), "hello, world")
+  })
+  it("can say hello with a duck", {
+    duck <- paste(
+      "hello, world",
+      ">(. )--",
+      "(____/",
+      sep = "\n"
+    )
+    expect_match(ducksay(), duck, fixed = TRUE )
+  })
+  it("can say any given phrase", {
+    expect_match(ducksay("quack!"), "quack!")
+  })
+ })
+```
+
+``` r
+ducksay <- function(phrase = "hello, world") {
+    paste(
+        phrase,
+        ">(. )--",
+        "(____/",
+        sep = "\n"
+    )
+}
+```
+
+now lets use it
+
+``` r
+load_all()
+cat(ducksay('quack'))
+test()
+```
+
+``` r
+build()
+```
+
+## Using the package
+
+lets create a new program that uses our package
+
+``` r
+setwd('..')
+file.create('greet.R')
+library(ducksay)
+```
+
+``` r
+install.packages('ducksay_1.0.tar.gz')
+```
+
+``` r
+library(ducksay)
+
+name <- readline("whats ur name?")
+gretting <- ducksay(paste("hello", name))
+cat(greeting)
+```
+
+to share the code
+
+1.  cran
+2.  github

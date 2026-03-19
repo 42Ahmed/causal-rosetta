@@ -1,0 +1,628 @@
+---
+title: "Factor Analysis & SEM"
+format: html
+number-sections: false
+---
+
+
+### 378. Part 5: Factor analysis and SEM
+
+Final part
+
+### 379. Almost there
+
+Rome wasn’t built in a day, but it collapsed in one
+
+### 380. Factor analysis and SEM
+
+I see a light, and I hope its not a train
+
+### 381. Factor analysis - an introduction
+
+**1. What is Factor Analysis?**
+
+- **Purpose**: Factor analysis aims to **explain the variance and covariance** between a set of **observed variables**.
+- **Observed Variables**: These are variables for which we have actual data.
+- **Model Goal**: To develop a model for the **population**, typically by using data from a **sample**.
+- **Core Mechanism**: The model explains the variance and covariance of observed variables using a **set of typically fewer unobserved factors and weightings**.
+    - This implies that the variance and covariance structure observed is, at least in part, due to these unobserved factors.
+
+---
+
+**Example: Psychiatric Care Data**
+
+- Imagine having data on observed characteristics of individuals admitted to psychiatric care:
+    - **Insomnia**
+    - **Suicidal thoughts**
+    - **Hyperventilation**
+    - **Nausea**
+- This data represents a **sample**, not the entire population.
+- **Observation**: Within this sample, there's variance and covariance between these variables.
+    - **Example**: There might be a covariance of $0.3$ between insomnia and suicidal thoughts.
+- **Factor Analysis Goal**: To create a model that explains this covariance (and variance) in the **population**.
+- **Hypothesis**: This variance and covariance structure is due to **unobserved factors**.
+    - **Proposed Unobserved Factors**:
+        - **Depression**
+        - **Extreme Anxiety**
+- **Intuition**: These two underlying factors (depression and anxiety) are hypothesized to **causally affect** and thus be **responsible for the variance and covariance** between all the observed characteristics.
+
+---
+
+**The Role of Weightings (Loadings)**
+
+- In factor analysis, the unobserved factors (e.g., depression, anxiety) are assumed to have a **causal effect** on each of the observed characteristics.
+- This causal influence is quantified by **weightings**.
+- **Weighting Notation**:
+    - The weighting of the first unobserved factor on the first observed factor might be called $w_{11}$.
+        - *Example*: The amount to which depression causes insomnia.
+    - The weighting of the second unobserved factor on the first observed factor might be called $w_{21}$.
+        - *Example*: The amount to which anxiety causes insomnia.
+- **Key Insight**: These weightings are typically different for each factor-observed variable pair.
+- **Estimation**: A primary goal of factor analysis is to **estimate these weightings and the unobserved factors** themselves.
+- **Factor Relationships**: It's important to note that these **unobserved factors can themselves be correlated**.
+- **Higher-Order Models**: Factor analysis can extend to higher-order models where unobserved factors are themselves caused by even "further down the chain" unobserved factors.
+
+---
+
+**Understanding Variance Components**
+
+- When analyzing the variance of a given observed variable (e.g., insomnia) across a sample, factor analysis aims to explain its variance in the population.
+- The variance of an observed variable is thought to comprise two main parts: <imagine a box>
+    - **Commonality**: This is the **proportion of variance explained by the shared unobserved factors**.
+        - It's called "commonality" because these factors are common to (affect) other observed variables as well.
+    - **Unique Variance**: This is the **proportion of variance that is NOT explained by these shared unobserved factors**.
+        - It is considered **unique to that specific observed variable** and is not caused by the common set of factors.
+- **Unique Factors**: Typically, this unique variance is attributed to a set of specific unobserved variables (e.g., $\varepsilon_1, \varepsilon_2, \varepsilon_3, \varepsilon_4$) that explain the unique variance of that particular observed variable.
+- **Covariance Extension**: If these unique factors (e.g., $\varepsilon_1$ and $\varepsilon_2$) are correlated, then the covariance between observed variables can also be attributed partly to the shared factors and partly to these unique factors.
+
+---
+
+**5. Practical Applications**
+
+- **Primary Use: Explaining Variance and Covariance**
+    - Factor analysis's core utility is to explain the complex variance and covariance relationships among observed characteristics by using a **typically simpler underlying structure**.
+    - **Example**: Reducing a system from four observed characteristics (insomnia, suicidal thoughts, hyperventilation, nausea) to two unobserved factors (depression, anxiety) simplifies the dimensionality from four to two.
+- **Testing a Particular Theory**
+    - Especially prominent in **psychology**, factor analysis is used to test theoretical frameworks.
+    - **Method**: If a theory proposes a link between certain unobserved constructs (e.g., depression, anxiety) and a set of observed characteristics, factor analysis can test whether this theoretical structure is supported by the empirical data.
+- **Dimensionality Reduction**
+    - This is a significant application, particularly relevant in fields like **machine learning**.
+    - **Concept**: It involves starting with a system of many (highly dimensional) variables and replacing it with a system of **fewer unobserved factors**.
+    - **Benefits in Machine Learning**:
+        - **Improving Predictive Power**: By reducing noise and focusing on core underlying constructs.
+        - **Easier Computation**: Working with fewer variables reduces computational complexity.
+
+---
+
+
+
+### 382. Factor analysis - model representation
+
+---
+
+Factor Analysis - Model Representation
+
+- **Factor analysis** helps us understand how observed variables relate to underlying, unobserved factors.
+- We will explore how to represent models and data in factor analysis.
+- Our example involves **four observed factors** collected from a sample of individuals:
+    - Insomnia ($y_1$)
+    - Suicidal Thoughts ($y_2$)
+    - Hyperventilation ($y_3$)
+    - Nausea ($y_4$)
+
+---
+
+Representing Observed Data
+Slide 2
+
+- Each observed variable can be thought of as a **vector of observations** across a sample of 'n' individuals.
+- For example, **insomnia ($y_1$)** is a vector where each component represents the insomnia measure for a different person:
+    
+    $$
+    y_1 = \begin{pmatrix} y_1^1 \\ y_1^2 \\ \vdots \\ y_1^n \end{pmatrix}
+    $$
+    
+    - Where $y_1^1$ is the insomnia value for the first person, $y_1^2$ for the second person, and so on, up to $y_1^n$ for the nth person.
+- Similarly, **nausea ($y_4$)** is also a vector of observations for each person in the sample:
+    
+    $$
+    y_4 = \begin{pmatrix} y_4^1 \\ y_4^2 \\ \vdots \\ y_4^n \end{pmatrix}
+    $$
+    
+- This vector representation applies analogously to all other observed variables ($y_2, y_3$).
+
+---
+
+Two Ways to Represent Factor Analysis Models
+
+- There are essentially **two primary ways** to think about representing models in factor analysis:
+    1. **Vector of Equations** formalism
+    2. **Matrix Interpretation**
+- In this discussion, we will focus extensively on the **Vector of Equations** approach.
+- The Matrix Interpretation will be introduced and discussed in subsequent material.
+
+---
+
+The Vector of Equations Formalism - Intuition and Unobserved Factors
+
+- **Intuition**: With the vector of equations formalism, we **"forget about the fact that $y_1$ through $y_4$ represents actually a vector of observations for individuals"** and instead focus purely on the structure of the equations themselves.
+- We identify **unobserved (latent) factors** that influence the observed variables.
+- For our example, we consider two unobserved factors:
+    - **Depression ($\eta_1$)**
+    - **Anxiety ($\eta_2$)**
+
+---
+
+The Vector of Equations - General Form and Example (Insomnia)
+
+- Each observed variable ($y_i$) is determined in a **linear regression-like form** by the unobserved factors.
+- Consider **Insomnia ($y_1$)**:
+    
+    $$
+    y_1 = \lambda_{11} \eta_1 + \lambda_{12} \eta_2 + \varepsilon_1
+    $$
+    
+- Let's break down this equation:
+    - $\eta_1$: The unobserved factor **Depression**.
+    - $\eta_2$: The unobserved factor **Anxiety**.
+    - $\lambda_{11}$: This is a **loading (weight)** that corresponds to the influence of the first unobserved variable (Depression, $\eta_1$) on the first observed variable (Insomnia, $y_1$).
+    - $\lambda_{12}$: This is a **loading (weight)** that corresponds to the influence of the second unobserved variable (Anxiety, $\eta_2$) on the first observed variable (Insomnia, $y_1$).
+    - $\varepsilon_1$: This term represents the **unique variance of $y_1$**.
+
+---
+
+The Vector of Equations - Another Example (Nausea) and Components Explained
+
+- We can write this type of regression formula for **each of the observed characteristics**.
+- Consider **Nausea ($y_4$)**:
+    
+    $$
+    y_4 = \lambda_{41} \eta_1 + \lambda_{42} \eta_2 + \varepsilon_4
+    $$
+    
+
+---
+
+Key Concepts: Commonality and Unique Variance
+
+- **Commonality**:
+    - This refers to **the part of each equation that is common to all the observed characteristics**.
+    - It represents the proportion of an observed variable's variance that is explained by the **shared unobserved factors**.
+    - In our equations, the commonality for $y_i$ is represented by the terms involving the latent variables:
+        
+        $$
+        \lambda_{i1} \eta_1 + \lambda_{i2} \eta_2
+        $$
+        
+- **Unique Variance ($\varepsilon_i$)**:
+    - This is the term ($\varepsilon$) in each equation that is **unique to that specific observed factor ($y_i$)**.
+    - It represents the **proportion of the variance of the observed characteristic which is NOT due to the shared unobserved factors**.
+    - Essentially, it captures the variance in an observed variable that is specific to that variable and not shared with others via the common latent factors.
+
+---
+
+Conclusion and Next Steps
+
+- We have discussed the **Vector of Equations** approach to representing models in factor analysis.
+- This method allows us to express observed variables as linear combinations of unobserved factors and unique variance terms.
+- The concepts of **commonality** and **unique variance** are crucial for understanding the contributions of shared and unique influences on observed variables.
+- In the next video, the **Matrix Interpretation** of factor analysis models will be introduced.
+
+---
+
+
+
+### 383. Factor analysis - model representation 2
+
+we continue our discussion on **model representation in factor analysis**. In the previous part, we introduced the vector of equations interpretation of models in factor analysis.
+
+---
+
+The Vector of Equations Interpretation
+
+- **Intuition**: In factor analysis, the vector of equations interpretation means that we have **one regression equation for each of the observed characteristics**.
+- For example, if we are analyzing symptoms, we would have a regression equation for:
+    - Insomnia
+    - Nausea
+    - Suicidal thoughts
+    - Hyperventilation
+
+---
+
+Fixed and Varying Components
+It is important to understand that each of these equations contains elements that are **fixed across individuals in our sample** and elements that **vary between individuals**.
+
+- **Fixed Components (across individuals)**:
+    - The **weightings of the unobserved factors on the observed characteristics**. These are often denoted by Lambda ($\lambda$) parameters, such as $\lambda_{11}$, $\lambda_{12}$, $\lambda_{41}$, and $\lambda_{42}$, as well as all weightings in between. These are essentially the **factor loadings**.
+- **Varying Components (between individuals)**:
+    - The **actual values or scores of these hidden (unobserved) factors** for different individuals. For instance, $\eta_{21}$ and $\eta_{22}$ represent these factor scores.
+    - **Crucially, $\eta_{21}$ (and similarly $\eta_{22}$) actually represents a vector** with different values for each individual in our sample (e.g., $\eta_{211}$ through $\eta_{21N}$).
+    - The **unique disturbance terms** (e.g., $\epsilon_1$ through $\epsilon_4$) also represent vectors of unique disturbance terms which are **different for each individual**.
+
+---
+
+A Key Difference from Multiple Regression
+On the surface, each individual equation in factor analysis might look like a simple multiple regression equation. However, there is a fundamental difference:
+
+- **Core Difference**: In factor analysis, the **only thing which we actually observe is the left-hand side** of the equations (i.e., the observed characteristics like insomnia, nausea, etc.).
+- **What is Unobserved?**: All other components of the model are **unobserved**:
+    - The **actual values or scores of the hidden factors** (e.g., $\eta_{21}$, $\eta_{22}$).
+    - The **weightings of the unobserved characteristics** (factor loadings).
+    - The **unique factors or disturbance terms** (e.g., $\epsilon_1$ through $\epsilon_4$).
+- **Intuition**: Factor analysis aims to infer these unobserved underlying factors and their relationships with observed variables, unlike multiple regression where all predictors are typically observed.
+
+---
+
+Stacking Equations: A More Compact Representation
+To simplify the representation of the system of equations, we can **stack each of these individual equations on top of each other**.
+
+- **Process**:
+    - The observed characteristics ($y_1$ through $y_4$) are combined into a **vector on the left-hand side**.
+    - The fixed weightings ($\lambda_{11}, \lambda_{12}$, etc.) form a **matrix**. This matrix would have values like $\lambda_{11}$ and $\lambda_{12}$ as its first row, and $\lambda_{41}$ and $\lambda_{42}$ as its final row. This is often referred to as the **factor loading matrix**, $\Lambda$.
+    - The unobserved specific factor scores ($\eta_{21}$ and $\eta_{22}$) are combined into a **vector**.
+    - The unique disturbance terms ($\epsilon_1$ through $\epsilon_4$) are also combined into a **vector**.
+- **Key Idea**: We are stacking equations rather than observations in this formalism.
+
+$$
+\begin{bmatrix}y_1 \\ \vdots \\ y_4\end{bmatrix}
+
+ = \begin{bmatrix}\lambda_{11} & \lambda_{12} \\ \vdots & \vdots\\ \eta_{41} &\eta_{42}\end{bmatrix}
+
+\begin{bmatrix}\eta_1 \\ \eta_2\end{bmatrix}
+
++ 
+\begin{bmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_4\end{bmatrix}
+$$
+
+---
+
+SThe Compact Vector Equation for Factor Analysis
+This process allows us to replace a system of four (or more) individual equations by a **single vector equation**.
+
+- **The General Form**:
+    
+    $$
+    \mathbf{y} = \mathbf{\Lambda \eta} + \mathbf{\epsilon}
+    $$
+    
+- **Intuition and Caveat**: This is a **very compact way of writing what is in principle actually quite a complicated system of equations**. However, it's important to stress that this compact form implicitly "forgets" a crucial detail:
+    - **$\mathbf{y}$ (e.g., $y_1$ through $y_4$) actually represents vectors of observations** for each observed characteristic across different individuals.
+    - **$\mathbf{\eta}$ (e.g., $\eta_{21}$ and $\eta_{22}$) also represents vectors of different values or scores of the factors** for different individuals.
+    - **$\mathbf{\epsilon}$ (e.g., $\epsilon_1$ through $\epsilon_4$) also represents vectors of unique disturbance terms** which are different for each individual.
+- **Next Steps**: This compact vector representation naturally leads into the **matrix representation of factor analysis**, which will be discussed further in the next segment.
+
+    
+
+### 384. Factor analysis - model representation 3
+
+Recap: Problems with the Vector Equation Form
+
+- In previous discussions, factor analysis models were written as a system of equations, where each equation represented a particular observed characteristic.
+- This was initially stacked as:
+    
+    $$
+    \mathbf{y} = \mathbf{\Lambda \eta} + \mathbf{\epsilon}
+    $$
+    
+- **The main problem with this vector equation form** is that implicitly, each component of the dependent variable $\mathbf{Y}$ (e.g., $Y_1$, $Y_2$, etc.) and the unobserved factors $\mathbf{\eta}$ are treated as vectors of $\mathbf{n \times 1}$ dimensions.
+- **Intuition**: For example, $Y_1$ actually represents a vector of observations for the first characteristic across all 'n' individuals (i.e., $Y_{1,1}$, $Y_{2,1}$, ..., $Y_{n,1}$), but this form implicitly "forgets" that crucial individual-level information.
+- We need a way to write down the model that **retains this individual-level information**.
+
+---
+
+Introducing the Individual Index 'i'
+
+- To address the limitations, we can add an index 'i' to each variable, representing the individual.
+    - So, for the first observed characteristic, we have:
+        
+        $$
+        Y_{i1} = \lambda_{11} \eta_{i1} + \lambda_{12} \eta_{i2} + \epsilon_{i1}
+        $$
+        
+    - This applies for all 'i' from 1 to 'N' (total observations).
+- This can be extended for all observed characteristics, for example, the fourth: $Y_{i4} = \lambda_{41} \eta_{i1} + \lambda_{42} \eta_{i2} + \epsilon_{i4}$.
+- **Condensing the system**: We can write down the entire system of equations using solely indices:
+    
+    $$
+    \boxed{\mathbf{Y_{ij} = \lambda_{j1} \eta_{i1} + \lambda_{j2} \eta_{i2} + \epsilon_{ij}}}
+    $$
+    
+    - Here, **'i' represents the individual** (takes values 1 through N).
+    - And **'j' represents which observable characteristic** we are talking about (takes values 1 through 4 in this example).
+- **Intuition**: This single equation effectively condenses **4N equations** (if there are 4 observed characteristics and N individuals) into a more compact form, but it can still appear messy.
+
+---
+
+Transition to Matrix Form: Why Matrices?
+
+- Because the observed variable $\mathbf{Y}$ now has **two indices** (i for individual, j for characteristic, as in $Y_{ij}$), it naturally lends itself to being represented by a **matrix**.
+- This allows us to incorporate the information that we are dealing with 'n' individuals directly into the model's structure.
+
+---
+
+The Observed Data Matrix: $\tilde{\mathbf{Y}}$
+
+- We can represent the dependent variable $\mathbf{Y}$ as a matrix.
+- Each **row** in this matrix represents an **individual's observed variables**.
+- **Dimensions**: This matrix has **N rows** (for N individuals) by **V columns** (for V observed characteristics). So, it's an **N x V** matrix.
+- Example (with 4 observed characteristics):
+    
+    $$
+    \mathbf{\tilde{Y}_{{N \times V}} = \begin{pmatrix} Y_{11} & Y_{12} & Y_{13} & Y_{14} \\ Y_{21} & Y_{22} & Y_{23} & Y_{24} \\ \vdots & \vdots & \vdots & \vdots \\ Y_{N1} & Y_{N2} & Y_{N3} & Y_{N4} \end{pmatrix}}
+    $$
+    
+    - $Y_{11}$ is the value of observed characteristic 1 for the first individual.
+    - $Y_{N4}$ is the value of observed characteristic 4 for the Nth individual.
+
+---
+
+The Factor Score Matrix: $\tilde{\mathbf{\eta}}$
+
+- This matrix contains the **factor scores for different individuals**.
+- Each **row** corresponds to an **individual**, and the entries in that row are their scores for each of the unobserved factors.
+- **Dimensions**: This matrix has **N rows** (for N individuals) by **F columns** (for F unobserved factors). So, it's an **N x F** matrix.
+- Example (with 2 unobserved factors):
+    
+    $$
+    \mathbf{\tilde{\eta}_{N \times F} = \begin{pmatrix} \eta_{11} & \eta_{12} \\ \eta_{21} & \eta_{22} \\ \vdots & \vdots \\ \eta_{N1} & \eta_{N2} \end{pmatrix}}
+    $$
+    
+    - $\eta_{11}$ is the score of the first individual on the first unobserved factor.
+    - $\eta_{N2}$ is the score of the Nth individual on the second unobserved factor.
+
+---
+
+The Factor Weight Matrix: $\mathbf{\Lambda^T}$
+
+- This matrix represents the **factor weights** (or loadings).
+- **Important**: In the matrix representation, this is often the **transpose of the loading matrix** commonly denoted as $\mathbf{\Lambda}$.
+- Each **column** of $\mathbf{\Lambda^T}$ represents the weights for a particular observed characteristic across the factors, while each **row** corresponds to the weights of a factor on all observed characteristics.
+- **Dimensions**: Because we have F unobserved factors and V observed characteristics, this matrix will have **F rows** by **V columns**. So, it's an **F x V** matrix.
+- Example (with 2 unobserved factors and 4 observed characteristics):
+    
+    $$
+    \mathbf{\Lambda^T_{F \times V} = \begin{pmatrix} \lambda_{11} & \lambda_{21} & \lambda_{31} & \lambda_{41} \\ \lambda_{12} & \lambda_{22} & \lambda_{32} & \lambda_{42} \end{pmatrix}}
+    $$
+    
+    - The first row ($\lambda_{11}$ to $\lambda_{41}$) represents the weights on the first unobserved factor ($\eta_1$) for each of the four observed characteristics.
+    - The second row ($\lambda_{12}$ to $\lambda_{42}$) represents the similar weights but for the second factor ($\eta_2$).
+- **Crucial intuition for matrix multiplication**: When we multiply $\mathbf{\tilde{\eta}_{N \times F}}$ *by $\mathbf{\Lambda^T_{F \times V}}$*, the inner dimensions (F) cancel out, resulting in an **N x V matrix**, which matches the dimensions of our observed data matrix $\mathbf{\tilde{Y}_{N \times V}}$. This dimensional consistency confirms the correctness of the setup.
+
+---
+
+The Disturbance Term Matrix: $\tilde{\mathbf{\epsilon}}$
+
+- Finally, we have a matrix of our **disturbance (error) terms**.
+- For the system to make sense, this matrix must have the **same dimensions as our dependent variable matrix** $\mathbf{\tilde{Y}}$.
+- **Dimensions**: This matrix has **N rows** (for N individuals) by **V columns** (for V observed characteristics). So, it's an **N x V** matrix.
+- Example (with 4 observed characteristics):
+    
+    $$
+    \mathbf{\tilde{\epsilon}_{N \times V} = \begin{pmatrix} \epsilon{11} & \epsilon_{12} & \epsilon_{13} & \epsilon_{14} \\ \epsilon_{21} & \epsilon_{22} & \epsilon_{23} & \epsilon_{24} \\ \vdots & \vdots & \vdots & \vdots \\ \epsilon_{N1} & \epsilon_{N2} & \epsilon_{N3} & \epsilon_{N4} \end{pmatrix}}
+    $$
+    
+    - Each individual row corresponds to the disturbances for one individual.
+
+---
+
+The Full Matrix Equation
+
+- The complete system of equations, explicitly including information about 'N' individuals, can be written as a single matrix equation.
+- It's common practice to use a **tilde ($\sim$)** to indicate that we are referring to a matrix representation and to explicitly state the dimensions.
+- The matrix representation of the factor analysis model is:
+    
+    $$
+    \boxed{\mathbf{\tilde{Y}_{N \times V} = \tilde{\eta}_{N \times F} \Lambda^T_{F \times V} + \tilde{\epsilon}_{N \times V}}}
+    $$
+    
+
+---
+
+Matrix vs. Vector Representation
+
+- In this course on factor analysis, we will **alternate between the matrix representation and the vector representation** of factor analysis models.
+- Sometimes one form will be more "prudent" or suitable than the other depending on the context.
+- However, it's important to note that the **matrix representation of factor analysis models is in some ways slightly more powerful** than the vector equation form.
+
+---
+
+
+
+### 385. Factor analysis - model representation 4
+
+We reached that
+
+$$
+\boxed{\mathbf{\tilde{Y}_{N \times V} = \tilde{\eta}_{N \times F} \Lambda^T_{F \times V} + \tilde{\epsilon}_{N \times V}}}
+$$
+
+where $N$ is number of individuals, $F$ number of factors and $V$ number of observed variables
+
+---
+
+Refining the Model: Incorporating Unique Factors
+
+Now, let's delve into a crucial refinement of the factor analysis model concerning the error term.
+
+**Intuition**: The initial error term ($\epsilon_{NV}$) lumps together all unexplained variance. However, in factor analysis, we want to distinguish between variance due to common factors and variance that is unique to each observed variable, plus random error. This distinction is vital for accurate model interpretation.
+
+- Typically, in factor analysis models, we prefer to write the **disturbance term** (the error term $\epsilon_{NV}$) in a way that is **similar to that of the variance due to the common share factors**.
+- This means we don't just treat it as residual error, but rather as variance stemming from **unique factors** specific to each observed variable.
+- Therefore, we **rewrite our error term $\epsilon_{NV}$**:
+    
+    $$
+     \epsilon_{NV} = U_{NV} D'_{VV}
+    $$
+    
+
+Let's define these new matrices:
+
+- **$U_{NV}$**: This is a matrix which **contains the unique factor scores for each individual**.
+    - Like the dependent variable and error term, it has **N rows** (individuals) and **V columns** (observed variables). Each individual has a score on a unique factor for each observed variable.
+- **$D'_{VV}$**: This is a **matrix of the weightings on each of those individual variables**.
+    - It has dimensions **V rows** and **V columns**.
+    - This matrix contains the **weightings of these unique factors on each of the observed variables**.
+        
+        $$
+        D_{VV} = \begin{bmatrix}
+        \lambda_{u1} &\dots &0\\
+        \vdots \\
+        0 & \dots & \lambda_{uV}
+        \end{bmatrix}
+        $$
+        
+
+---
+
+The Unique Factor Weightings Matrix: $D_{VV}$
+
+The matrix $D_{VV}$ (or its transpose $D'_{VV}$) has a very specific and important structure in factor analysis.
+
+**Intuition**: The unique factors represent variance in an observed variable that is not shared with any other observed variable. This includes both specific variance (variance truly unique to that measure) and measurement error. By making $D_{VV}$ diagonal, we mathematically enforce that each unique factor only influences its corresponding observed variable.
+
+- The matrix **$D_{VV}$ is typically assumed to be a diagonal matrix**.
+- This means that **all off-diagonal elements are assumed to be zero**.
+- The **diagonal elements** of $D_{VV}$ **represent the weights of these unique factor scores on each of the specific variables**.
+    - For example, these diagonal elements are denoted as **$\lambda_{U1}$ through to $\lambda_{UV}$**.
+    - The subscript 'U' (e.g., in $\lambda_U$) is used to **indicate that we are talking about the unique factors**. This helps to distinguish these weightings from those on the latent factors, which are assumed to be common between different variables.
+
+**In summary, because $D_{VV}$ is diagonal, it implies that**:
+
+- Each observed variable ($y_1, y_2, \ldots, y_V$) has a unique variance component associated only with itself.
+- The unique factor influencing $y_1$ does not influence $y_2$, and so on. This is a fundamental assumption that separates the common variance from the unique variance in factor analysis.
+
+---
+
+The Complete Factor Analysis Model in Matrix Form
+
+By incorporating the refined error term, we can now write the factor analysis model in its complete and commonly used matrix form.
+
+**Intuition**: The complete form of the equation clearly separates the variance of the observed variables into two main components: variance explained by **common factors** (shared across multiple variables) and variance explained by **unique factors** (specific to each variable and measurement error). This distinction is the core of factor analysis.
+
+- Combining our initial equation with the rewritten error term, we arrive at the **complete equation for factor analysis models**:
+    
+    $$
+    \begin{align*} y_{NV} = F_{Nf} P'_{fV} + U_{NV} D'_{VV} \end{align*}
+    $$
+    
+
+Let's reiterate what each part signifies in this **complete form**:
+
+- **$y_{NV}$**: The **Observed Variable Matrix**. This is our data, containing the measured characteristics for each individual.
+- **$F_{Nf} P'_{fV}$**: The **Common Factor Component**.
+    - This represents the portion of variance in the observed variables that is **explained by the underlying latent factors**. These factors are assumed to be shared across multiple observed variables.
+- **$U_{NV} D'_{VV}$**: The **Unique Factor Component**.
+    - This represents the portion of variance in the observed variables that is **unique to each specific variable** and includes random error.
+    - The diagonal nature of $D_{VV}$ ensures that these unique factors influence only their corresponding observed variables, not other variables.
+
+
+
+### 386. Factor analysis assumptions
+
+**Confirmatory Factor Analysis (CFA)** is a statistical technique used to explain the variance and covariance of observed variables. This presentation will cover the key assumptions underlying CFA.
+
+**Confirmatory factor analysis** (CFA) models attempt to explain the relationships among observed variables by means of a set of shared, unobserved factors.
+
+---
+
+The CFA model can be represented using vector notation as:
+
+$$
+\mathbf{Y} = \mathbf{\Lambda} \mathbf{\eta} + \mathbf{\epsilon}
+$$
+
+Where:
+
+- $\mathbf{Y}$: Represents the **vector of observed variables** ($y_1, y_2, ..., y_V$).
+- $\mathbf{\eta}$: Represents the **vector of unobserved factors** or shared factors ($f_1, f_2, ..., f_F$).
+- $\mathbf{\Lambda}$: Represents the **weights of the different factors** on each of the different observed variables.
+- $\mathbf{\epsilon}$: Represents the **specific unique variances** or disturbance terms, which are components of the variance unique to specific variables and not due to the shared factors.
+
+---
+
+Assumption 1: Zero Expected Value of Variables
+The first core assumption of confirmatory factor analysis is that the **expected value of the observed variables is equal to zero**.
+
+$$
+E[y]=0
+$$
+
+**What this means in practice: Standardization**
+This assumption implies that **each of the observed variables has been standardized**.
+
+- **Standardization** involves transforming a raw variable by subtracting its mean and dividing by its standard deviation.
+    - If $X_1$ is a raw variable with mean $\mu_1$ and standard deviation $\sigma_1$, the standardized variable $y_1$ is:
+        
+        $$
+        y_1 = \frac{X_1 - \mu_1}{\sigma_1}
+        $$
+        
+- **Result of Standardization**:
+    - The **mean of the transformed variable is zero**: $E[y_1] = 0$.
+    - The **variance of the transformed variable is one**: $Var(y_1) = 1$.
+
+---
+
+**Intuition behind Standardization**:
+
+- Standardization makes **variances equal to one**.
+- It also ensures that **covariances between individual variables are always less than one**, thereby making covariances and variances comparable to some degree.
+
+**Broader Implications for the Model Variables**:
+
+- The assumption that $E[\mathbf{Y}] = \mathbf{0}$ also implies that the **expected value of the unobserved factors is zero**: $E[\mathbf{\eta}] = \mathbf{0}$.
+- Similarly, the **expected value of the error terms is zero**: $E[\mathbf{\epsilon}] = \mathbf{0}$.
+- Therefore, all variables within the model (observed variables, unobserved factors, and error terms) are effectively expressed as **deviations from their respective means**.
+
+---
+
+Assumption 2: No Covariance between Factors & Error Terms
+The final assumption is that there is **no covariance between our underlying factors and our disturbance term Epsilon**.
+
+- This means that the factors ($\mathbf{\eta}$) and the errors ($\mathbf{\epsilon}$) are uncorrelated.
+
+$$
+E[\mathbf{\epsilon} \mathbf{\eta}^T] = \mathbf{0}
+$$
+
+- This matrix multiplication indicates that the covariance between each component of $\mathbf{\epsilon}$ and each component of $\mathbf{\eta}$ is zero.
+
+---
+
+The core intuition behind the assumption $E[\mathbf{\epsilon} \mathbf{\eta}^T] = \mathbf{0}$ is as follows:
+
+- After the model has **controlled for (or accounted for) the underlying shared factors** which are contained in the vector $\mathbf{\eta}$, any remaining **residual component of the variance of the observed variable Y** (which is represented by $\mathbf{\epsilon}$) is **in no way related to those underlying factors**.
+- This residual component, $\mathbf{\epsilon}$, is therefore considered to be **idiosyncratic error**. It represents the unique variation in each observed variable that is not explained by the common factors and is specific to that variable alone.
+    
+
+    
+
+### 387. Derivation of variance covariance matrix in factor analysis part 1
+
+### 388. Derivation of variance covariance matrix in factor analysis part 2
+
+### 389. Derivation of variance covariance matrix in factor analysis part 3
+
+### 390. Factor analysis: predicted variance and covariance indicators part 1
+
+### 391. Factor analysis: predicted variance and covariance indicators part 2
+
+### 392. Variance covariance matrix using matrix notation of factor analysis
+
+### 393. Covariance between indicators and factors
+
+### 394. Model implied variance covariance matrix of indicators (matrix form) part 1
+
+### 395. Model implied variance covariance matrix of indicators (matrix form) part 2
+
+### 396. Model implied variance covariance matrix an example
+
+### 397. Maximum likelihood estimation of factor analysis models part 1
+
+### 398. Maximum likelihood estimation of factor analysis models part 2
+
+### 399. Maximum likelihood estimation of factor analysis models fitting function
+
+### 400. MISSION ACCOMPLISHED
+
+But you still have other courses to do

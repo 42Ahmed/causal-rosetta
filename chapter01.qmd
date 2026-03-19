@@ -1,1179 +1,675 @@
 ---
-title: "Introductory Econometrics: OLS Emperically"
+title: "Deriving OLS"
 format: html
+number-sections: false
 ---
 
-## The Nature of Econometrics and Economic Data
 
-### What Is Econometrics?
+https://ben-lambert.com/econometrics-course-problem-sets-and-data/
 
-Practically speaking, econometrics is the toolset we use to evaluate business strategies, test economic theories, and forecast the future using data.
+### 1. Undergraduate econometrics syllabus
 
-The defining feature of econometrics—and what makes it different from standard laboratory statistics—is that it deals almost exclusively with **nonexperimental (observational) data**. In the hard sciences, you can run a controlled experiment. In economics or business, you usually can't. You cannot randomly force half of a city's workforce to drop out of high school just to see how it affects their wages, nor can you randomly assign minimum wages to different states. Because we act as passive collectors of data that people and markets naturally generate, we have to use econometrics to disentangle the messy, overlapping factors that influence human behavior.
+We have a population that we can’t have its whole dataset. So we take a **sample.** We use statistical tool on the sample to **estimate the population**
 
-### Steps in Empirical Economic Analysis
+Example:
 
-When you sit down to do an empirical project, you should generally follow a specific workflow:
+$\beta$ is average effect of one year of education on wage
 
-1\. **Pose a Specific Question:** You need a clear goal. For example, "Does an employer-provided job training program actually increase a worker's subsequent hourly wage?".
+$$
+\text{wage} = \alpha + \beta educ + \mu
+$$
 
-2\. **Specify an Economic Model:** Sometimes this is a formal mathematical theory, but in practice, it is often just strong intuition or common sense. You decide what factors logically drive the outcome.
+We don’t have the whole population, so we estimate $\beta$
 
-3\. **Turn it into an Econometric Model:** This is where you get practical. You declare the variable you are trying to explain (e.g., wage) and the variables you will use to explain it (e.g., education, experience, and job training). Crucially, you must also acknowledge an **error term** (the unobservables). This represents everything affecting wages that you *cannot* measure, like a worker's innate ability, their work ethic, or their family background.
+**Roadmap**
 
-4\. **Formulate Hypotheses:** You state what you expect to find (e.g., "job training has a positive effect on wages").
+1.  cross sectional data: Microeconomics
+    1.  OLS → BLUE
+    2.  Diagnostic tests for G-M assumptions
+    3.  When assumptions fail: IV,GLS, ML
+2.  Time series data: Macroeconomics
+    1.  stationary
+    2.  AR(1) + MA(1)
+3.  Panel data
+    1.  data generating process DGP
+    2.  between estimator
+    3.  fixed effects and random effects
 
-5\. **Collect Data and Estimate:** You gather the data, run it through your statistical software, and formally test your hypotheses.
+### 2. What is econometrics?
 
-### The Structure of Economic Data
+**Econometrics** is statistical toolset to evaluate a relationship
 
-Before you ever run a regression, you must know what kind of data you are holding. The structure of your data dictates what econometric tools you are allowed to use and what pitfalls you need to watch out for.
+Example: How education affects wage? if education increases, wage increases
 
--   **Cross-Sectional Data:** This is a snapshot of different units (individuals, firms, cities, etc.) taken at a single point in time. The order of the data does not matter (sorting your spreadsheet alphabetically by city name changes nothing). This is the most common data type in applied microeconomics (like labor or health economics).
--   **Time Series Data:** This is a record of a single entity (like a country's GDP, a stock price, or a company's sales) tracked over time. Here, **chronological order matters immensely**. Time series data is tricky because past events influence future events, and you have to deal with real-world issues like seasonality (e.g., retail sales always spike in December) and overarching time trends.
--   **Pooled Cross Sections:** This happens when you take a cross-section from one year and combine it with a cross-section from another year. Crucially, the people or firms in the first year are *different* from the people or firms in the second year. This is highly useful for seeing how a relationship changes over time or for evaluating the impact of a new policy by comparing the "before" and "after" periods.
--   **Panel (or Longitudinal) Data:** This is the gold standard. You track the **exact same** individuals, firms, or cities across multiple time periods. For example, observing the same 150 cities in both 1986 and 1990. Panel data is incredibly powerful for applied researchers because watching the same unit over time allows you to control for unobserved, hidden characteristics that never change (like a city's geographical location or a person's underlying personality).
+$$
+\text{educ}\uparrow \to \text{wage}\uparrow
+$$
 
-### Causality, Ceteris Paribus, and Counterfactual Reasoning
+This is not **causal relationship,** then we plot the data, and put a line between the points to capture **average relationship.** This is **micro econometrics**
 
-This is the philosophical core of applied econometrics. Finding a correlation between two variables is easy; proving that one **caused** the other is the hardest thing to do in the social sciences.
+is sales affected by tv advertising? we plot sales with respect to **time of advertising**, This is **time series, micro econometrics,** cuz data focuses on one firm \*\*\*\*
 
-Empirical researchers rely on two main concepts to prove causality:
+how interest rate affects inflation rate? This is **macro econometrics**
 
-**Ceteris Paribus ("holding other factors fixed"):** If you want to know the true effect of education on wages, you have to compare two people who are identical in *every single way* (experience, age, background) except for their education.
+All the data above have one thing in common:
 
-**Counterfactuals (Potential Outcomes):** The best way to think about causality is to imagine the same person in two alternate realities—one where they received job training, and one where they didn't. The true causal effect is the difference between these two realities.
+-   we have a population/ data generating process **DGP,** within this population we have a relationship like how how wage is related to education, and there are **other factors in the population error term** like where individual lives
 
-**The Empirical Problem:** In real life, we only get to see a person in one state of the world. Because we are using nonexperimental data, people self-select into their circumstances. For example, people who voluntarily get more education might also just be naturally smarter or more highly motivated. If we just compare the wages of highly educated people to less-educated people, we aren't just measuring the effect of the degree; we are accidentally measuring the effect of that hidden motivation.
+    $$
+      \text{wage} = \alpha + \beta \text{educ} + u
+      $$
 
-Practically speaking, the entire rest of this book is dedicated to teaching you how to use econometric methods to "simulate" a controlled experiment using messy, observational data so you can confidently claim causality.
+-   We don’t have the whole data, so we get a **sample**
 
-## The Simple Regression Model
+-   we use statistics with **sample** to **estimate the population**
 
-### Definition of the Simple Regression Model
+-   **we get sampling error** cuz sample is different from the population
 
-**The Practical Goal:** You have two variables, $y$ (the dependent variable, or the outcome you want to explain) and $x$ (the independent variable, or the factor you think explains $y$). You want to know how $y$ changes when $x$ changes.
+-   we use tools to reduce the **sampling error** as much as possible
 
-**The Empirical Hurdle:** The simple regression model is written as $y = \beta_0 + \beta_1x + u$. The catch is the $u$, which is the **error term**. In the real world, $y$ is almost never perfectly predicted by just one $x$. For example, if you are predicting crop yield ($y$) based on fertilizer ($x$), $u$ contains everything else you aren't measuring: rainfall, land quality, bugs, etc.
+### 3. Econometrics vs hard science
 
-To practically trust the slope parameter ($\beta_1$) as a true "holding all else fixed" causal effect, you have to assume that your $x$ variable is completely uncorrelated with the hidden factors in $u$ (this is called the zero conditional mean assumption). If farmers systematically put more fertilizer on their best quality land, $x$ and $u$ are correlated, and simple regression will give you a biased, misleading result.
+In science we check if $A \to B$ A affects B
 
-### Deriving the Ordinary Least Squares Estimates
+We use **experiment, control** tubes, that are exact replica except for one item A, if A caused B, then its **causal relationship**
 
-**The Practical Goal:** How do we draw the best possible line through a messy scatterplot of real-world data?
+EX: two identical tubes, we add substance in one tube and it generates $CO_2$. We can say that the substance caused carbon dioxide
 
-**The Empirical Takeaway:** We use **Ordinary Least Squares (OLS)**. You don't need to calculate this by hand; your software (like Stata, R, or Python) does it for you. What you need to know is *what* the software is doing: it draws a line through your data points that makes the sum of the squared prediction errors (the vertical distances between your actual data points and the line) as small as possible.
+In econometrics, we deal with a question like: effect of military participation on life income
 
-When researchers say "I regressed salary on return on equity," they simply mean they used OLS software to estimate the intercept ($\beta_0$) and the slope ($\beta_1$) for that relationship.
+To test that in an **experimental way**
 
-### Properties of OLS on Any Sample of Data
+1.  get two identical twins
+2.  one goes to militarily, second stays a civilian
+3.  we track them and see **life income**
+4.  we repeat this experiment with multiple twins
 
-**The Practical Goal:** Understanding the mechanical facts about the regression line your software spits out.
+Since that this is not feasible <and unethical>, we do it in another way
 
-**The Empirical Takeaway:**
+**Non experimental data**
 
-**Residuals average to zero:** Your software will create a "fitted value" (the prediction on the line) and a "residual" (the error from the line) for every single observation. By definition, OLS ensures these prediction errors perfectly average out to zero.
+1.  get life income of individuals
+2.  we know if each person went to military or nope
+3.  we plot the data for both, circles: civilians, cross: military
+4.  we get average life income for both groups
+5.  the difference in averages is **not causal** cuz there are other factors
+6.  an example of other factors:
+    1.  those who go to military already have lower life income aka **reverse causal relationship** \<they don’t plan to be entrepreneurs\>.
+    2.  life time <Military die younger>
+7.  So the difference is coming from two sources not just one: causal effect, reverse causal effect
 
-**Goodness-of-Fit (**$R^2$): Your software will report an $R$-squared value between 0 and 1. This tells you what fraction of the variation in your outcome ($y$) is successfully explained by your variable ($x$).
+Good luck handling the subject
 
-*Crucial applied note:* Do not obsess over getting a high $R^2$. In the social sciences, human behavior is messy and hard to predict, so a low $R^2$ is incredibly common. A low $R^2$ does not mean your estimate of the effect of $x$ is useless; it just means there are a lot of other things going on that you haven't modeled.
+### 4. Natural Experiments
 
-### Units of Measurement and Functional Form
+$$
+LI = f(M,LIP)
+$$
 
-**The Practical Goal:** Real-world data comes in different scales (dollars vs. thousands of dollars, percentages vs. decimals). How does this affect the analysis?
+Life income is a function of going to military and life income potential
 
-**The Empirical Takeaway:**
+Unfortunately, we have **selection bias,** cuz those who entered the military are not random
 
-**Data Scaling:** If you change your income variable from dollars to thousands of dollars (dividing by 1,000), your OLS slope coefficient will automatically multiply by 1,000 to compensate. The fundamental story, the statistical significance, and the $R^2$ will not change at all. Your software is smart enough to handle scale.
+A clever solution by **Joshua Angrist 1990:**
 
-**Using Logarithms:** This is heavily used in empirical economics to capture percentage changes rather than absolute changes.
+In Vietnam war, people were assigned numbers from 1 to 366 based on birthday, a number was chosen randomly, and those who are born in this number have to enter the military.
 
-*Log-Level model:* If you regress $\log(wage)$ on $education$, the coefficient multiplied by 100 tells you the **percentage increase** in wage for every 1 extra year of education.
+Since people entering the military became random, we avoided selection bias and could measure the **relationship,** this was an example of **instrumental variable IV**
 
-*Log-Log model:* If you regress $\log(salary)$ on $\log(sales)$, the coefficient is an **elasticity**. It tells you that a 1% increase in sales leads to a $\beta_1$% increase in salary.
+### 5. Populations and samples
 
-### Expected Values and Variances of the OLS Estimators
+**Population** can be anything like:
 
-**The Practical Goal:** If you pull a different random sample of people and run the same regression, you will get a slightly different answer. How do we know OLS is reliable across different samples?
+-   people under 18 in UK
+-   people who smoke in UK
 
-**The Empirical Takeaway:**
+The important thing is that it includes all the characteristics we care about
 
-**Unbiasedness:** OLS will give you the "true" population effect on average *only if* you have a random sample, your $x$ has some variation, and your $x$ is totally uncorrelated with the unobserved error $u$. If you omit a key variable (like innate ability when looking at the effect of education on wages), your OLS estimate will be biased and wrong.
+Each individual wage is affected by education in a certain way
 
-**Variance / Precision:** Your software will report a "standard error" for your estimate. A smaller standard error means your estimate is highly precise. You get better precision if you have a larger sample size and more variation in your $x$ variable. To calculate these standard errors simply, OLS requires an assumption called **homoskedasticity** (meaning the "noise" or error in the data is spread out evenly across all values of $x$). If this fails, standard errors are wrong (a common practical problem we fix later in Chapter 8).
+$$
+\text{wage}_i = \alpha + \beta_i \text{educ}
+$$
 
-### Regression through the Origin and Regression on a Constant
+We can sum it together to get the **population process** representing the average effect
 
-**The Practical Goal:** Forcing the regression line to start at exactly zero (no intercept).
+$$
+\text{wage} = \alpha + \beta \text{educ}
+$$
 
-**The Empirical Takeaway:** Almost never do this. In applied work, you should essentially always let the software estimate an intercept, even if the intercept itself has no meaningful real-world interpretation. Forcing the intercept to zero usually biases your slope estimate.
+$\beta$ here is the average effect of one year of education to wage
 
-### Regression on a Binary Explanatory Variable
+**sample**
 
-**The Practical Goal:** What if your explanatory variable $x$ isn't a continuous number like income, but a category, like "received a drug" vs "received a placebo," or "female" vs "male"?
+we don’t have the whole population, so we take some individuals and call it a **sample** and then sum them
 
-**The Empirical Takeaway:**
+$$
+\text{wage} = \alpha^s + \beta^s \text{educ}
+$$
 
-We use a **dummy variable** (1 for yes, 0 for no). When you run a simple regression of $y$ on a dummy variable $x$, the intercept is simply the average outcome for the $x=0$ group, and the slope coefficient is simply the exact difference in the average outcome between the $x=1$ group and the $x=0$ group.
+Notice that $\beta, \beta^s$ are not equal due to **sampling error**
 
-**Policy Analysis & Causality:** This is how we evaluate randomized experiments. If a job training program is **randomly assigned**, the unobserved errors are balanced between the two groups. In this case, simply running a regression on the treatment dummy perfectly yields the **Average Treatment Effect (ATE)**—the true causal impact of the policy.
+Econometrics deal with how to **estimate the population parameter and minimize sample error**
 
-*The Catch:* If the program was *not* randomly assigned, people self-selected into it based on hidden factors (like motivation). If you run a simple regression here, the slope coefficient is just a descriptive difference, massively polluted by selection bias. To fix this, you have to move to *multiple regression* to control for those hidden factors.
+### 6. Estimators the basics
 
-## Multiple Regression Analysis: Estimation
+back to wage by education example, the $\beta$ is called **parameter** cuz its involved with population, we estimate it using sample **estimator** $\hat{\beta}$. the estimator is a **function,** when its assigned a value its called **point estimate** $\beta^*$.
 
-### Motivation for Multiple Regression
+Next: we will focus on properties that makes the estimator good
 
-**The Practical Goal:** Moving beyond simple regression to get closer to true cause-and-effect relationships.
+### 7. Estimator properties
 
-**The Empirical Takeaway:** Simple regression is heavily flawed because it throws every unobserved factor into the error term. If those hidden factors are correlated with your variable of interest, your results are biased. Multiple regression allows you to explicitly pull important variables *out* of the hidden error term and put them into the model. By doing this, you can measure the effect of your main variable on the outcome while mathematically **holding the other included factors fixed**.
+The estimator has to have some properties to represent the parameter. But first, here is what happens under the hood
 
-### Mechanics and Interpretation of Ordinary Least Squares
+we can get multiple samples from one population, each sample can get an **estimate** $\beta_1^*, \beta_2^*, \dots, \beta_n^*$
 
-**The Practical Goal:** How to read and interpret the computer output when you include multiple variables.
+The estimates are not equal to each other nor equal to the population parameter due to **sampling error**, but they will form a normal distribution
 
-**The Empirical Takeaway:**
+**The properties we want:**
 
-**Partial Effects:** In multiple regression, each slope coefficient has a very specific interpretation: it measures the predicted change in your outcome variable ($y$) for a one-unit increase in that specific $x$, **holding all other included independent variables constant**.
+1.  on average, the estimator is the same as parameter aka **unbiased** $E(\hat{\beta}) = \beta^p$
 
-**The Magic of "Partialling Out":** You don't have to literally find a subsample of people who are exactly identical in age, experience, and background to see the effect of education. OLS mathematically "partials out" or nets out the effects of the other variables for you. It allows you to simulate a controlled environment.
+2.  as sample size increases, estimators values approach parameter until the distribution becomes a straight line above $\beta^P$
 
-**Goodness-of-Fit (**$R^2$): $R^2$ now measures the fraction of the variation in your outcome explained by *all* of your independent variables combined. Do not panic if your $R^2$ is low (e.g., 5% or 10%); this is incredibly common when trying to predict human behavior, and a low $R^2$ does not mean your estimated causal effects are wrong or useless.
+    $n \to \infty, \hat{\beta} \to \beta^p$ aka **consistency**
 
-### The Expected Value of the OLS Estimators
+3.  efficiency
 
-**The Practical Goal:** What happens to your estimates if you put the wrong variables in your model, or worse, leave the right ones out?
+### 8. Unbiasedness and consistency
 
-**The Empirical Takeaway:**
+In the **sampling distribution:**
 
-**Including Irrelevant Variables (Overspecifying):** If you throw "junk" variables into your model that have no actual effect on the outcome, your estimates of the variables you *do* care about remain unbiased. It is generally harmless to your bias, though it can make your estimates noisier.
+1.  unbiasedness means the expectation of estimator is parameter
+2.  consistency means as sample size increase, distribution keeps shrinking until it becomes a straight line aka closer and closer to the parameter
 
-**Omitted Variable Bias (Underspecifying):** This is the cardinal sin of applied econometrics. If you leave out a variable that matters for $y$ AND is correlated with the variables you included, your OLS estimates will be biased and wrong.
+Note: an estimator can be **biased but consistent,** imagine the sampling distribution centered on the right aka skewed, but as some size increases, the peak keeps shifting to the left until its above the parameter
 
-**Guessing the Bias:** In practice, you often can't measure a key variable (like innate ability). However, you can usually use logic to guess the *direction* of the bias. For example, if ability is positively correlated with wages, and positively correlated with getting more education, leaving ability out will cause an **upward bias**—meaning your OLS estimate of the return to education will look artificially higher than it actually is.
+Usually: estimators are biased but consistent
 
-### The Variance of the OLS Estimators
+we don’t care about a biased and inconsistent estimator
 
-**The Practical Goal:** Understanding what makes your estimates precise (tight) versus noisy (loose).
+### 9. Unbiasedness and consistency: an example
 
-**The Empirical Takeaway:** \* **Sample Size:** More data means smaller standard errors (higher precision). \* **Multicollinearity:** This happens when two or more of your independent variables are highly correlated with *each other*. If education and test scores are highly correlated, the OLS software struggles to figure out which one is actually driving the increase in wages. This inflates your standard errors, making your estimates very imprecise.
+We have a population with mean $\mu$, but we don’t know its value, so we get a sample.
 
-*Crucial applied note:* Do **not** drop an important control variable just because it is highly correlated with your main variable. Dropping it trades a multicollinearity problem (noisy estimates) for an omitted variable problem (biased/wrong estimates). Bias is much worse than noise.
+We calculate an estimator $\tilde{x}$ which is calculated as
 
-### Efficiency of OLS: The Gauss-Markov Theorem
+$$
+\tilde{x} = \dfrac{1}{N-1}\sum x_i
+$$
 
-**The Practical Goal:** Why do empirical researchers default to using OLS instead of some other estimation method?
+We know that the population has parameter $\mu$ and each individual has parameter $x_i =\mu + \epsilon$. Lets check unbiasedness
 
-**The Empirical Takeaway:** Under a specific set of assumptions (including that you haven't omitted key variables, and that the error noise is evenly spread out), the Gauss-Markov theorem proves that OLS is the **Best Linear Unbiased Estimator (BLUE)**. "Best" practically means it gives you the tightest, most precise estimates (lowest variance) possible among all unbiased linear methods.
+$$
+E[\tilde{x}] = \dfrac{1}{N-1}\sum E[x_i] = \dfrac{1}{N-1} Nu = \dfrac{N\mu}{N-1} \neq \mu
+$$
 
-### Some Comments on the Language of Multiple Regression Analysis
+The estimator is biased, but is it consistent?
 
-**The Practical Goal:** Speaking clearly and correctly about your research.
+Yes, cuz N/N-1 = 1 if they are infinite
 
-**The Empirical Takeaway:** OLS is an *estimation method*—a mathematical tool—not the model itself. In applied work, you first specify an underlying "population model" based on theory or logic (how you think the real world actually works), and then you use the OLS method on your data sample to estimate the parameters of that model.
+$$
+N \to \infty,E[\tilde x] \to \mu
+$$
 
-### Several Scenarios for Applying Multiple Regression
+### 10. Efficiency of estimators
 
-**The Practical Goal:** When and why do analysts actually use this tool in the real world?
+An estimator is efficient if the variance of its sampling distribution is small (aka its not wide)
 
-**The Empirical Takeaway:**
+Two estimators can be unbiased, but one can be more efficient
 
-**Prediction:** Sometimes you don't care about causality; you just want to predict a future outcome based on available variables (e.g., predicting college success based on high school grades).
+**Note**: an estimator can be biased but more efficient that the unbiased estimator
 
-**Measuring Tradeoffs:** Figuring out how people trade one thing for another, like measuring the tradeoff between higher salaries versus better pension benefits.
 
-**Policy Analysis & Treatment Effects:** This is the most common use in modern empirical work. You want to know the causal effect of a policy (like job training). Because people aren't randomly assigned to these policies in real life, you use multiple regression to control for enough background characteristics (like age, prior education, past earnings) so that the remaining decision to participate in the program is effectively as good as random. This is called **unconfoundedness**.
 
-## Multiple Regression Analysis: OLS Inference
+### 11. Good estimator properties summary
 
-### Sampling Distributions of the OLS Estimators
+1.  Unbiased $E(\hat \beta) = \beta^P$
+2.  Consistent $n \to \infty \qquad \hat \beta \to \beta^P$
+3.  Efficient
+4.  **Linear in parameters** $\hat \beta \sim \text{Linear function in parameters}$
 
-**The Practical Goal:** To run statistical tests, we need to know how our OLS estimates would behave if we drew sample after sample.
+### 12. Lines of best fit in econometrics
 
-**The Empirical Takeaway:** If you draw a different sample, you get a different coefficient estimate. To formally test hypotheses, researchers traditionally add one more assumption: that the unobserved error term is normally distributed. Practically speaking, this assumption ensures that your OLS estimates also follow a normal (bell-shaped) curve, which allows your software to accurately calculate $t$ and $F$ statistics. Don't panic if your data isn't perfectly normal, though—in the empirical world, if your sample size is large enough, the Central Limit Theorem usually saves you, and your tests will still be valid (this is the whole point of Chapter 5).
+Back to wages by education example. There is a positive relationship between education and wages, so we plot them on a **scatter plot**
 
-### Testing Hypotheses about a Single Population Parameter: The t Test
+Then we add a line to capture **average effect,** hence, it must be around the middle of the data representing it.
 
-**The Practical Goal:** You ran a regression, and the software says the effect of job training on wages is \$0.50. How do you know that effect is real, and not just a fluke of this specific sample of people?
+The **slope** of the line is $\beta$ represents the average effect of one more year of education on wages
 
-**The Empirical Takeaway:** You look at the $t$ statistic and the $p$-value.
+| educ | wage |
+|------|------|
+| 10   | 500  |
+| 11   | 550  |
 
-**The** $t$ statistic: Your software calculates this by taking your coefficient estimate and dividing it by its standard error. It essentially measures how many standard deviations your estimate is away from zero. A $t$ statistic near zero means the variable has no evidence of an effect. A $t$ statistic far from zero (typically \> 1.96 or \< -1.96) is good news.
+Effect here is 50. Why? cuz its a linear relationship
 
-**The** $p$-value: This is the most practical, important number on your regression output. It translates the $t$ statistic into a simple probability. A $p$-value of 0.03 means: *If the true effect in the real world was exactly zero, there is only a 3% chance we would have seen an estimate this large in our data.* \* Because 3% is highly unlikely, you "reject the null hypothesis" and declare the variable **statistically significant**. In applied research, the standard rule of thumb is to look for $p$-values less than 0.05 (the 5% significance level).
+$$
+y = mx+c\\wages = \alpha + \beta^p educ
+$$
 
-**Economic vs. Statistical Significance:** This is a crucial distinction for data scientists. A variable might have a $p$-value of 0.001 (highly statistically significant) but the actual size of the effect is a 1-cent increase in hourly wages (economically/practically meaningless). **Never look only at the stars or** $p$-values; always interpret the real-world size of the coefficient.
+Remember, we don’t have the whole data, so we take a sample
 
-### Confidence Intervals
+the $\beta^s$ estimates $\beta^p$
 
-**The Practical Goal:** Moving away from guessing a single number to providing a realistic range of where the true effect likely falls.
+In the sample, 10 years of education results in \$600 on average, however, the true value in the population is \$500, due to sampling error
 
-**The Empirical Takeaway:** Point estimates are never exactly right. Instead of telling your boss "the return to another year of education is exactly 6.67%," you should provide a 95% confidence interval. This is calculated roughly as your estimate plus or minus two times the standard error. If your 95% confidence interval for the return to education is $[0.04, 0.09]$, you can safely say you are 95% confident the true return is between 4% and 9%. Crucially, if your confidence interval includes zero (e.g., $[-0.02, 0.05]$), then you cannot confidently say the variable has any real effect at all.
+**Next**: we drew the line by eyes, we need a mathematical way
 
-### Testing Hypotheses about a Single Linear Combination of the Parameters
+### 13. Math behind drawing lines of best fit
 
-**The Practical Goal:** How do you test if two variables have the *exact same* effect? For example, is a year at a junior college worth the exact same as a year at a university?
+The line in scatterplot is trying to minimize sum of squared distance between x and the fitted line <in a vertical way like projections of x on the line>
 
-**The Empirical Takeaway:** You aren't just testing if a coefficient is zero; you are testing if $\beta_1 = \beta_2$. You can't just look at the two separate $p$-values on your output to answer this.
+An alternative way for measuring distance is to take absolute difference between y and fitted y aka $\hat{y}$ which is the point on the line
 
-**The Practical Trick:** You can force your software to run this exact test by creating a new variable. Create a variable called "total college" (junior college + university), and swap it into the regression in place of the university variable. The regression will spit out a new coefficient and a standard error that directly measures the *difference* between the two types of colleges, allowing you to easily look at the $p$-value to see if the difference is statistically significant.
+we take absolute value so points above the line don’t cancel the points below the line
 
-### Testing Multiple Linear Restrictions: The F Test
+$$
+S = \sum^N_{i=1}(|y_i-\hat{y}|)
+$$
 
-**The Practical Goal:** Testing if a *group* of variables matters together, even if individually they look like they don't matter.
+But this function is hard to differentiate, instead, we take the square
 
-**The Empirical Takeaway:**
+$$
+S = \sum^N_{i=1}(y_i-\hat{y})^2
+$$
 
-**Exclusion Restrictions:** Sometimes you have highly correlated variables (like batting average, home runs, and RBIs in a baseball salary model). Because they share the credit (multicollinearity), their individual $t$ statistics might all be low, making them look insignificant. \* **The** $F$ Test: To test them as a group, you use an $F$ test. You run the model with the variables (unrestricted) and without them (restricted). If dropping that group of variables causes your $R^2$ to plummet (or your sum of squared residuals to spike), the $F$ test will yield a small $p$-value, proving that the group of variables is **jointly significant** and should stay in the model.
+This is easier to differentiate, and focuses more on big deviations, If we have an **outlier,** it can shift the whole line towards it cuz the distance is squared
 
-**Overall Significance of a Regression:** Every regression software automatically prints one massive $F$ statistic at the bottom of the output. This tests a pessimistic hypothesis: *Do all of my independent variables combined equal zero?* If this overall $p$-value is large, it means your entire model is essentially useless at explaining the outcome.
+Why not go to power 4 or more?
 
-### Reporting Regression Results
+cuz the line will go to the outlier and leave the remaining points
 
-**The Practical Goal:** How to present your findings clearly to a boss, policy maker, or academic reader.
+### 14. Least squares Estimators as BLUE
 
-**The Empirical Takeaway:** Never just copy and paste raw software output. \* Create a clean table. \* Put the estimated coefficients first, and **always report the standard errors** in parentheses directly below them. This allows a savvy reader to instantly mentally calculate the $t$ statistics and confidence intervals themselves. \* Include the $R^2$ and the number of observations ($n$) at the bottom of the table. \* In the text of your report, interpret the magnitude of the key coefficients in plain English (e.g., dollars, percentages) and discuss their practical significance.
+The squared function described is called least square
 
-### Revisiting Causal Effects and Policy Analysis
+Back to our wage by educ example, we will use least squares to estimate $\alpha, \beta$
 
-**The Practical Goal:** Using inference tools to make definitive statements about real-world policy interventions.
+we want our estimators derived from least squares to be:
 
-**The Empirical Takeaway:** In Chapter 3, we learned to add controls to isolate the causal effect of a policy (like a job training program). In Chapter 4, we close the loop: once you have isolated that effect, you must look at the $t$ statistic or confidence interval on your policy variable. If the $p$-value is small, you can finally claim you have found a statistically significant, causal Average Treatment Effect (ATE).
+unbiased, consistent, efficient
 
-## Multiple Regression Analysis: OLS Asymptotics
+if **gauss Markov** assumptions are met, the least squares are **best linear unbiased estimator BLUE**
 
-### Consistency
+Best means its the most efficient and consistent
 
-**The Practical Goal:** If I collect a gigantic dataset, am I guaranteed to eventually uncover the true cause-and-effect relationship?
+Remember that these properties come from the sampling distribution
 
-**The Empirical Takeaway:**
+**Next**: we use gauss Markov to derive the estimators
 
-**Consistency:** This is a property that means as your sample size grows infinitely large, your OLS estimate collapses exactly onto the true population effect. Under our standard assumptions, OLS is consistent.
+### 15. Deriving least squares estimators 1
 
-**Big data does not fix bad models:** If your error term is correlated with your independent variable (for example, you have severe omitted variable bias), OLS is **inconsistent**. This is a massive empirical trap: if your model is fundamentally flawed because you left out a key variable, collecting 10 million more observations will not fix the bias. It will simply make you more precisely wrong.
+We learnt that we will minimize absolute value or squared or power 4, and we chose the squared function
 
-### Asymptotic Normality and Large Sample Inference
+We will minimize:
 
-**The Practical Goal:** In Chapter 4, we assumed our unobserved errors formed a perfect normal distribution (a bell curve) so that we could calculate exact $p$-values. But real-world data is often skewed, lopsided, or categorical. Can we still trust our tests?
+$$
+\boxed{S = \sum(y_i-\hat{y})^2}
+$$
 
-**The Empirical Takeaway:**
+minimize means differentiate and equate to zero
 
-**The Central Limit Theorem Saves You:** You do not need to panic if your dependent variable isn't perfectly normally distributed. (For example, if you are predicting the number of times a person is arrested, the data will be heavily piled up at zero—not a bell curve at all). Theorem 5.2 proves that as long as your sample size is "large enough," the distribution of your *coefficient estimates* will still form a nice, neat bell curve.
+$$
+\dfrac{\delta s}{\delta \hat \alpha} = 0 \qquad \dfrac{\delta s}{\delta \hat \beta} = 0
+$$
 
-**Testing remains the same:** Because of this large-sample magic, all the tools you learned in Chapter 4—$t$ statistics, $F$ statistics, $p$-values, and confidence intervals—are perfectly valid to use on non-normal data, provided you have a decent sample size.
+and we know that
 
-**Standard Errors Shrink:** As a rule of thumb, as your sample size grows, your standard errors shrink at a rate proportional to the inverse of the square root of the sample size ($1/\sqrt{n}$). If you quadruple your sample size, your standard errors will drop by half, giving you much tighter confidence intervals.
+$$
+\hat{y} = \hat{\alpha} + \hat{\beta}x_i
+$$
 
-**The Lagrange Multiplier (LM) Test:** This is a large-sample alternative to the $F$ test for testing multiple variables at once. Instead of estimating both a restricted and unrestricted model (like the $F$ test), the LM test only requires you to estimate the restricted model, save the residuals, and see if the excluded variables can predict those residuals. In practice, modern software computes both $F$ and LM tests easily, and they generally lead to the exact same real-world conclusions.
+Lets rewrite the function
 
-### Asymptotic Efficiency of OLS
+$$
+S = \sum(y_i-\hat{\alpha} - \hat{\beta}x_i)^2
+$$
 
-**The Practical Goal:** If we have a massive dataset, is there a different statistical method we should be using instead of OLS?
+Then differentiate with respect to $\hat{\alpha}$ and $\hat{\beta}$ then solve when derivative = 0
 
-**The Empirical Takeaway:** Under the standard Gauss-Markov assumptions (including homoskedasticity, where the data's noise is evenly spread out), OLS is "asymptotically efficient." This simply means that in large samples, no other linear method will give you tighter, more precise estimates than OLS. It remains the gold standard tool to use.
+This forms **first order conditions (FOCs)**
 
-## Multiple Regression Analysis: Further Issues
+$$
+\boxed{\dfrac{\delta s}{\delta \hat{\alpha}} =  -2 \sum(y - \hat\alpha - \hat \beta x_i) = 0}
+$$
 
-### Effects of Data Scaling on OLS Statistics
+$$
+\boxed{\dfrac{\delta s}{\delta \hat{\beta}} =  -2 \sum x_i (y - \hat\alpha - \hat \beta x_i) = 0}
+$$
 
-**The Practical Goal:** What happens to your results if you measure income in single dollars instead of thousands of dollars, or weight in pounds instead of ounces?
+### 16. Deriving least square estimators 2
 
-**The Empirical Takeaway:**
+To continue, we need to know two formulas
 
-**Automatic Adjustment:** Your regression software is smart enough to handle scaling. If you change your income variable from dollars to thousands of dollars (effectively dividing the data by 1,000), your OLS coefficient will automatically multiply by 1,000 to perfectly compensate.
+\$\$ \boxed{\begin{align*}
+\dfrac{1}{N} \sum x_i &= \bar x\\
+\sum x_i &= N\bar x\\
+\end{align*}}
 
-**Nothing Important Changes:** Changing the units of measurement does not change your $t$-statistics, your $p$-values, or your $R^2$. Practically, you should scale your data so that the coefficients are easy to read (e.g., avoiding an unreadable coefficient like $0.00000004$).
+\$\$
 
-**Beta (Standardized) Coefficients:** Sometimes you have variables with arbitrary, meaningless scales, like SAT scores or personality test results. To figure out if this variable has a practically large effect, you can standardize the data into $z$-scores. The resulting "beta coefficient" allows you to say, "a one *standard deviation* increase in test scores leads to a $\beta$ *standard deviation* increase in the outcome". This puts all your variables on equal footing so you can compare which one has the biggest relative impact.
+and
 
-### More on Functional Form
+$$
+\boxed{\begin{align*}
+\sum(x_i-\bar x)(y_i - \bar y) &= \sum  y_i (x_i - \bar x) \\&= \sum x_i (y_i - \bar y)|
+\end{align*}}
+$$
 
-**The Practical Goal:** Real-world relationships are rarely perfectly straight lines. How do we tweak our regression model to capture curves, diminishing returns, and conditional effects?
+and
 
-**The Empirical Takeaway:**
+the bars are constant, so I can take it outside the sum aka
 
-**Logarithms and Large Percentage Changes:** We know that a log-level model gives us percentage changes. However, if the coefficient on a dummy variable is extremely large (e.g., 0.30, suggesting a roughly 30% increase), the simple approximation loses accuracy. You must mathematically exponentiate the coefficient to get the *exact* percentage change. (For small effects, like 5%, the standard approximation works perfectly).
+$$
+\boxed{\sum \bar x = \bar x \sum 1 = N \bar x}
+$$
 
-**Quadratics (Squares):** These are used to capture diminishing or increasing returns. For example, the first few years of job experience might raise your wage significantly, but by year 20, an extra year of experience does very little. By including both the variable *and its square* in the model, you force the software to fit a curve that eventually flattens out or turns around.
+Here is the full proof
 
-**Interaction Terms:** Sometimes the effect of one variable fundamentally depends on the level of another. For example, the value of adding a bedroom to a house might be massive if the house is 3,000 square feet, but zero if the house is a cramped 800 square feet. Multiplying the two variables together and adding that term to the model captures this dynamic.
+$$
+\begin{align*}
+&~~~~\sum(x_i - \bar x)(y_i - \bar y)\\
+&= \sum(x_i y_i - x_i \bar y - \bar x y_i + \bar x \bar y)\\
+&= \sum x_i y_i - \bar y \sum x_i - \bar x \sum y_i + \bar x \bar y \sum 1\\
+&= \sum x_i y_i - N \bar y \bar x - N \bar y \bar x+ N \bar y \bar x\\
+&= \sum x_i y_i - N \bar y \bar x\\
+&= \sum x_iy_i - \bar x\sum y_i\\
+&= \sum y_i(x_i - \bar x)
+\end{align*}
+$$
 
-**Average Partial Effects (APEs):** The cost of using squares and interactions is that there is no longer a single, simple slope coefficient to report to your boss; the effect depends entirely on where you evaluate it. To summarize the effect in a single, practical number, modern software calculates the Average Partial Effect (APE) by calculating the specific effect for every single person in the dataset and averaging them together.
+### 17. Deriving least square estimators 3
 
-### More on Goodness-of-Fit and Selection of Regressors
+Using the equations we proved in 2, we can solve first order conditions in 1.
 
-**The Practical Goal:** How do I pick the "best" model? Should I just throw in every variable I can find to get the highest $R^2$?
+IN $\alpha\, FOC$, we divide both sides by $-2$ to simplify, then we isolate $y$
 
-**The Empirical Takeaway:**
+\$\$ \begin{align*}
+\sum (y_i - \hat \alpha - \hat \beta x_i) &= 0\\
+\sum y_i &= \hat \alpha \sum 1 + \hat \beta \sum x_i\\
+N\bar y &= \hat \alpha N + \hat \beta N \bar x \\
+\bar y &= \hat \alpha + \hat \beta \bar x
+\end{align*} \$\$
 
-**Adjusted** $R^2$: Standard $R^2$ is inherently flawed because it *always* increases (or stays flat) when you add a new variable, even if that variable is total garbage. The Adjusted $R^2$ introduces a mathematical penalty for adding more variables. If you add a useless variable, the Adjusted $R^2$ will actually drop, telling you to take it back out.
+Notice that we know $\hat y_i = \hat \alpha + \hat \beta x_i$
 
-**Comparing Models:** You can use Adjusted $R^2$ to decide between different variables (e.g., should I use linear `sales` or a quadratic of `sales`?). However, you **cannot** use it to compare a model predicting `salary` with a model predicting `log(salary)`. They are measuring the variance of two entirely different scales, making the $R^2$ values completely incomparable.
+Which tells me that line of best fit using OLS **must pass through** $\bar x, \bar y$
 
-**Over-controlling:** Don't blindly throw every variable you have into the model. If you want to know the causal effect of a new beer tax on alcohol consumption, you shouldn't control for the amount of beer actually bought in stores—that is the mechanism of the outcome itself, and including it will completely zero out the effect you are trying to measure.
+$$
+\boxed{\bar y_i = \hat \alpha + \hat \beta \bar x_i}
+$$
 
-### Prediction and Residual Analysis
+### 18. Deriving least square estimators 4
 
-**The Practical Goal:** Using your model to guess a specific future outcome, or finding out if a specific data point is an extreme outlier.
+Continuing with the last equation derived, we can isolate $\alpha$
 
-**The Empirical Takeaway:**
+$$
+\boxed{\hat \alpha = \bar y - \hat \beta \bar x}
+$$
 
-**Prediction Intervals:** You can use your regression coefficients to predict an exact future value (e.g., predicting a student's college GPA will be 2.70). However, you must also provide a 95% prediction interval (e.g., 1.60 to 3.80). Because human behavior has a massive amount of unobserved error (the $u$ term), these prediction intervals are usually extremely wide in applied social sciences.
+Now, into second condition regarding $\beta$
 
-**Residual Analysis:** This is the practice of investigating the prediction errors for individual cases. If you build a model to predict housing prices, the house with the most negative residual is legally the "best deal" on the market—it is priced vastly lower than its observable characteristics suggest it should be.
+$$
+\begin{align*}
+\sum x_i (y_i -\hat  \alpha - \hat \beta x_i) &= 0 \\
+\sum x_i y_i &= \hat \alpha \sum x_i + \hat \beta \sum x_i^2\\
+ \sum x_i y_i &= \hat \alpha N \bar x + \hat \beta \sum x_i^2\\
+\sum x_i y_i &= (\bar y - \hat \beta \bar x) N \bar x + \hat \beta \sum x_i^2 \\
+\sum x_i y_i &= N \bar x \bar y - \hat \beta N \bar x^2 + \hat \beta \sum x_i^2
+\end{align*}
+$$
 
-**Predicting** $y$ from a $\log(y)$ model: If your dependent variable was $\log(\text{salary})$, and you want to predict a CEO's actual dollar salary, you **cannot** simply reverse the log by exponentiating the prediction. Because of how probability distributions work, doing so will systematically underestimate the true dollar value. You must multiply the exponentiated prediction by an adjustment factor (like the Duan smearing estimate) to get an accurate dollar prediction.
+### 19. Deriving least square estimators 5
 
-## Multiple Regression Analysis with Qualitative Information
+Continuing with last function:
 
-### A Single Dummy Independent Variable
+$$
+\begin{align*}
+\sum x_i y_i - N \bar x \bar y &= \hat \beta (\sum x_i^2 - N \bar x ^2)\\ 
+\hat \beta &= \dfrac{\sum x_i y_i - N \bar x \bar y}{ \sum x_i^2 - N \bar x ^2} \\
+\hat \beta &= \dfrac{\sum(x_iy_i - \bar x_i y_i)}{\sum(x_i^2-\bar xx_i)}\\
+\hat \beta &= \dfrac{\sum(x_i - \bar x)(y_i - \bar y)}{\sum(x_i - \bar x)^2} \\
+\hat \beta &= \dfrac{cov(x_i,y_i)}{var(x_i)}
+\end{align*}
+$$
 
-**The Practical Goal:** How do we include a simple "yes/no" or "either/or" category into a regression model?
+### 20. Least squares estimators in summary
 
-**The Empirical Takeaway:**
+we want to estimate effect of education on wage, to do so, we fit line of best fit.
 
-**Dummy Variables:** You convert categories into binary "dummy" variables that take the value 1 for "yes" and 0 for "no". Always give them descriptive names: instead of naming a variable `gender` (which leaves you guessing what 1 means), name it `female` so it is obvious that 1 = female and 0 = male.
+Why?
 
-**The Base Group:** The group that gets the 0 is the "base group" or "benchmark group". The regression software will give you an intercept, which represents the average for the base group. The coefficient on your dummy variable is simply the *difference* between the 1 group and the 0 group. If you regress wage on `female` and `education`, the `female` coefficient tells you the exact wage gap between a woman and a man *with the exact same education*.
+to infer the average effect of education using our sample
 
-**The Dummy Variable Trap:** Never include a dummy variable for *both* categories (e.g., `male` and `female`) along with a constant intercept. If you do, your software will crash or drop one automatically due to perfect collinearity (the "dummy variable trap").
+We get this line by minimizing sum of distance between y and fitted y
 
-**Logarithmic Approximations:** If your dependent variable is $log(y)$, the coefficient on a dummy variable multiplied by 100 gives you the approximate percentage difference. However, if the coefficient is large (e.g., larger than 0.10 or 0.20), the approximation is inaccurate. You must use the exact formula: $100 \cdot [exp(\hat{\beta}) - 1]$ to get the true percentage impact.
+remember that fitted y is just alpha + beta \* x
 
-### Using Dummy Variables for Multiple Categories
+alpha is the **intercept**, beta is the **slope**
 
-**The Practical Goal:** How do you handle a variable with many categories, like "Region" (North, South, East, West) or "Industry" (Tech, Retail, Manufacturing)?
+Notice that $\hat \alpha, \hat \beta$ may not be equal to $\alpha, \beta$
 
-**The Empirical Takeaway:**
+**Next:** Quick probability recap
 
-**Leave One Out:** You create a separate dummy variable for every single category, but you **must leave exactly one out** of the regression to serve as the base group. If you have 4 regions, you put 3 region dummies into the model.
+### 21. Taking expectations of a random variable
 
-**Interpretation:** Every coefficient you see on your output is interpreted *relative to the group you left out*. If you leave out "Tech", and the coefficient on "Retail" is -20, it means Retail workers earn \$20 less than Tech workers. If you want to compare Retail to Manufacturing, you just subtract their respective coefficients.
+**Discrete:**
 
-**Ordinal Variables:** If you have ranked data (like a credit rating from 0 to 4, or a beauty scale from 1 to 5), do *not* just throw it in as a single continuous variable. The difference between a 1-star and 2-star rating might be massive, while the difference between a 4-star and 5-star rating might be tiny. By creating a dummy variable for *each* star rating, you allow the model to flexibly estimate a different effect for every step up the ladder.
+If we have a fair die, a random variable $x$ represents the value the die will show $1,2,\dots,6$. $P(X=x)$ for each value is $\dfrac 1 6$
 
-### Interactions Involving Dummy Variables
+Then $E(X) = \sum P(X=x)$, expectation is the average value we get if we keep rolling the die infinitely. Intuition, we know that average is in the middle, hence its 3.5.
 
-**The Practical Goal:** What if a relationship changes depending on what group you are in? For example, what if a college degree boosts men's wages more than it boosts women's wages?
+Using formula:
 
-**The Empirical Takeaway:**
+$$
+E(X) = \sum P(X=x)= P(X=1)+ P(X=2)+\dots = 1/6*1 + 1/6*2+ \dots +1/6*6=3.6
+$$
 
-**Interacting Two Dummies:** If you want to look at the intersection of two categories, you multiply them together. By including `female`, `married`, and the interaction `female*married`, you can estimate a separate marriage premium for men and women, rather than forcing them to be identical.
+Notice that expectation is just weighted sum
 
-**Allowing for Different Slopes:** You can multiply a dummy variable by a continuous variable (like `female*education`). This allows you to test whether the slope (the return to education) differs by gender.
+**Continuous:**
 
-**The Chow Test:** Sometimes you want to know if *every* relationship in the model is fundamentally different for two groups (e.g., do men and women have entirely different wage equations?). You run the model separately for men and separately for women, sum up the squared errors, and run an $F$ test (the Chow Test) to see if splitting the sample statistically improved the fit.
+heights of people are never exact, so we plot them and get $PDF$ then integrate
 
-### A Binary Dependent Variable: The Linear Probability Model (LPM)
+$$
+E[X]= \int_{-\infty}^{\infty}f_xxdx
+$$
 
-**The Practical Goal:** What if your *outcome* ($y$) is a category? For example, predicting whether someone defaults on a loan (1 = yes, 0 = no), or gets arrested.
+### 22. Moments of a random variable
 
-**The Empirical Takeaway:**
+expectation $E[X]$ is taking the average using sum or integral. And it means the average value as N goes to infinity
 
-**Probabilities:** When $y$ is binary, standard OLS is called the Linear Probability Model (LPM). The predicted values aren't dollar amounts; they are *probabilities* of the event happening (e.g., a prediction of 0.85 means an 85% chance). The coefficients tell you how much the probability of success changes when $x$ increases by one unit.
+We can also get $E[X^2]$ using **law of unconscious statistician**
 
-**The Flaws of LPM:** LPMs are widely used because they are incredibly easy to interpret, but they have two empirical flaws. First, they can generate nonsensical predictions (like predicting someone has a -10% or a 115% chance of working). Second, they assume constant marginal effects—meaning your 5th child reduces your likelihood of working by the exact same probability as your 1st child, which is unrealistic.
+$$
+E[X^2]= \int^{\infty}_{-\infty} x^2f_xdx = \lim_{N \to \infty} \dfrac{X_1^2+X_2^2+\dots}{N}
+$$
 
-**Built-in Heteroskedasticity:** A binary dependent variable mathematically guarantees that your error term is heteroskedastic (the variance of the error changes depending on $x$). Therefore, you must always use heteroskedasticity-robust standard errors when running an LPM.
+This is also called **second moment,** moment name is cheated from physics <google inertia>
 
-### More on Policy Analysis and Program Evaluation
+We can do this using any power not just 1 and 2
 
-**The Practical Goal:** Using binary variables to determine if a specific program or policy intervention actually worked in the real world.
+### 23. Central moments of a random variable
 
-**The Empirical Takeaway:**
+If we have a PDF, which is just a straight line with X = 10, aka a constant; Its expectation is 10, cuz on average, $x$ value is 10
 
-**Self-Selection Bias:** If you just regress wages on a `job_training` dummy variable, your results are likely garbage. In the real world, people are not randomly assigned to programs; they self-select. People who enroll in job training might have less education or a worse prior job history. If you don't control for this, the program will look like it causes lower wages.
+$E[X^2]=10^2=100$. This value is not interesting, we didn’t learn anything new about the data
 
-**Regression Adjustment:** To find the true causal effect (Average Treatment Effect, or ATE), you must include a rich set of control variables that explain *why* people got into the program. By doing this, you mathematically adjust the treatment and control groups so they are comparable, simulating a randomized experiment.
+Instead, we do $E[(X-10)^2]=0$ which tells us how on average, the data deviates from the mean. This is called **second central moment, Variance.** It tells us about the **shoulders**
 
-### Interpreting Regression Results with Discrete Dependent Variables
+Notice that $Var(x) \ge 0$
 
-**The Practical Goal:** How do you talk about a model where $y$ is a count (like number of children or number of arrests)?
+Power 4 will tell us about the **tails**
 
-**The Empirical Takeaway:** \* **Think in Averages:** If $y$ is the number of children, and the coefficient on education is $-0.09$, you can't have negative 0.09 of a child. Instead, you interpret it across a group: "For every 100 women, getting one more year of education results in 9 fewer children on average".
+### 24. Kurtosis
 
-## Heteroskedasticity
+We can have two distributions that have same variance and mean. To compare them, we see the fourth moment that focuses on the tails
 
-### Consequences of Heteroskedasticity for OLS
+Example: if expectation = 10, variance = 2
 
-**The Practical Goal:** Understanding what happens when the "noise" in your data isn't evenly spread out. For example, if you are predicting savings based on income, low-income families all save about the same amount (near zero), but high-income families vary wildly (some save a lot, some spend it all). The variance of your error changes depending on your $x$ variable.
+$$
+E[(X-10)^4]= \dfrac{(x_1-10)^4+(x_2-10)^4+ \dots}{N}
+$$
 
-**The Empirical Takeaway:**
+when anything is raised to power 4, the big values get way bigger, so values on tails will make **huge difference**.
 
-**The Good News:** Heteroskedasticity does **not** cause bias. Your OLS coefficient estimates (the slopes) are still totally fine, and they are still consistent.
+To be able to compare the values between distributions, we take a ratio by dividing kurtosis by standard deviation power 4,
 
-**The Bad News:** The standard errors reported by your software are wrong. Because the standard errors are wrong, your $t$ statistics, $F$ statistics, $p$-values, and confidence intervals are completely invalid. You might think a variable is statistically significant when it actually isn't, or vice versa.
+Why power 4?
 
-### Heteroskedasticity-Robust Inference after OLS Estimation
+so both of them be same dimension, then subtract 3 which is kurtosis of normal distribution to get **excess kurtosis**
 
-**The Practical Goal:** How do we fix the broken $p$-values and confidence intervals without abandoning our OLS estimates?
+$$
+\boxed{\gamma = \dfrac{\mu_4}{\sigma^4}-3}
+$$
 
-**The Empirical Takeaway:**
+### 25. Skewness
 
-**Robust Standard Errors:** Econometricians figured out a way to adjust the standard errors mathematically so they are valid regardless of what the heteroskedasticity looks like. In practice, you simply add a command (like `, robust` in Stata) to your regression code.
+A distribution can be symmetric or asymmetric, positively skewed has tail on right.
 
-**Empirical Standard Practice:** Because this adjustment is so easy, it has become standard practice in modern applied economics and data science to simply **always report heteroskedasticity-robust standard errors** when working with cross-sectional data. It acts as an insurance policy.
+To calculate the skewness, get expectation around mean power 3
 
-*Note:* The robust standard errors might be larger or smaller than the old standard errors.
+Why 3?
 
-### Testing for Heteroskedasticity
+when x =0 (start of pdf), expectation power 3 is really a big number cuz distance from $\mu$ is massive, then it keep decreasing until $x=\mu$, then it keeps increasing again.
 
-**The Practical Goal:** How do you formally prove to a reader that your data actually has a heteroskedasticity problem?
+If its not symmetric, the expectation of the cubed difference will not be = 0 (not balanced around zero)
 
-**The Empirical Takeaway:** Because we can just use robust standard errors anyway, testing for heteroskedasticity is less important today than it used to be. However, if you want to test for it, you look at your prediction errors (residuals) to see if they systematically get bigger or smaller.
+To be able to compare, we divide it by standard deviation cubed (to have same dimension)
 
-**The Breusch-Pagan (BP) Test:** You take your squared OLS residuals and run a regression using them as the dependent variable against all your original $x$ variables. If the resulting $F$ statistic or LM statistic has a small $p$-value, you reject homoskedasticity.
+$$
+\boxed{\text{skewness} = \dfrac {\mu_3}{{(\sigma^2)}^\frac 3 2}}
+$$
 
-**The White Test (Special Case):** The BP test only looks for linear relationships. The White test is more flexible. The easiest, most practical version is to take your squared residuals and regress them on your **fitted values** ($\hat{y}$) and your **squared fitted values** ($\hat{y}^2$). Again, a small $p$-value means you definitely have heteroskedasticity.
+### 26. Properties of expectation and variance
 
-### Weighted Least Squares (WLS) Estimation
+**Multiplication by a constant**
 
-**The Practical Goal:** If heteroskedasticity makes OLS less precise, is there a different method that gives us tighter, better estimates?
+when multiplied by a constant, constant goes out of the integral cuz it does not vary
 
-**The Empirical Takeaway:**
+$$
+\boxed{E[aX]=a \int^{\infty}_{-\infty} xf_xdx = aE[X]}
+$$
 
-**Weighted Least Squares:** Instead of treating every data point equally, WLS gives *less* weight to noisy observations (high variance) and *more* weight to tight, reliable observations (low variance).
+for the variance, notice that $a\mu_x$ part came from $E[aX]$
 
-**Group Averages (The most common use):** The most practical time to use WLS is when your data are averages (like average test scores by school, or average firm contributions). A school with 5,000 students has way less variance than a school with 50 students. You use WLS to explicitly weight the regression by the group size (e.g., number of students).
+$$
+\boxed{Var(ax) = E((ax-a\mu_x)^2)= a^2var(x)}
+$$
 
-**Feasible GLS (FGLS):** If you don't know exactly what the variance looks like, you can have the software estimate the variance first, then use those estimates as weights.
+why $a^2$? cuz variance is the squared distance
 
-**Belt and Suspenders:** Even when you use WLS to get tighter estimates, your guessed weighting formula might be slightly wrong. Therefore, the modern best practice is to estimate the model using WLS, but *still* ask the software to report heteroskedasticity-robust standard errors on top of it.
+**Addition**
 
-### The Linear Probability Model Revisited
+$$
+\boxed{E[aX+bY]= aE[X]+bE[]= a\mu_x+b\mu_y}
+$$
 
-**The Practical Goal:** Dealing with heteroskedasticity when your dependent variable ($y$) is a binary category (1 or 0).
+for the variance:
 
-**The Empirical Takeaway:**
+$$
+\boxed{Var(aX+bY)= a^2 Var(X)+ b^2Var(y)+2Cov(X,Y)}
+$$
 
-**Always Use Robust Standard Errors:** As we learned in Chapter 7, the Linear Probability Model (LPM) mathematically *guarantees* that heteroskedasticity is present. Therefore, if you are predicting a yes/no outcome using OLS, you **must** use heteroskedasticity-robust standard errors.
+Here is the full proof
 
-**WLS with LPMs:** You can try to fix the LPM heteroskedasticity using WLS, but it's highly problematic in the real world. If your LPM predicts a probability below 0 or above 1 (which LPMs often do), the mathematical weight becomes negative, and the WLS software will crash. Therefore, sticking to standard OLS with robust standard errors is usually the most practical choice.
+$$
+\begin{align*}
+& var(aX+bY)\\
+&= E((aX+bY-a \mu_x - b \mu_y)^2)\\
+&= E((aX-a\mu_x)+ (bY- b \mu_y)^2)\\
+&= a^2 var(X)+ b^2 var(y)+ 2ab~ cov(X,Y)
+\end{align*}
+$$
 
-## More on Specification and Data Issues
+### 27. Covariance/correlation
 
-### Functional Form Misspecification
+**Covariance:**
 
-**The Practical Goal:** How do you know if you used the right "shape" for your model? For example, did you use a straight line when you should have used a curve (a quadratic)?
+if we have two variables with many values plotted on scatterplot. Positive relationship means if x value increases, y value increases.
 
-**The Empirical Takeaway:**
+Negative relationship: x increases, y decreases
 
-**The Problem:** If the true relationship is curved but you only include a linear term, your estimate will be biased and misleading.
+To represent this relationship, we have covariate
 
-**The RESET Test:** If you aren't sure if you are missing polynomial terms or interactions, you can use Ramsey's RESET test. Practically, your software estimates your model, takes the predicted outcomes (the fitted values, $\hat{y}$), squares them, cubes them, and throws them back into the regression as new variables. If an $F$-test shows these new variables are statistically significant, it means your original model failed to capture some non-linear relationship. \* *The Catch:* If you fail the RESET test, it tells you that *something* is wrong with your functional form, but it doesn’t tell you *how* to fix it (e.g., it doesn't tell you whether you should add a log, a square, or an interaction).
+$$
+\boxed{Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y]}
+$$
 
-### Using Proxy Variables for Unobserved Explanatory Variables
+Intuition, if x is less than its mean and y is less than its mean, cov is $+$, if they are opposite, its $-$
 
-**The Practical Goal:** You know you have omitted variable bias (e.g., missing "ability" in a wage equation), but you literally do not have the data to measure it. How do you fix the bias?
+| Relation bet. $x,y$ | Relation bet. $u$ | $x-\mu_x$ | $y-\mu_y$ | product |
+|---------------------|-------------------|-----------|-----------|---------|
+| $+$                 | $x>u_x$           | $+$       | $+$       | $+$     |
+| $+$                 | $x<u_x$           | $-$       | $-$       | $+$     |
+| $-$                 | $x > u_x$         | $+$       | $-$       | $-$     |
+| $-$                 | $x< u_x$          | $-$       | $+$       | $-$     |
 
-**The Empirical Takeaway:**
+However, it is affected by units, so we take correlation
 
-**The Plug-In Solution:** You find a **proxy variable**—something that isn't exactly the missing variable, but is highly correlated with it. For example, using an IQ test score as a proxy for "innate ability". When you plug this proxy into your regression, it helps control for the unobserved factor and reduces the bias on your main variables of interest (like education).
+**correlation:**
 
-**Using Lagged Dependent Variables:** This is a massive, highly practical trick in policy analysis. If you are predicting city crime rates and can't possibly measure all the unobserved historical and cultural factors that make one city different from another, you can just use **past crime rates** as a proxy control variable. Controlling for the lagged dependent variable magically sweeps away a massive amount of unobserved historical baggage, letting you isolate the effect of a current policy change (like hiring more police).
+divide covariance by standard deviation of each variable so we remove units. Covariance can’t be bigger than product of variance, so correlation is bounded between -1 and 1
 
-### Models with Random Slopes
+### 28. Population vs sample quantities
 
-**The Practical Goal:** Standard regression assumes your variable has the exact same effect on everyone (a constant slope). What if the return to education actually varies wildly from person to person based on their unobserved traits?
+In the previous sections, we were talking about population quantities not sample like $E[X], Var(X)$, meaning: we know PDF (have the whole datasets)
 
-**The Empirical Takeaway:**
+In a sample, we have $\bar x$ to estimate $\mu$ and $S^2$ to estimate $\sigma^2$ where
 
-**Average Effects:** Good news: even if the slope varies randomly across the population, running a standard OLS regression is generally completely fine. It will simply estimate the **population average** of those individual slopes.
+$$
+\boxed{\bar X = \dfrac1 N \sum x_i}
+$$
 
-**Built-in Heteroskedasticity:** Because the effect varies from person to person, the "error" or noise in the relationship naturally widens as the variable gets larger. A random slope model practically guarantees that you have heteroskedasticity. The fix is easy: just use the heteroskedasticity-robust standard errors we learned about in Chapter 8.
+$$
+\boxed{S^2 = \dfrac 1{N-1} \sum(x_i - \mu)^2}
+$$
 
-### Properties of OLS under Measurement Error
+### 29. Population regression function
 
-**The Practical Goal:** Real-world data is full of typos, and people often lie or guess on surveys. What happens when the data you are using is just slightly wrong?
+Population regression function is also called **population process.** wage is a function of education, we can plot it on scatterplot
 
-**The Empirical Takeaway:**
+As education increases, options for wage increase \<can work as a plumber, or as an academic or banker\>, we fit a line. wages is not perfectly a function of education, there are other factors thrown in **error or disturbance term** $u_i$
 
-**Measurement Error in the DEPENDENT Variable (**$y$): Suppose you are predicting family savings, but families misreport their savings. As long as the reporting errors are just random noise, this is **not a big deal**. It does not bias your OLS estimates. It just increases the overall variance, meaning your standard errors will be larger and your $t$ statistics will be smaller.
+$$
+\text{wages} = \alpha^s+ \beta^s \text{educ} + u_i
+$$
 
-**Measurement Error in the INDEPENDENT Variable (**$x$): Suppose you are predicting savings based on income, but families misreport their *income*. This is a **massive problem**. Random measurement error in an $x$ variable inherently causes **Attenuation Bias**.
+Example: a person with 15 years of education can be a rich banker or a poor academic
 
-*Attenuation Bias:* This means your OLS coefficient is mathematically pulled (attenuated) toward zero. If the true effect of income on savings is 0.50, the noise in the data might cause OLS to estimate it as 0.20. In the empirical world, if you know an explanatory variable is measured poorly, you must assume your estimated effect is artificially smaller than the real-world effect.
+The errors are distributed around the fitted line normally aka most errors are close to the line, few are far (we don’t assume normality though)
 
-### Missing Data, Nonrandom Samples, and Outlying Observations
+But we expect error term to be
 
-**The Practical Goal:** Dealing with missing data rows and weird, extreme data points.
+$$
+\boxed{u_i \sim iid(0, \sigma^2)}
+$$
 
-**The Empirical Takeaway:**
+independent: knowing one error will not make me know another term
 
-**Missing Data & Nonrandom Samples:** If data is missing completely at random, your estimates are fine (you just have a smaller sample). If data is missing based on an $x$ variable (e.g., you only survey people over age 35), your estimates are also generally fine. **But**, if data is missing based on your outcome $y$ variable (e.g., you are trying to study wealth, but you only survey people with wealth under \$250k), your sample is endogenously selected, and your OLS estimates will be totally biased.
+identically distributed: they came from the same underlying process (so width of scatterplot does not change)
 
-**Outliers:** Sometimes a single bizarre observation (like a company with \$40 billion in sales in a sample where everyone else has \$2 billion) can physically pull the entire regression line toward it, skewing all the results. \* *The Practical Fix:* Run your regression with the outlier, and then run it again with the outlier dropped. If your story completely changes, your model is fragile. Taking the natural log of variables (like `log(sales)`) is the best empirical trick to compress extreme values and naturally pull outliers back into the pack.
+Notice: error term has mean of zero, so it vanishes when taking expectations
 
-### Least Absolute Deviations (LAD) Estimation
+$$
+E[wages|educ] = \alpha^2 + \beta^2 educ
+$$
 
-**The Practical Goal:** Is there an alternative estimation method to OLS that doesn't get ruined by extreme outliers?
+### **30. Problem set 1**
 
-**The Empirical Takeaway:**
+It has theory of estimators, and some practical questions that can be solved, if you don’t know programming, use GRETL
 
-**LAD Estimation:** OLS minimizes the *sum of squared residuals*. Because it squares the errors, it heavily punishes large mistakes, which is why a single outlier can bend the whole OLS line. LAD minimizes the *absolute values* of the residuals.
+practical example:
 
-**Estimating the Median:** Because of this math change, LAD estimates the **median** effect rather than the average (mean) effect. In the empirical world, the median is vastly less sensitive to extreme outliers than the mean. LAD is highly useful as a "robustness check" to prove to a reader that your OLS results weren't just driven by three weird data points.
+relationship between crime and unemployment across US states
 
-## Basic Regression Analysis with Time Series Data
+Theoretical: theory of estimators and some mathematics
 
-### The Nature of Time Series Data
+https://ben-lambert.com/econometrics-course-problem-sets-and-data/
 
-**The Practical Goal:** Understanding why we can't just treat historical data exactly the same as a random survey.
+[problem-set-1-final.pdf](https://prod-files-secure.s3.us-west-2.amazonaws.com/ea710394-3777-4c3e-b725-4b199d781b6d/2762ab90-ded2-4c70-9858-0ec41137a16e/problem-set-1-final.pdf)
 
-**The Empirical Takeaway:** In time series, the past can affect the future, but the future cannot affect the past. Chronological order is strictly meaningful. Furthermore, you are not taking a random draw from a massive population; you are observing the single historical path that an economy, a stock price, or a company actually took. Because adjacent observations (like today's unemployment and tomorrow's unemployment) are often highly related, time series data requires a special set of rules to prevent you from drawing false conclusions.
+[problemset1.csv](https://prod-files-secure.s3.us-west-2.amazonaws.com/ea710394-3777-4c3e-b725-4b199d781b6d/392598da-54e7-430e-aa8e-cd16ce14d73f/problemset1.csv)
 
-### Examples of Time Series Regression Models
-
-**The Practical Goal:** How do we practically model relationships that happen over time?
-
-**The Empirical Takeaway:**
-
-**Static Models:** You use these when you believe a change in your $x$ variable has an immediate, same-day (or same-year) effect on your $y$ variable. You are simply regressing today's $y$ on today's $x$.
-
-**Finite Distributed Lag (FDL) Models:** In the real world, policies take time to work. A change in the tax rate today might not affect fertility rates or corporate investments until two or three years later. To capture this, you include "lags" of your $x$ variable (e.g., last year's taxes, the year before's taxes) as separate explanatory variables.
-
-**Impact vs. Long-Run Effect:** In an FDL model, the coefficient on the *current* variable is the **impact propensity**—the immediate shock. If you add up the coefficients of the current variable and all of its lags, you get the **Long-Run Propensity (LRP)**. The LRP is highly practical: it tells a policymaker the total, permanent cumulative effect of a policy change after all the dust has settled.
-
-### Finite Sample Properties of OLS under Classical Assumptions
-
-**The Practical Goal:** What conditions must be met for us to actually trust our OLS estimates and $p$-values when using time series data?
-
-**The Empirical Takeaway:**
-
-**Strict Exogeneity:** For OLS to be unbiased here, we need a massive, highly restrictive assumption. Your unobserved error (noise) today cannot be correlated with your explanatory variables in the past, present, *or future*. Practically, this means there can be no feedback loops. If today's crime rate (your $y$) causes the city to hire more police next year (your future $x$), strict exogeneity fails, and OLS is biased.
-
-**No Serial Correlation:** You must assume that the unobserved error from yesterday is completely uncorrelated with the unobserved error from today. If a model over-predicts inflation today, it shouldn't systematically over-predict it tomorrow. (Spoiler: In empirical macroeconomics, this assumption almost always fails, which we will fix in Chapter 12).
-
-*The Good News:* If these assumptions actually hold, all the standard tools you already know—OLS estimates, $t$ statistics, $F$ statistics, and $R^2$—are perfectly valid to use.
-
-### Functional Form, Dummy Variables, and Index Numbers
-
-**The Practical Goal:** Dealing with messy macroeconomic data types like inflation, overall production, and sudden historical events.
-
-**The Empirical Takeaway:**
-
-**Index Numbers and Real Values:** Macroeconomic variables are often index numbers (like the Consumer Price Index, which is pinned to 100 in a base year). In applied work, you must essentially always adjust nominal dollar amounts (like wages or housing prices) into "real" dollars using a price index. If you don't, you will accidentally measure the effect of inflation rather than the actual economic effect.
-
-**Event Studies:** You can easily use dummy variables to isolate the effects of sudden historical events or policy shifts (like the start of a war, or the month a new trade tariff was enacted). A dummy variable that switches from 0 to 1 captures the structural shift in the outcome variable.
-
-### Trends and Seasonality
-
-**The Practical Goal:** Stopping "fake" correlations just because two things happen to be growing over time, or just because it happens to be December.
-
-**The Empirical Takeaway:**
-
-**Spurious Regression:** Many economic series (like GDP, population, or overall prices) naturally grow over time. If you regress housing investment on housing prices, you might find a strong positive relationship simply because both variables are naturally growing over time. This is a "spurious" (fake) regression.
-
-**The Fix (Time Trends):** To solve this, you must explicitly include a "time trend" variable (literally a variable counting 1, 2, 3...) in your regression. This mathematically "detrends" the data, forcing the model to stop looking at the overall historical growth and only look at whether the *fluctuations* in your $x$ variable correlate with the *fluctuations* in your $y$ variable.
-
-**Beware the High** $R^2$: Never brag about a 95% $R^2$ in a time series regression. If your dependent variable has a strong upward trend, your model will explain a massive amount of variance just because time is passing. A much more honest metric is to detrend the dependent variable first and calculate an Adjusted $R^2$ on the remaining variation.
-
-**Seasonality:** Data collected monthly or quarterly is heavily polluted by the calendar (e.g., retail sales spike in December; construction drops in February). You must include seasonal dummy variables (e.g., 11 dummy variables for the months of the year) to mathematically "deseasonalize" your data so you can measure the true causal effects of your variables.
-
-## Further Issues in Using OLS with Time Series Data
-
-### Stationary and Weakly Dependent Time Series
-
-**The Practical Goal:** Figuring out if our time series data is "well-behaved" enough to let us safely use large-sample statistical rules.
-
-**The Empirical Takeaway:**
-
-Because we cannot draw multiple random histories of the economy, we have to rely on the data being stable over time.
-
-**Weak Dependence:** This is the most crucial concept. It simply means that a shock to the system today (like a sudden spike in oil prices) will eventually fade away and be forgotten as time goes on.
-
-If your time series data is weakly dependent, it practically replaces the "random sampling" assumption from cross-sectional data. It allows the Central Limit Theorem to work, meaning if you have a large enough sample size, your $p$-values and confidence intervals will be mathematically valid.
-
-### Asymptotic Properties of OLS
-
-**The Practical Goal:** Can we use OLS when our model has feedback loops, or when we include past outcomes to predict future ones?
-
-**The Empirical Takeaway:**
-
-**Lagged Dependent Variables:** In Chapter 10, we needed "strict exogeneity" (no correlation between the error today and your variables at *any* point in time) to guarantee unbiased estimates. But if you include a lagged dependent variable (e.g., using yesterday's stock return to predict today's return), strict exogeneity mathematically fails, causing your OLS estimates to be biased in small samples.
-
-**The Good News (Consistency):** If your data is weakly dependent, OLS is **consistent**. This means that while your estimate might be slightly biased with 20 observations, as your sample size grows (e.g., 200 or 1,000 observations), the OLS estimate perfectly homes in on the true real-world effect.
-
-**Large Sample Inference:** Because of this large-sample magic, you can safely use standard $t$ tests, $F$ tests, and LM tests on time series data even if your errors aren't perfectly normally distributed, provided your sample is large and weakly dependent.
-
-### Using Highly Persistent Time Series in Regression Analysis
-
-**The Practical Goal:** Dealing with data that *isn't* well-behaved—specifically, variables that wander aimlessly and never revert to a historical average.
-
-**The Empirical Takeaway:**
-
-**Unit Roots / Random Walks:** Many economic variables (like GDP, stock prices, or inflation) are highly persistent (also called I(1) processes or unit roots). If a series is a random walk, a shock today is completely permanent, and the variance of the data grows infinitely over time.
-
-**The Danger (Spurious Regression):** You must be extremely cautious about running standard regressions on raw I(1) variables. If you regress one random walk on another completely unrelated random walk, the software will often print out massive $t$ statistics and high $R^2$ values, tricking you into thinking you found a causal relationship when none exists.
-
-**The Fix (Differencing):** If you suspect a unit root, the safest empirical strategy is to **first-difference** the data before running the regression (e.g., $y_t - y_{t-1}$). The differenced data is usually weakly dependent and safe for OLS. If you difference the natural log of a variable, you are conveniently running a regression on its *growth rate* or percentage change.
-
-**Spotting a Unit Root:** As a practical rule of thumb, if you correlate today's value with yesterday's value (the first-order autocorrelation) and the correlation is very close to 1 (like 0.95 or 0.98), you should strongly consider differencing the data.
-
-### Dynamically Complete Models and the Absence of Serial Correlation
-
-**The Practical Goal:** Knowing when you've put enough lags into your model to capture all the historical dynamics.
-
-**The Empirical Takeaway:**
-
-A model is **dynamically complete** if you've added enough lags of your $y$ and $x$ variables so that adding any *more* past data wouldn't help predict the outcome one bit.
-
-**The Benefit:** If a model is dynamically complete, the mathematics guarantee that your error term has **absolutely no serial correlation**.
-
-**The Reality Check:** You do not *always* have to make a model dynamically complete. If you are just trying to measure a simple, same-day policy effect (a static model), you might intentionally leave lags out. But by doing so, your errors will be serially correlated, and you will have to fix your standard errors before you can trust your $p$-values (which is exactly what Chapter 12 teaches you to do).
-
-### The Homoskedasticity Assumption for Time Series Models
-
-**The Practical Goal:** Dealing with changing volatility (noise) over time.
-
-**The Empirical Takeaway:**
-
-Just like in cross-sectional data, if the variance (volatility) of your error term changes based on your explanatory variables, you have heteroskedasticity.
-
-In time series, this often looks like clustered periods of high volatility (like the stock market being incredibly noisy during a recession, but calm during a boom). \* OLS estimates are still perfectly consistent, but your standard errors and $p$-values are wrong. You will need to use robust standard errors to safely test your hypotheses.
-
-## Serial Correlation and Heteroskedasticity in Time Series Regressions
-
-### Properties of OLS with Serially Correlated Errors
-
-**The Practical Goal:** What happens to my regression if the error term today is correlated with the error term from yesterday?
-
-**The Empirical Takeaway:**
-
-**The Good News:** Serial correlation does **not** cause bias. Your OLS coefficient estimates (the slopes) are still generally fine and will consistently point you toward the true real-world effect, provided you don't have omitted variables or feedback loops.
-
-**The Bad News:** Just like heteroskedasticity, serial correlation completely breaks your standard errors. The standard errors reported by your software will usually be much smaller than they should be, making your $t$-statistics artificially huge. If you ignore serial correlation, you will constantly trick yourself into thinking variables are statistically significant when they actually aren't.
-
-**Lagged Dependent Variables (A Warning):** If your model includes a lagged dependent variable (like predicting today's stock return using yesterday's stock return) *and* your errors are serially correlated, OLS is completely broken (biased and inconsistent). However, if you include enough lags to make the model "dynamically complete" (as discussed in Chapter 11), the serial correlation naturally vanishes, and you can safely use OLS.
-
-### Serial Correlation–Robust Inference after OLS
-
-**The Practical Goal:** How do we fix the broken $p$-values and confidence intervals without abandoning our OLS estimates?
-
-**The Empirical Takeaway:**
-
-**Newey-West Standard Errors:** Econometricians created a mathematical adjustment for time series data that fixes the standard errors. These are called **HAC** standard errors (Heteroskedasticity and Autocorrelation Consistent), with the most popular being the Newey-West estimator.
-
-**Empirical Standard Practice:** Just like we always use robust standard errors for cross-sectional data, modern empirical researchers routinely estimate time series models using OLS and then ask their software to report Newey-West standard errors.
-
-*The Catch (Truncation Lag):* When you tell your software to compute Newey-West standard errors, you have to choose a "lag" integer ($g$). This tells the software how far back the correlation goes. As a rule of thumb, for annual data you might choose 1 or 2; for quarterly data, 4; and for monthly data, 8 or 12.
-
-### Testing for Serial Correlation
-
-**The Practical Goal:** How do you formally prove to a reader that your data actually suffers from serial correlation?
-
-**The Empirical Takeaway:** You look at the prediction errors (residuals) from your regression to see if yesterday's error predicts today's error.
-
-**The Modern Regression Test:** Run your normal OLS regression and save the residuals ($\hat{u}_t$). Then, run a second regression where you try to predict today's residual using yesterday's residual ($\hat{u}_{t-1}$) *plus all of your original* $x$ variables. If the $t$-statistic on the lagged residual is significant, you have serial correlation.
-
-**The Durbin-Watson (DW) Test:** This is an older, very famous test your software will likely print automatically. The DW statistic is always between 0 and 4. A DW score close to 2 means you have *no* serial correlation. A score significantly below 2 (e.g., 0.80) means you have severe positive serial correlation and need to fix your standard errors.
-
-**Testing for Seasonality:** If you have monthly data, you shouldn't just check if today's error is correlated with yesterday's; you should check if it's correlated with the error from 12 months ago ($\hat{u}_{t-12}$) by including it in your residual test.
-
-### Correcting for Serial Correlation with Strictly Exogenous Regressors
-
-**The Practical Goal:** If serial correlation makes OLS less precise, is there a different estimation method that gives us tighter, better estimates?
-
-**The Empirical Takeaway:**
-
-**FGLS (Cochrane-Orcutt / Prais-Winsten):** Instead of just fixing the standard errors after the fact, Feasible Generalized Least Squares (FGLS) attempts to mathematically scrub the serial correlation out of the data itself (using a process called quasi-differencing) *before* estimating the coefficients. This is done using methods known as Cochrane-Orcutt or Prais-Winsten estimation.
-
-**The Practical Danger:** FGLS is highly fragile. For FGLS to be consistent, it requires your $x$ variables to be *strictly exogenous*. This means your $x$ variable today cannot react to the error (unobserved shocks) from yesterday. In the real world of macroeconomics, policy variables almost always react to past economic shocks. If strict exogeneity fails, FGLS is vastly worse than OLS.
-
-*Modern Best Practice:* Because FGLS is so easily broken by feedback loops, many modern researchers prefer to simply run standard OLS and fix the standard errors using the Newey-West method from Section 12-2.
-
-### Differencing and Serial Correlation
-
-**The Practical Goal:** An easier, highly practical way to wipe out extreme serial correlation.
-
-**The Empirical Takeaway:** If your serial correlation is extremely high (approaching a unit root/random walk where $\rho \approx 1$), standard fixes won't work well. The most logical and practical step is to **first-difference** your data (subtracting yesterday's value from today's value). Running your regression on the *changes* in your variables will almost always completely eliminate the serial correlation.
-
-### Heteroskedasticity in Time Series Regressions
-
-**The Practical Goal:** Dealing with changing volatility (noise) over time, such as the stock market being incredibly noisy during a recession but calm during a boom.
-
-**The Empirical Takeaway:**
-
-**The Easy Fix:** Standard heteroskedasticity in time series is handled exactly the same way it is in cross-sectional data: you just use robust standard errors. Furthermore, the Newey-West standard errors from Section 12-2 automatically fix *both* serial correlation and heteroskedasticity at the exact same time.
-
-**ARCH Models (Autoregressive Conditional Heteroskedasticity):** In finance, we often don't just want to *fix* heteroskedasticity; we want to study it, because variance equals *risk*. An ARCH model looks at whether a massive error (shock) yesterday predicts that there will be a highly volatile, massive error again today. You test for this by taking your squared OLS residuals and regressing them on your past squared OLS residuals. If past volatility predicts future volatility, you have ARCH, which is the foundational tool for predicting risk in modern empirical finance.
-
-## Pooling Cross Sections across Time: Simple Panel Data Methods
-
-### Pooling Independent Cross Sections across Time
-
-**The Practical Goal:** How do we analyze data when we randomly survey *different* groups of people every year? (For example, taking a random sample of the U.S. population in 1990, and a completely different random sample in 2000).
-
-**The Empirical Takeaway:**
-
-**Always Include Time Dummies:** If you combine cross-sections from different years, you **must** include dummy variables for the years. If you don't, you will confuse the effect of a variable with just the natural passage of time (like inflation, or a nationwide drop in crime).
-
-**Testing for Changes Over Time:** If you want to know if the "gender wage gap" or the "return to a college degree" has changed from 1990 to 2000, you simply interact the 2000 year dummy with the `female` or `education` variables. The coefficient on that interaction term tells you exactly how the real-world effect shifted between the two decades.
-
-### Policy Analysis with Pooled Cross Sections (Difference-in-Differences)
-
-**The Practical Goal:** How do we prove that a new policy (like a tax, a minimum wage hike, or a new garbage incinerator) actually caused an outcome to change, rather than it just being a coincidence?
-
-**The Empirical Takeaway:**
-
-**The Difference-in-Differences (DD) Estimator:** This is one of the most famous tools in applied economics. To evaluate a policy, you need two groups: a **Treatment Group** (who got the policy) and a **Control Group** (who didn't). You also need data from two time periods: **Before** the policy and **After** the policy.
-
-**The Mechanics:** You run a regression with a dummy for the Treatment group, a dummy for the After period, and an **interaction term** (Treatment $\times$ After). The coefficient on that interaction term is your causal effect (the DD estimator).
-
-*Why it works:* It calculates the change in the outcome for the treated group, and then *subtracts* the change in the outcome for the control group. This scrubs out any natural trends that were going to happen anyway.
-
-**The Parallel Trends Assumption:** The entire DD trick relies on one massive assumption: in the absence of the policy, the treatment and control groups would have naturally trended at the exact same rate. If this assumption is shaky, researchers will add a second control group to create a "Difference-in-Difference-in-Differences" (DDD) estimator to further scrub out varying trends.
-
-### Two-Period Panel Data Analysis
-
-**The Practical Goal:** What if, instead of surveying different people every year, we survey the **exact same** people (or firms, or cities) in Year 1 and then interview those exact same people again in Year 2? (This is called Panel Data or Longitudinal Data).
-
-**The Empirical Takeaway:**
-
-**The Unobserved Effect (**$a_i$): Panel data is the holy grail because it lets us control for **fixed unobserved heterogeneity**. Every person, city, or firm has hidden traits that never change over time (e.g., a person's innate drive, a city's geography, a firm's historical culture). If these hidden traits are correlated with your $x$ variables, normal cross-sectional OLS gives you biased results.
-
-**First-Differencing (FD):** Because these hidden traits do not change over time, you can mathematically wipe them out. You simply subtract the Year 1 data from the Year 2 data for every single person.
-
-$\Delta y_i = \delta_0 + \beta_1 \Delta x_i + \Delta u_i$
-
-Because the hidden trait ($a_i$) is the same in both years, $a_i - a_i = 0$. It vanishes! You then just run a normal OLS regression on these "change" variables.
-
-**The Limitation:** First-differencing is a miracle cure for omitted variable bias, but it has a cost. If an explanatory variable doesn't change over time (like a person's race or gender), it also gets mathematically wiped out ($\Delta x = 0$). You cannot estimate the effect of any variable that is strictly constant over time using this method.
-
-### Policy Analysis with Two-Period Panel Data
-
-**The Practical Goal:** Using panel data to run better program evaluations.
-
-**The Empirical Takeaway:**
-
-In the real world, people self-select into programs. For example, a city might put a job-training program in a county that is already historically struggling with high unemployment. If you use standard OLS, the program looks like it *causes* unemployment.
-
-By tracking the *exact same* counties over time and using the first-difference method, you completely eliminate the county's unobserved historical baggage. You regress the *change* in unemployment on the *change* in program status. This mathematically forces the units to act as their own control group.
-
-### Differencing with More Than Two Time Periods
-
-**The Practical Goal:** What if we track the same people or cities over 3, 5, or 10 years?
-
-**The Empirical Takeaway:**
-
-You do the exact same thing, but you difference adjacent years. You subtract Year 1 from Year 2, Year 2 from Year 3, and so on.
-
-**The Serial Correlation Trap:** By mathematically subtracting adjacent years, you are practically guaranteed to create serial correlation in your new differenced error terms. (If an error is unusually high in Year 2, it makes the Year 2 - Year 1 difference look high, but it makes the Year 3 - Year 2 difference look artificially low).
-
-**The Fix:** Because you induced serial correlation, your standard OLS standard errors and $p$-values will be wrong. When you run a first-differenced panel data model with more than two time periods, you **must** instruct your software to compute "cluster-robust" standard errors to ensure your confidence intervals are reliable.
-
-## Advanced Panel Data Methods
-
-### Fixed Effects Estimation
-
-**The Practical Goal:** How do we completely wipe out unobserved heterogeneity without losing data to first-differencing?.
-
-**The Empirical Takeaway:**
-
-**The Within Transformation (Time-Demeaning):** Instead of subtracting last year's value, the fixed effects (FE) method calculates the time-average for each person or firm over all years, and subtracts that average from every observation. This transformation makes the unobserved fixed effect mathematically disappear.
-
-**Time-Constant Variables Vanish:** Because the transformation removes anything that does not change over time, you cannot use FE to estimate the effect of time-constant variables like gender, race, or a city's distance from a river. However, you can interact these time-constant variables with year dummy variables to see how their partial effects change over time.
-
-**Dummy Variable Interpretation:** FE is mechanically identical to running a massive regression where you include a separate dummy variable for every single person or firm in your dataset. While this is conceptually helpful, it is not practical for large datasets, which is why software uses the time-demeaning transformation instead.
-
-**FE vs. First-Differencing (FD):** If you only have two time periods ($T=2$), FE and FD will give you the exact same estimates and standard errors. If you have more than two periods, they differ. FE is easily applied to unbalanced panels (where some units drop out of the survey), provided that the reason they drop out is completely unrelated to the random, time-varying shocks.
-
-### Random Effects Models
-
-**The Practical Goal:** What if we genuinely believe our unobserved fixed effect is not correlated with our explanatory variables, or we absolutely need to estimate the effect of a time-constant variable?.
-
-**The Empirical Takeaway:**
-
-**The Random Effects (RE) Assumption:** The RE model strictly assumes that the hidden traits of individuals ($a_i$) are completely independent of all the explanatory variables in all time periods. If you suspect your model suffers from omitted variable bias, RE will not solve the problem.
-
-**Quasi-Demeaning:** Rather than subtracting 100% of the time average like FE does, RE mathematically subtracts only a fraction of the time average from the data. This acts as a Generalized Least Squares (GLS) procedure that fixes the severe serial correlation inherently caused by the unobserved effect.
-
-**FE vs. RE in the Real World:** In applied economics and policy analysis, FE is almost always considered much more convincing than RE because it allows the hidden traits to be arbitrarily correlated with your variables. RE is generally used only when researchers must include time-constant variables and strongly believe they have already controlled for enough factors. Researchers frequently use the Hausman test to formally evaluate whether the RE assumptions hold up against the FE estimates.
-
-### The Correlated Random Effects Approach
-
-**The Practical Goal:** Getting the best of both worlds—the robustness of Fixed Effects combined with the ability to include time-constant variables.
-
-**The Empirical Takeaway:**
-
-**The CRE Trick:** You manually calculate the unit-specific time average for every single time-varying explanatory variable, and then you add those averages directly into a standard Random Effects regression as brand new control variables.
-
-**Matches FE Exactly:** By adding these time averages to the model, your software's RE estimates for the time-varying variables will be mathematically identical to the Fixed Effects estimates. This also proves that the FE estimator effectively controls for the average level of the explanatory variables over time.
-
-**Testing RE vs FE:** The CRE approach provides a highly practical way to test if you actually needed Fixed Effects. You simply run a joint significance test on all of the newly added time-average variables. If they are jointly significant, it definitively proves that the unobserved effect is correlated with your variables, and you must rely on the FE estimates.
-
-### General Policy Analysis with Panel Data
-
-**The Practical Goal:** Using panel data to evaluate real-world policies when the interventions happen at completely different times for different groups.
-
-**The Empirical Takeaway:**
-
-**Staggered Interventions:** You do not have to force your data into a simple two-period "Before/After" difference-in-differences setup. You can include multiple time periods and simply define a binary treatment variable that equals 1 in the specific years a county or person is subject to the intervention, and zero otherwise.
-
-**The Danger of Feedback:** If the government assigns a policy because of a bad outcome in the previous year (for example, boosting unemployment benefits because the local poverty rate just spiked), both FE and FD estimates will be highly biased. You can test for this dangerous feedback loop by adding next period's policy assignment variable to your equation; if it predicts this period's outcome, your model is compromised.
-
-### Applying Panel Data Methods to Other Data Structures
-
-**The Practical Goal:** Using panel data methods when you do not actually have data tracked over time.
-
-**The Empirical Takeaway:**
-
-**Siblings and Twins:** You can use these exact same FE and FD methods on families instead of tracking individuals over time. By taking the difference between two sisters, or using a "family fixed effect," you mathematically scrub away all unobserved family background and shared genetic traits. This allows you to isolate the true causal effect of variables that differ between the siblings, like teenage motherhood or education.
-
-## Instrumental Variables Estimation and Two-Stage Least Squares
-
-### Motivation: Omitted Variables in a Simple Regression Model
-
-**The Practical Goal:** You want to measure the effect of $x$ on $y$, but $x$ is hopelessly correlated with unobserved factors (the error term, $u$). How do you isolate the true causal effect?
-
-**The Empirical Takeaway:**
-
-**The Magic of an Instrument:** You need to find a third variable—an **Instrumental Variable (IV)**, often denoted as $z$—that acts as a surrogate for your endogenous $x$ variable.
-
-To be a valid instrument, $z$ must perfectly thread the needle with two strict requirements:
-
-1\. **Instrument Relevance (Testable):** The IV must be highly correlated with your endogenous $x$ variable. You can easily prove this to a reader by running a simple regression of $x$ on $z$ and showing that the $t$-statistic is highly significant.
-
-2\. **Instrument Exogeneity (Untestable):** The IV must have *no* direct effect on your outcome $y$, and it must be completely uncorrelated with the hidden error term $u$. You generally **cannot** test this with data. You must convince your audience using logic, economic theory, or by exploiting a "natural experiment" (like a randomized draft lottery).
-
-**The Danger of Bad Instruments:** If your IV is not truly exogenous, or if its correlation with $x$ is extremely weak, the IV estimate can actually be vastly *more* biased than the flawed OLS estimate you started with.
-
-### IV Estimation of the Multiple Regression Model
-
-**The Practical Goal:** How do we use an IV when we have other good, exogenous control variables in our model?
-
-**The Empirical Takeaway:**
-
-**Keep Your Controls:** You include your exogenous control variables in the equation exactly as you would in OLS. These variables effectively act as "their own instruments".
-
-**The Reduced Form (First Stage):** To check if your instrument is relevant in a multiple regression setting, you cannot just look at the simple correlation between $z$ and $x$. You must run a regression of your endogenous $x$ on *all* of your exogenous controls **plus** your new IV. Your instrument $z$ must be statistically significant in this regression to be considered relevant.
-
-### Two Stage Least Squares (2SLS)
-
-**The Practical Goal:** What if you have *multiple* good instrumental variables for a single endogenous variable? Or what if you have multiple endogenous variables?
-
-**The Empirical Takeaway:**
-
-**2SLS Mechanics:** We use a method called **Two Stage Least Squares (2SLS)**. Your statistical software does this seamlessly, but mechanically it works in two steps:
-
-*Stage 1:* Regress the endogenous $x$ on all exogenous variables and all IVs. Save the predicted values (the fitted values, $\hat{x}$). This creates a "purged" version of your variable, wiped clean of its correlation with the unobserved error term.
-
-*Stage 2:* Regress $y$ on your exogenous variables and the new "purged" $\hat{x}$. *(Note: Never do this manually in two steps, or your software will calculate the standard errors incorrectly. Use the built-in 2SLS/IV command.)*
-
-**The Rule of 10 for Weak Instruments:** Even if your IV is statistically significant in the first stage, it might still be a "weak instrument." The modern empirical rule of thumb is that you must look at the First Stage $F$-statistic for your instruments. **If the** $F$-statistic is less than 10, your instruments are weak, and your 2SLS results will be highly unreliable.
-
-**The Cost of 2SLS (Multicollinearity):** Because 2SLS only uses the "purged" variation in $x$, you are throwing away a lot of variation. As a result, 2SLS standard errors are almost always much larger (and confidence intervals much wider) than standard OLS. You are trading away precision to get rid of bias.
-
-### IV Solutions to Errors-in-Variables Problems
-
-**The Practical Goal:** Fixing Attenuation Bias (estimates shrinking toward zero) caused by severe measurement error in your independent variable.
-
-**The Empirical Takeaway:**
-
-If people misreport a variable (like their income or years of schooling), OLS is biased. You can use an IV to fix this if you have a second, independent measure of that exact same variable. Alternatively, you can use another variable (like parents' education) as an IV, provided it is correlated with the true variable but completely uncorrelated with the reporting error.
-
-### Testing for Endogeneity and Testing Overidentifying Restrictions
-
-**The Practical Goal:** 1) Proving to your boss that you actually *needed* to use 2SLS instead of OLS. 2) Proving that your IVs are actually valid.
-
-**The Empirical Takeaway:**
-
-**Testing for Endogeneity (The Hausman Test):** Because 2SLS standard errors are so large, you only want to use it if you absolutely have to. To test this, you take the residuals from your First Stage regression and add them as a new control variable into your standard OLS model. If that residual is statistically significant, it proves your $x$ variable was endogenous and you *must* use 2SLS. If it isn't significant, you can safely stick with OLS.
-
-**Testing Overidentifying Restrictions:** Remember how we said you can't test if an instrument is exogenous? That's true if you only have one instrument. But if you have *more instruments than you strictly need* (e.g., two IVs for one endogenous variable), you can mathematically test if they are valid. You do this by regressing the 2SLS residuals on all your exogenous variables. If the resulting test statistic ($n \times R^2$) is large, it means at least one of your IVs is secretly correlated with the error term, meaning your IV strategy is invalid.
-
-### 2SLS with Heteroskedasticity
-
-**The Practical Goal:** Dealing with non-constant variance (noise) in an IV framework.
-
-**The Empirical Takeaway:**
-
-Just like with cross-sectional OLS, if the noise in your data isn't evenly spread out, your 2SLS standard errors and $p$-values will be wrong. You must always instruct your software to report **heteroskedasticity-robust standard errors** when running 2SLS.
-
-### Applying 2SLS to Time Series Equations
-
-**The Practical Goal:** Fixing endogeneity when your data is chronological.
-
-**The Empirical Takeaway:**
-
-You can easily use 2SLS on time series data. In macroeconomics, where variables are often determined simultaneously, you frequently use lagged variables (e.g., yesterday's interest rate) as instrumental variables for today's endogenous variables.
-
-**Serial Correlation:** Just like in Chapter 12, time series 2SLS is highly prone to serial correlation. You must test for it using your 2SLS residuals, and if it exists, you must use HAC (Newey-West) standard errors to ensure your $p$-values are valid.
-
-### Applying 2SLS to Pooled Cross Sections and Panel Data
-
-**The Practical Goal:** Combining the power of Panel Data (Chapter 13/14) with IVs to wipe out multiple sources of bias at once.
-
-**The Empirical Takeaway:**
-
-Panel data methods (like first differencing) wipe out *time-constant* unobserved bias (like innate ability or geography). But what if your explanatory variable is also correlated with a *time-varying* shock?
-
-You can combine methods: First, you difference the data to wipe out the fixed unobserved effect. Then, you estimate the differenced equation using 2SLS, relying on an instrumental variable (like a randomized policy intervention or grant) to handle the remaining time-varying endogeneity. This is one of the most robust, credible ways to measure causal effects in modern empirical research.
-
-## Simultaneous Equations Models
-
-### The Nature of Simultaneous Equations Models
-
-**The Practical Goal:** Knowing when it is actually appropriate to use an SEM in the real world.
-
-**The Empirical Takeaway:**
-
-**The Feedback Loop:** SEMs are used when variables are determined jointly. The classic example is a city's crime rate and the size of its police force. Hiring more police lowers crime, but a high crime rate causes a city to hire more police,. You cannot just run a standard regression because the causality goes in both directions simultaneously.
-
-**The Ceteris Paribus Test:** For an SEM to make sense, each equation in the system must have a clear, standalone "holding all else fixed" interpretation,. A labor demand equation describes the behavior of employers, while a labor supply equation describes the behavior of workers.
-
-**When NOT to use an SEM:** Do not use an SEM just because two variables are chosen at the same time by the exact same person. For example, if an individual decides how much to spend on housing and how much to save each month, neither equation can stand on its own because the same person is choosing both based on the same budget,.
-
-### Simultaneity Bias in OLS
-
-**The Practical Goal:** What happens if I just ignore the feedback loop and run standard OLS anyway?
-
-**The Empirical Takeaway:**
-
-**Total Bias:** If you use standard OLS on an equation in a simultaneous system, your estimates will be completely biased and inconsistent.
-
-**The Math Reason:** Because the dependent variable ($y_1$) and the explanatory variable ($y_2$) cause each other, $y_2$ is mathematically guaranteed to be correlated with the unobserved error term in the $y_1$ equation,. OLS cannot separate the "forward" causal effect from the "backward" feedback effect, so your coefficient is a scrambled mix of both.
-
-### Identifying and Estimating a Structural Equation
-
-**The Practical Goal:** How do we break the feedback loop and actually estimate the true effect?
-
-**The Empirical Takeaway:**
-
-**The Solution is 2SLS:** The primary way to solve simultaneity is using the Two-Stage Least Squares (2SLS) method from Chapter 15.
-
-**The Magic of Identification (The Rank Condition):** To estimate an equation in an SEM, you need an instrumental variable. In an SEM, **your instrument comes from the other equation**. To identify a Demand curve, you need an exogenous variable that shifts Supply but does *not* shift Demand (like the price of cattle feed for milk supply),.
-
-If you do not have an exogenous variable excluded from your equation of interest, your equation is "unidentified," and it is impossible to estimate the real-world effect,.
-
-### Systems with More Than Two Equations
-
-**The Practical Goal:** Handling massive real-world models with three, four, or more interacting equations.
-
-**The Empirical Takeaway:**
-
-**The Order Condition:** The practical rule of thumb for large systems is simple: to estimate an equation, the number of exogenous variables *excluded* from that equation must be at least as large as the number of endogenous explanatory variables included on the right-hand side of the equation.
-
-If your equation passes this test, you can simply tell your statistical software to estimate it using standard 2SLS, using all the exogenous variables in the entire system as your instruments.
-
-### Simultaneous Equations Models with Time Series
-
-**The Practical Goal:** Applying SEMs to macroeconomic data, where variables like interest rates, inflation, and GDP are all determined at the same time.
-
-**The Empirical Takeaway:**
-
-**Predetermined Variables:** In time series, you can often use *past* values (lags) to solve current feedback loops. A lagged endogenous variable (like last year's consumption) is considered "predetermined". Under the assumption that today's error term is not correlated with past events, you can safely treat these lagged variables as exogenous instruments,.
-
-**Serial Correlation Danger:** This strategy falls apart if your errors have serial correlation. If today's error is correlated with yesterday's error, then yesterday's variables are no longer valid instruments. You must test for serial correlation using your 2SLS residuals to ensure your model is sound.
-
-### Simultaneous Equations Models with Panel Data
-
-**The Practical Goal:** The ultimate real-world combination—wiping out unobserved historical traits AND fixing simultaneous feedback loops at the same time.
-
-**The Empirical Takeaway:**
-
-**Two-Step Fix:** First, you difference your data (or use fixed effects) to mathematically wipe out the unobserved fixed effects (like a county's geographic or cultural history). Second, you estimate that differenced equation using 2SLS to fix the simultaneity problem.
-
-**The Practical Hurdle:** Finding an instrument in this setup is extremely difficult. Because you differenced the data, any instrument that does not change over time (like distance to a river) gets completely wiped out. Your instrumental variable *must* be something that changes over time (like a change in the state minimum wage, or the introduction of a new policy grant in a specific year),,.
-
-## Limited Dependent Variable Models and Sample Selection Corrections
-
-### Logit and Probit Models for Binary Response
-
-**The Practical Goal:** Predicting a simple "yes/no" or "either/or" outcome (like getting a loan, participating in a program, or being employed) without the flaws of the Linear Probability Model (LPM).
-
-**The Empirical Takeaway:**
-
-**The Problem with LPM:** If you use standard OLS to predict a binary outcome, your software might predict that a person has a -10% or a 115% chance of success. OLS also assumes the effect of $x$ is constant—meaning the first year of education boosts your chance of working by the exact same amount as the 20th year.
-
-**The Fix:** Logit and Probit models solve this by forcing all predictions into a non-linear, S-shaped curve that is strictly trapped between 0 and 1 (0% and 100%).
-
-**Logit vs. Probit:** The math under the hood is slightly different (Logit uses a logistic curve, Probit uses a normal distribution curve), but in applied work, they usually yield virtually identical conclusions. Pick one and don't obsess over it.
-
-**The Interpretation Trap:** The raw coefficients printed out by a Logit or Probit regression are practically meaningless on their own; they do not represent simple slopes. A coefficient of $0.15$ does *not* mean a 15% increase. The raw coefficients only tell you the *direction* (+ or -) and the statistical significance ($p$-value).
-
-**Average Partial Effects (APEs):** To actually explain your results to a boss or audience, you must ask your software to compute "Average Partial Effects" (or Marginal Effects). This mathematically translates the complex Logit/Probit coefficients back into the simple language of the LPM: "a one-unit increase in $x$ increases the probability of success by $Y$ percentage points, on average".
-
-### The Tobit Model for Corner Solution Responses
-
-**The Practical Goal:** Predicting an outcome that has a massive clump of exact zeros, but is continuous once it becomes positive (e.g., how much a person spends on alcohol, or how many hours a married woman works for a wage).
-
-**The Empirical Takeaway:**
-
-**The Problem:** You cannot use $\log(y)$ because $\log(0)$ is mathematically undefined. If you just use OLS on the whole sample, the giant pile of zeros will severely flatten and distort your regression line. If you throw away the zeros and only run OLS on the positive numbers, your estimates will suffer from omitted variable bias.
-
-**The Tobit Solution:** The Tobit model mathematically handles the dual nature of this decision:
-
-\(1\) the choice to participate at all (spending $> 0$), and
-
-\(2\) how much to spend once the decision is made.
-
-**Interpretation:** Just like Probit, the raw Tobit coefficients cannot be read like standard OLS slopes. You must rely on your software to compute the APEs. Tobit allows you to estimate two highly useful real-world numbers: the effect of $x$ on the *probability* of the outcome being positive, and the effect of $x$ on the *actual expected amount*.
-
-**The Danger (Fragility):** OLS is very robust. Tobit is not. The entire Tobit math relies heavily on the assumptions that your errors are perfectly normally distributed and perfectly homoskedastic (constant variance). If these assumptions fail, your Tobit estimates are completely wrong and biased.
-
-### The Poisson Regression Model
-
-**The Practical Goal:** Predicting a "count" variable—something that only takes on non-negative integers (0, 1, 2, 3...)—such as the number of children a woman has, or the number of times a person is arrested.
-
-**The Empirical Takeaway:**
-
-**The Exponential Fix:** OLS might predict that someone will have -1.5 arrests. Poisson regression models the expected value as an exponential function, ensuring that your predictions are always positive.
-
-**Easy Interpretation:** Because of the exponential math, you interpret Poisson coefficients exactly like you interpret a $\log(y)$ OLS model. A coefficient of $0.05$ on education simply means "one more year of education increases the expected number of arrests by roughly 5%".
-
-**Overdispersion:** The strict Poisson model assumes that the variance of the data exactly equals its mean. In the real world, count data is almost always wildly noisier than this (called overdispersion). If you ignore this, your standard errors will be much too small, tricking you into thinking variables are significant when they aren't. Therefore, in practice, you must always instruct your software to compute robust standard errors (or Quasi-Maximum Likelihood standard errors) when running a Poisson model.
-
-### Censored and Truncated Regression Models
-
-**The Practical Goal:** Dealing with situations where your data collection process is flawed, meaning you simply *cannot see* the true number for certain people.
-
-**The Empirical Takeaway:**
-
-**Data Censoring (Top-Coding):** Suppose you survey people about their wealth, but the highest option is "\$1 million or more". For these billionaires, you know all their $x$ variables, but their $y$ is capped (censored) at \$1,000,000. If you just run OLS and treat their wealth as exactly \$1M, your regression line will be artificially flattened. You must use a *Censored Normal Regression*, which uses the fact that you *know* the true value is above the threshold to correctly estimate the real slope.
-
-**Duration Analysis:** Censored regression is heavily used to study "time until an event" (like how many months until an inmate is rearrested). If the study ends and an inmate hasn't been arrested yet, their duration is "right-censored." The model uses that information without throwing the person out of the data.
-
-**Truncated Data:** This is worse than censoring. This happens when you simply *exclude* a group of people from your survey based on their outcome. For example, you want to study the effect of education on income, but you only survey people making less than \$50,000. OLS will be horribly biased here. A *Truncated Regression Model* mathematically fixes this bias, but just like Tobit, it falls apart if your errors aren't perfectly normally distributed.
-
-### Sample Selection Corrections
-
-**The Practical Goal:** You want to measure an outcome for an entire population, but you only have data for people who voluntarily *chose* to participate.
-
-**The Empirical Takeaway:**
-
-**Incidental Truncation:** The classic example is the "wage offer" equation. You want to know the return to education for all women, but you only observe wages for women who are currently working. Because the decision to work is not random (it is correlated with unobserved traits), running OLS only on the working women creates *Sample Selection Bias*.
-
-**The Heckit (Heckman) Method:** To fix this, you use a two-step process:
-
-1\. **The Selection Equation:** You take your *entire* sample (workers and non-workers) and run a Probit model to predict the probability that a woman works. From this, the software calculates a special term called the **Inverse Mills Ratio**, which mathematically captures a person's unobserved likelihood of participating.
-
-2\. **The Structural Equation:** You run your standard OLS wage regression on the working women, but you include that Inverse Mills Ratio as a brand-new control variable. If this new term is statistically significant, it proves you had selection bias, and the model has successfully mathematically scrubbed it out.
-
-**The Practical Catch (Exclusion Restriction):** For the Heckit method to actually be convincing in the real world, you *must* have an instrumental variable. You need at least one variable that strongly affects the decision to work (like number of young children) but does *not* directly affect the hourly wage itself. If you don't have this, the Inverse Mills Ratio will be perfectly correlated with your other variables, creating massive multicollinearity, and your results will be useless.
-
-## Advanced Time Series Topics
-
-### Infinite Distributed Lag Models
-
-**The Practical Goal:** How do you model a situation where a policy change today affects outcomes forever, but its impact slowly fades away over time?
-
-**The Empirical Takeaway:**
-
-**The Problem:** You can't put an infinite number of past lags into a regression because you only have finite data.
-
-**The Practical Fix:** We use models like the **Geometric (Koyck) Distributed Lag** or **Rational Distributed Lag**. Mechanically, this usually boils down to a brilliant algebraic trick: if you put the *lagged dependent variable* (yesterday's $y$) on the right side of the equation as a control variable, it mathematically captures the fading effect of all past history.
-
-**The Catch:** By doing this trick, you inherently create a specific type of serial correlation in your error term, which will be correlated with your lagged $y$. To get unbiased estimates, you typically have to either use Instrumental Variables (IV) or assume a very specific structure for the error term (AR(1)) so you can safely use OLS.
-
-### Testing for Unit Roots
-
-**The Practical Goal:** In Chapter 11, we learned that highly persistent data (random walks / unit roots) destroy standard $p$-values. How do you formally prove whether a variable actually has a unit root?
-
-**The Empirical Takeaway:**
-
-**The Dickey-Fuller (DF) Test:** You run a regression of the *change* in your variable ($\Delta y_t$) on its past *level* ($y_{t-1}$). \* **The Danger:** You **cannot** look at the standard $p$-value or $t$-statistic printed by your software for this test. Because the data violates standard assumptions, the normal bell curve doesn't apply. You must compare your $t$-statistic to special "Dickey-Fuller critical values". To reject a unit root at the 5% level, you usually need a much larger $t$-statistic (e.g., -2.86 instead of the usual -1.96).
-
-**The Augmented DF Test (ADF):** In the real world, the simple DF test suffers from serial correlation. To clean this up, you "augment" the regression by adding several past *changes* ($\Delta y_{t-1}, \Delta y_{t-2}$) as control variables. If your variable naturally grows over time (like GDP), you must also include a time trend in the test.
-
-### Spurious Regression
-
-**The Practical Goal:** What is the actual, practical danger if I ignore unit roots and just run standard regressions anyway?
-
-**The Empirical Takeaway:**
-
-**The Ultimate Trap:** If you take two completely unrelated variables that both have unit roots (for example, the cumulative number of pirates in the ocean and the cumulative global temperature) and regress one on the other, standard OLS will completely break down.
-
-**The Lie:** Your software will print out a massive $t$-statistic and a high $R^2$, boldly tricking you into thinking you have discovered a highly significant causal relationship. This is called a **spurious regression**.
-
-**The Rule:** Never run standard OLS on the raw levels of two highly persistent, trending variables unless you are absolutely sure they are cointegrated (see 18-4). Always use first differences (changes) instead.
-
-### Cointegration and Error Correction Models
-
-**The Practical Goal:** Sometimes two random walks *are* economically connected. They wander wildly, but they wander *together* (like short-term and long-term interest rates). How do we model them without differencing away their long-run relationship?
-
-**The Empirical Takeaway:**
-
-**Cointegration:** If two variables are I(1) unit roots, but the *gap* between them is stable and returns to an average (I(0)), they are "cointegrated".
-
-**Testing for Cointegration:** You use the **Engle-Granger test**. You regress $y$ on $x$, save the residuals (which represent the gap), and run a Dickey-Fuller test on those residuals. (Again, you must use special critical values for this).
-
-**The Leads and Lags Estimator:** To actually trust the $t$-statistics on the long-run relationship, standard OLS isn't enough due to endogeneity. You must add the contemporaneous, past, and *future* changes of $x$ ($\Delta x_{t+1}, \Delta x_{t-1}$) into the regression. This mathematically scrubs the endogeneity out, giving you valid $p$-values.
-
-**Error Correction Models (ECMs):** Once you establish cointegration, you can model the short-term bumps. You regress $\Delta y$ on $\Delta x$ *plus* an "error correction term" (the residual gap from yesterday). If the variables drifted too far apart yesterday, this term mathematically acts as a rubber band, pulling $y$ back toward its long-run equilibrium today.
-
-### Forecasting
-
-**The Practical Goal:** Predicting future outcomes of a time series using regression models.
-
-**The Empirical Takeaway:**
-
-**Use Past Information:** If you try to predict tomorrow's stock price using tomorrow's interest rate, you have a practical problem: you don't know tomorrow's interest rate either. Practical forecasting relies on predicting $y$ using only *past* lags of $y$ and *past* lags of $x$.
-
-**Vector Autoregressive (VAR) Models:** The most common forecasting tool. You model several different time series simultaneously, predicting each one purely based on the past lags of all the variables in the system. \* **Granger Causality:** Does variable $z$ "Granger cause" variable $y$? This does *not* mean philosophical causality. It is simply a predictive test: "Does the past history of $z$ help me predict $y$, *even after controlling for the past history of* $y$?". You test this by throwing lags of $z$ into a VAR equation for $y$ and checking if they are jointly significant (an $F$-test).
-
-**Forecast Intervals:** You should never just hand your boss a single point forecast. You must provide a 95% forecast interval (similar to a confidence interval).
-
-**The Horizon Problem:** Forecasting one step ahead is relatively precise. But as you forecast multiple steps into the future (e.g., forecasting 5 years out), you have to use your own past forecasts as inputs to generate your future forecasts. This means the forecast error variance compounds and grows massive. Forecasting a random walk far into the future is practically impossible because the confidence interval becomes infinitely wide.
-
-## Carrying Out an Empirical Project
-
-### Posing a Question
-
-**The Practical Goal:** Figuring out where to start so you don't waste time.
-
-**The Empirical Takeaway:** The biggest mistake beginners make is finding a massive data set and just running regressions to see what pops up. You must pose a specific, answerable question *before* you collect data. If you don't formulate your hypothesis first, you will likely pull the wrong sample, look at the wrong time period, or forget to download a crucial control variable.
-
-### Literature Review
-
-**The Practical Goal:** Making sure you aren't reinventing the wheel, and learning from the mistakes of past researchers.
-
-**The Empirical Takeaway:** When searching for previous studies, think laterally. If you want to study the effect of drug use on college GPAs, don't just search for "drugs"; look at the vast literature on how *alcohol* affects academic performance to see what control variables those researchers used.
-
-### Data Collection
-
-**The Practical Goal:** Gathering and preparing your data without getting tripped up by formatting errors.
-
-**The Empirical Takeaway:**
-
-**Data Structure:** Know immediately if you are building a cross-section, a time series, or a panel.
-
-**Inspect and Clean:** This is where data scientists spend 80% of their time. Even if you download a famous, widely used data set, you must inspect it carefully. Look for missing data codes (like a "999" entered for income) that will completely ruin your regression if you accidentally treat them as real numbers.
-
-### Econometric Analysis
-
-**The Practical Goal:** Choosing the right tools and avoiding the temptation to "data mine."
-
-**The Empirical Takeaway:**
-
-**Justify Your Assumptions:** You have to convince your reader that your error term is uncorrelated with your main variable. Address the "self-selection" problem head-on (e.g., if you are studying savings accounts, acknowledge that people who open them might just have a natural, unobserved inclination to save).
-
-**Robustness Checks:** If you suspect omitted variable bias, explain the likely *direction* of that bias. Try different methods—like standard OLS, then adding a lagged dependent variable, and then Fixed Effects—and compare the results to see if your story holds up.
-
-**The "Stepwise" Trap:** Many software packages have an automated "stepwise regression" feature that throws variables into the model if their $p$-values are small, and drops them if they are large. **Do not use this**. It is a severe form of data mining, and it makes the final $t$-statistics and $p$-values printed by your software completely invalid and impossible to interpret. You should choose your model based on economic logic and common sense, not an algorithm.
-
-### Writing an Empirical Paper
-
-**The Practical Goal:** Presenting your findings to a boss, a client, or an academic journal in a professional, readable format.
-
-**The Empirical Takeaway (Section by Section):**
-
-**Introduction:** Hook the reader with a paradox or an interesting simple statistic. Crucially, *give away the punchline*. Summarize your exact findings (e.g., "missing 10 hours of lecture lowers GPA by half a point") right in the introduction so the reader knows where you are going.
-
-**Conceptual Framework:** Explain the intuition and logic behind your idea before you introduce any heavy math.
-
-**Econometric Models and Estimation Methods:** Never confuse a "model" with an "estimation method". First, write out your population model using Greek letters and an error term (with no "hats" and no numbers), which represents how the real world works. *Then*, separately state your estimation method (e.g., "I estimate this model using OLS" or "I estimate this using 2SLS with an instrument").
-
-**The Data:** Provide a clean table of Summary Statistics. Your reader needs to see the Mean, Standard Deviation, Minimum, and Maximum for all your variables so they understand the scale of your data.
-
-**Results:**
-
-**Never copy and paste raw software code or output into a report**.
-
-Build a clean, professional table. Put your estimated coefficients on top, and always put the standard errors in parentheses `()` directly below them.
-
-**Format your numbers:** Avoid scientific notation (like `1.051e-07`) by rescaling your data (e.g., measuring sales in millions instead of single dollars).
-
-**Avoid false precision:** If your software spits out a coefficient of `0.54821059`, do not report that. Round it to `.548` or `.55`. Reporting 8 decimal places makes you look like an amateur who doesn't understand that data is noisy.
-
-**Conclusions:** Briefly restate the magnitude of your most important coefficient. Be honest about the flaws or caveats in your study, and suggest what future data scientists could do to improve it.
+[problem-set-1-answers-final1.pdf](https://prod-files-secure.s3.us-west-2.amazonaws.com/ea710394-3777-4c3e-b725-4b199d781b6d/c4085588-c2b1-47cb-8c7d-754ee47d8d92/problem-set-1-answers-final1.pdf)

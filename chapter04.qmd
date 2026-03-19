@@ -1,0 +1,1156 @@
+---
+title: "WLS, IV, & 2SLS"
+format: html
+number-sections: false
+---
+
+
+
+### 128. Weighted least squares: an introduction
+
+Finally a new $LS$ 
+
+$$
+y_i = \alpha + \beta x_i+ \varepsilon_i\\
+var(\varepsilon|x_i) \neq \sigma^2\\
+cov(\varepsilon_i, \varepsilon_j)\neq 0
+$$
+
+So we have heteroscedasticity and serial correlation. We will focus on heteroscedasticity here.
+
+In undergraduate courses, we take $WLS$ from $GLS$ only to deal with heteroscedasticity.
+
+Geometrically:
+
+draw $y_i,x_i$ and notice that error terms grows, split it into two regions. 
+
+variance of error in first region is smaller than  variance of error in region two.
+
+SO we can call the two regions as **low variance, high variance**
+
+If we add a new outlier point in the low variance region, the fitted line in region with low variance will shift the fitted line by a lot
+
+while in the second region with high version, we already have outliers, so a new outlier will not shift the line by much
+
+In other words, the points in first region are more influential (have higher **weight**) unlike OLS that treats all the points the same (equal weight)
+
+
+### 129. Weighted least squares: mathematical introduction
+
+Here is the equation with heteroscedasticity
+
+$$
+y_i = \alpha + \beta x_i+ \varepsilon_i\\
+var(\varepsilon|x_i) = \sigma^2 x_i
+$$
+
+Divide the equation by $x_i^{1/2}$ <more on why later>
+
+$$
+\dfrac{y_i}{x_i^{1/2}} = \dfrac{\alpha}{x_i^{1/2}} + \beta_1 x_i^{1/2} + \dfrac{\varepsilon_i}{x_i^{1/2}}
+$$
+
+Then remember that $var(ay)= a^2 var(y)$, the $x_i^{1/2}$will be squared when its out of the variance
+
+$$
+\begin{align*}
+var(\dfrac{\varepsilon_i}{x_i^{1/2}}|x_i) &= \dfrac{1}{x_i}var(\varepsilon_i|x_i)\\
+&= \dfrac{1}{x_i}\sigma^2x_i = \sigma^2
+\end{align*}
+$$
+
+since Gauss Markov assumptions are now met, it became BLUE. The thing we did to turn the variance into homoscedastic is called $WLS$
+
+Notice how I created weights by dividing the equation  by $x_i$, in this example, small x means high weight
+
+
+
+### 130. Weighted least squares: an example
+
+Relationship between wage and years of education, as years of education increase, variability increase cuz choices of employment increase. 
+
+SO its a positive relationship with increasing error variance.
+
+Using the sample we have, we try to estimate $\alpha, \beta$.
+
+If we have an outlier in the high variance region, OLS will treat all deviations equally and try to minimize sum of squared regression so line shifts more to the outlier
+
+WLS will focus on the points in the lower region so it will not shift to the outlier
+
+
+
+### 131. Weighted least squares - feasible GLS part 1
+
+In practice, we do $FGLS$
+ . The population variance is
+
+$$
+var(u_i|x_i)= \sigma^2x_i
+$$
+
+but we don’t know the population variance , we only have a sample, so we rewrite it first then estimate it
+
+$$
+var(u_i|x_i)= \sigma^2 exp(\delta_0+\delta_1x_1+\dots+\delta_px_p)
+$$
+
+rewrite it cuz in the first form, $x$ can be negative, hence variance can appear negative too. But after rewriting it, there is no way to get a negative variance
+
+To estimate the variance:
+
+1. get regression
+
+$$
+y_i = \hat \alpha + \hat \beta x_i +\dots +\hat \beta_px_p +\hat u_i
+$$
+
+1. Run auxiliary regression on $\log \hat u^2$
+
+$$
+\log \hat u^2 = \delta_0+\delta_1x_1+\dots+\delta x_px_p
+$$
+
+why $\hat u$ squared? 
+
+$$
+var(u_i|x_i) = E[u_i^2|x_i]-\cancel{[E(u_i|x_i]^2}
+$$
+
+the second term is zero under assumption of zero conditional mean, so only first term remains which has the error term squared
+
+We take the log to cancel the exponential that we introduced in variance rewriting
+
+1. use the fitted values to estimate log of conditional variance
+
+$$
+\hat g_i = \hat \delta_0 + \hat \delta_1x_1 +\dots +\hat \delta_px_p
+$$
+
+
+
+### 132. Weighted least squares - feasible GLS part 2
+
+continuing with last examples
+
+1. take the exponent to cancel the log
+
+$$
+\hat h = \exp(\hat g) = \exp(\log \hat u^2_i) = \hat u^2_i
+$$
+
+we needed log to be able to estimate using maximum likelihood
+
+1. divide the regression equation by $\hat h$
+
+$$
+\dfrac{y_i}{\sqrt{\hat h_i}}
+$$
+
+since we estimate, $FGLS$ is biased but its consistent and more efficient than $OLS$
+
+
+
+### 133. How to address the issue of serial correlation
+
+If we have serial correlation
+
+1. The default standard errors will be wrong so all the inference is wrong. To solve it, we use **Newey west standard errors**
+2. OLS are no longer BLUE. To solve it, we use $FGLS$
+
+Solution 2 is better than 1 cuz it solves the problem not the effect of the model
+
+$GLS$ deals with serial correlation and heteroscedasticity
+
+$WLS$ deals with heteroscedasticity only
+
+
+
+### 134. GLS estimation to correct for serial correlation
+
+If we have **runs of positive and negative,** we worry about having serial correlation.
+
+We will assume that the error term follows $AR(1)$ process
+
+$$
+y_t = \alpha + \beta x_t+u_t\\
+u_t = \rho u_{t-1} + \varepsilon_t\\
+\varepsilon_t\sim iid(0, \sigma^2)
+$$
+
+Solution: consider $y$ from previous time period
+
+$$
+y_{t-1} = \alpha + \beta x_{t-1}+u_{t-1}
+$$
+
+subtract $\rho y_{t-1}$ from $y_t$
+
+$$
+y_t - \rho y_{t-1} = \alpha (1-\rho) + \beta(x_t - \rho x_{t-1}) + \cancel{u_t - \rho u_{t-1}} + \varepsilon_t
+$$
+
+We replaced $u_t - \rho u_{t-1}$ by $\varepsilon_t$ which is by definition $iid(0,\sigma^2)$ So OLS becomes BLUE.
+
+Notice that we had to throw away one observation and we assumed the population variance
+
+
+
+### 135. FGLS for serially correlated errors
+
+In practice, we don’t know $\rho$ so we have to estimate it
+
+1. fit regression
+
+$$
+y_t = \hat \alpha + \hat \beta x_t + \hat u_t
+$$
+
+1. use residuals to estimate $\rho$
+
+$$
+\hat u_t = \hat\rho \hat u_{t-1}+ \hat \varepsilon_t
+$$
+
+to estimate $\rho$ we have two methods:
+
+1. **Cochrane Orcatt**
+2. **Prais-Winsted**
+
+both are the same asymptotically
+
+1. subtract
+
+$$
+y_t - \hat \rho y_{t-1} = \alpha (1-\hat \rho) + \beta(x_t -\hat  \rho x_{t-1}) +  \hat \varepsilon_t
+$$
+
+This $FGLS$ is
+
+1.  biased cuz we estimate $\rho$ 
+2. More efficient than OLS
+3. if we have **strict endogeneity**, its consistent
+
+Notice that strict endogeneity here means
+
+$$
+\boxed{E[u_t|x_t,x_{t-1},x_{t+1}] = 0}
+$$
+
+which is different than cross sectional endogeneity
+
+
+
+### 136. Instrumental variables - an introduction
+
+$$
+Life~Income = \alpha + \beta military ~particpation+\dots+u_i
+$$
+
+we expect military participation to have negative effect. The problem is that military participation is correlated with many stuff happening in the error term (prefer office? academia? attitude towards money?)
+
+This causes the OLS estimates to be overestimated
+
+**Joshua Angrist 1990**
+
+Vietnam war had soldiers split by birthday (1 to 366)  then random numbers were chosen to be eligible for war $z_i$
+
+And we got four cases
+
+1. Most of the people eligible participated in war
+2. most of not eligible did not participate
+3. some not eligible volunteered to participate
+4. some eligible did not participate for reasons like health issues
+
+Hence, there is a positive correlation between being eligible and participating in war
+
+But to capture the causal effect, think of three individuals: $x,y,k$
+
+$k$ did not participate in military, doesn’t matter if they are eligible or not
+
+$x$ participated in military but wasn’t eligible
+
+$y$ participated in military and was eligible
+
+Then take average life income for those who participated in war $x,y$, and those who didn’t participate $k$. But this comparison is not fair cuz $x$ is expected to have lower life income anyway, 
+
+so if we remove $x$, we will be comparing apples with apples with only one difference: participated in war or not. But this is on individual level
+
+ the eligibility status $z_i$ is correlated with $military \,participation$ and not correlated with errors. 
+
+Result:
+
+The difference between the two groups in 1990 was $-\$436$ and probability of participation in war if eligible $z_i=1$ is $16\%$. So the to get the effect we divide
+
+$$
+\beta_{IV} = \dfrac{-436}{0.16} = 2,741
+$$
+
+Another way of thinking about it
+
+Compare the people who participated despite being eligible or not. Then compare them again after war. 
+
+
+
+### 137. Endogeneity and instrumental variables
+
+One of the assumptions is zero conditional mean
+
+$$
+E[\varepsilon|x]=0
+$$
+
+and this assumption fails when we have
+
+1. omitted variables
+2. measurement error in independent variables
+3. reverse causality (selection bias)
+
+This causes $\hat\beta$ to be biased and inconsistent
+
+Why?
+
+cuz we focus on effect of $x$ on $y$, but if the assumption is not met, $x$ and error are correlated
+
+$$
+x \uparrow, \varepsilon \uparrow, y \uparrow 
+$$
+
+we don’t know if $y$ increased due to error or due to $x$?
+
+
+
+### 138. Instrumental variables intuition - part 1
+
+If the model
+
+$$
+y_i = \alpha + \beta x_i + \varepsilon_i
+$$
+
+has an omitted variable, model has endogeneity, zero conditional mean assumption is not met
+
+$$
+\hat \beta = \dfrac{\Delta y}{\Delta x} = \dfrac{\Delta y_x + \Delta y_\varepsilon }{\Delta x} = \beta + \dfrac{\Delta y_\varepsilon}{\Delta x}
+$$
+
+Meaning $\beta$ consists of change coming from $x$ and change coming from the error term
+
+What to do?
+
+Get a new variable $z_i$ that affects $x$ only <not with error> which in turn will affect $y$
+
+Example:
+
+if $z$ increases by 1, $x$ increases by 0.5, $y$ increases by 2
+
+so
+
+$$
+\hat \beta_{IV} = \dfrac{\Delta y}{\Delta x} =  \dfrac{2}{0.5} = 4
+$$
+
+Remember, we care about relation between $x,y$
+
+In other words
+
+$$
+\begin{align*}
+cov(z,y) &= cov(z, \alpha + \beta x_i + \varepsilon)\\
+&= cov(z, \alpha) + \beta cov(z,x)+ cov(z, \varepsilon)\\
+&= cov(z,x)
+\end{align*}
+$$
+
+$z$ is correlated with $x$ only
+
+
+
+### 139. Instrumental variables intuition - part 2
+
+We reached that
+
+$$
+\boxed{cov(z,y) = \beta cov(z,x)}
+$$
+
+Solving for $\beta$
+
+$$
+\boxed{\hat \beta_{IV} = \dfrac{cov(z,y)}{cov(z,x)}}
+$$
+
+We have assumptions that
+
+1. $cov(z,\varepsilon) = 0$
+2. $cov(z,x)\neq 0$ cuz if its value is small, the overall value will blow up
+
+Compared with OLS
+
+|  | OLS | IV |
+| --- | --- | --- |
+| unbiased | $\times$ | $\times$ |
+| consistency | $\times$ | $\checkmark$ |
+
+### 140. Instrumental variables example - returns to schooling
+
+$$
+\log(wage) = \alpha + \beta~ education + \gamma ~ability + \varepsilon
+$$
+
+Problem is that we can’t measure ability, ability and the error are in another error called $v_i$ so $\beta$ is upwardly biased
+
+$$
+\log(wage) = \alpha + \beta~ education + v_i
+$$
+
+We want $z$ to affect education but not ability so we can measure the true effect of education on wage
+
+**Angrist + krueger (1990)**
+
+The instrument they used is the $quarter~of~birth$ as an instrument $z$
+
+| Q | Age starting school |
+| --- | --- |
+| 4Q | $5 \dfrac3 4$ |
+| 1Q | $6\dfrac 3 4$ |
+
+There is a minimum age for which individuals can leave school in the specified country. So people who started school early spent more time on education, so its correlated with education, but not ability.
+
+Plot quarter graphically against number of years of education for people aged 30 to 39
+
+Notice that 4Q have better wage than those with 1Q <difference is 0.1>
+
+Then plot quarter against log wage, same pattern of ups and downs. Difference is 0.01
+
+$$
+\hat \beta_{IV} \sim \dfrac{0.01}{0.1}\sim 0.1
+$$
+
+which was close to $\hat \beta_{ OLS}$, Meaning education is not really correlated with ability or ability does not really affect wage (based on instrumental variable assumptions)
+
+
+
+### 141. Instrumental variables example - classroom size
+
+$$
+\text{test~score} = \alpha + \beta \text{ class size}+ \varepsilon
+$$
+
+We expect that as class size decreases, teacher focus on students more so test score increase $(\beta<0)$
+
+But there are other omitted factors like ability, family background.
+
+We need an $IV$ that affects class size only
+
+**Angrist-Lawy (1999)** made use of **Maimonides rule** in that specific country
+
+This is a rule that governs class size
+
+$$
+cs = \left\{
+\begin{array}{ll}
+N&, N \le 40\\
+n/2&, N>40
+\end{array}
+
+ \right.
+$$
+
+So If N = 40, class size = 40
+
+If N = 41, class size = 20, 21
+
+This is correlated with class size and not with error
+
+Results showed that $\hat \beta_{OLS}\ge 0$, $\hat \beta_{IV}<0$ indicating that OLS had selection bias
+
+
+
+### 142. Instrumental variables example - colonial origins of economic development
+
+$$
+\log(GDP) = \alpha + \beta \text{ property right}+\varepsilon
+$$
+
+But there is a reverse causal effect, as we have more GDP, we afford more property rights, we also have omitted variables.
+
+**Johnson, Robinson (2001)**
+
+Think of East and west Germany, North and south Korea
+
+Settlement strategy the colonist decides early institution
+
+Strategy can be 
+
+1. extractive (extract resources) <think of Africa>
+2. Neo-colonialist (make the country their own) <US>
+
+  
+
+and early institution lead to the current institution which caused current GDP
+
+The researcher used mortality rate for an instrument of strategy <if you have malaria, death will increase, will focus on extractive resources>
+
+$$
+\text{mortality rate} \to \text{strategy}\to \text{early instituion} \to \text{current instituions <PR>} \to GDP
+$$
+
+Mortality rate affected property rights only and nothing else.
+
+
+
+### 143. Instrumental variables as two stage least squares
+
+We know that military participation is a dummy variable and we are interested in wage
+
+$$
+\text{wage} = \alpha + \beta +\text{military participation} + \varepsilon
+$$
+
+and we learnt that there is a correlation between mp and error term. So we came up with an instrument $D_I$ and derived its form
+
+$$
+\hat \beta_{IV} = \dfrac{cov(wage, D_i)}{cov(mp,D_I)}
+$$
+
+write in the sample form (cuz the above covariance is for population)
+
+$$
+\dfrac{\sum(wage_i-\bar{wage})(D_i - \bar D)}{\sum (MP- \bar{MP})(D_i - \bar D)}
+$$
+
+We can interpret $IV$ as $2SLS$
+
+meaning we have two stages of least squares
+
+1. $MP_i = \delta_0 + \delta_1 D_i + v_i$
+
+Then we use the estimated MP to get wage
+
+1. $wage = \alpha + \beta \hat{MP}$
+
+When number of instruments is 1, its 2SLS
+
+Notice that we have to do it manually to get first stage (software will provide second stage only)
+
+Also make sure that assumptions are met
+
+
+
+### 144. Proof that instrumental variables estimators are two stage least squares
+
+We have the model
+
+$$
+y = \alpha + \beta x + \varepsilon
+$$
+
+where we have endogeneity so use instrumental variable
+
+$$
+\hat \beta_{IV} = \dfrac{cov(z,y)}{cov(z,x)}
+$$
+
+we do it on two stages
+
+$$
+x = \delta_0+\delta_1z + u
+$$
+
+and since that its just OLS till now, we get that
+
+$$
+\boxed{\hat \delta_1 = \dfrac{cov(z,x)}{var(z)}}
+$$
+
+Then we use it to estimate $y$
+
+$$
+y = \alpha + \beta \hat x + \varepsilon
+$$
+
+which has $\hat \beta$ 
+
+$$
+\hat \beta_{2sls} = \dfrac{cov(y, \hat x)}{var(\hat x)}
+$$
+
+which can be rewritten as <using form of $\delta_1$ from above>
+
+$$
+\begin{align*}
+\hat \beta_{2sls} &=
+\dfrac{cov(y, \hat \delta_0 + \hat \delta_1 z)}{var(\hat \delta_0 + \hat \delta_1,z)}\\
+&= \dfrac{\hat \delta_1 cov(y,z)}{\hat \delta_1^2 var(z)}\\
+&= \dfrac{cov(y,z)}{\hat \delta var(z)}\\
+&= \dfrac{var(z)}{var(z)}\times \dfrac{cov(y,z)}{cov(x,z)}\\
+&= \hat \beta_{IV}
+\end{align*}
+$$
+
+Knowing that $\hat \delta_0$ is a constant so has no covariance nor variance
+
+
+
+### 145. Bad instruments part 1
+
+$$
+wage = \alpha + \beta \text{educ} + u_i
+$$
+
+$educ$ is correlated with many variables in the error term, so we use an instrument $\text{parental education}$ and call it $peduc$
+
+The two conditions we need:
+
+1. $cov(peduc, u_i) = 0$
+2. $cov(peduc, educ_i)\neq 0$
+
+We expect a positive correlation between education and parental education so second assumption is satisfied
+
+For the second assumption:
+
+we assume positive relation between parental education and parental income
+
+parental income also affects the wage in a positive way, hence **its contained in the error term**. Meaning first assumption is not met, $\hat \beta_{IV}$ is inconsistent.
+
+
+
+### 146. Bad instruments part 2
+
+$$
+score = \alpha + \beta \,\text{class attendance} + u_i
+$$
+
+we expect positive correlation between attendance and score.
+
+attendance is correlated with interest and ability that are contained in error term
+
+We choose an instrument $pregnant$ and do the two assumptions
+
+1. $cov(pregnant, u_i)= 0$
+2. $cov(pregnant, CA) \neq 0$
+
+We expect negative correlation between pregnancy and attendance so second assumption is ok
+
+for first assumption, there is negative correlation between ability/ interest and pregnancy, so first assumption is not met
+
+
+
+### 147. Bias of instrumental variables part 1
+
+We have two problems: bad instruments, weak instruments
+
+**Bad instruments is worse than weak instruments**
+
+For **Bad instruments**:
+
+if $cov(z, u_i) \neq 0$, IV is inconsistent. If the covariance $\sigma_{z\varepsilon} \uparrow$, Then $\hat \beta_{ls}$ has bigger variance than $\hat \beta_{ols}$
+
+$$
+\boxed{E[|\hat \beta_{IV} - \beta|]> E[|\hat \beta_{LS} - \beta|]}
+$$
+
+For **weak instruments**
+
+$cov(z, \varepsilon) = 0$ but $cov(z,x) \sim 0$ (its very small), the weak instrument is biased
+
+The bias is <no proof>
+
+$$
+E[\hat \beta_{IV} - \beta] \approx \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}. \dfrac{1}{1+F}\\
+= \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+= E[\hat \beta_{LS} - \beta]
+$$
+
+Bias of weak instrument is  same as the bias of OLS
+
+
+
+### 148. Bias of instrumental variables part 2
+
+$$
+E[\hat \beta_{IV} - \beta] \approx \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}. \dfrac{1}{1+F}\\
+= \dfrac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+= E[\hat \beta_{LS} - \beta]
+$$
+
+we did not state why cuz its a little bit hard hard and out of scope.
+
+But if $F$ is very small the term will disappear and be same as bias from OLS
+
+We will focus on the OLS part
+
+$$
+\begin{align*}
+E[\hat \beta_{LS} - \beta] &= E\left[  \dfrac{1/N \sum(x_i - \bar x)\varepsilon_i}{1/N S^2_{xx}} \right]\\
+&= \frac{\sigma_{\varepsilon x}}{\sigma^2_x}\\
+
+&= \frac{\sigma_{\varepsilon u}}{\sigma^2_u}\\
+\end{align*}
+$$
+
+if $\delta = 0$ all the variance in $x$ is coming from $u$
+
+$$
+y = \alpha + \beta x + \varepsilon\\
+x = \delta z + u
+$$
+
+This is why we replace $\sigma_{xu}$ with $\sigma^2_{u}$
+
+
+
+### 149. Bias of instrumental variables - intuition
+
+We learnt that even if assumptions are met, its still biased but consistent
+
+$$
+y = \alpha + \beta x + \varepsilon\\
+x = \delta z + u
+$$
+
+If we know population $\delta$ we can get  an estimate for $x$ without errors
+
+$$
+\tilde x = \delta z
+$$
+
+and use it to estimate $y$
+
+$$
+y = \alpha + \beta \tilde x + \varepsilon\\
+$$
+
+Which has no correlation between $\tilde x, \varepsilon$. 
+
+In reality we don’t know population $\delta$ so we estimate it
+
+$$
+\hat x = \hat\delta z \neq \tilde x
+$$
+
+They are not equal cuz there is sampling error from $u$ and $z$
+
+$$
+\hat x = f(z,u)
+$$
+
+So when we run second stage regression, there is correlation between $\hat x, \varepsilon$ cuz
+
+$$
+cov(\varepsilon, u) \neq 0
+$$
+
+but the dependence of $\hat x$ on $u$ decreases as sample size increases so we get asymptotic unbiasedness
+
+
+
+### 150.  Consistency of instrumental variables - intuition
+
+We know the function for instrumental variable $\beta$
+
+$$
+\boxed{\hat B_{IV} = \dfrac{S_{zy}}{S_{zx}}}
+$$
+
+what happens as $N \to \infty$?
+
+$$
+\begin{align*}
+\plim \beta_{IV} &= \dfrac{cov(z,y)}{cov(z,x)}\\
+&= \dfrac{cov(z, \alpha + \beta x + \varepsilon)}{cov(z,x)}\\
+&= \beta + \dfrac{cov(z, \varepsilon)}{cov(z,x)}
+\end{align*}
+$$
+
+Which is consistent (asymptotically unbiased) if we assume that $cov(z, \varepsilon) = 0$
+
+but if we have a weak or bad instrument
+
+$$
+cov(z, \varepsilon) = |a|>0\\
+cov(z, x) = |b|>0
+$$
+
+even if $a,b$ are small , then asymptotically it will be
+
+$$
+\boxed{\beta_{IV}= \beta + \dfrac a b}
+$$
+
+
+
+### 151. Consistency - comparing ordinary least squares with instrumental variables
+
+If we have endogeneity:
+
+for OLS
+
+$$
+\begin{align*}
+\plim \hat \beta_{LS} &= \dfrac{cov(x,y)}{\sigma^2_x}\\
+&= \beta + \dfrac{cov(x, \varepsilon)}{\sigma^2_x}\\
+&= \beta + \dfrac{\sigma_\varepsilon}{\sigma_x} corr(x, \varepsilon)
+\end{align*}
+$$
+
+Remember that correlation is 
+
+$$
+\boxed{corr(x, \varepsilon) = \dfrac{cov(z,y)}{\sigma_x \sigma_\varepsilon}}
+$$
+
+as for $\hat \beta_{IV}$
+
+$$
+\begin{align*}
+\plim \beta_{IV} &= \dfrac{cov(z,y)}{cov(z,x)}\\
+&= \dfrac{cov(z, \alpha + \beta x + \varepsilon)}{cov(z,x)}\\
+&= \beta + \dfrac{cov(z, \varepsilon)}{cov(z,x)}\\
+&= \beta + \dfrac{corr(z,\varepsilon)}{corr(z,x)} \dfrac{\sigma_{\varepsilon}}{\sigma_x}
+\end{align*}
+$$
+
+When to use the  $\hat \beta _{IV}$?
+
+$$
+\boxed{\dfrac{corr(z, \varepsilon)}{corr(z, x)} < corr(x, \varepsilon)}
+$$
+
+which says: 
+
+how bad is the instrument? <$z, \varepsilon$>
+
+how weak is the instrument? <$z, x$>
+
+how bad is the problem of endogeneity? <$x, \varepsilon$>
+
+
+
+### 152. Inference using instrumental variables estimators
+
+If assumptions of $\hat \beta_{IV}$ are met, then its approximately normal
+
+$$
+\boxed{\hat \beta_{IV} \sim N(\beta, var())}
+$$
+
+so we can use our $t, F$ tests
+
+The extra assumption we need to add to Gauss Markov assumptions
+
+$$
+\boxed{E[\varepsilon^2|z]= \sigma^2}
+$$
+
+which is **homogeneity** assumption but for the instrument
+
+we can get estimated variance
+
+$$
+\boxed{var(\hat \beta_{IV}) = \dfrac{\hat \sigma^2}{\sum (x_i - \bar x)^2} \dfrac{1}{R^2_{x.z}}}
+$$
+
+Remember that estimated variance for OLS is
+
+$$
+\boxed{var(\hat \beta_{LS}) = \dfrac{\hat \sigma^2}{\sum (x_i - \bar x)^2}}
+$$
+
+Knowing that $0 < R^2_{xz}<1$, we conclude that
+
+$$
+var(\hat \beta_{IV}) > var(\hat \beta_{LS})
+$$
+
+So we need more sample size, and not a weak instrument so $R^2$ doesn’t become small 
+
+
+### 153. Multiple regressor instrumental variables estimation
+
+If we have multiple regressors
+
+$$
+y = \alpha + \beta_1 x + \beta_2 z_1+ \varepsilon
+$$
+
+we use $z_1$ as an instrument for itself and $z_2$ as an instrument for $x$.
+
+So we need three assumptions
+
+$$
+\begin{align}
+E[\varepsilon] &= 0\\
+cov(\varepsilon, z_1) &= 0, E[\varepsilon, z_1] = 0\\
+cov(\varepsilon, z_2) &= 0, E[\varepsilon z_2]= 0
+\end{align}
+$$
+
+Remember that 
+The first condition is that $E[\varepsilon]=0$, therefore $E[\varepsilon].E[Z]=0$
+
+$$
+Cov(\varepsilon,Z) = E[\varepsilon Z] - E[\varepsilon].E[Z]
+$$
+
+These assumptions are for population, their sample analog is
+
+$$
+\begin{align}
+\sum (y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &= 0\\
+\sum z_1(y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &= 0\\
+\sum z_2(y_i - \hat \alpha - \hat \beta_1 x_i - \hat \beta_2 z_1) &= 0
+\end{align}
+$$
+
+we have three equations, three unknowns $\hat \alpha, \hat \beta_1, \hat \beta_2$
+
+However, if $z_2, x_i$ are uncorrelated, we can remove the term $\hat \beta x_i$ from third term, so we have hard time estimating (think of it as column space)
+
+
+### 154. Two stage least square - introduction
+
+We know that $IV$ is a subset of $2SLS$, so lets discuss $2SLS$ more
+
+$$
+y = \alpha + \beta_1x + \beta_2 z_1 + \varepsilon
+$$
+
+what if we have two instruments for x?
+
+Like $z_2, z_3$ where both are not correlated with $\varepsilon$
+
+Instead of picking out a winner, we do this
+
+1. Use both to estimate $x$
+
+$$
+x = \delta_0 +\delta_1z_1 + \delta_2 z_2 + \delta_3 z_3 + v
+$$
+
+so we include both of them in the first stage to get $\hat x$
+
+1. In second stage, we regress y on $\hat x$
+
+$$
+y = \alpha + \beta_1 \hat x + \beta_2 z_1 + \varepsilon
+$$
+
+Note that $\hat \beta_{2sls}$ is more efficient than $\hat \beta_{IV}$ and the main difference is that $IV$ uses one instrument for $x$ while $2sls$ uses more than one instrument.
+
+But if we add more instruments that are ineffective, it causes bias, why? remember the function
+
+$$
+\boxed{E[\hat \beta_{2sls} - \beta] \approx f\left( \dfrac{1}{1+F} \right)}
+$$
+
+if the instruments are useless, $F$ decreases, bias increases, but its still consistent
+
+To know if they are useless or not, run first stage and check $F$ test
+
+Statistical packages can do $2SLS$ automatically, we will not go through algebraic form cuz its complicated but know for now that its an example of $GMM$
+
+Why in first stage regress $x$ on other covariates not just the instruments?
+
+- no clear answer, Monte Carlo studies shows its better this way.
+
+
+### 155. Two stage least squares - example
+
+$$
+score = \alpha + \beta_1 CA + \beta_2 SAT + \varepsilon
+$$
+
+where CA is class attendance and SAT is the exam. CA is correlated with $\varepsilon$ specifically $interest$ in the subject
+
+so we might use two  instruments: distance from campus $distance$ and public transportation $ptrans$ for estimating $CA$ <which affect class attendance but not strongly correlated with interest>
+
+1. first stage
+
+$$
+\widehat{CA} = \delta_0 + \delta_1 SAT + \delta_2 dist + \delta_3 Ptrans + v
+$$
+
+if $F$ test shows they are significant, use them and go on to second stage and do OLS
+
+1. second stage
+
+$$
+score = \alpha + \beta_1 \widehat {CA} + \beta_2 SAT + \varepsilon
+$$
+
+Notice that its consistent
+
+$$
+\hat \beta_{2sls} \overset{p} \to \beta
+$$
+
+
+### 156. Two stage least squares- multiple endogenous explanatory variables
+
+If we have the model
+
+$$
+y = \alpha + \beta_1x_1 + \beta_2x_2 + \beta_3z_1 + \beta_4z_2 + \varepsilon
+$$
+
+where $x_1,x_2$ are endogenous, $z_1,z_2$ are exogenous <not related to error>
+
+we use $z_1$ for $z_1$, $z_2$ for $z_2$
+
+if we use $z_3$ for both of  $x_2$ and $x_1$, it will not work, we need more variation
+
+so we use $z_3,z_4$ both for $x_1,x_2$
+
+1. And do our first stage
+
+$$
+\hat x_1 = \delta_0 + \delta_1z_1 + \delta_2 z_2 + \delta_3z_3 + \delta_4 z_4
+$$
+
+and
+
+$$
+\hat x_2 = \gamma + \gamma_1z_1 + \gamma_2 z_2 + \gamma_3z_3 + \gamma_4 z_4
+$$
+
+1. second stage
+
+$$
+y = \alpha + \beta_1 \hat x_1 + \beta_2 \hat x_2 + \beta_3z_1 + \beta_4z_2 + \varepsilon
+$$
+
+The $\beta's$ we get are consistent. 
+
+**Note:**
+
+number of instruments <exogenous variables> must be at least as large as number of endogenous variables, **Order condition**
+
+$$
+\boxed{\# Z \ge \#E}
+$$
+
+Also the original $z_1,z_2$ must be significant, can’t be rubbish
+
+
+### 157. Testing for endogeneity
+
+If we have the model
+
+$$
+y = \alpha + \beta_1x  + \beta_2 z_1 + \varepsilon
+$$
+
+where $x$ is suspected to be endogenous and $z$ is exogenous
+
+We can’t just measure the covariance $cov(x,\varepsilon)$ cuz we don’t have $\varepsilon$ <population error>, we  have its estimate $\hat \varepsilon$
+
+Another idea is to test
+
+$$
+\boxed{\hat \beta_{2sls} = \hat \beta_{ls}}
+$$
+
+If they are both equal, then we have no endogeneity. But this is a **rule of thumb** not a test
+
+Here is the actual test
+
+1. estimate $x$ using two instruments $z_2, z_3$ and of course add the instrument u already have in the original model
+
+$$
+x = \delta_0 + \delta_1 z_1 + \delta_2 z_2 + \delta_3 z_3 + v
+$$
+
+the $z$ will get the exogenous part of $x$, $v$ will get the endogenous part
+
+1. regress $y$ on the original model and the $v$ 
+
+$$
+y = \alpha + \beta_1x  + \beta_2 z_1 + \gamma_0 \hat v+ u
+$$
+
+If $\hat v$ is significant aka $\gamma_0 >0$ then we have endogeneity
+
+What if we have multiple $x$ not just one?
+
+1. get $\hat{v}_i$ for each variable
+2. include them in model
+3. test for significant using  $f$ test
+
+Note: in step 2, the $\beta's$ will be the same as of $\beta_{2sls}$ cuz we are doing the same thing, instead of including $\hat x$, we include its residual $\hat v$. SO the $\beta's$ are **consistent**
+
+Note2: there is no simple test for endogeneity cuz we required exogenous variables <instruments> to test
+
+
+### 158. Testing for endogenous instruments - test for overidentifying restriction
+
+If we have the model
+
+$$
+y = \alpha + \beta x+ \varepsilon
+$$
+
+And we have two potential instruments for $x$ which are $z_1, z_2$
+
+We will pick one that satisfies the assumption
+
+1. $cov(\varepsilon, z) = 0$
+
+How to test that <we don’t have the error term>
+
+1. Assume the assumption is true
+2. Use the instrument $z_1$ only in original model and get $\hat \varepsilon$
+3. Regress $\hat \varepsilon$ on $z_2$ to see if they are correlated or not
+    
+    $$
+    \hat \varepsilon = \delta_0 + \delta_1 z_2\\
+    H_0: \delta_1 = 0 \qquad H_1: \delta_1 \neq 0 <z_2 \,endo>
+    $$
+    
+4. Repeat using $z_2$
+    
+    $$
+    \hat \varepsilon_2 = \gamma_0 + \gamma_1 z_2\\
+    H_0: \gamma_1 = 0 \qquad H_1: \gamma_1  \neq 0 <1_2 \,endo>
+    $$
+    
+
+But we still had to make assumptions. Another method is test of **overidentifying restriction**
+
+1. run the regression
+    
+    $$
+    y = \alpha + \beta x+ \varepsilon
+    $$
+    
+2. Regress $\varepsilon$ on all the instruments and get $R^2$
+    
+    $$
+    \hat \varepsilon = \delta_0 + \delta_1 z_1 + \delta_2 z_2
+    $$
+    
+3. Check this formula
+    
+    $$
+    \boxed{N R^2 \sim^{H_0} \chi^2_k}
+    $$
+    
+
+where $N$ is number of observations and $k$ is number of instrument variables - endogenous variables
+
+$$
+k = IV - E
+$$
+
+which here is $2-1=1$
+
+Note: This test requires that we have at least 2 instruments
+
+Note2: this test doesn’t tell us which instrument is endogenous, we still gave to refer to theory
+
+
+### ***159. Problem set 4***
+
+Practical: use $wls, IV$ to see what affects wage
+
+Theoretical: $WLS, FGLS, IV$
