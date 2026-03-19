@@ -1,10 +1,6 @@
 # Preface {.unnumbered}
 
 
-
-
-# Preface: The Map of a Struggle
-
 If you are looking for a traditional, top-down econometrics textbook that pretends learning this subject is a clean, linear process, you are in the wrong place. 
 
 There are already brilliant textbooks written by brilliant econometricians. But when you are actually trying to learn modern causal inference from scratch, reading those textbooks feels like walking into a movie halfway through. 
